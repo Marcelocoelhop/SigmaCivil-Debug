@@ -17,6 +17,10 @@
 <body>
     <button onclick="Capture()">Gravar</button>
     <script>
+        window.onerror = function (message, url, lineNumber) {
+            alert("Error: " + message + " in " + url + " at line " + lineNumber);
+        }
+
         function Capture() {
             document.addEventListener("click", onDeviceReady, false);
             function onDeviceReady() {

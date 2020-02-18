@@ -15,29 +15,31 @@
 </head>
 
 <body>
-    <button onclick="captureAudio()">Gravar</button>
+    <button onclick="Capture()">Gravar</button>
     <script>
-        document.addEventListener("click", onDeviceReady, false);
-        function onDeviceReady() {
-            console.log(navigator.device.capture);
-        }
-
-        // capture callback
-        var captureSuccess = function (mediaFiles) {
-            var i, path, len;
-            for (i = 0, len = mediaFiles.length; i < len; i += 1) {
-                path = mediaFiles[i].fullPath;
-                // do something interesting with the file
+        function Capture() {
+            document.addEventListener("click", onDeviceReady, false);
+            function onDeviceReady() {
+                console.log(navigator.device.capture);
             }
-        };
 
-        // capture error callback
-        var captureError = function (error) {
-            navigator.notification.alert('Error code: ' + error.code, null, 'Capture Error');
-        };
+            // capture callback
+            var captureSuccess = function (mediaFiles) {
+                var i, path, len;
+                for (i = 0, len = mediaFiles.length; i < len; i += 1) {
+                    path = mediaFiles[i].fullPath;
+                    // do something interesting with the file
+                }
+            };
 
-        // start audio capture
-        navigator.device.capture.captureAudio(captureSuccess, captureError, { limit: 2 });
+            // capture error callback
+            var captureError = function (error) {
+                navigator.notification.alert('Error code: ' + error.code, null, 'Capture Error');
+            };
+
+            // start audio capture
+            navigator.device.capture.captureAudio(captureSuccess, captureError, { limit: 2 });
+        }
     </script>
 </body>
 

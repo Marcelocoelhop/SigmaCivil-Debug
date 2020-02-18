@@ -15,9 +15,11 @@
 </head>
 
 <body>
-    <!-- <button onclick="captureAudio()">Gravar</button> -->
+    <button id="btn">Gravar</button>
     <script>
-        document.addEventListener("deviceready", onDeviceReady, false);
+        let $btn = document.getElementById('btn');
+
+        $btn.addEventListener("click", onDeviceReady, false);
         function onDeviceReady() {
             console.log(navigator.device.capture);
         }

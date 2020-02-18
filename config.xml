@@ -98,6 +98,7 @@
 		<variable name="MICROPHONE_USAGE_DESCRIPTION" value="Para que você possa gravar áudios com este aplicativo do SigmaCivil, você precisa permitir o acesso a seu microfone. Confirma ?" />
 		<variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="Para que você possa usar suas imagens com este aplicativo do SigmaCivil, você precisa permitir o acesso a sua galeria de imagens. Confirma ?" />
 	</plugin>
+    <plugin name="cordova-plugin-audio-recorder" source="npm" spec="~1.1.0" />
     <plugin name="cordova-plugin-console" source="npm" spec="~1.0.2" />
     <plugin name="cordova-plugin-contacts" source="npm" spec="~2.0.1" />
     <plugin name="cordova-plugin-device" source="npm" spec="~1.1.1" />

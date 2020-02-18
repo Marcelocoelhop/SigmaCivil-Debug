@@ -40,7 +40,7 @@
 	</feature>
 
 	<!-- para o audio -->
-	<feature name="Camera">
+	<!-- <feature name="Camera">
     	<param name="android-package" value="org.apache.cordova.camera.CameraLauncher" />
 	</feature>
 	<feature name="File">
@@ -51,7 +51,7 @@
 	</feature>
 	<feature name="Capture">
 		<param name="ios-package" value="CDVCapture" />
-	</feature>	
+	</feature>	 -->
 	<!-- fim para o audio -->
 
     <!--
@@ -92,7 +92,7 @@
 	<allow-intent href="*" />
 		
     <!-- <plugin name="cordova-plugin-battery-status" source="npm" spec="~1.1.1" /> -->
-    <plugin name="cordova-plugin-camera" source="npm" spec="~2.3.1" />
+    <!-- <plugin name="cordova-plugin-camera" source="npm" spec="~2.3.1" /> -->
     <plugin name="cordova-plugin-media-capture" source="npm" spec="~3.0.3">
 		<variable name="CAMERA_USAGE_DESCRIPTION" value="Para que você possa tirar fotos com este aplicativo do SigmaCivil, você precisa permitir o acesso a sua câmera. Confirma ?" />
 		<variable name="MICROPHONE_USAGE_DESCRIPTION" value="Para que você possa gravar áudios com este aplicativo do SigmaCivil, você precisa permitir o acesso a seu microfone. Confirma ?" />
@@ -101,10 +101,10 @@
     <!-- <plugin name="cordova-plugin-audio-recorder" source="npm" spec="~1.1.0" /> 
     <plugin name="cordova-plugin-console" source="npm" spec="~1.0.2" />
     <plugin name="cordova-plugin-contacts" source="npm" spec="~2.0.1" /> -->
-    <!-- <plugin name="cordova-plugin-device" source="npm" spec="~1.1.1" /> -->
-    <!-- <plugin name="cordova-plugin-device-motion" source="npm" spec="~1.2.0" />
+    <plugin name="cordova-plugin-device" source="npm" spec="~1.1.1" />
+    <plugin name="cordova-plugin-device-motion" source="npm" spec="~1.2.0" />
     <plugin name="cordova-plugin-device-orientation" source="npm" spec="~1.0.2" />
-    <plugin name="cordova-plugin-dialogs" source="npm" spec="~1.2.0" /> -->
+    <!-- <plugin name="cordova-plugin-dialogs" source="npm" spec="~1.2.0" />  -->
     <!-- <plugin name="cordova-plugin-file" source="npm" spec="~4.1.1" />
     <plugin name="cordova-plugin-file-transfer" source="npm" spec="~1.6.1" /> -->
     <!-- <plugin name="cordova-plugin-geolocation" source="npm" spec="~2.1.0" />
@@ -115,7 +115,7 @@
     <plugin name="cordova-plugin-splashscreen" source="npm" spec="~3.2.1" />
     <plugin name="cordova-plugin-statusbar" source="npm" spec="~2.1.2" />
     <plugin name="cordova-plugin-vibration" source="npm" spec="~2.1.0" />
-    <plugin name="cordova-sqlite-storage" spec="~0.8.5" /> -->
+    <plugin name="cordova-sqlite-storage" spec="~0.8.5" />
 		
 	<!-- Define app icon for each platform. -->
     <!-- <icon src="images/icon.png" />

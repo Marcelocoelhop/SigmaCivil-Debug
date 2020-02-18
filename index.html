@@ -18,13 +18,14 @@
     <button onclick="Capture()">Gravar</button>
     <script>
         window.onerror = function (message, url, lineNumber) {
-            alert("Error: " + message + " in " + url + " at line " + lineNumber);
+            alert("Error 11: " + message + " in " + url + " at line " + lineNumber);
         }
 
         function Capture() {
             alert('ponto 1')
             document.addEventListener("deviceready", onDeviceReady, false);
             function onDeviceReady() {
+                alert('ponto 3')
                 alert(navigator.device.capture);
             }
 
@@ -44,6 +45,7 @@
             };
 
             // start audio capture
+            alert('ponto 4')
             navigator.device.capture.captureAudio(captureSuccess, captureError, { limit: 2 });
         }
     </script>

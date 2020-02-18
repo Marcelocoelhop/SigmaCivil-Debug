@@ -20,7 +20,7 @@
         function Capture() {
             document.addEventListener("click", onDeviceReady, false);
             function onDeviceReady() {
-                console.log(navigator.device.capture);
+                console.log(navigator.device.audiorecorder);
             }
 
             // capture callback
@@ -38,7 +38,7 @@
             };
 
             // start audio capture
-            navigator.device.capture.captureAudio(captureSuccess, captureError, { limit: 2 });
+            navigator.device.capture.recordAudio(captureSuccess, captureError, { limit: 2 });
         }
     </script>
 </body>

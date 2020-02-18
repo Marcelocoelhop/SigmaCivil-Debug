@@ -117,7 +117,7 @@
     <plugin name="cordova-plugin-vibration" source="npm" spec="~2.1.0" />
     <plugin name="cordova-sqlite-storage" spec="~0.8.5" />
 		
-	<!-- Define app icon for each platform. -->
+	<! Define app icon for each platform. -->
     <!-- <icon src="images/icon.png" />
     <icon src="res/icon/android/icon-36-ldpi.png"   gap:platform="android"    gap:density="ldpi" />
     <icon src="res/icon/android/icon-48-mdpi.png"   gap:platform="android"    gap:density="mdpi" />

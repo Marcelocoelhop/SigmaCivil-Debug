@@ -93,7 +93,7 @@
 		
     <!-- <plugin name="cordova-plugin-battery-status" source="npm" spec="~1.1.1" /> -->
     <!-- <plugin name="cordova-plugin-camera" source="npm" spec="~2.3.1" /> -->
-    <plugin name="cordova-plugin-media-capture" source="npm" spec="~1.4.3">
+    <plugin name="cordova-plugin-media-capture" source="npm" spec="~2.0.0">
 		<variable name="CAMERA_USAGE_DESCRIPTION" value="Para que você possa tirar fotos com este aplicativo do SigmaCivil, você precisa permitir o acesso a sua câmera. Confirma ?" />
 		<variable name="MICROPHONE_USAGE_DESCRIPTION" value="Para que você possa gravar áudios com este aplicativo do SigmaCivil, você precisa permitir o acesso a seu microfone. Confirma ?" />
 		<variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="Para que você possa usar suas imagens com este aplicativo do SigmaCivil, você precisa permitir o acesso a sua galeria de imagens. Confirma ?" />

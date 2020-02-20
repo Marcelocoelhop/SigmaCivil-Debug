@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="css/custom.css" />
     <link rel="stylesheet" href="css/custom-mobile.css" />
+    <link rel="stylesheet" href="css/custom_new_checkpoint.css" />
     <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
     <title>Checkpoint hist</title>
     <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
@@ -67,9 +68,39 @@
 
     <div id="opc_periodo"></div>
 
+    <table data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke">
+     <thead class="table_titles table_checkpoint">
+       <tr>
+         <th data-priority="1">Quantidade de checkpoints por dia</th>
+       </tr>
+     </thead>
+   </table>
+
     <div id="chart_wrap">
         <div id="barchart"></div>
     </div>
+
+    <table data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke">
+     <thead class="table_titles">
+       <tr>
+         <th data-priority="1">Sistema</th>
+         <th>Data</th>
+         <th>Usuário</th>
+       </tr>
+     </thead>
+     <tbody>
+       <tr>
+         <th>1</th>
+         <td>Citizen Kane</td>
+         <td>masmac@ig.com.br</td>
+       </tr>
+       <tr>
+         <th>1</th>
+         <td>Citizen Kane</td>
+         <td>1941</td>
+       </tr>
+     </tbody>
+   </table>
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
@@ -280,6 +311,7 @@
                 '<div class="ui-bar ui-bar-a" style="height:38;text-align:center">',
                 '<div class="barra1" align="left"><img src="images/wifi_vermelho.png" style="position: absolute; left: 70px; top: 20px;" width="17" /></div>',
                 '<div align="center">',
+                // '<a href="#" onClick="go_page_check()"><button style="background: #e9e9e9; float: right; border-color: #e9e9e9;" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-left ui-icon-carat-l">Voltar</button></a>',
                 '<table width="30" border="0" cellpadding="0" cellspacing="0" >',
                 '<tr>',
                 '<td width="30" ><img src="images/logo4.png" width="142"> </td>',
@@ -298,6 +330,7 @@
                 '<div class="ui-corner-all custom-corners">',
                 '<div class="ui-bar ui-bar-a" style="height:38;text-align:center">',
                 '<div class="barra1" align="left"><img src="images/wifi_verde.png" style="position: absolute; left: 70px; top: 20px;" width="17" /></div>',
+                // '<a href="#" onClick="go_page_check()"><button style="background: #e9e9e9; position: relative; border-color: #e9e9e9;" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-left ui-icon-carat-l">Voltar</button></a>',
                 '<div align="center">',
                 '<table width="30" border="0" cellpadding="0" cellspacing="0" >',
                 '<tr>',
@@ -353,19 +386,50 @@
             function drawChart() {
 
                 var data = google.visualization.arrayToDataTable([
-                    ['Datas', 'Área de recreação infantil', 'CFTV / Segurança perimetral', 'Cobertura', 'Infraestrutura para prática recreativa', 'Instalações hidráulicas - Água potável'],
-                    ['3/10/2018', 1, 1, 1, 1, 1],
-                    ['03/10/2018', 1, 0, 1, 0, 1],
-                    ['03/10/2018', 1, 1, 1, 1, 1],
-                    ['2030', 1, 1, 1, 1, 1]
+                    ['Datas', 'Ancoragem (ganchos de ancoragem da fachada)', 'Área de recreação  infantil', 'CFTV / Segurança perimetral', 'Elevadores', 'Instalações hidráulicas - água não potável', 'Instalações hidráulicas - água potável', 'Instalações hidráulicas - sistema de combate a incêndio', 'Piscinas, fontes, cascatas e espelhos de água', 'Sistema de Cobertura - Sistema de Captação de Água Pluvial e Prumadas', 'Sistemas Hidrossanitários - Bombas', 'Telefonia e sistema de interfones'],
+                    ['01/01/2020', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    ['02/01/2020', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    ['03/01/2020', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    ['04/01/2020', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    ['05/01/2020', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    ['06/01/2020', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    ['07/01/2020', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    ['08/01/2020', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    ['09/01/2020', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    ['10/01/2020', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    ['11/01/2020', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    ['12/01/2020', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    ['13/01/2020', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    ['14/01/2020', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    ['15/01/2020', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    ['16/01/2020', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    ['17/01/2020', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    ['18/01/2020', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    ['19/01/2020', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    ['20/01/2020', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    ['21/01/2020', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    ['22/01/2020', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    ['23/01/2020', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    ['24/01/2020', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    ['25/01/2020', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    ['26/01/2020', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    ['27/01/2020', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    ['28/01/2020', 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    ['29/01/2020', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    ['30/01/2020', 0, 19, 6, 11, 6, 3, 1, 3, 3, 1, 3],
+                    ['31/01/2020', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                 ]);
 
                 var options = {
                     title: 'Manutenções',
+                    titleTextStyle: { width: '100%' },
                     width: '100%',
                     height: '500px',
-                    legend: { position: 'none' },
-                    // legend: {position: 'top', maxLines: 3}
+                    hAxis: { textStyle: { color: '#333333',fontSize:11 }  , slantedTextAngle:90 },
+                    fontSize: 11,
+                    isStacked: true,
+                    // legend: { position: 'none' },
+                    legend: { position: 'top', maxLines: 3 }
                 };
 
                 var chart = new google.visualization.BarChart(document.getElementById('barchart'));

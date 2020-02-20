@@ -382,6 +382,22 @@
                 return true;
             }
         }
+
+        function enviar_sync() {
+            decisao = confirm("Deseja efetuar novo login? Será possível se logar novamente em qualquer empreendimento atualizando o Plano de Manutenção!");
+
+            if (decisao) {
+                document.form_sup.action = "del.htm";
+                document.form_sup.submit();
+
+            } else {
+
+            }
+        }
+
+        function go_page_check() {
+            window.location.assign("checkpoint.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano));
+        }
     </script>
 
     <script>

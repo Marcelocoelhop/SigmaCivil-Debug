@@ -1,0 +1,23 @@
+.ui-table-columntoggle-btn {
+    display: none !important;
+}
+
+/* ÁREA DA TABELA */
+.table-stroke {
+    margin-bottom: 15px;
+}
+
+.table-stroke .table_titles {
+    background-color: #615c5c;
+    color: #fff;
+    text-shadow: none;
+}
+
+.table-stroke .table_titles th {
+    color: #fff;
+    text-shadow: none;
+}
+
+.table-stroke .table_checkpoint th {
+    text-align: center;
+}

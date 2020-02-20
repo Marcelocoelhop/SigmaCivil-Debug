@@ -1,0 +1,397 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/custom.css" />
+    <link rel="stylesheet" href="css/custom-mobile.css" />
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
+    <title>Checkpoint hist</title>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" src="js/mc.js"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/jquery.mobile-1.4.5.min.js"></script>
+    <script src="https://kit.fontawesome.com/c202879e33.js" crossorigin="anonymous"></script>
+    <style>
+        .menu .ui-mini.ui-btn-icon-left:after,
+        .ui-mini .ui-btn-icon-left:after,
+        .ui-header .ui-btn-icon-left:after,
+        .ui-footer .ui-btn-icon-left:after {
+            display: none;
+        }
+
+        .ui-btn-icon-left {
+            position: relative;
+            padding-left: 12px !important;
+        }
+
+        .ui-collapsible-inset .ui-collapsible-heading .ui-btn {
+            box-shadow: none !important;
+        }
+
+        #chart_wrap {
+            position: relative;
+            padding-bottom: 100%;
+            height: 0;
+            overflow: hidden;
+        }
+
+        #barchart {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 500px;
+        }
+    </style>
+</head>
+
+<body>
+    <span id="menu_opc2"></span>
+
+    <div class="btn-bars">
+        <div style="top:4; z-index: 1" data-role="collapsible" data-collapsed="true" class="ui-btn-left menu"
+            data-mini="true">
+            <h4 class="btn-bars-bars">
+                <img class="is-bars" src="images/bars.svg" width="14" alt="Menu" />
+                <img class="is-times is-disabled" src="images/times.svg" width="13" alt="Menu" />
+            </h4>
+            <ul style="border: 1px solid #e0e0e0;" data-role="listview" data-mini="true">
+                <li><a class="click" href="#" onClick="enviar_sync()">Novo Login</a></li>
+                <li><a class="ui-btn ui-icon-clock ui-btn-icon-right ui-shadow ui-corner-all" href="#"
+                        onClick="go_page_check()">Checkpoint</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="opc_periodo"></div>
+
+    <div id="chart_wrap">
+        <div id="barchart"></div>
+    </div>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script type="text/javascript">
+
+        window.onerror = function (message, url, lineNumber) {
+            alert("Error: " + message + " in " + url + " at line " + lineNumber);
+        }
+
+        var num_empree = getquerystring("e");
+        var login = getquerystring("l");
+        var senha = getquerystring("s");
+
+        var q_mes = getquerystring("qm");
+        var q_ano = getquerystring("qa");
+
+        if (q_mes != '') {
+            q_mes = q_mes
+        }
+        else {
+            var mes_now = new Date();
+            q_mes = mes_now.getMonth() + 1;
+            q_mes = q_mes.toString()
+        }
+
+        if (q_ano != '') {
+            q_ano = q_ano
+        }
+        else {
+            var ano_now = new Date();
+            q_ano = ano_now.getFullYear();
+            q_ano = q_ano.toString()
+        }
+        ///////////////////////////////
+
+        ////// variaveis para mes e ano
+        var marca1 = ''
+        var marca2 = ''
+        var marca3 = ''
+        var marca4 = ''
+        var marca5 = ''
+        var marca6 = ''
+        var marca7 = ''
+        var marca8 = ''
+        var marca9 = ''
+        var marca10 = ''
+        var marca11 = ''
+        var marca12 = ''
+        var marca2010 = ''
+        var marca2011 = ''
+        var marca2012 = ''
+        var marca2013 = ''
+        var marca2014 = ''
+        var marca2015 = ''
+        var marca2016 = ''
+        var marca2017 = ''
+        var marca2018 = ''
+        var marca2019 = ''
+        var marca2020 = ''
+        var marca2021 = ''
+        var marca2022 = ''
+        var marca2023 = ''
+        var marca2024 = ''
+
+        switch (q_mes) {
+            case '1':
+                marca1 = "selected";
+                break;
+            case '2':
+                marca2 = "selected";
+                break;
+            case '3':
+                marca3 = "selected";
+                break;
+            case '4':
+                marca4 = "selected";
+                break;
+            case '5':
+                marca5 = "selected";
+                break;
+            case '6':
+                marca6 = "selected";
+                break;
+            case '7':
+                marca7 = "selected";
+                break;
+            case '8':
+                marca8 = "selected";
+                break;
+            case '9':
+                marca9 = "selected";
+                break;
+            case '10':
+                marca10 = "selected";
+                break;
+            case '11':
+                marca11 = "selected";
+                break;
+            case '12':
+                marca12 = "selected";
+                break;
+        }
+
+        switch (q_ano) {
+            case '2010':
+                marca2010 = "selected";
+                break;
+            case '2011':
+                marca2011 = "selected";
+                break;
+            case '2012':
+                marca2012 = "selected";
+                break;
+            case '2013':
+                marca2013 = "selected";
+                break;
+            case '2014':
+                marca2014 = "selected";
+                break;
+            case '2015':
+                marca2015 = "selected";
+                break;
+            case '2016':
+                marca2016 = "selected";
+                break;
+            case '2017':
+                marca2017 = "selected";
+                break;
+            case '2018':
+                marca2018 = "selected";
+                break;
+            case '2019':
+                marca2019 = "selected";
+                break;
+            case '2020':
+                marca2020 = "selected";
+                break;
+            case '2021':
+                marca2021 = "selected";
+                break;
+            case '2022':
+                marca2022 = "selected";
+                break;
+            case '2023':
+                marca2023 = "selected";
+                break;
+            case '2024':
+                marca2024 = "selected";
+                break;
+        }
+
+        // VARIAVEIS PARA MÊS E ANO
+        var op_periodo = [
+            '<div class="dates-and-years">',
+            '<fieldset data-role="controlgroup" data-type="horizontal" style="display: inline-block;">',
+            '<select onchange="enviar()" id="idmes" name="select-custom-12" id="select-custom-12" data-native-menu="false">',
+            '<option value="1"' + marca1 + '>Janeiro</option>',
+            '<option value="2"' + marca2 + '>Fevereiro</option>',
+            '<option value="3"' + marca3 + '>Março</option>',
+            '<option value="4"' + marca4 + '>Abril</option>',
+            '<option value="5"' + marca5 + '>Maio</option>',
+            '<option value="6"' + marca6 + '>Junho</option>',
+            '<option value="7"' + marca7 + '>Julho</option>',
+            '<option value="8"' + marca8 + '>Agosto</option>',
+            '<option value="9"' + marca9 + '>Setembro</option>',
+            '<option value="10"' + marca10 + '>Outubro</option>',
+            '<option value="11"' + marca11 + '>Novembro</option>',
+            '<option value="12"' + marca12 + '>Dezembro</option>',
+            '</select>',
+            '<select onchange="enviar()" id="idano" name="select-custom-12" id="select-custom-12" data-native-menu="false">',
+            '<option value="2010"' + marca2010 + '>2010</option>',
+            '<option value="2011"' + marca2011 + '>2011</option>',
+            '<option value="2012"' + marca2012 + '>2012</option>',
+            '<option value="2013"' + marca2013 + '>2013</option>',
+            '<option value="2014"' + marca2014 + '>2014</option>',
+            '<option value="2015"' + marca2015 + '>2015</option>',
+            '<option value="2016"' + marca2016 + '>2016</option>',
+            '<option value="2017"' + marca2017 + '>2017</option>',
+            '<option value="2018"' + marca2018 + '>2018</option>',
+            '<option value="2019"' + marca2019 + '>2019</option>',
+            '<option value="2020"' + marca2020 + '>2020</option>',
+            '<option value="2021"' + marca2021 + '>2021</option>',
+            '<option value="2022"' + marca2022 + '>2022</option>',
+            '<option value="2023"' + marca2023 + '>2023</option>',
+            '<option value="2024"' + marca2024 + '>2024</option>',
+            '</select>',
+            '</fieldset>',
+            // '<i class="fas fa-filter" onclick="enviar()">',
+            '</div>'
+        ].join('')
+        // FIM VARIAVEIS PARA MÊS E ANO
+
+        document.addEventListener("deviceready", onDeviceReady, false);
+        function onDeviceReady() {
+            if (tem_conexao()) {
+                iniciar()
+            } else {
+                window.location.assign('empree.htm?e=' + num_empree + '&l=' + login + '&s=' + senha)
+            }
+        }
+
+        function iniciar() {
+
+            var menu_sup_offline = [
+                '<form name="form_sup" action="" method="get">',
+                '<div data-role="header" data-position="fixed" data-theme="a">',
+                '<div class="ui-corner-all custom-corners">',
+                '<div class="ui-bar ui-bar-a" style="height:38;text-align:center">',
+                '<div class="barra1" align="left"><img src="images/wifi_vermelho.png" style="position: absolute; left: 70px; top: 20px;" width="17" /></div>',
+                '<div align="center">',
+                '<table width="30" border="0" cellpadding="0" cellspacing="0" >',
+                '<tr>',
+                '<td width="30" ><img src="images/logo4.png" width="142"> </td>',
+                '</tr>',
+                '</table>',
+                '</div>',
+                '</div>',
+                '</div>',
+                '</div>',
+                '</form>'
+            ].join('');
+
+            var menu_sup_online = [
+                '<form name="form_sup" action="" method="get">',
+                '<div data-role="header" data-position="fixed" data-theme="a">',
+                '<div class="ui-corner-all custom-corners">',
+                '<div class="ui-bar ui-bar-a" style="height:38;text-align:center">',
+                '<div class="barra1" align="left"><img src="images/wifi_verde.png" style="position: absolute; left: 70px; top: 20px;" width="17" /></div>',
+                '<div align="center">',
+                '<table width="30" border="0" cellpadding="0" cellspacing="0" >',
+                '<tr>',
+                '<td width="30" ><img src="images/logo4.png" width="142"> </td>',
+                '</tr>',
+                '</table>',
+                '</div>',
+                '</div>',
+                '</div>',
+                '</div>',
+                '</form>'
+            ].join('');
+
+            document.getElementById('menu_opc2').innerHTML = menu_sup_online;
+
+            setInterval(function () {
+                if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
+                    document.getElementById('menu_opc2').innerHTML = menu_sup_offline;
+                    return false;
+                }
+                else {
+                    document.getElementById('menu_opc2').innerHTML = menu_sup_online;
+                    return true;
+                }
+            }, 5000);
+
+            /////////////////////////////////
+            var data1_aux = q_mes + "/01/" + q_ano
+            var data_ini_p_busca = new Date(data1_aux)
+
+            var q_dia
+
+            if (q_mes == 04 || q_mes == 06 || q_mes == 09 || q_mes == 11) {
+                q_dia = 30;
+            } else if ((q_mes == 02) && (q_ano % 4 == 0)) {
+                q_dia = 29;
+            } else if ((q_mes == 02) && (q_ano % 4 != 0)) {
+                q_dia = 28;
+            } else {
+                q_dia = 31;
+            }
+
+            var data2_aux = q_mes + "/" + q_dia + "/" + q_ano
+
+            var data_final_p_busca = new Date(data2_aux)
+            /////////////////////////////////////////////
+
+            document.getElementById('opc_periodo').innerHTML = op_periodo
+
+            google.charts.load('current', { 'packages': ['corechart'] });
+            google.charts.setOnLoadCallback(drawChart);
+
+            function drawChart() {
+
+                var data = google.visualization.arrayToDataTable([
+                    ['Datas', 'Área de recreação infantil', 'CFTV / Segurança perimetral', 'Cobertura', 'Infraestrutura para prática recreativa', 'Instalações hidráulicas - Água potável'],
+                    ['3/10/2018', 1, 1, 1, 1, 1],
+                    ['03/10/2018', 1, 0, 1, 0, 1],
+                    ['03/10/2018', 1, 1, 1, 1, 1],
+                    ['2030', 1, 1, 1, 1, 1]
+                ]);
+
+                var options = {
+                    title: 'Manutenções',
+                    width: '100%',
+                    height: '500px',
+                    legend: { position: 'none' },
+                    // legend: {position: 'top', maxLines: 3}
+                };
+
+                var chart = new google.visualization.BarChart(document.getElementById('barchart'));
+
+                chart.draw(data, options);
+            }
+        }
+
+        function tem_conexao() {
+            // navigator.connection.type == 0 || navigator.connection.type == 'none' ? false : true;
+            if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
+                return false;
+            } else {
+                return true;
+            }
+        }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('.btn-bars-bars').click(function () {
+                $('.is-bars').toggleClass('is-disabled')
+                $('.is-times').toggleClass('is-disabled')
+            })
+        })
+    </script>
+</body>
+
+</html>

@@ -33,8 +33,6 @@
 
         #chart_wrap {
             position: relative;
-            /* padding-bottom: 100%; */
-            /* height: 0; */
             overflow: hidden;
             height: 650px;
         }
@@ -80,6 +78,17 @@
            </table>
 
     <div id="chart_wrap">
+        <tr id='interstitial'>
+            <table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+                        <div id="load-sigma" align="center"><img src="images/load-sigma.svg" width="50"
+                                height="50"><br>Aguarde o
+                            carregamento...</div>
+                    </td>
+                </tr>
+            </table>
+        </tr>
         <div id="barchart"></div>
     </div>
 
@@ -382,16 +391,16 @@
             /////////////////////////////////////////////
 
             var response;
-            var xhr = new XMLHttpRequest()
-            xhr.open("GET", "http://www.sigmacivil.com.br/app_sc/consult_checkpoint.asp?l=" + login + "&s=" + senha + "&mes=" + q_mes + "&ano=" + q_ano + "&versao=2.0&t=" + Math.random(), false);
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState == 4) {
-                    if (xhr.status == 200 || xhr.status == 0) {
-                        response = xhr.responseText
-                    }
-                }
-            }
-            xhr.send();
+            // var xhr = new XMLHttpRequest()
+            // xhr.open("GET", "http://www.sigmacivil.com.br/app_sc/consult_checkpoint.asp?l=" + login + "&s=" + senha + "&mes=" + q_mes + "&ano=" + q_ano + "&versao=2.0&t=" + Math.random(), false);
+            // xhr.onreadystatechange = function () {
+            //     if (xhr.readyState == 4) {
+            //         if (xhr.status == 200 || xhr.status == 0) {
+            //             response = xhr.responseText
+            //         }
+            //     }
+            // }
+            // xhr.send();
 
             document.getElementById('opc_periodo').innerHTML = op_periodo
 
@@ -400,6 +409,19 @@
 
 
             function drawChart() {
+
+
+                var xhr = new XMLHttpRequest()
+                xhr.open("GET", "http://www.sigmacivil.com.br/app_sc/consult_checkpoint.asp?l=" + login + "&s=" + senha + "&mes=" + q_mes + "&ano=" + q_ano + "&versao=2.0&t=" + Math.random(), false);
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4) {
+                        if (xhr.status == 200 || xhr.status == 0) {
+                            response = xhr.responseText
+                        }
+                    }
+                }
+                xhr.send();
+
                 var result = "var data = google.visualization.arrayToDataTable([" + response + "]);"
                 var sequencia_dados = eval(result);
 
@@ -417,7 +439,7 @@
                     hAxis: { textStyle: { color: '#333333', fontSize: 11 }, slantedTextAngle: 90 },
                     fontSize: 11,
                     isStacked: true,
-                    bar: {groupWidth: "95%"},
+                    bar: { groupWidth: "95%" },
                     legend: { position: 'top', alignment: 'start', maxLines: 10 }
                 };
 
@@ -425,6 +447,7 @@
                 var chart = new google.visualization.BarChart(document.getElementById('barchart'));
 
                 chart.draw(data, options);
+                $('#load-sigma').addClass('is-disabled');
                 // chart.draw(view, options);
 
                 // var selectHandler = function (e) {

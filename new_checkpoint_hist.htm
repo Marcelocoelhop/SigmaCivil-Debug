@@ -92,27 +92,7 @@
         <div id="barchart"></div>
     </div>
 
-    <table data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke">
-             <thead class="table_titles">
-                   <tr>
-                         <th data-priority="1">Sistema</th>
-                         <th>Data</th>
-                         <th>Usuário</th>
-                       </tr>
-                  </thead>
-             <tbody>
-                   <tr>
-                         <td>1</td>
-                         <td>Citizen Kane</td>
-                         <td>masmac@ig.com.br</td>
-                       </tr>
-                   <tr>
-                         <td>1</td>
-                         <td>Citizen Kane</td>
-                         <td>1941</td>
-                        </tr>
-                 </tbody>
-           </table>
+    <div id="dados_usuario"></div>
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
@@ -422,7 +402,43 @@
                 }
                 xhr.send();
 
-                var result = "var data = google.visualization.arrayToDataTable([" + response + "]);"
+                var reqDados = response.split('//*//');
+                var dadosGrafico = reqDados[0];
+                var dadosUsuario = reqDados[1];
+
+                var blocoUsuario = dadosUsuario.split('/,/');
+
+                var ini_ = [
+                    '<table data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke">',
+                    '<thead class="table_titles">',
+                    '<tr>',
+                    '<th data-priority="1">Sistema</th>',
+                    '<th>Data</th>',
+                    '<th>Usuário</th>',
+                    '</tr>',
+                    '</thead>'
+                ].join('');
+                
+                var fim_ = '</table>';
+                var dados = "";
+
+                for (var i = 0; i < blocoUsuario.length; i++) {
+                    var partUser = blocoUsuario[i].split('/_/');
+                    
+                    dados += [
+                        '<tbody>',
+                        '<tr>',
+                        '<td>' + partUser[0] + '</td>',
+                        '<td>' + partUser[2] + '</td>',
+                        '<td>' + partUser[1] + '</td>',
+                        '</tr>',     
+                        '</tbody>'
+                    ].join('');
+                }
+
+                document.getElementById('dados_usuario').innerHTML = ini_ + dados + fim_;
+
+                var result = "var data = google.visualization.arrayToDataTable([" + dadosGrafico + "]);"
                 var sequencia_dados = eval(result);
 
                 // var data = google.visualization.arrayToDataTable([

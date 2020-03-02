@@ -44,6 +44,17 @@
             width: 100%;
             height: 650px;
         }
+
+        #map {
+            height: 100%;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
     </style>
 </head>
 
@@ -93,6 +104,8 @@
     </div>
 
     <div id="dados_usuario"></div>
+
+    <div id="map"></div>
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
@@ -390,7 +403,6 @@
 
             function drawChart() {
 
-
                 var xhr = new XMLHttpRequest()
                 xhr.open("GET", "http://www.sigmacivil.com.br/app_sc/consult_checkpoint.asp?l=" + login + "&s=" + senha + "&mes=" + q_mes + "&ano=" + q_ano + "&versao=2.0&t=" + Math.random(), false);
                 xhr.onreadystatechange = function () {
@@ -412,26 +424,29 @@
                     '<table data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke">',
                     '<thead class="table_titles">',
                     '<tr>',
-                    '<th data-priority="1">Sistema</th>',
                     '<th>Data</th>',
-                    '<th>Usuário</th>',
+                    '<th data-priority="1">Sistema</th>',
+                    '<th style="padding: 10px;">Mapa</th>',
                     '</tr>',
                     '</thead>'
                 ].join('');
-                
+
                 var fim_ = '</table>';
                 var dados = "";
 
                 for (var i = 0; i < blocoUsuario.length; i++) {
                     var partUser = blocoUsuario[i].split('/_/');
-                    
+                    var q_lat = partUser[3];
+                    var q_lon = partUser[4];
+
                     dados += [
-                        '<tbody>',
+                        '<tbody>',
                         '<tr>',
-                        '<td>' + partUser[0] + '</td>',
-                        '<td>' + partUser[2] + '</td>',
-                        '<td>' + partUser[1] + '</td>',
-                        '</tr>',     
+                        '<td style="text-align: center; font-size: 14px; border-bottom: 1px solid #000;">' + partUser[2] + '</td>',
+                        '<td style="border-bottom: 1px solid #000;"><span style="color: #038ad0;">' + partUser[0] + '</span><div style="font-size: 14px;">' + partUser[1] + '</div></td>',
+                        '<td style="text-align: center; border-bottom: 1px solid #000;"><img src="images/map-marked-alt.png" width="20" onclick="loadMap(' + "'" + q_lat + "'" + "," + "'" + q_lon + "'" + ')"></td>',
+                        // '<td>' + partUser[1] + '</td>',
+                        '</tr>',
                         '</tbody>'
                     ].join('');
                 }
@@ -456,7 +471,8 @@
                     fontSize: 11,
                     isStacked: true,
                     bar: { groupWidth: "95%" },
-                    legend: { position: 'top', alignment: 'start', maxLines: 10 }
+                    legend: { position: 'bottom', alignment: 'start', maxLines: 10 },
+                    vAxis: {maxValue: 10}
                 };
 
                 // var view = new google.visualization.DataView(data);
@@ -464,13 +480,11 @@
 
                 chart.draw(data, options);
                 $('#load-sigma').addClass('is-disabled');
-                // chart.draw(view, options);
-
-                // var selectHandler = function (e) {
-                //     window.location = data.getValue(data.getSelection()[0]['row'], 1);
-                // }
-                // google.visualization.events.addListener(data, 'select', selectHandler);
             }
+        }
+
+        function loadMap(v_lat, v_lon) {
+            window.location.assign('map.html?q_lat=' + v_lat + '&q_lon=' + v_lon);
         }
 
         function tem_conexao() {
@@ -502,6 +516,8 @@
             window.location.assign("checkpoint.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano));
         }
     </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC8hk_gHhhP_g4vlc95rZszkLtsOxDJw4E&callback=initMap"
+        async defer></script>
 
     <script>
         $(document).ready(function () {

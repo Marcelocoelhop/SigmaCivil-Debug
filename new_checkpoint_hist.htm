@@ -442,9 +442,9 @@
                     dados += [
                         '<tbody>',
                         '<tr>',
-                        '<td style="text-align: center; font-size: 14px; border-bottom: 1px solid #000;">' + partUser[2] + '</td>',
-                        '<td style="border-bottom: 1px solid #000;"><span style="color: #038ad0;">' + partUser[0] + '</span><div style="font-size: 14px;">' + partUser[1] + '</div></td>',
-                        '<td style="text-align: center; border-bottom: 1px solid #000;"><img src="images/map-marked-alt.png" width="20" onclick="loadMap(' + "'" + q_lat + "'" + "," + "'" + q_lon + "'" + ')"></td>',
+                        '<td style="text-align: center; font-size: 14px; border-bottom: 1px solid #b2b2b2; padding: 10px 0;">' + partUser[2] + '</td>',
+                        '<td style="border-bottom: 1px solid #b2b2b2; padding: 10px 0;"><span style="color: #038ad0;">' + partUser[0] + '</span><div style="font-size: 14px;">' + partUser[1] + '</div></td>',
+                        '<td style="text-align: center; border-bottom: 1px solid #b2b2b2; padding: 10px 0;"><img src="images/map-marked-alt.png" width="20" onclick="loadMap(' + "'" + q_lat + "'" + "," + "'" + q_lon + "'" + ')"></td>',
                         // '<td>' + partUser[1] + '</td>',
                         '</tr>',
                         '</tbody>'
@@ -466,14 +466,24 @@
                     title: 'Manutenções',
                     titleTextStyle: { width: '100%' },
                     width: '100%',
-                    height: '500px',
+                    height: '650',
                     hAxis: { textStyle: { color: '#333333', fontSize: 10.5 }, slantedTextAngle: 90 },
                     fontSize: 11,
                     isStacked: true,
                     bar: { groupWidth: '60%' },
                     legend: { textStyle: { fontSize: 11 } },
-                    chartArea: { width: '50%' },
-                    vAxis: { maxValue: 10 }
+                    chartArea: { width: '50%', height: '80%' },
+                    vAxis: {
+						textStyle : {
+							fontSize : 10
+						},
+						title : "Datas",
+						titleTextStyle : {
+							fontName : "Oswald",
+							italic : false,
+							color : "#990000"
+						}
+					},
                 };
 
                 // var view = new google.visualization.DataView(data);

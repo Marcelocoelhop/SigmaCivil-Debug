@@ -261,7 +261,7 @@
         var op_periodo = [
             '<div class="dates-and-years">',
             '<fieldset data-role="controlgroup" data-type="horizontal" style="display: inline-block;">',
-            '<select onchange="enviar()" id="idmes" name="select-custom-12" id="select-custom-12" data-native-menu="false">',
+            '<select class="ui-btn ui-icon-carat-d ui-btn-icon-left ui-shadow ui-corner-all" style="padding: 8px; box-shadow: none; border-radius: 5px 0 0 5px; margin: 0; display: inline;" onchange="enviar()" id="idmes" name="select-custom-12" id="select-custom-12" data-native-menu="false">',
             '<option value="1"' + marca1 + '>Janeiro</option>',
             '<option value="2"' + marca2 + '>Fevereiro</option>',
             '<option value="3"' + marca3 + '>Março</option>',
@@ -275,7 +275,7 @@
             '<option value="11"' + marca11 + '>Novembro</option>',
             '<option value="12"' + marca12 + '>Dezembro</option>',
             '</select>',
-            '<select onchange="enviar()" id="idano" name="select-custom-12" id="select-custom-12" data-native-menu="false">',
+            '<select class="ui-btn ui-icon-carat-d ui-btn-icon-left ui-shadow ui-corner-all" style="padding: 8px; box-shadow: none; border-radius: 0 5px 5px 0; margin: 0; display: inline;" onchange="enviar()" id="idano" name="select-custom-12" id="select-custom-12" data-native-menu="false">',
             '<option value="2010"' + marca2010 + '>2010</option>',
             '<option value="2011"' + marca2011 + '>2011</option>',
             '<option value="2012"' + marca2012 + '>2012</option>',
@@ -313,13 +313,13 @@
                 '<form name="form_sup" action="" method="get">',
                 '<div data-role="header" data-position="fixed" data-theme="a">',
                 '<div class="ui-corner-all custom-corners">',
-                '<div class="ui-bar ui-bar-a" style="height:38;text-align:center">',
+                '<div class="ui-bar ui-bar-a" style="height:38;text-align:center;width:100%;">',
                 '<div class="barra1" align="left"><img src="images/wifi_vermelho.png" style="position: absolute; left: 70px; top: 20px;" width="17" /></div>',
                 '<div align="center">',
-                // '<a href="#" onClick="go_page_check()"><button style="background: #e9e9e9; float: right; border-color: #e9e9e9;" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-left ui-icon-carat-l">Voltar</button></a>',
+                '<a href="#"><button style="box-shadow: none !important; background: #ebebeb !important; border: none; position: absolute; right: 37px; top: 7px;" onclick="go_page_check()" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right ui-icon-carat-l">Voltar</button></a>',
                 '<table width="30" border="0" cellpadding="0" cellspacing="0" >',
                 '<tr>',
-                '<td width="30" ><img src="images/logo4.png" width="142"> </td>',
+                '<td width="30" style="display: flex; align-items: center; justify-content: center;"><img src="images/logo4.png" width="142"> </td>',
                 '</tr>',
                 '</table>',
                 '</div>',
@@ -333,13 +333,13 @@
                 '<form name="form_sup" action="" method="get">',
                 '<div data-role="header" data-position="fixed" data-theme="a">',
                 '<div class="ui-corner-all custom-corners">',
-                '<div class="ui-bar ui-bar-a" style="height:38;text-align:center">',
+                '<div class="ui-bar ui-bar-a" style="height:38;text-align:center;width:100%;">',
                 '<div class="barra1" align="left"><img src="images/wifi_verde.png" style="position: absolute; left: 70px; top: 20px;" width="17" /></div>',
-                // '<a href="#" onClick="go_page_check()"><button style="background: #e9e9e9; position: relative; border-color: #e9e9e9;" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-left ui-icon-carat-l">Voltar</button></a>',
                 '<div align="center">',
+                '<a href="#"><button style="box-shadow: none !important; background: #ebebeb !important; border: none; position: absolute; right: 37px; top: 7px;" onclick="go_page_check()" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right ui-icon-carat-l">Voltar</button></a>',
                 '<table width="30" border="0" cellpadding="0" cellspacing="0" >',
                 '<tr>',
-                '<td width="30" ><img src="images/logo4.png" width="142"> </td>',
+                '<td width="30" style="position: relative; right: 15px;"><img src="images/logo4.png" width="142"> </td>',
                 '</tr>',
                 '</table>',
                 '</div>',
@@ -421,7 +421,7 @@
                 var blocoUsuario = dadosUsuario.split('/,/');
 
                 var ini_ = [
-                    '<table data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke">',
+                    '<table style="width: 100%;" data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke">',
                     '<thead class="table_titles">',
                     '<tr>',
                     '<th>Data</th>',
@@ -467,12 +467,13 @@
                     titleTextStyle: { width: '100%' },
                     width: '100%',
                     height: '500px',
-                    hAxis: { textStyle: { color: '#333333', fontSize: 11 }, slantedTextAngle: 90 },
+                    hAxis: { textStyle: { color: '#333333', fontSize: 10.5 }, slantedTextAngle: 90 },
                     fontSize: 11,
                     isStacked: true,
-                    bar: { groupWidth: "95%" },
-                    legend: { position: 'bottom', alignment: 'start', maxLines: 10 },
-                    vAxis: {maxValue: 10}
+                    bar: { groupWidth: '60%' },
+                    legend: { textStyle: { fontSize: 11 } },
+                    chartArea: { width: '50%' },
+                    vAxis: { maxValue: 10 }
                 };
 
                 // var view = new google.visualization.DataView(data);

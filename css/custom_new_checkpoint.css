@@ -8,7 +8,13 @@
 }
 
 .table-stroke .table_titles {
-    background-color: #615c5c;
+    background-color: #c00c13;
+    color: #fff;
+    text-shadow: none;
+}
+
+.table_titles_blue {
+    background-color: #0071bc;
     color: #fff;
     text-shadow: none;
 }

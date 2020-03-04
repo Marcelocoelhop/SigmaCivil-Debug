@@ -64,3 +64,11 @@
     top: 2px;
     outline: none !important;
 }
+/* FIM ÁREA DA TABELA */
+
+.dates-and-years select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-indent: 1px;
+    text-overflow: '';
+}

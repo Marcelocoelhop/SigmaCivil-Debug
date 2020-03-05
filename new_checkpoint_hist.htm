@@ -80,13 +80,17 @@
         <div id="opc_periodo"></div>
     </table>
 
-    <table data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke">
+    <table style="margin: 0; padding: 0;" data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke">
              <thead class="table_titles table_checkpoint">
                    <tr>
                          <th data-priority="1">Quantidade de checkpoints por dia</th>
                        </tr>
                  </thead>
            </table>
+
+    <div id="search"></div>
+
+    <div id="dados_select"></div>
 
     <div id="chart_wrap">
         <tr id='interstitial'>
@@ -121,6 +125,15 @@
 
         var q_mes = getquerystring("qm");
         var q_ano = getquerystring("qa");
+
+        var q_sist = getquerystring("id_sist");
+
+        var sl = getquerystring("sl");
+        if(q_sist != '') {
+            sl = "selected";
+        } else {
+            sl = '';
+        }
 
         if (q_mes != '') {
             q_mes = q_mes
@@ -261,7 +274,7 @@
         var op_periodo = [
             '<div class="dates-and-years">',
             '<fieldset data-role="controlgroup" data-type="horizontal" style="display: inline-block;">',
-            '<img src="images/chevron-circle-down.png" style="position: relative; left: 93px; top: 6px;" width="22" name="select-custom-12" id="select-custom-12" data-native-menu="false" />',
+            // '<img src="images/chevron-circle-down.png" style="position: relative; left: 9px; top: 6px;" width="22" name="select-custom-12" id="select-custom-12" data-native-menu="false" />',
             '<select class="ui-btn ui-icon-carat-d ui-btn-icon-left ui-shadow ui-corner-all" style="padding: 8px; background: transparent; box-shadow: none; border-radius: 5px 0 0 5px; margin: 0; display: inline;" onchange="enviar()" id="idmes" name="select-custom-12" id="select-custom-12" data-native-menu="false">',
             '<option value="1"' + marca1 + '>Janeiro</option>',
             '<option value="2"' + marca2 + '>Fevereiro</option>',
@@ -293,7 +306,7 @@
             '<option value="2023"' + marca2023 + '>2023</option>',
             '<option value="2024"' + marca2024 + '>2024</option>',
             '</select>',
-            '<img src="images/chevron-circle-down.png" style="position: relative; right: 30px; top: 6px;" width="22" name="select-custom-12" id="select-custom-12" data-native-menu="false" />',
+            // '<img src="images/chevron-circle-down.png" style="position: relative; right: 30px; top: 6px;" width="22" name="select-custom-12" id="select-custom-12" data-native-menu="false" />',
             '</fieldset>',
             // '<i class="fas fa-filter" onclick="enviar()">',
             '</div>'
@@ -402,11 +415,11 @@
             google.charts.load('current', { 'packages': ['corechart'] });
             google.charts.setOnLoadCallback(drawChart);
 
-
             function drawChart() {
 
                 var xhr = new XMLHttpRequest()
-                xhr.open("GET", "http://www.sigmacivil.com.br/app_sc/consult_checkpoint.asp?l=" + login + "&s=" + senha + "&mes=" + q_mes + "&ano=" + q_ano + "&versao=2.0&t=" + Math.random(), false);
+                xhr.open("GET", "http://www.sigmacivil.com.br/app_sc/consult_checkpoint.asp?l=" + login + "&s=" + senha + "&mes=" + q_mes + "&ano=" + q_ano + "&versao=2.0&id_sist=" + q_sist + "&t=" + Math.random(), false);
+                // alert("http://www.sigmacivil.com.br/app_sc/consult_checkpoint.asp?l=" + login + "&s=" + senha + "&mes=" + q_mes + "&ano=" + q_ano + "&versao=2.0&id_sist=" + document.getElementById('q_manut').value)
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState == 4) {
                         if (xhr.status == 200 || xhr.status == 0) {
@@ -419,8 +432,10 @@
                 var reqDados = response.split('//*//');
                 var dadosGrafico = reqDados[0];
                 var dadosUsuario = reqDados[1];
+                var dadosBusca = reqDados[2];
 
                 var blocoUsuario = dadosUsuario.split('/,/');
+                var blocoBusca = dadosBusca.split('/,/');
 
                 var ini_ = [
                     '<table style="width: 100%;" data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke">',
@@ -434,7 +449,24 @@
                 ].join('');
 
                 var fim_ = '</table>';
+
+                var ini_select = [
+                    '<form style="margin: 0; padding: 0; font-weight: normal;">',
+                    '<div style="margin: 0 0.5rem; padding: 0; font-weight: normal;" class="ui-field-contain">',
+                    // '<label for="select-native-2">Mini sized:</label>',
+                    '<select style="width: 100%; padding: 6px; padding-left: 25px; box-shadow: none; position: relative; bottom: 8px;" class="ui-btn ui-icon-carat-d ui-btn-icon-right ui-corner-all ui-shadow select_manut" onchange="enviar_select()" name="select-native-2" id="q_manut" data-mini="true">',
+                    '<option value="">Buscar...</option>',
+                ].join('');
+
+                var fim_select = [
+                    '</select>',
+                    '</div>',
+                    '</form>'
+                ].join('');
+
                 var dados = "";
+                var dados_select = "";
+                var arr = [];
 
                 for (var i = 0; i < blocoUsuario.length; i++) {
                     var partUser = blocoUsuario[i].split('/_/');
@@ -451,9 +483,47 @@
                         '</tr>',
                         '</tbody>'
                     ].join('');
+
+                    // var encontrou = arr.indexOf(partUser[5]);
+                    // //alert("encontrou" + "="+ encontrou)  
+                    
+                    // arr.push(partUser[5])
+                    // //alert("arr" + i + "::"+ arr)                 
+
+                    // //alert(arr.filter(isBigEnough))
+
+                    // if (encontrou == -1) {
+                    //     dados_select += [
+                    //         '<option value="' + partUser[5] + '" ' + sl + '>' + partUser[0] + '</option>',
+                    //     ].join('');
+                    // }
                 }
 
+                for (var i = 0; i < blocoBusca.length; i++) {
+                    var partBusca = blocoBusca[i].split('/_/');
+
+                    var encontrou = arr.indexOf(partBusca[0]);
+                    //alert("encontrou" + "="+ encontrou)  
+                    
+                    arr.push(partBusca[0])
+                    //alert("arr" + i + "::"+ arr)                 
+
+                    //alert(arr.filter(isBigEnough))
+
+                    if (encontrou == -1) {
+                        dados_select += [
+                            '<option value="' + partBusca[0] + '" ' + sl + '>' + partBusca[1] + '</option>',
+                        ].join('');
+                    }
+                }
+
+                //alert("arr final: " + arr)
+
                 document.getElementById('dados_usuario').innerHTML = ini_ + dados + fim_;
+                document.getElementById('dados_select').innerHTML = ini_select + dados_select + fim_select;
+
+                var search = '<img style="position: relative; z-index: 1; top: 25px; left: 15px;" src="images/search.png" width="15" />';
+                document.getElementById('search').innerHTML = search;
 
                 var result = "var data = google.visualization.arrayToDataTable([" + dadosGrafico + "]);"
                 var sequencia_dados = eval(result);
@@ -476,16 +546,16 @@
                     legend: { textStyle: { fontSize: 11 } },
                     chartArea: { width: '55%', height: '90%', left: '10%' },
                     // vAxis: {
-					// 	textStyle : {
-					// 		fontSize : 10
-					// 	},
-					// 	title : "Datas",
-					// 	titleTextStyle : {
-					// 		fontName : "Oswald",
-					// 		italic : false,
-					// 		color : "#990000"
-					// 	}
-					// },
+                    // 	textStyle : {
+                    // 		fontSize : 10
+                    // 	},
+                    // 	title : "Datas",
+                    // 	titleTextStyle : {
+                    // 		fontName : "Oswald",
+                    // 		italic : false,
+                    // 		color : "#990000"
+                    // 	}
+                    // },
                 };
 
                 // var view = new google.visualization.DataView(data);
@@ -501,7 +571,6 @@
         }
 
         function tem_conexao() {
-            // navigator.connection.type == 0 || navigator.connection.type == 'none' ? false : true;
             if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
                 return false;
             } else {
@@ -511,6 +580,11 @@
 
         function enviar() {
             window.location.assign("new_checkpoint_hist.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + document.getElementById('idmes').value + "&qa=" + document.getElementById('idano').value);
+        }
+
+        function enviar_select() {
+            window.location.assign("new_checkpoint_hist.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + document.getElementById('idmes').value + "&qa=" + document.getElementById('idano').value + "&id_sist=" + document.getElementById('q_manut').value + "&sl=" + sl);
+            // alert("new_checkpoint_hist.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + document.getElementById('idmes').value + "&qa=" + document.getElementById('idano').value + "&id_sist=" + document.getElementById('q_manut').value)
         }
 
         function enviar_sync() {

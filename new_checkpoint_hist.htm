@@ -76,11 +76,33 @@
         </div>
     </div>
 
+    <td width="20" class="menu_2">
+        <div align="right">
+            <a style="position: absolute; top: 80px; right: 20px;" href="#transitionExample" data-transition="pop"
+                data-rel="popup">
+                <img src="images/question-circle.png" width="15" alt="">
+            </a>
+        </div>
+    </td>
+
+    <div data-role="popup" id="transitionExample" class="ui-content" data-theme="a">
+        <h2>Como funciona?</h2>
+        <p>No gráfico abaixo é possível visualizar a quantidade de check points realizados em cada sistema do
+            empreendimento em cada dia do mês.
+        </p>
+        <p>
+            Na tabela a seguir mostramos o dia, horário e o login do responsável que efetuou o check point, além de ser
+            possível visualizar o local no mapa (através da latitude e longitude) onde o check point foi realizado.
+        </p>
+
+    </div>
+
     <table>
         <div id="opc_periodo"></div>
     </table>
 
-    <table style="margin: 0; padding: 0;" data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke">
+    <table style="margin: 0; padding: 0;" data-role="table" id="table-column-toggle" data-mode="columntoggle"
+        class="ui-responsive table-stroke">
              <thead class="table_titles table_checkpoint">
                    <tr>
                          <th data-priority="1">Quantidade de checkpoints por dia</th>
@@ -413,108 +435,115 @@
                 }
                 xhr.send();
 
-                var reqDados = response.split('//*//');
-                var dadosGrafico = reqDados[0];
-                var dadosUsuario = reqDados[1];
-                var dadosBusca = reqDados[2];
+                if (response == "nok") {
+                    document.getElementById('barchart').innerHTML = 'Não há ocorrência de check points neste mês!';
+                    $('#load-sigma').hide();
+                    return;
+                } else {
 
-                var blocoUsuario = dadosUsuario.split('/,/');
-                var blocoBusca = dadosBusca.split('/,/');
+                    var reqDados = response.split('//*//');
+                    var dadosGrafico = reqDados[0];
+                    var dadosUsuario = reqDados[1];
+                    var dadosBusca = reqDados[2];
 
-                var ini_ = [
-                    '<table style="width: 100%;" data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke">',
-                    '<thead class="table_titles_blue">',
-                    '<tr>',
-                    '<th>Data</th>',
-                    '<th data-priority="1">Sistema</th>',
-                    '<th style="padding: 10px;">Local</th>',
-                    '</tr>',
-                    '</thead>'
-                ].join('');
+                    var blocoUsuario = dadosUsuario.split('/,/');
+                    var blocoBusca = dadosBusca.split('/,/');
 
-                var fim_ = '</table>';
-
-                var ini_select = [
-                    '<form style="margin: 0; padding: 0; font-weight: normal;">',
-                    '<div style="margin: 0 0.5rem; padding: 0; font-weight: normal;" class="ui-field-contain">',
-                    '<select style="width: 100%; padding: 6px; padding-left: 25px; box-shadow: none; position: relative; bottom: 8px;" class="ui-btn ui-icon-carat-d ui-btn-icon-right ui-corner-all ui-shadow select_manut" onchange="enviar_select()" name="select-native-2" id="q_manut" data-mini="true">',
-                    '<option value="">Buscar...</option>',
-                ].join('');
-
-                var fim_select = [
-                    '</select>',
-                    '</div>',
-                    '</form>'
-                ].join('');
-
-                var dados = "";
-                var dados_select = "";
-                var arr = [];
-
-                for (var i = 0; i < blocoUsuario.length; i++) {
-                    var partUser = blocoUsuario[i].split('/_/');
-                    var q_lat = partUser[3];
-                    var q_lon = partUser[4];
-
-                    dados += [
-                        '<tbody>',
+                    var ini_ = [
+                        '<table style="width: 100%;" data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke">',
+                        '<thead class="table_titles_blue">',
                         '<tr>',
-                        '<td style="text-align: center; font-size: 14px; border-bottom: 1px solid #cccccc; padding: 10px;">' + partUser[2] + '</td>',
-                        '<td style="border-bottom: 1px solid #cccccc; padding: 10px;"><span style="color: #038ad0;">' + partUser[0] + '</span><div style="font-size: 14px;">' + partUser[1] + '</div></td>',
-                        '<td style="text-align: center; border-bottom: 1px solid #cccccc; padding: 10px;"><img src="images/map-marked-alt.png" width="20" onclick="loadMap(' + "'" + q_lat + "'" + "," + "'" + q_lon + "'" + ')"></td>',
+                        '<th>Data check point</th>',
+                        '<th data-priority="1">Sistema e login</th>',
+                        '<th style="padding: 10px;">Local check point</th>',
                         '</tr>',
-                        '</tbody>'
+                        '</thead>'
                     ].join('');
-                }
 
-                for (var i = 0; i < blocoBusca.length; i++) {
-                    var partBusca = blocoBusca[i].split('/_/');
+                    var fim_ = '</table>';
 
-                    var encontrou = arr.indexOf(partBusca[0]);
-                    
-                    arr.push(partBusca[0]);
+                    var ini_select = [
+                        '<form style="margin: 0; padding: 0; font-weight: normal;">',
+                        '<div style="margin: 0 0.5rem; padding: 0; font-weight: normal;" class="ui-field-contain">',
+                        '<select style="width: 100%; padding: 6px; padding-left: 25px; box-shadow: none; position: relative; bottom: 8px;" class="ui-btn ui-icon-carat-d ui-btn-icon-right ui-corner-all ui-shadow select_manut" onchange="enviar_select()" name="select-native-2" id="q_manut" data-mini="true">',
+                        '<option value="">Buscar...</option>',
+                    ].join('');
 
-                    partBusca[0] == q_sist ? sl = "selected" : sl = "";
+                    var fim_select = [
+                        '</select>',
+                        '</div>',
+                        '</form>'
+                    ].join('');
 
-                    if (encontrou == -1) {
-                        dados_select += [
-                            `<option style="color: #fff;" value="${partBusca[0]}" ${sl}>${partBusca[1]}</option>`,
+                    var dados = "";
+                    var dados_select = "";
+                    var arr = [];
+
+                    for (var i = 0; i < blocoUsuario.length; i++) {
+                        var partUser = blocoUsuario[i].split('/_/');
+                        var q_lat = partUser[3];
+                        var q_lon = partUser[4];
+
+                        dados += [
+                            '<tbody>',
+                            '<tr>',
+                            '<td style="text-align: center; font-size: 14px; border-bottom: 1px solid #cccccc; padding: 10px;">' + partUser[2] + '</td>',
+                            '<td style="border-bottom: 1px solid #cccccc; padding: 10px;"><span style="color: #038ad0;">' + partUser[0] + '</span><div style="font-size: 14px;">' + partUser[1] + '</div></td>',
+                            '<td style="text-align: center; border-bottom: 1px solid #cccccc; padding: 10px;"><img src="images/map-marked-alt.png" width="20" onclick="loadMap(' + "'" + q_lat + "'" + "," + "'" + q_lon + "'" + ')"></td>',
+                            '</tr>',
+                            '</tbody>'
                         ].join('');
                     }
+
+                    for (var i = 0; i < blocoBusca.length; i++) {
+                        var partBusca = blocoBusca[i].split('/_/');
+
+                        var encontrou = arr.indexOf(partBusca[0]);
+
+                        arr.push(partBusca[0]);
+
+                        partBusca[0] == q_sist ? sl = "selected" : sl = "";
+
+                        if (encontrou == -1) {
+                            dados_select += [
+                                `<option style="color: #fff;" value="${partBusca[0]}" ${sl}>${partBusca[1]}</option>`,
+                            ].join('');
+                        }
+                    }
+
+                    document.getElementById('dados_usuario').innerHTML = ini_ + dados + fim_;
+                    document.getElementById('dados_select').innerHTML = ini_select + dados_select + fim_select;
+
+                    var search = '<img style="position: relative; z-index: 1; top: 25px; left: 15px;" src="images/search.png" width="15" />';
+                    document.getElementById('search').innerHTML = search;
+
+                    var result = "var data = google.visualization.arrayToDataTable([" + dadosGrafico + "]);"
+                    var sequencia_dados = eval(result);
+
+                    // var data = google.visualization.arrayToDataTable([
+                    //     ['Datas', 'Ancoragem (ganchos de ancoragem da fachada)', 'Área de recreação  infantil', 'CFTV / Segurança perimetral', 'Elevadores', 'Instalações hidráulicas - água não potável', 'Instalações hidráulicas - água potável', 'Instalações hidráulicas - sistema de combate a incêndio', 'Piscinas, fontes, cascatas e espelhos de água', 'Sistema de Cobertura - Sistema de Captação de Água Pluvial e Prumadas', 'Sistemas Hidrossanitários - Bombas', 'Telefonia e sistema de interfones'],
+                    //     ['01/01/2020', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    //     ['31/01/2020', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                    // ]);
+
+                    var options = {
+                        title: 'Quantidade de check points x Dia do mês',
+                        titleTextStyle: { width: '100%' },
+                        width: '100%',
+                        height: '650',
+                        hAxis: { textStyle: { color: '#333333', fontSize: 10.5 }, slantedTextAngle: 90 },
+                        fontSize: 11,
+                        isStacked: true,
+                        bar: { groupWidth: '60%' },
+                        legend: { textStyle: { fontSize: 11 } },
+                        chartArea: { width: '55%', height: '90%', left: '10%' },
+                    };
+
+                    var chart = new google.visualization.BarChart(document.getElementById('barchart'));
+
+                    chart.draw(data, options);
+                    $('#load-sigma').hide();
                 }
-
-                document.getElementById('dados_usuario').innerHTML = ini_ + dados + fim_;
-                document.getElementById('dados_select').innerHTML = ini_select + dados_select + fim_select;
-
-                var search = '<img style="position: relative; z-index: 1; top: 25px; left: 15px;" src="images/search.png" width="15" />';
-                document.getElementById('search').innerHTML = search;
-
-                var result = "var data = google.visualization.arrayToDataTable([" + dadosGrafico + "]);"
-                var sequencia_dados = eval(result);
-
-                // var data = google.visualization.arrayToDataTable([
-                //     ['Datas', 'Ancoragem (ganchos de ancoragem da fachada)', 'Área de recreação  infantil', 'CFTV / Segurança perimetral', 'Elevadores', 'Instalações hidráulicas - água não potável', 'Instalações hidráulicas - água potável', 'Instalações hidráulicas - sistema de combate a incêndio', 'Piscinas, fontes, cascatas e espelhos de água', 'Sistema de Cobertura - Sistema de Captação de Água Pluvial e Prumadas', 'Sistemas Hidrossanitários - Bombas', 'Telefonia e sistema de interfones'],
-                //     ['01/01/2020', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                //     ['31/01/2020', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-                // ]);
-
-                var options = {
-                    title: 'Quantidade de manutenções x Dia do mês',
-                    titleTextStyle: { width: '100%' },
-                    width: '100%',
-                    height: '650',
-                    hAxis: { textStyle: { color: '#333333', fontSize: 10.5 }, slantedTextAngle: 90 },
-                    fontSize: 11,
-                    isStacked: true,
-                    bar: { groupWidth: '60%' },
-                    legend: { textStyle: { fontSize: 11 } },
-                    chartArea: { width: '55%', height: '90%', left: '10%' },
-                };
-
-                var chart = new google.visualization.BarChart(document.getElementById('barchart'));
-
-                chart.draw(data, options);
-                $('#load-sigma').addClass('is-disabled');
             }
         }
 

@@ -128,12 +128,7 @@
 
         var q_sist = getquerystring("id_sist");
 
-        var sl = getquerystring("sl");
-        if(q_sist != '') {
-            sl = "selected";
-        } else {
-            sl = '';
-        }
+        var sl = "";
 
         if (q_mes != '') {
             q_mes = q_mes
@@ -399,16 +394,6 @@
             /////////////////////////////////////////////
 
             var response;
-            // var xhr = new XMLHttpRequest()
-            // xhr.open("GET", "http://www.sigmacivil.com.br/app_sc/consult_checkpoint.asp?l=" + login + "&s=" + senha + "&mes=" + q_mes + "&ano=" + q_ano + "&versao=2.0&t=" + Math.random(), false);
-            // xhr.onreadystatechange = function () {
-            //     if (xhr.readyState == 4) {
-            //         if (xhr.status == 200 || xhr.status == 0) {
-            //             response = xhr.responseText
-            //         }
-            //     }
-            // }
-            // xhr.send();
 
             document.getElementById('opc_periodo').innerHTML = op_periodo
 
@@ -419,7 +404,6 @@
 
                 var xhr = new XMLHttpRequest()
                 xhr.open("GET", "http://www.sigmacivil.com.br/app_sc/consult_checkpoint.asp?l=" + login + "&s=" + senha + "&mes=" + q_mes + "&ano=" + q_ano + "&versao=2.0&id_sist=" + q_sist + "&t=" + Math.random(), false);
-                // alert("http://www.sigmacivil.com.br/app_sc/consult_checkpoint.asp?l=" + login + "&s=" + senha + "&mes=" + q_mes + "&ano=" + q_ano + "&versao=2.0&id_sist=" + document.getElementById('q_manut').value)
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState == 4) {
                         if (xhr.status == 200 || xhr.status == 0) {
@@ -453,7 +437,6 @@
                 var ini_select = [
                     '<form style="margin: 0; padding: 0; font-weight: normal;">',
                     '<div style="margin: 0 0.5rem; padding: 0; font-weight: normal;" class="ui-field-contain">',
-                    // '<label for="select-native-2">Mini sized:</label>',
                     '<select style="width: 100%; padding: 6px; padding-left: 25px; box-shadow: none; position: relative; bottom: 8px;" class="ui-btn ui-icon-carat-d ui-btn-icon-right ui-corner-all ui-shadow select_manut" onchange="enviar_select()" name="select-native-2" id="q_manut" data-mini="true">',
                     '<option value="">Buscar...</option>',
                 ].join('');
@@ -479,45 +462,27 @@
                         '<td style="text-align: center; font-size: 14px; border-bottom: 1px solid #cccccc; padding: 10px;">' + partUser[2] + '</td>',
                         '<td style="border-bottom: 1px solid #cccccc; padding: 10px;"><span style="color: #038ad0;">' + partUser[0] + '</span><div style="font-size: 14px;">' + partUser[1] + '</div></td>',
                         '<td style="text-align: center; border-bottom: 1px solid #cccccc; padding: 10px;"><img src="images/map-marked-alt.png" width="20" onclick="loadMap(' + "'" + q_lat + "'" + "," + "'" + q_lon + "'" + ')"></td>',
-                        // '<td>' + partUser[1] + '</td>',
                         '</tr>',
                         '</tbody>'
                     ].join('');
-
-                    // var encontrou = arr.indexOf(partUser[5]);
-                    // //alert("encontrou" + "="+ encontrou)  
-                    
-                    // arr.push(partUser[5])
-                    // //alert("arr" + i + "::"+ arr)                 
-
-                    // //alert(arr.filter(isBigEnough))
-
-                    // if (encontrou == -1) {
-                    //     dados_select += [
-                    //         '<option value="' + partUser[5] + '" ' + sl + '>' + partUser[0] + '</option>',
-                    //     ].join('');
-                    // }
                 }
 
                 for (var i = 0; i < blocoBusca.length; i++) {
                     var partBusca = blocoBusca[i].split('/_/');
 
                     var encontrou = arr.indexOf(partBusca[0]);
-                    //alert("encontrou" + "="+ encontrou)  
+                    alert(encontrou)
                     
-                    arr.push(partBusca[0])
-                    //alert("arr" + i + "::"+ arr)                 
+                    arr.push(partBusca[0]);
 
-                    //alert(arr.filter(isBigEnough))
+                    partBusca[0] == q_sist ? sl = "selected" : sl = "";
 
                     if (encontrou == -1) {
                         dados_select += [
-                            '<option value="' + partBusca[0] + '" ' + sl + '>' + partBusca[1] + '</option>',
+                            `<option style="color: #fff;" value="${partBusca[0]}" ${sl}>${partBusca[1]}</option>`,
                         ].join('');
                     }
                 }
-
-                //alert("arr final: " + arr)
 
                 document.getElementById('dados_usuario').innerHTML = ini_ + dados + fim_;
                 document.getElementById('dados_select').innerHTML = ini_select + dados_select + fim_select;
@@ -545,20 +510,8 @@
                     bar: { groupWidth: '60%' },
                     legend: { textStyle: { fontSize: 11 } },
                     chartArea: { width: '55%', height: '90%', left: '10%' },
-                    // vAxis: {
-                    // 	textStyle : {
-                    // 		fontSize : 10
-                    // 	},
-                    // 	title : "Datas",
-                    // 	titleTextStyle : {
-                    // 		fontName : "Oswald",
-                    // 		italic : false,
-                    // 		color : "#990000"
-                    // 	}
-                    // },
                 };
 
-                // var view = new google.visualization.DataView(data);
                 var chart = new google.visualization.BarChart(document.getElementById('barchart'));
 
                 chart.draw(data, options);
@@ -584,7 +537,6 @@
 
         function enviar_select() {
             window.location.assign("new_checkpoint_hist.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + document.getElementById('idmes').value + "&qa=" + document.getElementById('idano').value + "&id_sist=" + document.getElementById('q_manut').value + "&sl=" + sl);
-            // alert("new_checkpoint_hist.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + document.getElementById('idmes').value + "&qa=" + document.getElementById('idano').value + "&id_sist=" + document.getElementById('q_manut').value)
         }
 
         function enviar_sync() {

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<title>Login</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
+<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript" src="js/mc.js"/></script>
+
+<script src="js/jquery.js"></script>
+<script src="js/jquery.mobile-1.4.5.min.js"></script>
+
+<script>
+var menu_sup=[
+'<div data-role="header" data-position="fixed" data-theme="a">',
+'<div class="ui-corner-all custom-corners">',
+'<div class="ui-bar ui-bar-a" style="height:38;text-align: center;margin-left:-35;">',
+	'<div align="center">',
+	  '<table width="30"  border="0" cellpadding="0" cellspacing="0" >',
+		'<tr>' ,
+		  '<td width="30" ><img src="images/logoSC2.gif" width="125" height="24"> </td>',
+		'</tr>',
+	  '</table>',
+	'</div>',
+'</div>',
+'</div>',
+'</div>'
+].join('');
+
+
+document.addEventListener("deviceready", onDeviceReady, false);
+
+function onDeviceReady(){
+  document.getElementById('menu_opc2').innerHTML = menu_sup;
+}
+
+
+
+</script> 
+
+</head>
+<body>
+<br><br>
+<span id="menu_opc2"></span><br>
+ 
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+    <tr> 
+      
+    <td width="5%" height="100%" valign="middle"> </td>
+      <td width="90%" height="100%" valign="middle">
+	   <form name="form1" action="" method="get">
+                  
+        <input name="login" type="text" value="">
+          
+        <input name="senha" type="password" value="">
+        		
+        <input type="button" value="Enviar" onClick="validar()">
+        </form>
+		
+		</td>
+      
+    <td width="5%" height="100%" valign="middle"></td>
+    </tr>
+  </table>
+
+
+</body>
+</html>
+
+
+<script>
+
+function validar() {	
+	document.form1.action="i_empree.htm";
+	document.form1.submit();
+}
+
+</script>

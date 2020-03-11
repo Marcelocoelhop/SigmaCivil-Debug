@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="css/jquery.mobile-1.0.1.min.css" />
+<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript" src="js/mc.js"/></script>
+
+<script src="js/jquery.js"></script>
+<script src="js/jquery.mobile-1.4.5.min.js"></script>
+</head>
+
+<body>
+
+<script type="text/javascript">
+
+document.addEventListener("deviceready", onDeviceReady, false);
+
+function onDeviceReady(){
+
+	iniciar() ;
+}
+
+
+/////////////////////////////
+function iniciar()
+{ 
+					var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+										
+					///////////////  tabela cliente //////////////
+					db.transaction(function (tx) {
+						   tx.executeSql('CREATE TABLE IF NOT EXISTS mtab_cliente (id_cliente INTEGER, e_construtora TEXT)');
+						   tx.executeSql('SELECT * FROM mtab_cliente', [], function (tx, results) {
+						   var len1 = results.rows.length;
+
+					 			   tx.executeSql('CREATE TABLE IF NOT EXISTS mtab_empree (id_empree INTEGER, nome_empree TEXT, status_sync TEXT, data_implantacao_sc TEXT)');
+								   tx.executeSql('SELECT * FROM mtab_empree', [], function (tx, results) {
+								   var len2 = results.rows.length;     //verifica se tem algum comprador (evitar o caso de nao ter escolhido empreendimento e saido antes)
+									   
+										   if (len1>0 && len2>0) {
+												///////////////  FIM tabela empreendimento //////////////	        
+												db.transaction(function (tx) {
+												  tx.executeSql('SELECT * FROM mtab_empree', [], function (tx, results) {
+												   var len = results.rows.length;
+												   var i; 
+												   for (i = 0; i < len; i++){
+													 var  row = results.rows.item(i)
+													 var id_empree= row['id_empree'] ;
+												   }
+													cliente_existe(id_empree);						   
+												 }, null);
+												});										
+												///////////////  FIM tabela empreendimento //////////////	        
+										   }
+										   else {
+   											    cliente_nao_existe();
+										   }
+
+								   }, null);
+
+						   }, null);
+						 
+					});
+
+
+
+                    					
+
+function cliente_nao_existe(){
+ window.location.assign("login.htm");
+}
+
+function cliente_existe(parametro1){
+ window.location.assign("empree.htm?e=" + parametro1);
+}
+
+
+}
+
+
+</script>
+
+</body>
+</html>
+
+

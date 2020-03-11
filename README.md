@@ -1,2 +1,0 @@
-# SigmaCivil-Debug
-debug sigmacivil

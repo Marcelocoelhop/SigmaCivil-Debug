@@ -1,0 +1,92 @@
+/* TABLETS */
+@media only screen and (max-width: 768px) {
+	.title-content {
+		display: inline-grid !important;
+	}
+}
+
+/* SMARTHPHONES */
+@media only screen and (max-width: 480px) {
+    .images-center {
+        width: 100%;
+	}
+	.ui-block-a {
+		width: 45% !important;
+	}
+	.ui-block-b {
+		width: 45% !important;
+		float: right !important;
+	}
+	.date-size {
+		width: 100% !important;
+	}
+	.input-responsive {
+		width: 100% !important;
+		float: left;
+	}	
+}
+
+@media only screen and (max-width: 300px) {
+	.input-responsive {
+		width: 100% !important;
+	}
+	.ui-block-a {
+		width: 45% !important;
+	}
+	.ui-block-b {
+		width: 45% !important;
+	}
+}
+
+@media only screen and (max-width: 300px) {
+	.screen-over {
+		height: 63% !important;
+	}
+	.image-content {
+		height: 215px !important;
+	}
+	.image-content img {
+		width: 200px;
+	}
+	.title-content span {
+		font-size: 12px !important;
+	}
+	.custo-estimado {
+		width: 45% !important;
+	}
+	.custo-real {
+		width: 45% !important;
+	}
+	.input-responsive {
+		width: 115px;
+	}
+	.align_images:nth-child(3) {
+		position: relative;
+		left: 15px;
+	}
+}
+
+/* First breakpoint at 576px */
+/* Inherits mobile styles, but floats containers to make columns */
+@media all and (min-width: 36em){
+    p {
+        word-wrap: wrap;
+    }
+}
+
+/* Second breakpoint at 800px */
+/* Adjusts column proportions, tweaks base H1 */
+@media all and (min-width: 50em){
+
+}
+
+@media all and (max-width: 35em) {
+	.my-breakpoint .ui-block-a,
+	.my-breakpoint .ui-block-b,
+	.my-breakpoint .ui-block-c,
+	.my-breakpoint .ui-block-d,
+	.my-breakpoint .ui-block-e {
+		width: 100%;
+		float: none;
+	}
+}

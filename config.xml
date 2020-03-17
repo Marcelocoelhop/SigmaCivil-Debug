@@ -59,7 +59,7 @@
     <!-- Customize your app and platform with the preference element.
 	 -->
     
-	<preference name="phonegap-version" 		  value="cli-7.1.0" />      <!-- all: current version of PhoneGap -->
+	<preference name="phonegap-version" 		  value="cli-6.5.0" />      <!-- all: current version of PhoneGap -->
     <preference name="orientation"                value="default" />        <!-- all: default means both landscape and portrait are enabled -->
     <preference name="target-device"              value="universal" />      <!-- all: possible values handset, tablet, or universal -->
     <preference name="fullscreen"                 value="true" />           <!-- all: hides the status bar at the top of the screen -->
@@ -113,7 +113,7 @@
 
 		
 	<!-- Define app icon for each platform. -->
-    <icon src="icon.png" gap:platform="ios" height="1024" width="1024" />
+    <!-- <icon src="icon.png" /> -->
     <icon src="res/icon/android/icon-36-ldpi.png"   gap:platform="android"    gap:density="ldpi" />
     <icon src="res/icon/android/icon-48-mdpi.png"   gap:platform="android"    gap:density="mdpi" />
     <icon src="res/icon/android/icon-72-hdpi.png"   gap:platform="android"    gap:density="hdpi" />
@@ -137,7 +137,7 @@
 	<icon src="res/icon/ios/icon-50.png"            gap:platform="ios"      width="50" height="50" />
 	<icon src="res/icon/ios/icon-50@2x.png"         gap:platform="ios"      width="100" height="100" />
 	<icon src="res/icon/ios/icon-40.png"            gap:platform="ios"      width="40" height="40" />
-	<icon src="res/icon/ios/icon-1024.png"          gap:platform="ios"      width="1024" height="1024" />
+	<icon src="res/icon/ios/icon.png"               gap:platform="ios"      width="1024" height="1024" />
 	<icon src="res/icon/ios/icon-40@2x.png"         gap:platform="ios"      width="80" height="80" />
 
 

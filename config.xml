@@ -5,7 +5,7 @@
         xmlns:gap = "http://phonegap.com/ns/1.0"
  		xmlns:android   = "http://schemas.android.com/apk/res/android"
         id        = "br.com.sigmacivil.sc"
-        version   = "2.0.5">
+        version   = "2.0.7">
 
     <name>SigmaCivil</name>
 
@@ -59,7 +59,7 @@
     <!-- Customize your app and platform with the preference element.
 	 -->
     
-	<preference name="phonegap-version" 		  value="cli-6.5.0" />      <!-- all: current version of PhoneGap -->
+	<preference name="phonegap-version" 		  value="cli-7.1.0" />      <!-- all: current version of PhoneGap -->
     <preference name="orientation"                value="default" />        <!-- all: default means both landscape and portrait are enabled -->
     <preference name="target-device"              value="universal" />      <!-- all: possible values handset, tablet, or universal -->
     <preference name="fullscreen"                 value="true" />           <!-- all: hides the status bar at the top of the screen -->
@@ -113,7 +113,7 @@
 
 		
 	<!-- Define app icon for each platform. -->
-    <icon src="icon.png" />
+    <icon src="icon.png" gap:platform="ios" height="1024" width="1024" />
     <icon src="res/icon/android/icon-36-ldpi.png"   gap:platform="android"    gap:density="ldpi" />
     <icon src="res/icon/android/icon-48-mdpi.png"   gap:platform="android"    gap:density="mdpi" />
     <icon src="res/icon/android/icon-72-hdpi.png"   gap:platform="android"    gap:density="hdpi" />

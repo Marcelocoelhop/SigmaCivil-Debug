@@ -178,6 +178,18 @@
     <icon src="res/icon/ios/Icon-512.png"        gap:platform="ios"      width="512" height="512" />
     <icon src="res/icon/ios/Icon-1024.png"       gap:platform="ios"      width="1024" height="1024" />
 
+    <!-- autorizacoes para apple -->
+    <key>NSCameraUsageDescription</key>
+    <string>need camera access to take pictures</string>
+
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>need photo library access to get pictures from there</string>
+
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>need location access to find things nearby</string>
+
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>need photo library access to save pictures there</string>
 
     <!-- Define app splash screen for each platform. -->
     <gap:splash src="res/screen/android/screen-ldpi-portrait.png"  gap:platform="android" gap:density="ldpi" />

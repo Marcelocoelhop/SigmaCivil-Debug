@@ -1,2 +1,2 @@
 # SigmaCivil-Debug
-debug sigmacivil
+debug sigmacivil para testes

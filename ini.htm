@@ -95,18 +95,22 @@
 				objectStore.transaction.onerror = function() {
 					alert('Ocorreu um erro na criação!');
 				}
+
+				var transaction2 = db.transaction(["clientes"]);
+				var objectStore2 = transaction2.objectStore2("clientes");
+				var request = objectStore2.get("444-44-4444");
+				request.onerror = function(event) {
+					alert('Ocorreu um erro na consulta!');
+				};
+				request.onsuccess = function(event) {
+					// Fazer algo com request.result!
+					alert("O nome do SSN 444-44-4444 é " + request.result.name);
+				};
+
+
 			};
 
-			var transaction2 = db.transaction(["clientes"]);
-			var objectStore2 = transaction2.objectStore2("clientes");
-			var request = objectStore2.get("444-44-4444");
-			request.onerror = function(event) {
-				alert('Ocorreu um erro na consulta!');
-			};
-			request.onsuccess = function(event) {
-				// Fazer algo com request.result!
-				alert("O nome do SSN 444-44-4444 é " + request.result.name);
-			};
+			
 
 		}
 

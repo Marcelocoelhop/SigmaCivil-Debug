@@ -90,6 +90,7 @@
 						clientesObjectStore.add(DadosClientes[i]);
 					}
 					alert('Tabela criada!');
+					alert(clientesObjectStore);
 				}
 
 				objectStore.transaction.onerror = function() {
@@ -97,7 +98,7 @@
 				}
 
 				objectStore.get("444-44-4444").onsuccess = function(event) {
-					alert("O nome do SSN 444-44-4444 é " + request.result.nome);
+					alert("O nome do SSN 444-44-4444 é " + request.result.name);
 				};
 
 

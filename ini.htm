@@ -98,8 +98,8 @@
 			};
 
 			var transaction = db.transaction(["clientes"]);
-			var objectStore = transaction.objectStore("clientes");
-			var request = objectStore.get("444-44-4444");
+			var objectStore2 = transaction.objectStore2("clientes");
+			var request = objectStore2.get("444-44-4444");
 			request.onerror = function(event) {
 				alert('Ocorreu um erro na consulta!');
 			};

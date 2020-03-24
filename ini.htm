@@ -96,9 +96,9 @@
 					alert('Ocorreu um erro na criação!');
 				}
 
-				var transaction2 = db.transaction(["clientes"]);
-				var objectStore2 = transaction2.objectStore("clientes");
-				var request2 = objectStore2.get("444-44-4444");
+				//var transaction2 = db.transaction(["clientes"]);
+				//var objectStore2 = transaction2.objectStore("clientes");
+				var request2 = objectStore.get("444-44-4444");
 				request2.onerror = function(event) {
 					alert('Ocorreu um erro na consulta!');
 				};

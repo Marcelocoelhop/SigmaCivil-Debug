@@ -66,7 +66,7 @@
 				},
 			];
 
-			request.onupgradeneeded = function(event) {
+			request.onupgradeneeded = async function(event) {
 				var db = event.target.result;
 
 				// Cria um objectStore para conter a informação sobre nossos clientes. Nós vamos
@@ -85,7 +85,7 @@
 				// é terminada antes de adicionar algum dado nele.
 				objectStore.transaction.oncomplete = function(event) {
 					// Armazenando valores no novo objectStore.
-					var clientesObjectStore = db.transaction("clientes", "readwrite").objectStore("clientes");
+					var clientesObjectStore = await db.transaction("clientes", "readwrite").objectStore("clientes");
 					for (var i in DadosClientes) {
 						clientesObjectStore.add(DadosClientes[i]);
 					}
@@ -101,7 +101,7 @@
 				};
 
 				objectStore.delete("444-44-4444").onsuccess = function(event) {
-					alert("O nome do SSN 444-44-4444 é " + request.result.name);
+					alert("Tabela deletada " + request.result.name);
 				}
 
 			};

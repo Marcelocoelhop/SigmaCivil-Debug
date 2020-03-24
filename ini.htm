@@ -92,7 +92,7 @@
 					alert('Tabela criada!');
 				}
 
-				objectStore("clientes").transaction.onerror = function() {
+				objectStore.transaction.onerror = function() {
 					alert('Ocorreu um erro na criação!');
 				}
 

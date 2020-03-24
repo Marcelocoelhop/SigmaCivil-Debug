@@ -66,7 +66,7 @@
 				},
 			];
 
-			request.onupgradeneeded = async function(event) {
+			request.onupgradeneeded = function(event) {
 				var db = event.target.result;
 
 				// Cria um objectStore para conter a informação sobre nossos clientes. Nós vamos
@@ -85,7 +85,7 @@
 				// é terminada antes de adicionar algum dado nele.
 				objectStore.transaction.oncomplete = function(event) {
 					// Armazenando valores no novo objectStore.
-					var clientesObjectStore = await db.transaction("clientes", "readwrite").objectStore("clientes");
+					var clientesObjectStore = db.transaction("clientes", "readwrite").objectStore("clientes");
 					for (var i in DadosClientes) {
 						clientesObjectStore.add(DadosClientes[i]);
 					}

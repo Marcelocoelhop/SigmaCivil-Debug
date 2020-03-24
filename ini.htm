@@ -96,7 +96,7 @@
 					alert('Ocorreu um erro na criação!');
 				}
 
-				db.get("444-44-4444").onsuccess = function(event) {
+				objectStore.get("444-44-4444").onsuccess = function(event) {
 					alert("O nome do SSN 444-44-4444 é " + request.result.name);
 				};
 

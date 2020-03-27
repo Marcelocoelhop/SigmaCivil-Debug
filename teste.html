@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Crud Demo using jsstore</title>
+        <script src="js/jsstore.js"></script>
+    </head>
+    <body>
+    <h4>We have included JsStore in this html code.</h4>
+    
+    <script>
+        var dbName = "sigmaDB";
+        function getDbSchema() {
+            debugger;
+            var mtab_cliente = {
+                name: 'mtab_cliente',
+                columns: {
+                    // Here "Id" is name of column 
+                    id_cliente:{ primaryKey: true, autoIncrement: true },
+                    itemName:  { notNull: true, dataType: "string" },
+                    price:  { notNull: true, dataType: "number" },
+                    quantity : { notNull: true, dataType: "number" }
+                }
+            };
+            var db = {
+                name: dbName,
+                tables: [mtab_cliente]
+            }
+            return db;
+        }
+
+        // executing jsstore inside a web worker
+        var connection = new JsStore.Connection(new Worker("js/jsstore.worker.js"));
+
+        async function initJsStore() {
+            var database = getDbSchema();
+            const isDbCreated = await connection.initDb(database);
+            if(isDbCreated===true){
+                alert("tabela criada");
+                // here you can prefill database with some data
+            } else {
+                alert("tabela aberta");
+            }
+        }
+    </script>
+    
+    </body>
+</html>

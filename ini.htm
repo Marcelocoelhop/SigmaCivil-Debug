@@ -29,86 +29,89 @@
 
 		/////////////////////////////
 		function iniciar() {
-			// Na linha abaixo, você deve incluir os prefixos do navegador que você vai testar.
 			window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
-			// Não use "var indexedDB = ..." se você não está numa function.
-			// Posteriormente, você pode precisar de referências de algum objeto window.IDB*:
 			window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
 			window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
-			// (Mozilla nunca usou prefixo nesses objetos, então não precisamos window.mozIDB*)
 
 			if (!window.indexedDB) {
 				alert("Seu navegador não suporta uma versão estável do IndexedDB. Alguns recursos não estarão disponíveis.");
 			}
 
-			const dbName = "sigmaDB";
+			var db;
+			// Abrindo o banco de dados
+			var request = window.indexedDB.open("sigmaDB", 1.0);
 
-			var request = indexedDB.open(dbName, 1.0); // A versão será convertida para "1" inteiro.
+			request.onerror = function (event) {
+				alert("Erro ao criar o banco!");
+			}
 
-			request.onerror = function(event) {
-				alert("Você não habilitou minha web app para usar IndexedDB?!");
-			};
+			request.onsuccess = function (event) {
+				db = request.result;
+				db.onerror = function () {
+					// Função genérica para tratar os erros de todos os requests desse banco!
+					alert("Database error: " + event.target.errorCode);
+				}
+			}
 
-			// Isso é o que os dados de nossos clientes será.
-			const DadosClientes = [
-				{ 
-					ssn: "444-44-4444", 
-					nome: "Bill", 
-					idade: 35, 
-					email: "bill@company.com" 
-				},
-				{ 
-					ssn: "555-55-5555", 
-					nome: "Donna", 
-					idade: 32, 
-					email: "donna@home.org" 
-				},
+			var dados_cliente = [
+				{ id_cliente: "1", nome_empree: "green design", e_construtora: "0" },
+				{ id_cliente: "2", nome_empree: "sigma", e_construtora: "1" },
+				{ id_cliente: "3", nome_empree: "sigma", e_construtora: "0" },
 			];
 
 			request.onupgradeneeded = function(event) {
-				var db = event.target.result;
+				db = event.target.result;
 
-				// Cria um objectStore para conter a informação sobre nossos clientes. Nós vamos
-				// usar "ssn" como key path porque sabemos que é único;
-				var objectStore = db.createObjectStore("clientes", { keyPath: "ssn" });
+				// cria um objectStore para esse banco
+				var objectStore = db.createObjectStore("mtab_cliente", { keyPath: "id_cliente" });
 
-				// Cria um índice para buscar clientes pelo nome. Podemos ter nomes
-				// duplicados, então não podemos usar como índice único.
-				objectStore.createIndex("nome", "nome", { unique: false });
+				objectStore.createIndex("id_cliente", "id_cliente", { unique: true });
+				objectStore.createIndex("nome_empree", "nome_empree", { unique: false });
+				objectStore.createIndex("e_construtora", "e_construtora", { unique: false });
 
-				// Cria um índice para buscar clientes por email. Queremos ter certeza
-				// que não teremos 2 clientes com o mesmo e-mail;
-				objectStore.createIndex("email", "email", { unique: true });
-
-				// Usando transação oncomplete para afirmar que a criação do objectStore 
-				// é terminada antes de adicionar algum dado nele.
 				objectStore.transaction.oncomplete = function(event) {
-					// Armazenando valores no novo objectStore.
-					var clientesObjectStore = db.transaction("clientes", "readwrite").objectStore("clientes");
-					for (var i in DadosClientes) {
-						clientesObjectStore.add(DadosClientes[i]);
+					var transaction = db.transaction(["mtab_cliente"], "readwrite");
+					
+					transaction.oncomplete = function(event) {
+						alert("Pronto!");
 					}
-					alert('Tabela criada!');
-				}
 
-				objectStore.transaction.onerror = function() {
-					alert('Ocorreu um erro na criação!');
-				}
+					transaction.onerror = function(event) {
+						alert("Ocorreu um erro!");
+					}
 
-				db.transaction("clientes", "readonly").objectStore("clientes").openCursor().onsuccess = function(event) {
-					var cursor = event.target.result;
-					if(cursor) {
-						alert("ssn: " + cursor.key + " nome: " + cursor.value.nome);
-						cursor.continue();
+					var objectStore = transaction.objectStore("mtab_cliente");
+					for(var i in dados_cliente) {
+						var request = objectStore.add(dados_cliente[i]);
+						request.onsuccess = function(event) {
+							alert("inserção realizada: " + event.target.result);
+						}
+					}
+
+					// var lowerBound = ['sigma'];
+					// var upperBound = ['green design'];
+					// var range = IDBKeyRange.bound(lowerBound, upperBound, false, true);
+					// alert(range);
+
+					var whereEquals = IDBKeyRange.only(["sigma"]);
+					// var whereEquals2 = IDBKeyRange.bound("sigma", "green design", false, true);
+					var request = db.transaction(["mtab_cliente"], "readwrite").objectStore("mtab_cliente").index("nome_empree").openCursor(whereEquals);
+
+					request.onerror = function(event) {
+						alert("falhou!");
+					}
+					request.onsuccess = function(event) {
+						var cursor = event.target.result;
+						if(cursor) {					
+							alert("comando realizado! " + cursor.key + " e " + cursor.value.id_cliente);
+							cursor.continue();
+						}
 					}
 				}
-				// objectStore.get("444-44-4444").onsuccess = function(event) {
-				// 	alert("O nome do SSN 444-44-4444 é " + request.result.name);
-				// };
-
-			};
-
+			}
 		}
+
+		iniciar()
 
 	</script>
 

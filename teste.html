@@ -32,13 +32,14 @@
         function iniciar() {
             // var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
 
-            var db = window.sqlitePlugin.openatabase({
-                name: 'DB_SigmaCivil',
-                location: 'default',
-                androidDatabaseProvider: 'system'
+            var db = sqlitePlugin.openDatabase('DB_SigmaCivil', '1.0', '', 1);
+            db.transaction(function (tx) {
+                tx.executeSql('SELECT 42 AS `answer`', [], function (tx, res) {
+                    alert(res.rows.item(0)); // {"answer": 42}
+                });
             });
 
-            if(db) {
+            if (db) {
                 alert("Pronto!");
             } else {
                 alert("deu pau!");

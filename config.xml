@@ -5,7 +5,11 @@
         xmlns:gap = "http://phonegap.com/ns/1.0"
  		xmlns:android   = "http://schemas.android.com/apk/res/android"
         id        = "br.com.sigmacivil.sc"
+<<<<<<< HEAD
         version   = "2.0.91">
+=======
+        version   = "2.0.93">
+>>>>>>> 3caa2dae56649c0b9816783dc88834449f4a01cd
 
     <name>SigmaCivil</name>
 

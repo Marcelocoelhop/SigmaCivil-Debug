@@ -121,7 +121,7 @@
     <plugin name="cordova-plugin-vibration" source="npm" spec="~2.1.0" />
     
     <plugin name="cordova-sqlite-storage" spec="~0.8.5" />
-    <plugin name="cordova-plugin-sqlite-2" spec="~1.0.6" />
+    <!-- <plugin name="cordova-plugin-sqlite-2" spec="~1.0.6" /> -->
     
     <plugin name="cordova-plugin-ionic-webview" source="npm" spec="~4.1.3" />
 		

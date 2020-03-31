@@ -25,17 +25,18 @@
 		document.addEventListener("deviceready", onDeviceReady, false);
 
 		function onDeviceReady() {
-			var db = window.sqlitePlugin.openDatabase({
-				name: 'DB_SigmaCivil',
-				location: 'default',
-				androidDatabaseProvider: 'system'
-			});
 			iniciar();
 		}
 
 		/////////////////////////////
 		function iniciar() {
 			// var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+
+			var db = window.sqlitePlugin.openDatabase({
+				name: 'DB_SigmaCivil',
+				location: 'default',
+				androidDatabaseProvider: 'system'
+			});
 
 			///////////////  tabela cliente //////////////
 			db.transaction(function (tx) {

@@ -93,7 +93,15 @@
 				return true;
 			}
 
+<<<<<<< HEAD
+				objectStore.createIndex("id_cliente", "id_cliente", { unique: true });
+				objectStore.createIndex("nome_empree", "nome_empree", { unique: false });
+				objectStore.createIndex("e_construtora", "e_construtora", { unique: false });
+				
+				objectStore.createIndex("nome_empree2", ["nome_empree", "id_cliente"], { unique: false });
+=======
 		}
+>>>>>>> a9c2c55a8be356f0de14237d512eac81af332eeb
 
 		function cliente_nao_existe() {
 
@@ -104,10 +112,36 @@
 
 			if (tem_conexao()) {
 
+<<<<<<< HEAD
+					var whereEquals = IDBKeyRange.only(["sigma", "3"]);
+
+					var request1 = db.transaction(["mtab_cliente"], "readwrite").objectStore("mtab_cliente").index("e_construtora");
+					var request = request1.get("0");
+
+					request.onerror = function(event) {
+						alert("falhou!");
+					}
+					request.onsuccess = function(event) {
+						var data = request.result;
+
+						data.nome_empree = "sigmacivil 2.0";
+
+						// Atulizar esse dado no banco
+						var requestUpdate = request1.put(data);
+						requestUpdate.onerror = function(event) {
+							alert("falhou!");
+						};
+						requestUpdate.onsuccess = function(event) {
+							alert(request.result.nome_empree);
+						};
+					}
+				}
+=======
 				window.location.assign("empree_online.htm" + parametro1)
 			} else {
 
 				window.location.assign("empree.htm" + parametro1);
+>>>>>>> a9c2c55a8be356f0de14237d512eac81af332eeb
 			}
 		}
 

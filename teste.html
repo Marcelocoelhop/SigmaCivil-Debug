@@ -25,16 +25,14 @@
         document.addEventListener("deviceready", onDeviceReady, false);
 
         function onDeviceReady() {
-            alert('ponto 0');
             iniciar();
         }
 
         /////////////////////////////
         function iniciar() {
-            alert('ponto 1');
             // var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
 
-            var db = window.sqlitePlugin.openDatabase({
+            var db = window.sqlitePlugin.openatabase({
                 name: 'DB_SigmaCivil',
                 location: 'default',
                 androidDatabaseProvider: 'system'
@@ -45,8 +43,6 @@
             } else {
                 alert("deu pau!");
             }
-
-            alert('ponto 2');
 
         }
 

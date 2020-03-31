@@ -18,83 +18,101 @@
 	<script type="text/javascript">
 
 		window.onerror = function (message, url, lineNumber) {
+			//alert("Error: " + message + " in " + url + " at line " + lineNumber);
 			alert(`Error: ${message} in ${url} at line ${lineNumber}`);
 		}
 
 		document.addEventListener("deviceready", onDeviceReady, false);
 
 		function onDeviceReady() {
+			var db = window.sqlitePlugin.openDatabase({
+				name: 'DB_SigmaCivil',
+				location: 'default',
+				androidDatabaseProvider: 'system'
+			});
 			iniciar();
 		}
 
 		/////////////////////////////
 		function iniciar() {
-			window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
-			window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
-			window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
+			// var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
 
-			if (!window.indexedDB) {
-				alert("Seu navegador não suporta uma versão estável do IndexedDB. Alguns recursos não estarão disponíveis.");
+			///////////////  tabela cliente //////////////
+			db.transaction(function (tx) {
+				alert('ponto 0');
+				tx.executeSql('CREATE TABLE IF NOT EXISTS mtab_cliente (id_cliente INTEGER, e_construtora TEXT, text1 TEXT, text2 TEXT)');
+				tx.executeSql('SELECT * FROM mtab_cliente', [], function (tx, results) {
+					alert('ponto 1');
+					var len1 = results.rows.length;
+
+					var j;
+					for (j = 0; j < len1; j++) {
+						var row = results.rows.item(j);
+						var login = row['text1'];
+						var senha = row['text2'];
+					}
+
+					tx.executeSql('CREATE TABLE IF NOT EXISTS mtab_empree (id_empree INTEGER, nome_empree TEXT, status_sync TEXT, data_implantacao_sc TEXT)');
+					tx.executeSql('SELECT * FROM mtab_empree', [], function (tx, results) {
+						var len2 = results.rows.length;     //verifica se tem algum comprador (evitar o caso de nao ter escolhido empreendimento e saido antes)
+
+						if (len1 > 0 && len2 > 0) {
+							///////////////  FIM tabela empreendimento //////////////	        
+							db.transaction(function (tx) {
+								tx.executeSql('SELECT * FROM mtab_empree', [], function (tx, results) {
+									var len = results.rows.length;
+									var i;
+									for (i = 0; i < len; i++) {
+										var row = results.rows.item(i)
+										var id_empree = row['id_empree'];
+									}
+									cliente_existe("?e=" + id_empree + "&l=" + login + "&s=" + senha);
+								}, null);
+							});
+							///////////////  FIM tabela empreendimento //////////////	        
+						}
+						else {
+							cliente_nao_existe();
+						}
+
+					}, null);
+
+				}, null);
+
+			});
+
+		}
+
+		function tem_conexao() {
+
+			if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
+				// alert('Sem conexão com internet. Favor se conectar.');
+				return false;
+			}
+			else {
+				return true;
 			}
 
-			var db;
-			// Abrindo o banco de dados
-			var request = window.indexedDB.open("sigmaDB", 1.0);
-
-			request.onerror = function (event) {
-				alert("Erro ao criar o banco!");
-			}
-
-			request.onsuccess = function (event) {
-				db = request.result;
-				db.onerror = function () {
-					// Função genérica para tratar os erros de todos os requests desse banco!
-					alert("Database error: " + event.target.errorCode);
-				}
-			}
-
-			var dados_cliente = [
-				{ id_cliente: "1", nome_empree: "green design", e_construtora: "0" },
-				{ id_cliente: "2", nome_empree: "sigma", e_construtora: "1" },
-				{ id_cliente: "3", nome_empree: "sigma", e_construtora: "0" },
-			];
-
-			request.onupgradeneeded = function(event) {
-				db = event.target.result;
-
-				// cria um objectStore para esse banco
-				var objectStore = db.createObjectStore("mtab_cliente", { keyPath: "id_cliente" });
-
+<<<<<<< HEAD
 				objectStore.createIndex("id_cliente", "id_cliente", { unique: true });
 				objectStore.createIndex("nome_empree", "nome_empree", { unique: false });
 				objectStore.createIndex("e_construtora", "e_construtora", { unique: false });
 				
 				objectStore.createIndex("nome_empree2", ["nome_empree", "id_cliente"], { unique: false });
+=======
+		}
+>>>>>>> a9c2c55a8be356f0de14237d512eac81af332eeb
 
-				objectStore.transaction.oncomplete = function(event) {
-					var transaction = db.transaction(["mtab_cliente"], "readwrite");
-					
-					transaction.oncomplete = function(event) {
-						alert("Pronto!");
-					}
+		function cliente_nao_existe() {
 
-					transaction.onerror = function(event) {
-						alert("Ocorreu um erro!");
-					}
+			window.location.assign("login.htm");
+		}
 
-					var objectStore = transaction.objectStore("mtab_cliente");
-					for(var i in dados_cliente) {
-						var request = objectStore.add(dados_cliente[i]);
-						request.onsuccess = function(event) {
-							alert("inserção realizada: " + event.target.result);
-						}
-					}
+		function cliente_existe(parametro1) {
 
-					// var lowerBound = ['sigma'];
-					// var upperBound = ['green design'];
-					// var range = IDBKeyRange.bound(lowerBound, upperBound, false, true);
-					// alert(range);
+			if (tem_conexao()) {
 
+<<<<<<< HEAD
 					var whereEquals = IDBKeyRange.only(["sigma", "3"]);
 
 					var request1 = db.transaction(["mtab_cliente"], "readwrite").objectStore("mtab_cliente").index("e_construtora");
@@ -118,10 +136,14 @@
 						};
 					}
 				}
+=======
+				window.location.assign("empree_online.htm" + parametro1)
+			} else {
+
+				window.location.assign("empree.htm" + parametro1);
+>>>>>>> a9c2c55a8be356f0de14237d512eac81af332eeb
 			}
 		}
-
-		iniciar()
 
 	</script>
 

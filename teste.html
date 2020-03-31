@@ -18,25 +18,28 @@
     <script type="text/javascript">
 
         window.onerror = function (message, url, lineNumber) {
-            //alert("Error: " + message + " in " + url + " at line " + lineNumber);
-            alert(`Error: ${message} in ${url} at line ${lineNumber}`);
+            alert("Error: " + message + " in " + url + " at line " + lineNumber);
+            // alert(`Error: ${message} in ${url} at line ${lineNumber}`);
         }
 
         document.addEventListener("deviceready", onDeviceReady, false);
 
         function onDeviceReady() {
+            alert('ponto 0');
             iniciar();
         }
 
         /////////////////////////////
         function iniciar() {
+            alert('ponto 1');
             // var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
 
-            var db = window.sqlitePlugin.openatabase({
+            var db = window.sqlitePlugin.openDatabase({
                 name: 'DB_SigmaCivil',
                 location: 'default',
                 androidDatabaseProvider: 'system'
             });
+            alert('ponto 2');
 
         }
 

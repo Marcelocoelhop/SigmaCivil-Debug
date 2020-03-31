@@ -19,6 +19,7 @@
 	<script type="text/javascript">
 
 		window.onerror = function (message, url, lineNumber) {
+			//alert("Error: " + message + " in " + url + " at line " + lineNumber);
 			alert(`Error: ${message} in ${url} at line ${lineNumber}`);
 		}
 
@@ -31,12 +32,81 @@
 
 		/////////////////////////////
 		function iniciar() {
-			alert('ponto 1');
+			
 			var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
-			alert('ponto 2');
+
+			///////////////  tabela cliente //////////////
+			db.transaction(function (tx) {
+				tx.executeSql('CREATE TABLE IF NOT EXISTS mtab_cliente (id_cliente INTEGER, e_construtora TEXT, text1 TEXT, text2 TEXT)');
+				tx.executeSql('SELECT * FROM mtab_cliente', [], function (tx, results) {
+					var len1 = results.rows.length;
+
+					var j;
+					for (j = 0; j < len1; j++) {
+						var row = results.rows.item(j);
+						var login = row['text1'];
+					    var senha = row['text2'];						
+					}
+
+					tx.executeSql('CREATE TABLE IF NOT EXISTS mtab_empree (id_empree INTEGER, nome_empree TEXT, status_sync TEXT, data_implantacao_sc TEXT)');
+					tx.executeSql('SELECT * FROM mtab_empree', [], function (tx, results) {
+						var len2 = results.rows.length;     //verifica se tem algum comprador (evitar o caso de nao ter escolhido empreendimento e saido antes)
+
+						if (len1 > 0 && len2 > 0) {
+							///////////////  FIM tabela empreendimento //////////////	        
+							db.transaction(function (tx) {
+								tx.executeSql('SELECT * FROM mtab_empree', [], function (tx, results) {
+									var len = results.rows.length;
+									var i;
+									for (i = 0; i < len; i++) {
+										var row = results.rows.item(i)
+										var id_empree = row['id_empree'];
+									}
+									cliente_existe("?e=" + id_empree + "&l=" + login + "&s=" + senha);
+								}, null);
+							});
+							///////////////  FIM tabela empreendimento //////////////	        
+						}
+						else {
+							cliente_nao_existe();
+						}
+
+					}, null);
+
+				}, null);
+
+			});
+
 		}
 
+		function tem_conexao() {
+
+			if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
+				// alert('Sem conexão com internet. Favor se conectar.');
+				return false;
+			}
+			else {
+				return true;
+			}
+
+		}
+
+		function cliente_nao_existe() {
 		
+			window.location.assign("login.htm");
+		}
+
+		function cliente_existe(parametro1) {
+		
+			if (tem_conexao()) {
+			
+				window.location.assign("empree_online.htm" + parametro1)
+			} else {
+				
+				window.location.assign("empree.htm" + parametro1);
+			}
+		}
+
 	</script>
 
 </body>

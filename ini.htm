@@ -68,6 +68,8 @@
 				objectStore.createIndex("id_cliente", "id_cliente", { unique: true });
 				objectStore.createIndex("nome_empree", "nome_empree", { unique: false });
 				objectStore.createIndex("e_construtora", "e_construtora", { unique: false });
+				
+				objectStore.createIndex("nome_empree2", ["nome_empree", "id_cliente"], { unique: false });
 
 				objectStore.transaction.oncomplete = function(event) {
 					var transaction = db.transaction(["mtab_cliente"], "readwrite");
@@ -93,19 +95,27 @@
 					// var range = IDBKeyRange.bound(lowerBound, upperBound, false, true);
 					// alert(range);
 
-					var whereEquals = IDBKeyRange.only(["sigma"]);
-					// var whereEquals2 = IDBKeyRange.bound("sigma", "green design", false, true);
-					var request = db.transaction(["mtab_cliente"], "readwrite").objectStore("mtab_cliente").index("nome_empree").openCursor(whereEquals);
+					var whereEquals = IDBKeyRange.only(["sigma", "3"]);
+
+					var request1 = db.transaction(["mtab_cliente"], "readwrite").objectStore("mtab_cliente").index("e_construtora");
+					var request = request1.get("0");
 
 					request.onerror = function(event) {
 						alert("falhou!");
 					}
 					request.onsuccess = function(event) {
-						var cursor = event.target.result;
-						if(cursor) {					
-							alert("comando realizado! " + cursor.key + " e " + cursor.value.id_cliente);
-							cursor.continue();
-						}
+						var data = request.result;
+
+						data.nome_empree = "sigmacivil 2.0";
+
+						// Atulizar esse dado no banco
+						var requestUpdate = request1.put(data);
+						requestUpdate.onerror = function(event) {
+							alert("falhou!");
+						};
+						requestUpdate.onsuccess = function(event) {
+							alert(request.result.nome_empree);
+						};
 					}
 				}
 			}

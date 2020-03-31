@@ -30,8 +30,6 @@
 
 		/////////////////////////////
 		function iniciar() {
-<<<<<<< HEAD
-			
 			var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
 
 			///////////////  tabela cliente //////////////
@@ -105,91 +103,6 @@
 				window.location.assign("empree.htm" + parametro1);
 			}
 		}
-=======
-			window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
-			window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
-			window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
-
-			if (!window.indexedDB) {
-				alert("Seu navegador não suporta uma versão estável do IndexedDB. Alguns recursos não estarão disponíveis.");
-			}
-
-			var db;
-			// Abrindo o banco de dados
-			var request = window.indexedDB.open("sigmaDB", 1.0);
-
-			request.onerror = function (event) {
-				alert("Erro ao criar o banco!");
-			}
-
-			request.onsuccess = function (event) {
-				db = request.result;
-				db.onerror = function () {
-					// Função genérica para tratar os erros de todos os requests desse banco!
-					alert("Database error: " + event.target.errorCode);
-				}
-			}
-
-			var dados_cliente = [
-				{ id_cliente: "1", nome_empree: "green design", e_construtora: "0" },
-				{ id_cliente: "2", nome_empree: "sigma", e_construtora: "1" },
-				{ id_cliente: "3", nome_empree: "sigma", e_construtora: "0" },
-			];
-
-			request.onupgradeneeded = function(event) {
-				db = event.target.result;
-
-				// cria um objectStore para esse banco
-				var objectStore = db.createObjectStore("mtab_cliente", { keyPath: "id_cliente" });
-
-				objectStore.createIndex("id_cliente", "id_cliente", { unique: true });
-				objectStore.createIndex("nome_empree", "nome_empree", { unique: false });
-				objectStore.createIndex("e_construtora", "e_construtora", { unique: false });
-
-				objectStore.transaction.oncomplete = function(event) {
-					var transaction = db.transaction(["mtab_cliente"], "readwrite");
-					
-					transaction.oncomplete = function(event) {
-						alert("Pronto!");
-					}
-
-					transaction.onerror = function(event) {
-						alert("Ocorreu um erro!");
-					}
-
-					var objectStore = transaction.objectStore("mtab_cliente");
-					for(var i in dados_cliente) {
-						var request = objectStore.add(dados_cliente[i]);
-						request.onsuccess = function(event) {
-							alert("inserção realizada: " + event.target.result);
-						}
-					}
-
-					// var lowerBound = ['sigma'];
-					// var upperBound = ['green design'];
-					// var range = IDBKeyRange.bound(lowerBound, upperBound, false, true);
-					// alert(range);
-
-					var whereEquals = IDBKeyRange.only(["sigma"]);
-					// var whereEquals2 = IDBKeyRange.bound("sigma", "green design", false, true);
-					var request = db.transaction(["mtab_cliente"], "readwrite").objectStore("mtab_cliente").index("nome_empree").openCursor(whereEquals);
-
-					request.onerror = function(event) {
-						alert("falhou!");
-					}
-					request.onsuccess = function(event) {
-						var cursor = event.target.result;
-						if(cursor) {					
-							alert("comando realizado! " + cursor.key + " e " + cursor.value.id_cliente);
-							cursor.continue();
-						}
-					}
-				}
-			}
-		}
-
-		iniciar()
->>>>>>> 3caa2dae56649c0b9816783dc88834449f4a01cd
 
 	</script>
 

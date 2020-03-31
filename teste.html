@@ -35,7 +35,7 @@
             var db = sqlitePlugin.openDatabase('DB_SigmaCivil', '1.0', '', 1);
             db.transaction(function (tx) {
                 tx.executeSql('SELECT 42 AS `answer`', [], function (tx, res) {
-                    alert(res.rows.item(0)); // {"answer": 42}
+                    alert(res.rows.item(0).answer); // {"answer": 42}
                 });
             });
 

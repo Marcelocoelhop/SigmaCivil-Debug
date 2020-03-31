@@ -120,7 +120,7 @@
     <plugin name="cordova-plugin-statusbar" source="npm" spec="~2.1.2" />
     <plugin name="cordova-plugin-vibration" source="npm" spec="~2.1.0" />
     
-    <plugin name="cordova-sqlite-storage" source="npm" spec="~5.0.0" />
+    <plugin name="cordova-sqlite-storage" source="npm" spec="~0.8.5" />
     <!-- <plugin name="cordova-sqlite-evcore-extbuild-free" spec="~0.12.0" /> -->
     <!-- npm i cordova-sqlite-evcore-extbuild-free -->
     

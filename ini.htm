@@ -25,24 +25,31 @@
 		document.addEventListener("deviceready", onDeviceReady, false);
 
 		function onDeviceReady() {
+			var db = window.sqlitePlugin.openDatabase({
+				name: 'DB_SigmaCivil',
+				location: 'default',
+				androidDatabaseProvider: 'system'
+			});
 			iniciar();
 		}
 
 		/////////////////////////////
 		function iniciar() {
-			var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+			// var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
 
 			///////////////  tabela cliente //////////////
 			db.transaction(function (tx) {
+				alert('ponto 0');
 				tx.executeSql('CREATE TABLE IF NOT EXISTS mtab_cliente (id_cliente INTEGER, e_construtora TEXT, text1 TEXT, text2 TEXT)');
 				tx.executeSql('SELECT * FROM mtab_cliente', [], function (tx, results) {
+					alert('ponto 1');
 					var len1 = results.rows.length;
 
 					var j;
 					for (j = 0; j < len1; j++) {
 						var row = results.rows.item(j);
 						var login = row['text1'];
-					    var senha = row['text2'];						
+						var senha = row['text2'];
 					}
 
 					tx.executeSql('CREATE TABLE IF NOT EXISTS mtab_empree (id_empree INTEGER, nome_empree TEXT, status_sync TEXT, data_implantacao_sc TEXT)');
@@ -89,17 +96,17 @@
 		}
 
 		function cliente_nao_existe() {
-		
+
 			window.location.assign("login.htm");
 		}
 
 		function cliente_existe(parametro1) {
-		
+
 			if (tem_conexao()) {
-			
+
 				window.location.assign("empree_online.htm" + parametro1)
 			} else {
-				
+
 				window.location.assign("empree.htm" + parametro1);
 			}
 		}

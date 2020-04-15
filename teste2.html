@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>IndexedDB note store</title>
+</head>
+
+<body>
+
+    <script>
+        let db;
+        let dbReq = indexedDB.open('myDatabase', 1);
+
+        dbReq.onupgradeneeded = function (event) {
+            db = event.target.result;
+
+            let notes = db.createObjectStore('notes', { autoIncrement: true });
+            let mtab_cliente = db.createObjectStore('mtab_cliente', { keyPath: 'id_cliente' });
+        }
+
+        dbReq.onsuccess = function (event) {
+            db = event.target.result;
+        }
+
+        dbReq.onerror = function (event) {
+            alert('error opening database ' + event.target.errorCode);
+        }
+
+        function addStickyNote(db, message) {
+            let tx = db.transaction(['notes'], 'readwrite');
+            let store = tx.objectStore('notes');
+
+            let note = { text: message, timestamp: Date.now() };
+            store.add(note);
+
+            tx.oncomplete = function () {
+                alert('stored note!')
+            }
+
+            tx.onerror = function (event) {
+                alert('error storing note ' + event.target.errorCode);
+            }
+        }
+
+        dbReq.onsuccess = function (event) {
+            db = event.target.result;
+            // Add some sticky notes
+            addStickyNote(db, 'Sloths are awesome!');
+            addStickyNote(db, 'Order more hibiscus tea');
+            addStickyNote(db, 'And Green Sheen shampoo, the best for sloth fur algae grooming!');
+        }
+
+    </script>
+</body>
+
+</html>

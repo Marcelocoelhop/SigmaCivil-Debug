@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Crud Demo using jsstore</title>
+    <script src="js/jsstore.js"></script>
+</head>
+
+<body>
+
+    <script>
+        window.onerror = function (message, url, lineNumber) {
+            alert("Error: " + message + " in " + url + " at line " + lineNumber);
+        }
+
+        window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+        window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
+        window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
+
+        if (!window.indexedDB) {
+            alert("Seu navegador não suporta uma versão estável do IndexedDB. Alguns recursos não estarão disponíveis.");
+        }
+
+        // var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+
+        var db;
+        var request = window.indexedDB.open("db_sigmacivil", "1");
+
+        request.onerror = function (event) {
+            alert("Erro ao criar o banco");
+        };
+
+        request.onsuccess = function (event) {
+            db = request.result;
+            db.onerror = function (event) {
+                alert("Database error: " + event.target.errorCode);
+            }
+        }
+
+        request.onupgradeneeded = function (event) {
+            db = event.target.result;
+            var mtab_cliente = db.createObjectStore("mtab_cliente", { keyPath: "id_cliente" });
+
+            mtab_cliente.createIndex("id_cliente", "id_cliente", { unique: true });
+            mtab_cliente.createIndex("e_construtora", "e_construtora", { unique: false });
+            mtab_cliente.createIndex("text1", "text1", { unique: false });
+            mtab_cliente.createIndex("text2", "text2", { unique: false });
+
+            var mtab_empree = db.createObjectStore("mtab_empree", { keyPath: "id_empree" });
+
+            mtab_empree.createIndex("id_empree", "id_empree", { unique: true });
+            mtab_empree.createIndex("nome_empree", "nome_empree", { unique: false });
+            mtab_empree.createIndex("status_sync", "status_sync", { unique: false });
+            mtab_empree.createIndex("data_implantacao_sc", "data_implantacao_sc", { unique: false });
+
+            var mtab_prog_manut = db.createObjectStore("mtab_prog_manut", { keyPath: "id_prog_manut" });
+
+            mtab_prog_manut.createIndex("id_prog_manut", "id_prog_manut", { unique: true });
+            mtab_prog_manut.createIndex("nome_sistema", "nome_sistema", { unique: false });
+            mtab_prog_manut.createIndex("nome_atividade", "nome_atividade", { unique: false });
+            mtab_prog_manut.createIndex("nome_periodicidade", "nome_periodicidade", { unique: false });
+            mtab_prog_manut.createIndex("qtde_agrupamentos_eventos", "qtde_agrupamentos_eventos", { unique: false });
+            mtab_prog_manut.createIndex("qtde_dias_periodicidade", "qtde_dias_periodicidade", { unique: false });
+            mtab_prog_manut.createIndex("data_inicial_garantia", "data_inicial_garantia", { unique: false });
+            mtab_prog_manut.createIndex("prazo_garantia_dias", "prazo_garantia_dias", { unique: false });
+            mtab_prog_manut.createIndex("formato_periodicidade", "formato_periodicidade", { unique: false });
+
+            var mtab_prog_manut_evento = db.createObjectStore("mtab_prog_manut_evento", { keyPath: "id_prog_manut" });
+
+            mtab_prog_manut_evento.createIndex("id_prog_manut", "id_prog_manut", { unique: true });
+            mtab_prog_manut_evento.createIndex("dia_evento", "dia_evento", { unique: false });
+            mtab_prog_manut_evento.createIndex("mes_evento", "mes_evento", { unique: false });
+            mtab_prog_manut_evento.createIndex("ano_evento", "ano_evento", { unique: false });
+            mtab_prog_manut_evento.createIndex("caminho_imagens", "caminho_imagens", { unique: false });
+            mtab_prog_manut_evento.createIndex("caminho_audio", "caminho_audio", { unique: false });
+            mtab_prog_manut_evento.createIndex("caminho_video", "caminho_video", { unique: false });
+            mtab_prog_manut_evento.createIndex("caminho_texto", "caminho_texto", { unique: false });
+            mtab_prog_manut_evento.createIndex("status_imagens_upl", "status_imagens_upl", { unique: false });
+            mtab_prog_manut_evento.createIndex("status_video_upl", "status_video_upl", { unique: false });
+            mtab_prog_manut_evento.createIndex("status_audio_upl", "status_audio_upl", { unique: false });
+            mtab_prog_manut_evento.createIndex("status_texto_upl", "status_texto_upl", { unique: false });
+            mtab_prog_manut_evento.createIndex("comparar", ["id_prog_manut", "dia_evento", "mes_evento", "ano_evento"], { unique: false });
+            // removerTabela(db, 'mtab_cliente');
+        };
+
+        request.onsuccess = function (event) {
+            db = event.target.result;
+            removerDados(db, 'mtab_cliente');
+            addCliente(db, clientes);
+
+            removerDados(db, 'mtab_empree');
+            addEmpree(db, emprees);
+
+            removerDados(db, 'mtab_prog_manut');
+            addManut(db, manuts);
+
+            removerDados(db, 'mtab_prog_manut_evento');
+            consultaCliente(db, clientes, emprees);
+        }
+
+        request.onerror = function (event) {
+            alert("Erro na criação: " + event.target.error);
+        }
+
+        function removerTabela(db, tabela) {
+            var request = db.deleteObjectStore(tabela);
+        }
+
+        var clientes = [
+            {
+                id_cliente: "1",
+                e_construtora: "1",
+                text1: "teste l",
+                text2: "teste s"
+            },
+            {
+                id_cliente: "2",
+                e_construtora: "0",
+                text1: "teste teste",
+                text2: "teste teste2 s"
+            }
+        ];
+
+        var emprees = [
+            {
+                id_empree: "1",
+                nome_empree: "Green Design",
+                status_sync: "1",
+                data_implantacao_sc: "15"
+            },
+        ];
+
+        // for (var i = 0; i < objEmpree.dados_empreendimento.length; i++) {
+        var manuts = [
+            // {
+            //     id_prog_manut: objEmpree.dados_empreendimento[i].id_prog_manut,
+            //     nome_sistema: objEmpree.dados_empreendimento[i].nome_sistema,
+            //     nome_atividade: objEmpree.dados_empreendimento[i].nome_atividade,
+            //     nome_periodicidade: objEmpree.dados_empreendimento[i].nome_periodicidade,
+            //     qtde_agrupamentos_eventos: objEmpree.dados_empreendimento[i].qtde_agrupamentos_eventos,
+            //     qtde_dias_periodicidade: objEmpree.dados_empreendimento[i].qtde_dias_periodicidade,
+            //     data_inicial_garantia: objEmpree.dados_empreendimento[i].data_inicial_garantia,
+            //     prazo_garantia_dias: objEmpree.dados_empreendimento[i].prazo_garantia_dias,
+            //     formato_periodicidade: objEmpree.dados_empreendimento[i].formato_periodicidade
+            // }
+        ];
+        // }
+
+        function addCliente(db, clientes) {
+            var tx = db.transaction(['mtab_cliente'], 'readwrite');
+            var store = tx.objectStore('mtab_cliente');
+
+            clientes.map(function (cliente) {
+                store.add(cliente);
+            });
+
+            tx.oncomplete = function () {
+                alert('stored note!')
+            }
+
+            tx.onerror = function (event) {
+                alert('error storing note ' + event.target.error);
+            }
+        }
+
+        function consultaCliente(db, clientes, emprees) {
+            var login = "";
+            var senha = "";
+            var id_cliente2 = "1";
+            var e_construtora2 = "1";
+            var tx = db.transaction(['mtab_cliente'], 'readwrite');
+            var store = tx.objectStore('mtab_cliente');
+            var index = store.index('comparar');
+            var range = IDBKeyRange.only(["1", "1"])
+            var objectStoreRequest = store.openCursor(range);
+            objectStoreRequest.onsuccess = function (event) {
+                var cursor = event.target.result;
+                if (cursor) {
+                    clientes.push(cursor.value);
+
+                    login = cursor.value.text1;
+                    alert(login)
+                    senha = cursor.value.text2;
+
+                    cursor.continue();
+                }
+            }
+
+            var tx2 = db.transaction(['mtab_empree'], 'readwrite');
+            var store2 = tx2.objectStore('mtab_empree');
+            var objectStoreRequest2 = store2.openCursor();
+            objectStoreRequest2.onsuccess = function (event) {
+                if (clientes.length > 0 && emprees.length > 0) {
+                    alert('ponto 1');
+                    var cursor = event.target.result;
+                    if (cursor) {
+                        var data = cursor.value;
+                        emprees.push(cursor.value);
+
+                        data.nome_empree = "teste testando!";
+                        data.data_implantacao_sc = "515";
+
+                        const request = cursor.update(data);
+                        request.onsuccess = function (event) {
+                            alert("Atualizado com sucesso!");
+                        }
+
+                        var id_empree = cursor.value.id_empree;
+                        cliente_existe("?e=" + id_empree + "&l=" + login + "&s=" + senha);
+
+                        cursor.continue();
+                    }
+                } else {
+                    cliente_nao_existe();
+                }
+            }
+        }
+
+        function addEmpree(db, emprees) {
+            var tx = db.transaction(['mtab_empree'], 'readwrite');
+            var store = tx.objectStore('mtab_empree');
+
+            emprees.map(function (empree) {
+                store.add(empree);
+            });
+
+            tx.oncomplete = function () {
+                alert('stored note empree!')
+            }
+
+            tx.onerror = function (event) {
+                alert('error storing empree note ' + event.target.error);
+            }
+        }
+
+        function addManut(db, manuts) {
+            var tx = db.transaction(['mtab_prog_manut'], 'readwrite');
+            var store = tx.objectStore('mtab_prog_manut');
+
+            manuts.map(function (manut) {
+                store.add(manut);
+            });
+
+            tx.oncomplete = function () {
+                alert('stored note manut!')
+            }
+
+            tx.onerror = function (event) {
+                alert('error storing manut note ' + event.target.error);
+            }
+        }
+
+        function removerDados(db, tabela) {
+            var tx = db.transaction([tabela], 'readwrite');
+            var store = tx.objectStore(tabela);
+
+            var objectStoreRequest = store.clear();
+            objectStoreRequest.onsuccess = function (event) {
+                alert("dados apagados");
+            }
+        }
+
+        function tem_conexao() {
+            if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        function cliente_nao_existe() {
+            alert("Cliente não existe");
+            // window.location.assign("login.htm");
+        }
+
+        function cliente_existe(parametro1) {
+            if (tem_conexao()) {
+                alert(parametro1);
+                // window.location.assign("empree_online.htm" + parametro1)
+            } else {
+                alert("Cliente não exsite");
+                // window.location.assign("empree.htm" + parametro1);
+            }
+        }
+    </script>
+</body>
+
+</html>

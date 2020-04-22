@@ -98,6 +98,14 @@
         // EXECUTA CASO TENHA INTERNET
         function iniciar() {
 
+            window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+            window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
+            window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
+
+            if (!window.indexedDB) {
+                alert("Seu navegador não suporta uma versão estável do IndexedDB. Alguns recursos não estarão disponíveis.");
+            }
+
             var rrr_id_prog_manut = id_prog_manut
 
             // CASCA OFFLINE
@@ -579,14 +587,6 @@
             }
             ajax2.send();
             ////  capturando dados do evento
-
-            window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
-            window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
-            window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
-
-            if (!window.indexedDB) {
-                alert("Seu navegador não suporta uma versão estável do IndexedDB. Alguns recursos não estarão disponíveis.");
-            }
 
             var db;
             var request = window.indexedDB.open("db_sigmacivil", "1");
@@ -1331,6 +1331,7 @@
                 objectStoreRequest.onsuccess = function (event) {
                     var cursor = event.target.result;
                     if (cursor) {
+                        alert('ponto 3')
                         var data = cursor.value;
                         var aux_dia_evento = data.dia_evento;
                         var aux_mes_evento = data.mes_evento;
@@ -1354,9 +1355,11 @@
                         }
 
                         if (taman > 1) {
+                            alert('ponto 4')
                             aux_2 = aux_1.substring(0, aux_1.length - 2);
                             aux_2_status = aux_1_status.substring(0, aux_1_status.length - 2);
                         } else if (taman == 0 || taman == 1) {
+                            alert('ponto 5')
                             aux_2 = "";
                             aux_2_status = "";
                         }
@@ -1381,22 +1384,50 @@
                         var data = cursor.value;
                         manutsEvento.push(cursor.value);
 
+                        alert("data.caminho_imagens: " + data.caminho_imagens)
                         data.caminho_imagens = aux_2;
+                        alert("data.caminho_imagens: " + data.caminho_imagens)
                         data.status_imagens_upl = aux_2_status;
 
                         var request = cursor.update(data);
+                        alert(request)
                         request.onsuccess = function (event) {
                             alert("Atualização realizada update delete!");
                         }
-
-                        request.onerror = function (event) {
-                            alert('Error: ' + event.target.error)
-                        }
-
                         cursor.continue();
                     }
+
+                    reload_page();
                 }
             }
+
+            // function deleteManutEventoVideo(db, manutsEvento) {
+            //     var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+            //     var store = tx.objectStore('mtab_prog_manut_evento');
+            //     var index = store.index('comparar');
+            //     var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+            //     index.openCursor(whereEquals).onsuccess = function (event) {
+            //         var cursor = event.target.result;
+            //         if (cursor) {
+            //             var data = cursor.value;
+            //             manutsEvento.push(cursor.value);
+
+            //             alert('ponto 5')
+            //             alert("data.caminho_imagens: " + data.caminho_imagens)
+            //             alert("data.caminho_video: " + data.caminho_video)
+            //             data.caminho_video = "";
+            //             data.status_video_upl = "0";
+
+            //             var request = cursor.update(data);
+            //             request.onsuccess = function (event) {
+            //                 alert("Atualização realizada delete função video!");
+            //             }
+            //             cursor.continue();
+            //         }
+
+            //         reload_page();
+            //     }
+            // }
 
 
 
@@ -3355,7 +3386,7 @@
 
                     cursor.continue();
                 }
-                
+
                 reload_page();
             }
         }
@@ -3505,12 +3536,12 @@
 
                     cursor.continue();
                 }
-                
+
                 reload_page_empree();
             }
         }
 
-        
+
 
 
 

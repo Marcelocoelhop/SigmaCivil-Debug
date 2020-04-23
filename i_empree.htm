@@ -91,77 +91,6 @@
 								alert("Erro ao criar o banco");
 							};
 
-							request.onsuccess = function (event) {
-								db = request.result;
-								db.onerror = function (event) {
-									alert("Database error: " + event.target.error);
-								}
-							};
-
-							request.onupgradeneeded = function (event) {
-								db = event.target.result;
-								var mtab_cliente = db.createObjectStore("mtab_cliente", { keyPath: "id_cliente" });
-
-								mtab_cliente.createIndex("id_cliente", "id_cliente", { unique: true });
-								mtab_cliente.createIndex("e_construtora", "e_construtora", { unique: false });
-								mtab_cliente.createIndex("text1", "text1", { unique: false });
-								mtab_cliente.createIndex("text2", "text2", { unique: false });
-
-								var mtab_empree = db.createObjectStore("mtab_empree", { keyPath: "id_empree" });
-
-								mtab_empree.createIndex("id_empree", "id_empree", { unique: true });
-								mtab_empree.createIndex("nome_empree", "nome_empree", { unique: false });
-								mtab_empree.createIndex("status_sync", "status_sync", { unique: false });
-								mtab_empree.createIndex("data_implantacao_sc", "data_implantacao_sc", { unique: false });
-
-								var mtab_prog_manut = db.createObjectStore("mtab_prog_manut", { keyPath: "id_prog_manut" });
-
-								mtab_prog_manut.createIndex("id_prog_manut", "id_prog_manut", { unique: true });
-								mtab_prog_manut.createIndex("nome_sistema", "nome_sistema", { unique: false });
-								mtab_prog_manut.createIndex("nome_atividade", "nome_atividade", { unique: false });
-								mtab_prog_manut.createIndex("nome_periodicidade", "nome_periodicidade", { unique: false });
-								mtab_prog_manut.createIndex("qtde_agrupamentos_eventos", "qtde_agrupamentos_eventos", { unique: false });
-								mtab_prog_manut.createIndex("qtde_dias_periodicidade", "qtde_dias_periodicidade", { unique: false });
-								mtab_prog_manut.createIndex("data_inicial_garantia", "data_inicial_garantia", { unique: false });
-								mtab_prog_manut.createIndex("prazo_garantia_dias", "prazo_garantia_dias", { unique: false });
-								mtab_prog_manut.createIndex("formato_periodicidade", "formato_periodicidade", { unique: false });
-
-								var mtab_prog_manut_evento = db.createObjectStore("mtab_prog_manut_evento", { keyPath: "id_prog_manut" });
-
-								mtab_prog_manut_evento.createIndex("id_prog_manut", "id_prog_manut", { unique: true });
-								mtab_prog_manut_evento.createIndex("dia_evento", "dia_evento", { unique: false });
-								mtab_prog_manut_evento.createIndex("mes_evento", "mes_evento", { unique: false });
-								mtab_prog_manut_evento.createIndex("ano_evento", "ano_evento", { unique: false });
-								mtab_prog_manut_evento.createIndex("caminho_imagens", "caminho_imagens", { unique: false });
-								mtab_prog_manut_evento.createIndex("caminho_audio", "caminho_audio", { unique: false });
-								mtab_prog_manut_evento.createIndex("caminho_video", "caminho_video", { unique: false });
-								mtab_prog_manut_evento.createIndex("caminho_texto", "caminho_texto", { unique: false });
-								mtab_prog_manut_evento.createIndex("status_imagens_upl", "status_imagens_upl", { unique: false });
-								mtab_prog_manut_evento.createIndex("status_video_upl", "status_video_upl", { unique: false });
-								mtab_prog_manut_evento.createIndex("status_audio_upl", "status_audio_upl", { unique: false });
-								mtab_prog_manut_evento.createIndex("status_texto_upl", "status_texto_upl", { unique: false });
-							};
-
-							request.onsuccess = function (event) {
-								db = event.target.result;
-
-								removerDados(db, 'mtab_cliente');
-								addCliente(db, clientes);
-
-								removerDados(db, 'mtab_empree');
-								addEmpree(db, emprees);
-
-								removerDados(db, 'mtab_prog_manut');
-								addManut(db, manuts);
-
-								removerDados(db, 'mtab_prog_manut_evento');
-								go_to();
-								// consultaCliente(db, clientes, emprees);
-							}
-
-							request.onerror = function (event) {
-								alert("Erro na criação: " + event.target.error);
-							}
 
 							var clientes = [
 								{
@@ -198,6 +127,92 @@
 
 								//alert(manuts[i])
 							}
+
+							request.onsuccess = function (event) {
+								db = request.result;
+
+								removerDados(db, 'mtab_cliente');
+								addCliente(db, clientes);
+
+								removerDados(db, 'mtab_empree');
+								addEmpree(db, emprees);
+
+								removerDados(db, 'mtab_prog_manut');
+								addManut(db, manuts);
+
+								removerDados(db, 'mtab_prog_manut_evento');
+								go_to();
+
+								db.onerror = function (event) {
+									alert("Database error: " + event.target.error);
+								}
+							};
+
+							// request.onupgradeneeded = function (event) {
+							// 	db = event.target.result;
+							// 	var mtab_cliente = db.createObjectStore("mtab_cliente", { keyPath: "id_cliente" });
+
+							// 	mtab_cliente.createIndex("id_cliente", "id_cliente", { unique: true });
+							// 	mtab_cliente.createIndex("e_construtora", "e_construtora", { unique: false });
+							// 	mtab_cliente.createIndex("text1", "text1", { unique: false });
+							// 	mtab_cliente.createIndex("text2", "text2", { unique: false });
+
+							// 	var mtab_empree = db.createObjectStore("mtab_empree", { keyPath: "id_empree" });
+
+							// 	mtab_empree.createIndex("id_empree", "id_empree", { unique: true });
+							// 	mtab_empree.createIndex("nome_empree", "nome_empree", { unique: false });
+							// 	mtab_empree.createIndex("status_sync", "status_sync", { unique: false });
+							// 	mtab_empree.createIndex("data_implantacao_sc", "data_implantacao_sc", { unique: false });
+
+							// 	var mtab_prog_manut = db.createObjectStore("mtab_prog_manut", { keyPath: "id_prog_manut" });
+
+							// 	mtab_prog_manut.createIndex("id_prog_manut", "id_prog_manut", { unique: true });
+							// 	mtab_prog_manut.createIndex("nome_sistema", "nome_sistema", { unique: false });
+							// 	mtab_prog_manut.createIndex("nome_atividade", "nome_atividade", { unique: false });
+							// 	mtab_prog_manut.createIndex("nome_periodicidade", "nome_periodicidade", { unique: false });
+							// 	mtab_prog_manut.createIndex("qtde_agrupamentos_eventos", "qtde_agrupamentos_eventos", { unique: false });
+							// 	mtab_prog_manut.createIndex("qtde_dias_periodicidade", "qtde_dias_periodicidade", { unique: false });
+							// 	mtab_prog_manut.createIndex("data_inicial_garantia", "data_inicial_garantia", { unique: false });
+							// 	mtab_prog_manut.createIndex("prazo_garantia_dias", "prazo_garantia_dias", { unique: false });
+							// 	mtab_prog_manut.createIndex("formato_periodicidade", "formato_periodicidade", { unique: false });
+
+							// 	var mtab_prog_manut_evento = db.createObjectStore("mtab_prog_manut_evento", { keyPath: "id_prog_manut" });
+
+							// 	mtab_prog_manut_evento.createIndex("id_prog_manut", "id_prog_manut", { unique: true });
+							// 	mtab_prog_manut_evento.createIndex("dia_evento", "dia_evento", { unique: false });
+							// 	mtab_prog_manut_evento.createIndex("mes_evento", "mes_evento", { unique: false });
+							// 	mtab_prog_manut_evento.createIndex("ano_evento", "ano_evento", { unique: false });
+							// 	mtab_prog_manut_evento.createIndex("caminho_imagens", "caminho_imagens", { unique: false });
+							// 	mtab_prog_manut_evento.createIndex("caminho_audio", "caminho_audio", { unique: false });
+							// 	mtab_prog_manut_evento.createIndex("caminho_video", "caminho_video", { unique: false });
+							// 	mtab_prog_manut_evento.createIndex("caminho_texto", "caminho_texto", { unique: false });
+							// 	mtab_prog_manut_evento.createIndex("status_imagens_upl", "status_imagens_upl", { unique: false });
+							// 	mtab_prog_manut_evento.createIndex("status_video_upl", "status_video_upl", { unique: false });
+							// 	mtab_prog_manut_evento.createIndex("status_audio_upl", "status_audio_upl", { unique: false });
+							// 	mtab_prog_manut_evento.createIndex("status_texto_upl", "status_texto_upl", { unique: false });
+							// };
+
+							// request.onsuccess = function (event) {
+							// 	db = event.target.result;
+
+							// 	removerDados(db, 'mtab_cliente');
+							// 	addCliente(db, clientes);
+
+							// 	removerDados(db, 'mtab_empree');
+							// 	addEmpree(db, emprees);
+
+							// 	removerDados(db, 'mtab_prog_manut');
+							// 	addManut(db, manuts);
+
+							// 	removerDados(db, 'mtab_prog_manut_evento');
+							// 	go_to();
+							// 	// consultaCliente(db, clientes, emprees);
+							// }
+
+							// request.onerror = function (event) {
+							// 	alert("Erro na criação: " + event.target.error);
+							// }
+
 
 							// alert(manuts.nome_sistema)
 
@@ -267,7 +282,7 @@
 								objectStoreRequest.onsuccess = function (event) {
 									alert("dados apagados");
 								}
-							}	
+							}
 
 							// var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
 

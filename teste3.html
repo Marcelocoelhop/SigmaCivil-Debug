@@ -48,12 +48,17 @@
 
             request.onsuccess = function (event) {
                 db = request.result;
+
+                alert("ponto banco aberto")
+                consultaCliente(db, clientes, emprees);
+
                 db.onerror = function (event) {
                     alert("Database error: " + event.target.error);
                 }
             };
 
             request.onupgradeneeded = function (event) {
+                alert("ponto onupgradeneeded")
                 db = event.target.result;
 
                 var mtab_cliente = db.createObjectStore("mtab_cliente", { keyPath: "id_cliente" });
@@ -82,7 +87,7 @@
                 mtab_prog_manut.createIndex("prazo_garantia_dias", "prazo_garantia_dias", { unique: false });
                 mtab_prog_manut.createIndex("formato_periodicidade", "formato_periodicidade", { unique: false });
                 mtab_prog_manut.createIndex("comparar_prog_manut", ["id_prog_manut"], { unique: false });
-                
+
                 var mtab_prog_manut_evento = db.createObjectStore("mtab_prog_manut_evento", { keyPath: "id_prog_manut" });
 
                 mtab_prog_manut_evento.createIndex("id_prog_manut", "id_prog_manut", { unique: true });
@@ -100,52 +105,21 @@
                 mtab_prog_manut_evento.createIndex("comparar", ["id_prog_manut", "dia_evento", "mes_evento", "ano_evento"], { unique: false });
             };
 
-            request.onsuccess = function (event) {
-                alert('ponto 0');
-                db = event.target.result;
-                addCliente(db, clientes);
-                addEmpree(db, emprees);
-                consultaCliente(db, clientes, emprees);
-            }
+            // request.onsuccess = function (event) {
+            //     alert('ponto sucesso 2');
+            //     db = event.target.result;
+            //     // addCliente(db, clientes);
+            //     // addEmpree(db, emprees);
+            //     //consultaCliente(db, clientes, emprees);
+            // }
 
             request.onerror = function (event) {
                 alert("Erro na criação: " + event.target.error);
             }
 
-            var clientes = [
-                // {
-                //     id_cliente: "1",
-                //     e_construtora: "0",
-                //     text1: "masmac@ig.com.br",
-                //     text2: "msenha"
-                // },
-            ];
+            var clientes = [];
 
-            var emprees = [
-                // {
-                //     id_empree: "1",
-                //     nome_empree: "Green Design",
-                //     status_sync: "1",
-                //     data_implantacao_sc: "15"
-                // }
-            ];
-
-            function addCliente(db, clientes) {
-                var tx = db.transaction(['mtab_cliente'], 'readwrite');
-                var store = tx.objectStore('mtab_cliente');
-
-                clientes.map(function (cliente) {
-                    store.add(cliente);
-                });
-
-                tx.oncomplete = function () {
-                    alert('stored note!')
-                }
-
-                tx.onerror = function (event) {
-                    alert('error storing note ' + event.target.error);
-                }
-            }
+            var emprees = [];
 
             function consultaCliente(db, clientes, emprees) {
                 var login = "";
@@ -162,7 +136,10 @@
                         alert(login)
                         senha = cursor.value.text2;
 
-                        cursor.continue();
+                        //cursor.continue();
+                    }
+                    else {
+                        alert("sem cursor")
                     }
                 }
 
@@ -170,37 +147,28 @@
                 var store2 = tx2.objectStore('mtab_empree');
                 var objectStoreRequest2 = store2.openCursor();
                 objectStoreRequest2.onsuccess = function (event) {
-                    if (clientes.length > 0 && emprees.length > 0) {
-                        alert('ponto 1');
-                        var cursor = event.target.result;
-                        if (cursor) {
-                            emprees.push(cursor.value);
 
-                            var id_empree = cursor.value.id_empree;
+
+                    alert('ponto 1');
+                    var cursor = event.target.result;
+                    if (cursor) {
+                        emprees.push(cursor.value);
+
+                        var id_empree = cursor.value.id_empree;
+
+                        alert(clientes.length);
+                        alert(emprees.length);
+
+                        if (clientes.length > 0 && emprees.length > 0) {
+
                             cliente_existe("?e=" + id_empree + "&l=" + login + "&s=" + senha);
 
-                            cursor.continue();
                         }
+
                     } else {
                         cliente_nao_existe();
                     }
-                }
-            }
 
-            function addEmpree(db, emprees) {
-                var tx = db.transaction(['mtab_empree'], 'readwrite');
-                var store = tx.objectStore('mtab_empree');
-
-                emprees.map(function (empree) {
-                    store.add(empree)
-                });
-
-                tx.oncomplete = function () {
-                    alert('stored note empree!')
-                }
-
-                tx.onerror = function (event) {
-                    alert('error storing empree note ' + event.target.error);
                 }
             }
 
@@ -215,15 +183,6 @@
 
             //     alert(event.result); // should be undefined
             // };
-
-            // request.onsuccess = function (event) {
-            //     db = event.target.result;
-
-            //     addCliente(db, clientes);
-            //     // addEmpree(db, emprees);
-            //     // consultaCliente(db, clientes, emprees);
-            //     // consultaEmpree(db, clientes, emprees);
-            // }
 
 
             // var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it

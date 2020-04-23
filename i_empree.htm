@@ -82,6 +82,8 @@
 							var getEmpree = jsontext[1];
 							var objEmpree = JSON.parse(getEmpree);
 
+							alert("objEmpree.dados_empreendimento.length: " + objEmpree.dados_empreendimento.length)
+
 							var db;
 							var request = window.indexedDB.open("db_sigmacivil", "1");
 
@@ -179,7 +181,7 @@
 								},
 							];
 
-							for (var i = 0; i < objEmpree.dados_empreendimento.length; i++) {
+							for (i = 0; i < objEmpree.dados_empreendimento.length; i++) {
 								var manuts = [
 									{
 										id_prog_manut: objEmpree.dados_empreendimento[i].id_prog_manut,
@@ -196,6 +198,8 @@
 
 								//alert(manuts[i])
 							}
+
+							// alert(manuts.nome_sistema)
 
 							function addCliente(db, clientes) {
 								var tx = db.transaction(['mtab_cliente'], 'readwrite');
@@ -235,9 +239,16 @@
 								var tx = db.transaction(['mtab_prog_manut'], 'readwrite');
 								var store = tx.objectStore('mtab_prog_manut');
 
-								manuts.map(function (manut) {
-									store.add(manut);
-								});
+								for (var i in manuts) {
+									store.add(manuts[i]);
+								}
+
+								// store.add(manuts)
+
+								// manuts.map(function (manut) {
+								// 	alert(manut.nome_sistema)
+								// 	store.add(manut);
+								// });
 
 								tx.oncomplete = function () {
 									alert('stored note manut!')

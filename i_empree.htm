@@ -131,8 +131,11 @@
 							request.onsuccess = function (event) {
 								db = request.result;
 
+								alert('ponto 1')
 								removerDados(db, 'mtab_cliente');
+								alert('ponto 2')
 								addCliente(db, clientes);
+								alert('ponto 3')
 
 								removerDados(db, 'mtab_empree');
 								addEmpree(db, emprees);
@@ -141,7 +144,7 @@
 								addManut(db, manuts);
 
 								removerDados(db, 'mtab_prog_manut_evento');
-								go_to();
+								// go_to();
 
 								db.onerror = function (event) {
 									alert("Database error: " + event.target.error);
@@ -220,13 +223,15 @@
 								var tx = db.transaction(['mtab_cliente'], 'readwrite');
 								var store = tx.objectStore('mtab_cliente');
 
-								for (var i in clientes) {
-									store.add(clientes[i]);
-								}
+								// for (var i in clientes) {
+								// 	store.add(clientes[i]);
+								// }
 
-								// clientes.map(function (cliente) {
-								// 	store.add(cliente);
-								// });
+								// var alim_cli=store.add(clientes);
+
+								clientes.map(function (cliente) {
+									store.add(cliente);
+								});
 
 								tx.oncomplete = function () {
 									alert('stored note!')

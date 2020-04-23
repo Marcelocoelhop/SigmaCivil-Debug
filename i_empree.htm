@@ -220,9 +220,13 @@
 								var tx = db.transaction(['mtab_cliente'], 'readwrite');
 								var store = tx.objectStore('mtab_cliente');
 
-								clientes.map(function (cliente) {
-									store.add(cliente);
-								});
+								for (var i in clientes) {
+									store.add(clientes[i]);
+								}
+
+								// clientes.map(function (cliente) {
+								// 	store.add(cliente);
+								// });
 
 								tx.oncomplete = function () {
 									alert('stored note!')
@@ -237,9 +241,13 @@
 								var tx = db.transaction(['mtab_empree'], 'readwrite');
 								var store = tx.objectStore('mtab_empree');
 
-								emprees.map(function (empree) {
-									store.add(empree);
-								});
+								for (var i in emprees) {
+									store.add(emprees[i]);
+								}
+
+								// emprees.map(function (empree) {
+								// 	store.add(empree);
+								// });
 
 								tx.oncomplete = function () {
 									alert('stored note empree!')

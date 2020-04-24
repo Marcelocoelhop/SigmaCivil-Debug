@@ -131,11 +131,8 @@
 							request.onsuccess = function (event) {
 								db = request.result;
 
-								alert('ponto 1')
 								removerDados(db, 'mtab_cliente');
-								alert('ponto 2')
 								addCliente(db, clientes);
-								alert('ponto 3')
 
 								removerDados(db, 'mtab_empree');
 								addEmpree(db, emprees);
@@ -143,8 +140,7 @@
 								removerDados(db, 'mtab_prog_manut');
 								addManut(db, manuts);
 
-								removerDados(db, 'mtab_prog_manut_evento');
-								// go_to();
+								removerDadosProgManutEvento(db);
 
 								db.onerror = function (event) {
 									alert("Database error: " + event.target.error);
@@ -294,6 +290,17 @@
 								var objectStoreRequest = store.clear();
 								objectStoreRequest.onsuccess = function (event) {
 									alert("dados apagados");
+								}
+							}
+
+							function removerDadosProgManutEvento(db) {
+								var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+								var store = tx.objectStore('mtab_prog_manut_evento');
+
+								var objectStoreRequest = store.clear();
+								objectStoreRequest.onsuccess = function (event) {
+									alert("dados apagados mtab_prog_manut_evento");
+									go_to();
 								}
 							}
 

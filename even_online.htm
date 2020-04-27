@@ -597,24 +597,11 @@
 
             request.onsuccess = function (event) {
                 db = request.result;
+                alert('ponto 1');
+                consultaManutEvento(db);
                 db.onerror = function (event) {
                     alert("Database error: " + event.target.errorCode);
                 }
-            }
-
-            request.onupgradeneeded = function (event) {
-                db = event.target.result;
-                var mtab_prog_manut_evento = db.createObjectStore("mtab_prog_manut_evento", { keyPath: "id_prog_manut" });
-            };
-
-            request.onsuccess = function (event) {
-                db = event.target.result;
-                alert('ponto 1');
-                consultaManutEvento(db);
-            }
-
-            request.onerror = function (event) {
-                alert("Erro na criação: " + event.target.error);
             }
 
             function consultaManutEvento(db) {
@@ -1096,24 +1083,11 @@
             request.onsuccess = function (event) {
                 db = request.result;
 
+                consultaManutEvento2(db, manutsEvento);
+
                 db.onerror = function (event) {
                     alert("Database error: " + event.target.errorCode);
                 }
-            }
-
-            request.onupgradeneeded = function (event) {
-                db = event.target.result;
-
-                var mtab_prog_manut_evento = db.createObjectStore("mtab_prog_manut_evento", { keyPath: "id_prog_manut" });
-            };
-
-            request.onsuccess = function (event) {
-                db = event.target.result;
-                consultaManutEvento2(db, manutsEvento);
-            }
-
-            request.onerror = function (event) {
-                alert("Erro na criação: " + event.target.error);
             }
 
             manutsEvento = [
@@ -1299,24 +1273,11 @@
             request.onsuccess = function (event) {
                 db = request.result;
 
+                deletarManutEvento(db, manutsEvento);
+
                 db.onerror = function (event) {
                     alert("Database error: " + event.target.errorCode);
                 }
-            }
-
-            request.onupgradeneeded = function (event) {
-                db = event.target.result;
-
-                var mtab_prog_manut_evento = db.createObjectStore("mtab_prog_manut_evento", { keyPath: "id_prog_manut" });
-            };
-
-            request.onsuccess = function (event) {
-                db = event.target.result;
-                deletarManutEvento(db, manutsEvento);
-            }
-
-            request.onerror = function (event) {
-                alert("Erro na criação: " + event.target.error);
             }
 
             function deletarManutEvento(db, manutsEvento) {
@@ -1498,24 +1459,11 @@
                 request.onsuccess = function (event) {
                     db = request.result;
 
+                    uploadManutEvento(db, manutsEvento);
+
                     db.onerror = function (event) {
                         alert("Database error: " + event.target.errorCode);
                     }
-                }
-
-                request.onupgradeneeded = function (event) {
-                    db = event.target.result;
-
-                    var mtab_prog_manut_evento = db.createObjectStore("mtab_prog_manut_evento", { keyPath: "id_prog_manut" });
-                };
-
-                request.onsuccess = function (event) {
-                    db = event.target.result;
-                    uploadManutEvento(db, manutsEvento);
-                }
-
-                request.onerror = function (event) {
-                    alert("Erro na criação: " + event.target.error);
                 }
 
                 function uploadManutEvento(db, manutsEvento) {
@@ -1656,24 +1604,11 @@
             request.onsuccess = function (event) {
                 db = request.result;
 
+                updateManutEventoWinUp(db, manutsEvento);
+
                 db.onerror = function (event) {
                     alert("Database error: " + event.target.errorCode);
                 }
-            }
-
-            request.onupgradeneeded = function (event) {
-                db = event.target.result;
-
-                var mtab_prog_manut_evento = db.createObjectStore("mtab_prog_manut_evento", { keyPath: "id_prog_manut" });
-            };
-
-            request.onsuccess = function (event) {
-                db = event.target.result;
-                updateManutEventoWinUp(db, manutsEvento);
-            }
-
-            request.onerror = function (event) {
-                alert("Erro na criação: " + event.target.error);
             }
 
             function updateManutEventoWinUp(db, manutsEvento) {
@@ -1779,24 +1714,11 @@
                 request.onsuccess = function (event) {
                     db = request.result;
 
+                    consultaManutEventoVideo(db, manutsEvento);
+
                     db.onerror = function (event) {
                         alert("Database error: " + event.target.errorCode);
                     }
-                }
-
-                request.onupgradeneeded = function (event) {
-                    db = event.target.result;
-
-                    var mtab_prog_manut_evento = db.createObjectStore("mtab_prog_manut_evento", { keyPath: "id_prog_manut" });
-                };
-
-                request.onsuccess = function (event) {
-                    db = event.target.result;
-                    consultaManutEventoVideo(db, manutsEvento);
-                }
-
-                request.onerror = function (event) {
-                    alert("Erro na criação: " + event.target.error);
                 }
 
                 manutsEvento = [
@@ -1942,24 +1864,11 @@
             request.onsuccess = function (event) {
                 db = request.result;
 
+                deleteManutEventoVideo(db, manutsEvento);
+
                 db.onerror = function (event) {
                     alert("Database error: " + event.target.errorCode);
                 }
-            }
-
-            request.onupgradeneeded = function (event) {
-                db = event.target.result;
-
-                var mtab_prog_manut_evento = db.createObjectStore("mtab_prog_manut_evento", { keyPath: "id_prog_manut" });
-            };
-
-            request.onsuccess = function (event) {
-                db = event.target.result;
-                deleteManutEventoVideo(db, manutsEvento);
-            }
-
-            request.onerror = function (event) {
-                alert("Erro na criação: " + event.target.error);
             }
 
             function deleteManutEventoVideo(db, manutsEvento) {
@@ -2022,24 +1931,11 @@
                 request.onsuccess = function (event) {
                     db = request.result;
 
+                    uploadManutEventoVideo(db, manutsEvento);
+
                     db.onerror = function (event) {
                         alert("Database error: " + event.target.errorCode);
                     }
-                }
-
-                request.onupgradeneeded = function (event) {
-                    db = event.target.result;
-
-                    var mtab_prog_manut_evento = db.createObjectStore("mtab_prog_manut_evento", { keyPath: "id_prog_manut" });
-                };
-
-                request.onsuccess = function (event) {
-                    db = event.target.result;
-                    uploadManutEventoVideo(db, manutsEvento);
-                }
-
-                request.onerror = function (event) {
-                    alert("Erro na criação: " + event.target.error);
                 }
 
                 function uploadManutEventoVideo(db, manutsEvento) {
@@ -2129,24 +2025,11 @@
             request.onsuccess = function (event) {
                 db = request.result;
 
+                updateManutEventoWinUpVideo(db, manutsEvento);
+
                 db.onerror = function (event) {
                     alert("Database error: " + event.target.errorCode);
                 }
-            }
-
-            request.onupgradeneeded = function (event) {
-                db = event.target.result;
-
-                var mtab_prog_manut_evento = db.createObjectStore("mtab_prog_manut_evento", { keyPath: "id_prog_manut" });
-            };
-
-            request.onsuccess = function (event) {
-                db = event.target.result;
-                updateManutEventoWinUpVideo(db, manutsEvento);
-            }
-
-            request.onerror = function (event) {
-                alert("Erro na criação: " + event.target.error);
             }
 
             function updateManutEventoWinUpVideo(db, manutsEvento) {
@@ -2268,24 +2151,11 @@
                 request.onsuccess = function (event) {
                     db = request.result;
 
+                    consultaManutEventoAudio(db, manutsEvento);
+
                     db.onerror = function (event) {
                         alert("Database error: " + event.target.errorCode);
                     }
-                }
-
-                request.onupgradeneeded = function (event) {
-                    db = event.target.result;
-
-                    var mtab_prog_manut_evento = db.createObjectStore("mtab_prog_manut_evento", { keyPath: "id_prog_manut" });
-                };
-
-                request.onsuccess = function (event) {
-                    db = event.target.result;
-                    consultaManutEventoAudio(db, manutsEvento);
-                }
-
-                request.onerror = function (event) {
-                    alert("Erro na criação: " + event.target.error);
                 }
 
                 manutsEvento = [
@@ -2453,24 +2323,11 @@
             request.onsuccess = function (event) {
                 db = request.result;
 
+                deleteManutEventoAudio(db, manutsEvento);
+
                 db.onerror = function (event) {
                     alert("Database error: " + event.target.errorCode);
                 }
-            }
-
-            request.onupgradeneeded = function (event) {
-                db = event.target.result;
-
-                var mtab_prog_manut_evento = db.createObjectStore("mtab_prog_manut_evento", { keyPath: "id_prog_manut" });
-            };
-
-            request.onsuccess = function (event) {
-                db = event.target.result;
-                deleteManutEventoAudio(db, manutsEvento);
-            }
-
-            request.onerror = function (event) {
-                alert("Erro na criação: " + event.target.error);
             }
 
             function deleteManutEventoAudio(db, manutsEvento) {
@@ -2529,25 +2386,12 @@
 
                 request.onsuccess = function (event) {
                     db = request.result;
+                    
+                    uploadManutEventoAudio(db, manutsEvento);
 
                     db.onerror = function (event) {
                         alert("Database error: " + event.target.errorCode);
                     }
-                }
-
-                request.onupgradeneeded = function (event) {
-                    db = event.target.result;
-
-                    var mtab_prog_manut_evento = db.createObjectStore("mtab_prog_manut_evento", { keyPath: "id_prog_manut" });
-                };
-
-                request.onsuccess = function (event) {
-                    db = event.target.result;
-                    uploadManutEventoAudio(db, manutsEvento);
-                }
-
-                request.onerror = function (event) {
-                    alert("Erro na criação: " + event.target.error);
                 }
 
                 function uploadManutEventoAudio(db, manutsEvento) {
@@ -2639,24 +2483,11 @@
             request.onsuccess = function (event) {
                 db = request.result;
 
+                updateManutEventoWinUpAudio(db, manutsEvento);
+
                 db.onerror = function (event) {
                     alert("Database error: " + event.target.errorCode);
                 }
-            }
-
-            request.onupgradeneeded = function (event) {
-                db = event.target.result;
-
-                var mtab_prog_manut_evento = db.createObjectStore("mtab_prog_manut_evento", { keyPath: "id_prog_manut" });
-            };
-
-            request.onsuccess = function (event) {
-                db = event.target.result;
-                updateManutEventoWinUpAudio(db, manutsEvento);
-            }
-
-            request.onerror = function (event) {
-                alert("Erro na criação: " + event.target.error);
             }
 
             function updateManutEventoWinUpAudio(db, manutsEvento) {
@@ -2740,24 +2571,11 @@
                 request.onsuccess = function (event) {
                     db = request.result;
 
+                    uploadManutEventoTexto(db, manutsEvento);
+
                     db.onerror = function (event) {
                         alert("Database error: " + event.target.errorCode);
                     }
-                }
-
-                request.onupgradeneeded = function (event) {
-                    db = event.target.result;
-
-                    var mtab_prog_manut_evento = db.createObjectStore("mtab_prog_manut_evento", { keyPath: "id_prog_manut" });
-                };
-
-                request.onsuccess = function (event) {
-                    db = event.target.result;
-                    uploadManutEventoTexto(db, manutsEvento);
-                }
-
-                request.onerror = function (event) {
-                    alert("Erro na criação: " + event.target.error);
                 }
 
                 function uploadManutEventoTexto(db, manutsEvento) {
@@ -2844,24 +2662,11 @@
                             request.onsuccess = function (event) {
                                 db = request.result;
 
+                                uploadManutEventoWinUpTexto(db, manutsEvento);
+
                                 db.onerror = function (event) {
                                     alert("Database error: " + event.target.errorCode);
                                 }
-                            }
-
-                            request.onupgradeneeded = function (event) {
-                                db = event.target.result;
-
-                                var mtab_prog_manut_evento = db.createObjectStore("mtab_prog_manut_evento", { keyPath: "id_prog_manut" });
-                            };
-
-                            request.onsuccess = function (event) {
-                                db = event.target.result;
-                                uploadManutEventoWinUpTexto(db, manutsEvento);
-                            }
-
-                            request.onerror = function (event) {
-                                alert("Erro na criação: " + event.target.error);
                             }
 
                             function uploadManutEventoWinUpTexto(db, manutsEvento) {
@@ -3279,24 +3084,11 @@
         request.onsuccess = function (event) {
             db = request.result;
 
+            atualizarManutEvento(db, manutsEvento);
+
             db.onerror = function (event) {
                 alert("Database error: " + event.target.errorCode);
             }
-        }
-
-        request.onupgradeneeded = function (event) {
-            db = event.target.result;
-
-            var mtab_prog_manut_evento = db.createObjectStore("mtab_prog_manut_evento", { keyPath: "id_prog_manut" });
-        };
-
-        request.onsuccess = function (event) {
-            db = event.target.result;
-            atualizarManutEvento(db, manutsEvento);
-        }
-
-        request.onerror = function (event) {
-            alert("Erro na criação: " + event.target.error);
         }
 
         manutsEvento = [
@@ -3439,24 +3231,11 @@
         request.onsuccess = function (event) {
             db = request.result;
 
+            atualizarManutEventoEmpree(db, manutsEvento);
+
             db.onerror = function (event) {
                 alert("Database error: " + event.target.errorCode);
             }
-        }
-
-        request.onupgradeneeded = function (event) {
-            db = event.target.result;
-
-            var mtab_prog_manut_evento = db.createObjectStore("mtab_prog_manut_evento", { keyPath: "id_prog_manut" });
-        };
-
-        request.onsuccess = function (event) {
-            db = event.target.result;
-            atualizarManutEventoEmpree(db, manutsEvento);
-        }
-
-        request.onerror = function (event) {
-            alert("Erro na criação: " + event.target.error);
         }
 
         manutsEvento = [

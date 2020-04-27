@@ -3148,7 +3148,8 @@
                     });
 
                     tx2.oncomplete = function () {
-                        alert('stored manut evento texto note!')
+                        alert('stored manut evento texto note!');
+                        reload_page();
                     }
 
                     tx2.onerror = function (event) {
@@ -3158,7 +3159,7 @@
 
                 updateManutEventoTexto(db, manutsEvento);
 
-                reload_page();
+                // reload_page();
             }
         }
 
@@ -3186,12 +3187,13 @@
                     var request = cursor.update(data);
                     request.onsuccess = function (event) {
                         alert("Atualização realizada update função texto!");
+                        reload_page();
                     }
 
                     cursor.continue();
                 }
 
-                reload_page();
+                // reload_page();
             }
         }
 

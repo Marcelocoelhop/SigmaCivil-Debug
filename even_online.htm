@@ -1154,11 +1154,12 @@
                         var request = cursor.update(data);
                         request.onsuccess = function (event) {
                             alert("Atualização realizada!");
+                            reload_page();
                         }
 
                         updateManutEvento(db, manutsEvento);
 
-                        cursor.continue();
+                        // cursor.continue();
                     } else {
                         aux_caminho_imagens = "";
                         var tx2 = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
@@ -1170,6 +1171,7 @@
 
                         tx2.oncomplete = function () {
                             alert('stored manut evento note!')
+                            reload_page();
                         }
 
                         tx2.onerror = function (event) {
@@ -1177,7 +1179,7 @@
                         }
                     }
 
-                    reload_page();
+                    // reload_page();
                     // terminou de tirar a foto, aqui é a seleção da seta
                 }
             }
@@ -1330,7 +1332,7 @@
 
                     deleteUpdateManutEvento(db, manutsEvento, aux_2, aux_2_status);
 
-                    reload_page();
+                    // reload_page();
                 }
             }
 
@@ -1354,11 +1356,12 @@
                         alert(request)
                         request.onsuccess = function (event) {
                             alert("Atualização realizada update delete!");
+                            reload_page();
                         }
                         cursor.continue();
                     }
 
-                    reload_page();
+                    // reload_page();
                 }
             }
 
@@ -1627,12 +1630,13 @@
                         var request = cursor.update(data);
                         request.onsuccess = function (event) {
                             alert("Atualização realizada update win up!");
+                            reload_page();
                         }
 
                         cursor.continue();
                     }
 
-                    reload_page();
+                    // reload_page();
                 }
             }
 

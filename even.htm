@@ -143,24 +143,12 @@
 
 			request.onsuccess = function (event) {
 				db = request.result;
+
+				consultaCliente(db);
+
 				db.onerror = function (event) {
 					alert("Database error: " + event.target.errorCode);
 				}
-			}
-
-			request.onupgradeneeded = function (event) {
-				db = event.target.result;
-				var mtab_prog_manut_evento = db.createObjectStore("mtab_prog_manut_evento", { keyPath: "id_prog_manut" });
-			};
-
-			request.onsuccess = function (event) {
-				db = event.target.result;
-				alert('ponto 1');
-				consultaCliente(db);
-			}
-
-			request.onerror = function (event) {
-				alert("Erro na criação: " + event.target.error);
 			}
 
 			function consultaCliente(db) {
@@ -181,8 +169,7 @@
 					}
 
 					consultaEmpree(db);
-					
-					
+
 				}
 			}
 
@@ -194,8 +181,6 @@
 					var cursor = event.target.result;
 					if (cursor) {
 						var data = cursor.value;
-
-						alert('ponto 2')
 
 						nome_empree = data.nome_empree;
 						id_empree = data.id_empree;
@@ -256,7 +241,7 @@
 						var rrr_status_caminho_audio = data.status_audio_upl;
 						var rrr_status_caminho_texto = data.status_texto_upl;
 
-						cursor.continue();
+						// cursor.continue();
 					} else {
 						var rrr_caminho_imagens = "";
 						var rrr_caminho_texto = "";
@@ -285,19 +270,17 @@
 					for (k = 0; k < tam_ti; k++) {
 
 						if (todas_status_imagens[k] == '0') {
-							aux_image_upload = 'upload.png';
-							qtdDocs_Device += 1
+							aux_image_upload = "upload1.gif";
 						}
 						else {
-							aux_image_upload = 'upload_verde.png';
+							aux_image_upload = "upload2.gif";
 						}
-
 						//imagens da seta, preta ou verde
 
-						selec_imagens_thumb = selec_imagens_thumb + "<div style='float:left; position: relative; left: 1.5px;'><div style='border: 1px solid #5d5d5d'><table cellpadding='0' cellspacing='0'><img src='" + todas_imagens[k] + "'  onclick='abrir_popup(" + String.fromCharCode(34) + rrr_id_prog_manut + String.fromCharCode(34) + "," + String.fromCharCode(34) + k + String.fromCharCode(34) + " )'  width='106' height='70' hspace='2' vspace='2'/><div align='center'><img src='images/trash.svg' style='float: left; padding: 0.5rem; position: relative; left: 5px; text-shadow: none;' class='icon-size' width='15' onclick='deletar_imagem(" + String.fromCharCode(34) + k + String.fromCharCode(34) + ")'></div><div align='center'><img src='images/" + aux_image_upload + "' style='float: right; padding: 0.5rem; position: relative; right: 5px; text-shadow: none;' class='icon-size' width='17' onclick='upload_imagem(" + String.fromCharCode(34) + k + String.fromCharCode(34) + ")' s></div></table></div></div></div>"
+						selec_imagens_thumb = selec_imagens_thumb + "<div style='float:left;'><table cellpadding='0' cellspacing='0'><tr><td colspan='2'><img src='" + todas_imagens[k] + "'  onclick='abrir_popup(" + String.fromCharCode(34) + rrr_id_prog_manut + String.fromCharCode(34) + "," + String.fromCharCode(34) + k + String.fromCharCode(34) + " )'  width='106' height='70' hspace='2' vspace='2'/> </td></tr><tr><td><div align='center'><img src='images/trash.gif' width='25' height='25' onclick='deletar_imagem(" + String.fromCharCode(34) + k + String.fromCharCode(34) + ")'/></div></td><td><div align='center'><img src='images/" + aux_image_upload + "' width='25' height='25' onclick='upload_imagem(" + String.fromCharCode(34) + k + String.fromCharCode(34) + ")'/></div></td></tr></table></div>"
 						selec_imagens = selec_imagens + "<div data-role='popup' id='idpopup_" + rrr_id_prog_manut + "_" + k + "'><a href='#' data-rel='back' class='ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right'>Close</a> <img class='popphoto' src='" + todas_imagens[k] + "' style='max-height:512px;'> </div>"
 
-						//Popup
+						//Poup
 					}
 
 					if (rrr_status_caminho_audio == '0') {
@@ -352,8 +335,6 @@
 					else {
 						bot_up = "<img src='images/" + aux_image_upload + "' width='25' height='25' onclick='upload_texto()'/>"
 					}
-
-					alert("nome_sistema: " + nome_sistema)
 
 					var item_opc = [
 						'<div align="center">',
@@ -459,7 +440,7 @@
 						var rrr2_caminho_imagens = data.caminho_imagens;
 						var rrr2_id_prog_manut = data.id_prog_manut;
 
-						cursor.continue();
+						// cursor.continue();
 					} else {
 						var rrr2_caminho_imagens = "";
 						var rrr2_id_prog_manut = id_prog_manut;
@@ -840,36 +821,163 @@
 		$("#idpopup_new_" + id).popup('open');
 	}
 
+	var manutsEvento = [
+		{
+			id_prog_manut: "",
+			dia_evento: dia_ev,
+			mes_evento: mes_ev,
+			ano_evento: ano_ev,
+			caminho_imagens: "",
+			caminho_audio: "",
+			caminho_video: "",
+			caminho_texto: "",
+			status_imagens_upl: "0",
+			status_video_upl: "",
+			status_audio_upl: "",
+			status_texto_upl: ""
+		}
+	];
 
 	var qual_id_prog_manut
 
 	//////////////////////  ini para  texto   /////////////////////////////
 	function atualizar_texto(qual) {
-		var db2 = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000);
+		var db;
+		var request = window.indexedDB.open("db_sigmacivil", "1");
+
+		request.onerror = function (event) {
+			alert("Erro ao criar o banco");
+		};
+
+		request.onsuccess = function (event) {
+			db = request.result;
+
+			consultaManutEvento(db, manutsEvento);
+
+			db.onerror = function (event) {
+				alert("Database error: " + event.target.errorCode);
+			}
+		}
+
 		var quale;
 
 		qual_id_prog_manut = qual;
 		quale = document.getElementById('textarea_' + qual).value;
 
-		var db2 = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
-		db2.transaction(function (tx) {
+		manutsEvento = [
+			{
+				id_prog_manut: qual_id_prog_manut,
+				dia_evento: dia_ev,
+				mes_evento: mes_ev,
+				ano_evento: ano_ev,
+				caminho_imagens: "",
+				caminho_audio: "",
+				caminho_video: "",
+				caminho_texto: quale,
+				status_imagens_upl: "",
+				status_video_upl: "",
+				status_audio_upl: "",
+				status_texto_upl: "0"
+			}
+		];
 
-			tx.executeSql('SELECT * FROM mtab_prog_manut_evento WHERE mtab_prog_manut_evento.id_prog_manut="' + qual_id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"  ', [], function (tx, results) {
-				var len2 = results.rows.length;
+		function consultaManutEvento(db, manutsEvento) {
+			var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+			var store = tx.objectStore('mtab_prog_manut_evento');
+			var index = store.index('comparar');
+			var whereEquals = IDBKeyRange.only([qual_id_prog_manut, dia_ev, mes_ev, ano_ev]);
+			var objectStoreRequest = index.openCursor(whereEquals);
+			objectStoreRequest.onsuccess = function (event) {
+				var cursor = event.target.result;
+				if (cursor) {
+					var data = cursor.value;
+					manutsEvento.push(cursor.value);
 
-				if (len2 == 0) {
-					tx.executeSql('INSERT INTO mtab_prog_manut_evento(id_prog_manut,dia_evento,mes_evento,ano_evento,caminho_texto,caminho_video,caminho_audio, caminho_imagens, status_imagens_upl,status_video_upl,status_audio_upl,status_texto_upl) VALUES (?,?,?,?,?,"","","","","","","0")', [qual_id_prog_manut, dia_ev, mes_ev, ano_ev, quale]);
+					updateManutEvento(db, manutsEvento);
+
+					// cursor.continue();
+				} else {
+					var tx2 = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+					var store2 = tx2.objectStore('mtab_prog_manut_evento');
+
+					manutsEvento.map(function (manutEvento) {
+						store2.add(manutEvento);
+					});
+
+					tx2.oncomplete = function () {
+						alert('stored manut evento note!')
+						reload_page();
+					}
+
+					tx2.onerror = function (event) {
+						alert('error storing manut evento note ' + event.target.error);
+					}
 				}
-				else {
-					var row = results.rows.item(0)
-					tx.executeSql('UPDATE mtab_prog_manut_evento SET caminho_texto="' + quale + '" , status_texto_upl="0" WHERE mtab_prog_manut_evento.id_prog_manut="' + qual_id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"');
+
+				// reload_page();
+				// terminou de tirar a foto, aqui é a seleção da seta
+			}
+		}
+
+		function updateManutEvento(db, manutsEvento) {
+			var tx3 = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+			var store3 = tx3.objectStore('mtab_prog_manut_evento');
+			var index = store3.index('comparar');
+			var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+			index.openCursor(whereEquals).onsuccess = function (event) {
+				var cursor = event.target.result;
+				if (cursor) {
+					var data = cursor.value;
+					manutsEvento.push(cursor.value);
+
+					alert(data.caminho_texto);
+					data.caminho_texto = quale;
+					alert(data.caminho_texto);
+
+					var request = cursor.update(data);
+					request.onsuccess = function (event) {
+						alert("Atualização realizada update função!");
+						reload_page();
+					}
+
+					cursor.continue();
 				}
+			}
+		}
 
-				reload_page();
 
-			}, null);
 
-		});
+
+
+
+
+
+
+		// var db2 = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000);
+		// var quale;
+
+		// qual_id_prog_manut = qual;
+		// quale = document.getElementById('textarea_' + qual).value;
+
+		// var db2 = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+		// db2.transaction(function (tx) {
+
+		// 	tx.executeSql('SELECT * FROM mtab_prog_manut_evento WHERE mtab_prog_manut_evento.id_prog_manut="' + qual_id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"  ', [], function (tx, results) {
+		// 		var len2 = results.rows.length;
+
+		// 		if (len2 == 0) {
+		// 			tx.executeSql('INSERT INTO mtab_prog_manut_evento(id_prog_manut,dia_evento,mes_evento,ano_evento,caminho_texto,caminho_video,caminho_audio, caminho_imagens, status_imagens_upl,status_video_upl,status_audio_upl,status_texto_upl) VALUES (?,?,?,?,?,"","","","","","","0")', [qual_id_prog_manut, dia_ev, mes_ev, ano_ev, quale]);
+		// 		}
+		// 		else {
+		// 			var row = results.rows.item(0)
+		// 			tx.executeSql('UPDATE mtab_prog_manut_evento SET caminho_texto="' + quale + '" , status_texto_upl="0" WHERE mtab_prog_manut_evento.id_prog_manut="' + qual_id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"');
+		// 		}
+
+		// 		reload_page();
+
+		// 	}, null);
+
+		// });
 
 
 	}
@@ -915,7 +1023,136 @@
 
 		document.getElementById('foto_big_' + qual_id_prog_manut).src = imageURI;
 
-		var db2 = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+		var db;
+		var request = window.indexedDB.open("db_sigmacivil", "1");
+
+		request.onerror = function (event) {
+			alert("Erro ao criar o banco");
+		};
+
+		request.onsuccess = function (event) {
+			db = request.result;
+
+			consultaManutEvento2(db, manutsEvento);
+
+			db.onerror = function (event) {
+				alert("Database error: " + event.target.errorCode);
+			}
+		}
+
+		manutsEvento = [
+			{
+				id_prog_manut: qual_id_prog_manut,
+				dia_evento: dia_ev,
+				mes_evento: mes_ev,
+				ano_evento: ano_ev,
+				caminho_imagens: imageURI,
+				caminho_audio: "",
+				caminho_video: "",
+				caminho_texto: "",
+				status_imagens_upl: "0",
+				status_video_upl: "",
+				status_audio_upl: "",
+				status_texto_upl: ""
+			}
+		];
+
+		function consultaManutEvento2(db, manutsEvento) {
+			var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+			var store = tx.objectStore('mtab_prog_manut_evento');
+			var index = store.index('comparar');
+			var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+			var objectStoreRequest = index.openCursor(whereEquals);
+			objectStoreRequest.onsuccess = function (event) {
+				var cursor = event.target.result;
+				if (cursor) {
+					var data = cursor.value;
+					manutsEvento.push(cursor.value);
+
+					aux_caminho_imagens = cursor.value.caminho_imagens;
+
+					if (aux_caminho_imagens != "") {
+						aux_caminho_imagens = aux_caminho_imagens + '**';
+
+						aux_status_imagens_upl = cursor.value.status_imagens_upl;
+						aux_status_imagens_upl = aux_status_imagens_upl + '**';
+						aux_status_imagens_upl = aux_status_imagens_upl + '0';
+					} else {
+						aux_status_imagens_upl = '0';
+					}
+
+					data.caminho_imagens = aux_caminho_imagens + imageURI;
+					data.status_imagens_upl = aux_status_imagens_upl;
+
+					var request = cursor.update(data);
+					request.onsuccess = function (event) {
+						alert("Atualização realizada!");
+						reload_page();
+					}
+
+					updateManutEvento(db, manutsEvento);
+
+					// cursor.continue();
+				} else {
+					aux_caminho_imagens = "";
+					var tx2 = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+					var store2 = tx2.objectStore('mtab_prog_manut_evento');
+
+					manutsEvento.map(function (manutEvento) {
+						store2.add(manutEvento);
+					});
+
+					tx2.oncomplete = function () {
+						alert('stored manut evento note!')
+						reload_page();
+					}
+
+					tx2.onerror = function (event) {
+						alert('error storing manut evento note ' + event.target.error);
+					}
+				}
+
+				// reload_page();
+				// terminou de tirar a foto, aqui é a seleção da seta
+			}
+		}
+
+		function updateManutEvento(db, manutsEvento) {
+			var tx3 = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+			var store3 = tx3.objectStore('mtab_prog_manut_evento');
+			var index = store3.index('comparar');
+			var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+			index.openCursor(whereEquals).onsuccess = function (event) {
+				var cursor = event.target.result;
+				if (cursor) {
+					var data = cursor.value;
+					manutsEvento.push(cursor.value);
+
+					data.id_prog_manut = qual_id_prog_manut;
+					data.dia_evento = dia_ev;
+					data.mes_evento = mes_ev;
+					data.ano_evento = ano_ev;
+
+					var request = cursor.update(data);
+					request.onsuccess = function (event) {
+						alert("Atualização realizada update função!");
+					}
+
+					cursor.continue();
+				}
+			}
+		}
+
+
+
+
+
+
+
+
+
+
+		/*var db2 = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
 		db2.transaction(function (tx) {
 
 			tx.executeSql('SELECT * FROM mtab_prog_manut_evento WHERE mtab_prog_manut_evento.id_prog_manut="' + qual_id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"  ', [], function (tx, results) {
@@ -963,7 +1200,7 @@
 
 			}, null);
 
-		});
+		});*/
 
 	}
 
@@ -977,7 +1214,117 @@
 		var aux_1 = "";
 		var aux_1_status = "";
 
-		var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+		var db;
+		var request = window.indexedDB.open("db_sigmacivil", "1");
+
+		request.onerror = function (event) {
+			alert("Erro ao criar o banco");
+		};
+
+		request.onsuccess = function (event) {
+			db = request.result;
+
+			deletarManutEvento(db, manutsEvento);
+
+			db.onerror = function (event) {
+				alert("Database error: " + event.target.errorCode);
+			}
+		}
+
+		function deletarManutEvento(db, manutsEvento) {
+			var aux_2;
+			var aux_2_status;
+
+			var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+			var store = tx.objectStore('mtab_prog_manut_evento');
+			var index = store.index('comparar');
+			var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev])
+			var objectStoreRequest = index.openCursor(whereEquals);
+			objectStoreRequest.onsuccess = function (event) {
+				var cursor = event.target.result;
+				if (cursor) {
+					var data = cursor.value;
+					var aux_dia_evento = data.dia_evento;
+					var aux_mes_evento = data.mes_evento;
+					var aux_ano_evento = data.ano_evento;
+
+					manutsEvento.push(cursor.value);
+					var k;
+
+					aux_caminho_imagens = cursor.value.caminho_imagens;
+					aux_status_imagens_upl = cursor.value.status_imagens_upl;
+
+					all_images = aux_caminho_imagens.split("**")
+					all_status_images = aux_status_imagens_upl.split("**")
+					taman = all_images.length;
+
+					for (k = 0; k < taman; k++) {
+						if (q_id != k) {
+							aux_1 = aux_1 + all_images[k] + "**"
+							aux_1_status = aux_1_status + all_status_images[k] + "**"
+						}
+					}
+
+					if (taman > 1) {
+						alert('ponto 4')
+						aux_2 = aux_1.substring(0, aux_1.length - 2);
+						aux_2_status = aux_1_status.substring(0, aux_1_status.length - 2);
+					} else if (taman == 0 || taman == 1) {
+						alert('ponto 5')
+						aux_2 = "";
+						aux_2_status = "";
+					}
+
+					cursor.continue();
+				}
+
+				deleteUpdateManutEvento(db, manutsEvento, aux_2, aux_2_status);
+
+				// reload_page();
+			}
+		}
+
+		function deleteUpdateManutEvento(db, manutsEvento, aux_2, aux_2_status) {
+			var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+			var store = tx.objectStore('mtab_prog_manut_evento');
+			var index = store.index('comparar');
+			var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+			index.openCursor(whereEquals).onsuccess = function (event) {
+				var cursor = event.target.result;
+				if (cursor) {
+					var data = cursor.value;
+					manutsEvento.push(cursor.value);
+
+					alert("data.caminho_imagens: " + data.caminho_imagens)
+					data.caminho_imagens = aux_2;
+					alert("data.caminho_imagens: " + data.caminho_imagens)
+					data.status_imagens_upl = aux_2_status;
+
+					var request = cursor.update(data);
+					alert(request)
+					request.onsuccess = function (event) {
+						alert("Atualização realizada update delete!");
+						reload_page();
+					}
+					cursor.continue();
+				}
+
+				// reload_page();
+			}
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+		/*var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
 		db.transaction(function (tx) {
 
 			tx.executeSql('SELECT * FROM mtab_prog_manut_evento WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '" ', [], function (tx, results) {
@@ -1005,7 +1352,7 @@
 				reload_page();
 
 			}, null);
-		});
+		});*/
 
 	}
 	/////////  fim  deletar imagem///////
@@ -1026,7 +1373,83 @@
 			var taman;
 			var aux_1 = "";
 
-			var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+			var db;
+			var request = window.indexedDB.open("db_sigmacivil", "1");
+
+			request.onerror = function (event) {
+				alert("Erro ao criar o banco");
+			};
+
+			request.onsuccess = function (event) {
+				db = request.result;
+
+				uploadManutEvento(db, manutsEvento);
+
+				db.onerror = function (event) {
+					alert("Database error: " + event.target.errorCode);
+				}
+			}
+
+			function uploadManutEvento(db, manutsEvento) {
+				var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+				var store = tx.objectStore('mtab_prog_manut_evento');
+				var index = store.index('comparar');
+				var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+				index.openCursor(whereEquals).onsuccess = function (event) {
+					var cursor = event.target.result;
+					if (cursor) {
+						var data = cursor.value;
+						manutsEvento.push(cursor.value);
+
+						var k;
+						aux_caminho_imagens = cursor.value.caminho_imagens;
+
+						all_images = aux_caminho_imagens.split("**");
+
+						aux_1 = aux_1 + all_images[q_id] + "**";
+						var aux_2 = aux_1.substring(0, aux_1.length - 2);
+
+						// marcar que foi feito upload para esta imagem
+
+						aux_status_imagens_upl = cursor.value.status_imagens_upl;
+
+						all_status_images = aux_status_imagens_upl.split("**");
+						taman = all_status_images.length;
+
+						for (k = 0; k < taman; k++) {
+							if (q_id != k) {
+								aux_1_status = aux_1_status + all_status_images[k] + "**"
+							}
+							else {
+								aux_1_status = aux_1_status + "1" + "**"
+								var ja_fez_upload = all_status_images[k]
+							}
+						}
+
+						aux_1_status = aux_1_status.substring(0, aux_1_status.length - 2)
+						// fim  marcar que foi feito upload para esta imagem
+						if (ja_fez_upload != '1') {
+							up_loadPhoto(aux_2, q_id, aux_1_status);
+						}
+						else {
+							up_loadPhoto(aux_2, q_id, aux_status_imagens_upl);
+						}
+
+						cursor.continue();
+					}
+				}
+			}
+
+
+
+
+
+
+
+
+
+
+			/*var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
 			db.transaction(function (tx) {
 
 				tx.executeSql('SELECT * FROM mtab_prog_manut_evento WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '" ', [], function (tx, results) {
@@ -1071,7 +1494,7 @@
 					}
 
 				}, null);
-			});
+			});*/
 
 		}
 	}
@@ -1101,14 +1524,61 @@
 
 	var win_up = function (r) {
 
-		var db3 = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000);
+		var db;
+		var request = window.indexedDB.open("db_sigmacivil", "1");
+
+		request.onerror = function (event) {
+			alert("Erro ao criar o banco");
+		};
+
+		request.onsuccess = function (event) {
+			db = request.result;
+
+			updateManutEventoWinUp(db, manutsEvento);
+
+			db.onerror = function (event) {
+				alert("Database error: " + event.target.errorCode);
+			}
+		}
+
+		function updateManutEventoWinUp(db, manutsEvento) {
+			var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+			var store = tx.objectStore('mtab_prog_manut_evento');
+			var index = store.index('comparar');
+			var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+			index.openCursor(whereEquals).onsuccess = function (event) {
+				var cursor = event.target.result;
+				if (cursor) {
+					var data = cursor.value;
+					manutsEvento.push(cursor.value);
+
+					data.status_imagens_upl = aux_1_status;
+
+					var request = cursor.update(data);
+					request.onsuccess = function (event) {
+						alert("Atualização realizada update win up!");
+						reload_page();
+					}
+
+					cursor.continue();
+				}
+
+				// reload_page();
+			}
+		}
+
+
+
+
+
+		/*var db3 = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000);
 		db3.transaction(function (tx) {
 
 			tx.executeSql('UPDATE mtab_prog_manut_evento SET status_imagens_upl="' + aux_1_status + '" WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"');
 
 			reload_page();
 
-		});
+		});*/
 
 	}
 
@@ -1137,7 +1607,125 @@
 
 			document.getElementById('video_invis_' + qual_id_prog_manut).style.display = "inline";
 
-			var db2 = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+			var db;
+			var request = window.indexedDB.open("db_sigmacivil", "1");
+
+			request.onerror = function (event) {
+				alert("Erro ao criar o banco");
+			};
+
+			request.onsuccess = function (event) {
+				db = request.result;
+
+				consultaManutEventoVideo(db, manutsEvento);
+
+				db.onerror = function (event) {
+					alert("Database error: " + event.target.errorCode);
+				}
+			}
+
+			manutsEvento = [
+				{
+					id_prog_manut: qual_id_prog_manut,
+					dia_evento: dia_ev,
+					mes_evento: mes_ev,
+					ano_evento: ano_ev,
+					caminho_imagens: "",
+					caminho_audio: "",
+					caminho_video: m_path,
+					caminho_texto: "",
+					status_imagens_upl: "",
+					status_video_upl: "0",
+					status_audio_upl: "",
+					status_texto_upl: ""
+				}
+			];
+
+			function consultaManutEventoVideo(db, manutsEvento) {
+				var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+				var store = tx.objectStore('mtab_prog_manut_evento');
+				var index = store.index('comparar');
+				var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+				var objectStoreRequest = index.openCursor(whereEquals);
+				objectStoreRequest.onsuccess = function (event) {
+					var cursor = event.target.result;
+					if (cursor) {
+						var data = cursor.value;
+						manutsEvento.push(cursor.value);
+
+						alert('ponto 2');
+
+						// updateManutEventoVideo(db, manutsEvento);
+
+						// cursor.continue();
+					} else {
+						var tx2 = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+						var store2 = tx2.objectStore('mtab_prog_manut_evento');
+
+						alert('ponto 3')
+
+						manutsEvento.map(function (manutEvento) {
+							store2.add(manutEvento);
+						});
+
+						tx2.oncomplete = function () {
+							alert('stored manut evento video note!')
+							reload_page();
+						}
+
+						tx2.onerror = function (event) {
+							alert('error storing manut evento video note ' + event.target.error);
+						}
+					}
+
+					updateManutEventoVideo(db, manutsEvento);
+
+					// reload_page();
+				}
+			}
+
+			function updateManutEventoVideo(db, manutsEvento) {
+				var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+				var store = tx.objectStore('mtab_prog_manut_evento');
+				var index = store.index('comparar');
+				var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+				index.openCursor(whereEquals).onsuccess = function (event) {
+					var cursor = event.target.result;
+					if (cursor) {
+						var data = cursor.value;
+						manutsEvento.push(cursor.value);
+
+						alert(m_path)
+
+						data.id_prog_manut = qual_id_prog_manut;
+						data.dia_evento = dia_ev;
+						data.mes_evento = mes_ev;
+						data.ano_evento = ano_ev;
+
+						data.caminho_video = m_path;
+						data.status_video_upl = "0";
+
+						var request = cursor.update(data);
+						request.onsuccess = function (event) {
+							alert("Atualização realizada update video win up!");
+							reload_page();
+						}
+
+						cursor.continue();
+					}
+
+					// reload_page();
+				}
+			}
+
+
+
+
+
+
+
+
+			/*var db2 = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
 			db2.transaction(function (tx) {
 
 				tx.executeSql('SELECT * FROM mtab_prog_manut_evento WHERE mtab_prog_manut_evento.id_prog_manut="' + qual_id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"  ', [], function (tx, results) {
@@ -1155,7 +1743,7 @@
 
 				}, null);
 
-			});
+			});*/
 
 		}
 	}
@@ -1168,13 +1756,65 @@
 
 	//// deletar video ///////////////
 	function deletar_video() {
+		var db;
+		var request = window.indexedDB.open("db_sigmacivil", "1");
 
-		var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+		request.onerror = function (event) {
+			alert("Erro ao criar o banco");
+		};
+
+		request.onsuccess = function (event) {
+			db = request.result;
+
+			deleteManutEventoVideo(db, manutsEvento);
+
+			db.onerror = function (event) {
+				alert("Database error: " + event.target.errorCode);
+			}
+		}
+
+		function deleteManutEventoVideo(db, manutsEvento) {
+			var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+			var store = tx.objectStore('mtab_prog_manut_evento');
+			var index = store.index('comparar');
+			var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+			index.openCursor(whereEquals).onsuccess = function (event) {
+				var cursor = event.target.result;
+				if (cursor) {
+					var data = cursor.value;
+					manutsEvento.push(cursor.value);
+
+					alert('ponto 5')
+					alert("data.caminho_imagens: " + data.caminho_imagens)
+					alert("data.caminho_video: " + data.caminho_video)
+					data.caminho_video = "";
+					data.status_video_upl = "0";
+
+					var request = cursor.update(data);
+					request.onsuccess = function (event) {
+						alert("Atualização realizada delete função video!");
+						reload_page();
+					}
+					cursor.continue();
+				}
+
+				// reload_page();
+			}
+		}
+
+
+
+
+
+
+
+
+		/*var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
 		db.transaction(function (tx) {
 
 			tx.executeSql('UPDATE mtab_prog_manut_evento SET caminho_video="" , status_video_upl="0"  WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"');
 			reload_page();
-		});
+		});*/
 
 	}
 	/////////  fim  deletar video///////
@@ -1184,8 +1824,58 @@
 
 		if (tem_conexao()) {
 
+			var db;
+			var request = window.indexedDB.open("db_sigmacivil", "1");
 
-			var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+			request.onerror = function (event) {
+				alert("Erro ao criar o banco");
+			};
+
+			request.onsuccess = function (event) {
+				db = request.result;
+
+				uploadManutEventoVideo(db, manutsEvento);
+
+				db.onerror = function (event) {
+					alert("Database error: " + event.target.errorCode);
+				}
+			}
+
+			function uploadManutEventoVideo(db, manutsEvento) {
+				var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+				var store = tx.objectStore('mtab_prog_manut_evento');
+				var index = store.index('comparar');
+				var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+				var objectStoreRequest = index.openCursor(whereEquals);
+				objectStoreRequest.onsuccess = function (event) {
+					var cursor = event.target.result;
+					if (cursor) {
+						var data = cursor.value;
+						manutsEvento.push(cursor.value);
+
+						if (cursor.value.status_video_upl != '1') {
+							var aux_caminho_video = cursor.value.caminho_video;
+							up_loadVideo(aux_caminho_video);
+						}
+						else {
+							var aux_caminho_video = cursor.value.caminho_video;
+							up_loadVideo(aux_caminho_video);
+						}
+
+						cursor.continue();
+					}
+				}
+			}
+
+
+
+
+
+
+
+
+
+			/*var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
 			db.transaction(function (tx) {
 
 				tx.executeSql('SELECT * FROM mtab_prog_manut_evento WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '" ', [], function (tx, results) {
@@ -1203,7 +1893,7 @@
 					}
 
 				}, null);
-			});
+			});*/
 
 		}
 	}
@@ -1227,14 +1917,67 @@
 
 
 	var win_up_v = function (r) {
-		var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+		var db;
+		var request = window.indexedDB.open("db_sigmacivil", "1");
+
+		request.onerror = function (event) {
+			alert("Erro ao criar o banco");
+		};
+
+		request.onsuccess = function (event) {
+			db = request.result;
+
+			updateManutEventoWinUpVideo(db, manutsEvento);
+
+			db.onerror = function (event) {
+				alert("Database error: " + event.target.errorCode);
+			}
+		}
+
+		function updateManutEventoWinUpVideo(db, manutsEvento) {
+			var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+			var store = tx.objectStore('mtab_prog_manut_evento');
+			var index = store.index('comparar');
+			var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+			index.openCursor(whereEquals).onsuccess = function (event) {
+				var cursor = event.target.result;
+				if (cursor) {
+					var data = cursor.value;
+					manutsEvento.push(cursor.value);
+
+					data.status_video_upl = "1";
+
+					var request = cursor.update(data);
+					request.onsuccess = function (event) {
+						alert("Atualização realizada update win up video!");
+						reload_page();
+					}
+
+					cursor.continue();
+				}
+
+				// reload_page();
+			}
+		}
+
+
+
+
+
+
+
+
+
+
+
+		/*var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
 		db.transaction(function (tx) {
 			tx.executeSql('UPDATE mtab_prog_manut_evento SET status_video_upl="1" WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"');
 
 			reload_page();
 			alert("Vídeo upado com sucesso");
 
-		});
+		});*/
 	}
 
 	var fail_up_v = function (error) {

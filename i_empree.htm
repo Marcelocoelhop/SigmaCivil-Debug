@@ -110,23 +110,104 @@
 								},
 							];
 
+							var manuts = [];
+
+							// var todas_manutencoes = "";
+
 							for (i = 0; i < objEmpree.dados_empreendimento.length; i++) {
-								var manuts = [
-									{
-										id_prog_manut: objEmpree.dados_empreendimento[i].id_prog_manut,
-										nome_sistema: objEmpree.dados_empreendimento[i].nome_sistema,
-										nome_atividade: objEmpree.dados_empreendimento[i].nome_atividade,
-										nome_periodicidade: objEmpree.dados_empreendimento[i].nome_periodicidade,
-										qtde_agrupamentos_eventos: objEmpree.dados_empreendimento[i].qtde_agrupamentos_eventos,
-										qtde_dias_periodicidade: objEmpree.dados_empreendimento[i].qtde_dias_periodicidade,
-										data_inicial_garantia: objEmpree.dados_empreendimento[i].data_inicial_garantia,
-										prazo_garantia_dias: objEmpree.dados_empreendimento[i].prazo_garantia_dias,
-										formato_periodicidade: objEmpree.dados_empreendimento[i].formato_periodicidade
-									}
-								];
+
+								manuts.push(objEmpree.dados_empreendimento[i]);
+								// alert(manuts[i].nome_sistema)
+								// for (var k in manuts) {
+								// manuts += {
+								// 	id_prog_manut: objEmpree.dados_empreendimento[i].id_prog_manut,
+								// 	nome_sistema: objEmpree.dados_empreendimento[i].nome_sistema,
+								// 	nome_atividade: objEmpree.dados_empreendimento[i].nome_atividade,
+								// 	nome_periodicidade: objEmpree.dados_empreendimento[i].nome_periodicidade,
+								// 	qtde_agrupamentos_eventos: objEmpree.dados_empreendimento[i].qtde_agrupamentos_eventos,
+								// 	qtde_dias_periodicidade: objEmpree.dados_empreendimento[i].qtde_dias_periodicidade,
+								// 	data_inicial_garantia: objEmpree.dados_empreendimento[i].data_inicial_garantia,
+								// 	prazo_garantia_dias: objEmpree.dados_empreendimento[i].prazo_garantia_dias,
+								// 	formato_periodicidade: objEmpree.dados_empreendimento[i].formato_periodicidade
+								// }
+								// }
+								// alert(manuts[0].nome_sistema)
+
+
+								// todas_manutencoes = todas_manutencoes + "{" + "id_prog_manut:" + objEmpree.dados_empreendimento[i].id_prog_manut + "," + "nome_sistema:" + objEmpree.dados_empreendimento[i].nome_sistema + "," + "nome_atividade:" + objEmpree.dados_empreendimento[i].nome_atividade + "," + "nome_periodicidade:" + objEmpree.dados_empreendimento[i].nome_periodicidade + "," + "qtde_agrupamentos_eventos:" + objEmpree.dados_empreendimento[i].qtde_agrupamentos_eventos + "," + "qtde_dias_periodicidade:" + objEmpree.dados_empreendimento[i].qtde_dias_periodicidade + "," + "data_inicial_garantia:" + objEmpree.dados_empreendimento[i].data_inicial_garantia + "," + "prazo_garantia_dias:" + objEmpree.dados_empreendimento[i].prazo_garantia_dias + "," + "formato_periodicidade:" + objEmpree.dados_empreendimento[i].formato_periodicidade + "}, ";
+								// alert(todas_manutencoes)
+								// id_prog_manut: 'teste 1 id_prog_manut',
+								// nome_sistema: 'teste 1 nome_sistema',
+								// nome_atividade: 'teste 1 nome_atividade',
+								// nome_periodicidade: 'teste 1 nome_periodicidade',
+								// qtde_agrupamentos_eventos: 'teste 1 qtde_agrupamentos_eventos',
+								// qtde_dias_periodicidade: 'teste 1 qtde_dias_periodicidade',
+								// data_inicial_garantia: 'teste 1 data_inicial_garantia',
+								// prazo_garantia_dias: 'teste 1 prazo_garantia_dias',
+								// formato_periodicidade: 'teste 1 formato_periodicidade'
+
+								// 	"id_prog_manut:" +  objEmpree.dados_empreendimento[i].id_prog_manut + ","
+								// 	nome_sistema: objEmpree.dados_empreendimento[i].nome_sistema,
+								// 	nome_atividade: objEmpree.dados_empreendimento[i].nome_atividade,
+								// 	nome_periodicidade: objEmpree.dados_empreendimento[i].nome_periodicidade,
+								// 	qtde_agrupamentos_eventos: objEmpree.dados_empreendimento[i].qtde_agrupamentos_eventos,
+								// 	qtde_dias_periodicidade: objEmpree.dados_empreendimento[i].qtde_dias_periodicidade,
+								// 	data_inicial_garantia: objEmpree.dados_empreendimento[i].data_inicial_garantia,
+								// 	prazo_garantia_dias: objEmpree.dados_empreendimento[i].prazo_garantia_dias,
+								// 	formato_periodicidade: objEmpree.dados_empreendimento[i].formato_periodicidade
+								// },
+								// {
+								// 	id_prog_manut: 'teste 2 id_prog_manut',
+								// 	nome_sistema: 'teste 2 nome_sistema',
+								// 	nome_atividade: 'teste 2 nome_atividade',
+								// 	nome_periodicidade: 'teste 2 nome_periodicidade',
+								// 	qtde_agrupamentos_eventos: 'teste 2 qtde_agrupamentos_eventos',
+								// 	qtde_dias_periodicidade: 'teste 2 qtde_dias_periodicidade',
+								// 	data_inicial_garantia: 'teste 2 data_inicial_garantia',
+								// 	prazo_garantia_dias: 'teste 2 prazo_garantia_dias',
+								// 	formato_periodicidade: 'teste 2 formato_periodicidade'
+
+								// 	// id_prog_manut: objEmpree.dados_empreendimento[i].id_prog_manut,
+								// 	// nome_sistema: objEmpree.dados_empreendimento[i].nome_sistema,
+								// 	// nome_atividade: objEmpree.dados_empreendimento[i].nome_atividade,
+								// 	// nome_periodicidade: objEmpree.dados_empreendimento[i].nome_periodicidade,
+								// 	// qtde_agrupamentos_eventos: objEmpree.dados_empreendimento[i].qtde_agrupamentos_eventos,
+								// 	// qtde_dias_periodicidade: objEmpree.dados_empreendimento[i].qtde_dias_periodicidade,
+								// 	// data_inicial_garantia: objEmpree.dados_empreendimento[i].data_inicial_garantia,
+								// 	// prazo_garantia_dias: objEmpree.dados_empreendimento[i].prazo_garantia_dias,
+								// 	// formato_periodicidade: objEmpree.dados_empreendimento[i].formato_periodicidade
+								// },
+								// {
+								// 	id_prog_manut: 'teste 3 id_prog_manut',
+								// 	nome_sistema: 'teste 3 nome_sistema',
+								// 	nome_atividade: 'teste 3 nome_atividade',
+								// 	nome_periodicidade: 'teste 3 nome_periodicidade',
+								// 	qtde_agrupamentos_eventos: 'teste 3 qtde_agrupamentos_eventos',
+								// 	qtde_dias_periodicidade: 'teste 3 qtde_dias_periodicidade',
+								// 	data_inicial_garantia: 'teste 3 data_inicial_garantia',
+								// 	prazo_garantia_dias: 'teste 3 prazo_garantia_dias',
+								// 	formato_periodicidade: 'teste 3 formato_periodicidade'
+
+								// 	// id_prog_manut: objEmpree.dados_empreendimento[i].id_prog_manut,
+								// 	// nome_sistema: objEmpree.dados_empreendimento[i].nome_sistema,
+								// 	// nome_atividade: objEmpree.dados_empreendimento[i].nome_atividade,
+								// 	// nome_periodicidade: objEmpree.dados_empreendimento[i].nome_periodicidade,
+								// 	// qtde_agrupamentos_eventos: objEmpree.dados_empreendimento[i].qtde_agrupamentos_eventos,
+								// 	// qtde_dias_periodicidade: objEmpree.dados_empreendimento[i].qtde_dias_periodicidade,
+								// 	// data_inicial_garantia: objEmpree.dados_empreendimento[i].data_inicial_garantia,
+								// 	// prazo_garantia_dias: objEmpree.dados_empreendimento[i].prazo_garantia_dias,
+								// 	// formato_periodicidade: objEmpree.dados_empreendimento[i].formato_periodicidade
+								// }
+								// ];
 
 								//alert(manuts[i])
 							}
+
+							// Object.entries(manuts).forEach(([key, value]) => {
+							// 	alert(key + ' ' + value); // "a 5", "b 7", "c 9"     
+							// });
+
+							// var manuts = todas_manutencoes;
 
 							request.onsuccess = function (event) {
 								db = request.result;
@@ -141,6 +222,7 @@
 								addManut(db, manuts);
 
 								removerDadosProgManutEvento(db);
+								// go_to(); 
 
 								db.onerror = function (event) {
 									alert("Database error: " + event.target.error);
@@ -219,6 +301,7 @@
 								var tx = db.transaction(['mtab_cliente'], 'readwrite');
 								var store = tx.objectStore('mtab_cliente');
 
+								alert('ponto 1')
 								// for (var i in clientes) {
 								// 	store.add(clientes[i]);
 								// }
@@ -242,6 +325,8 @@
 								var tx = db.transaction(['mtab_empree'], 'readwrite');
 								var store = tx.objectStore('mtab_empree');
 
+								alert('ponto 2')
+
 								for (var i in emprees) {
 									store.add(emprees[i]);
 								}
@@ -262,6 +347,8 @@
 							function addManut(db, manuts) {
 								var tx = db.transaction(['mtab_prog_manut'], 'readwrite');
 								var store = tx.objectStore('mtab_prog_manut');
+
+								alert('ponto 3')
 
 								for (var i in manuts) {
 									store.add(manuts[i]);

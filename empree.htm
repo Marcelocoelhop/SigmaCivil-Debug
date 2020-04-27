@@ -300,30 +300,6 @@
 										alert("Erro ao criar o banco");
 									};
 
-									request.onsuccess = function (event) {
-										db = request.result;
-										db.onerror = function (event) {
-											alert("Database error: " + event.target.error);
-										}
-									};
-
-									request.onupgradeneeded = function (event) {
-										db = event.target.result;
-
-										var mtb_empree = db.createObjectStore("mtab_empree", { keyPath: "id_empree" });
-									};
-
-									request.onsuccess = function (event) {
-										db = event.target.result;
-										consultaEmpree(db, emprees);
-										// addEmpree(db, emprees);
-										// addCliente(db, clientes);
-										// consultaCliente(db, clientes, emprees);
-									}
-
-									request.onerror = function (event) {
-										alert("Erro na criação: " + event.target.error);
-									}
 
 									emprees = [
 										{
@@ -333,6 +309,34 @@
 											data_implantacao_sc: ""
 										}
 									];
+
+									request.onsuccess = function (event) {
+										db = request.result;
+										consultaEmpree(db, emprees);
+										db.onerror = function (event) {
+											alert("Database error: " + event.target.error);
+										}
+									};
+
+									// request.onupgradeneeded = function (event) {
+									// 	db = event.target.result;
+
+									// 	var mtb_empree = db.createObjectStore("mtab_empree", { keyPath: "id_empree" });
+									// };
+
+									// request.onsuccess = function (event) {
+									// 	db = event.target.result;
+									// 	consultaEmpree(db, emprees);
+									// 	// addEmpree(db, emprees);
+									// 	// addCliente(db, clientes);
+									// 	// consultaCliente(db, clientes, emprees);
+									// }
+
+									// request.onerror = function (event) {
+									// 	alert("Erro na criação: " + event.target.error);
+									// }
+
+
 
 									// function addEmpree(db, emprees) {
 									// 	var tx = db.transaction(['mtab_empree'], 'readwrite');
@@ -372,7 +376,7 @@
 													}
 												}
 
-												cursor.continue();
+												// cursor.continue();
 											}
 										}
 									}
@@ -505,21 +509,12 @@
 
 			request.onsuccess = function (event) {
 				db = request.result;
+				consultaEmpree2(db, emprees, manuts);
 				db.onerror = function (event) {
 					alert("Database error: " + event.target.error);
 				}
 			};
 
-			request.onsuccess = function (event) {
-				db = event.target.result;
-				// addCliente(db, clientes);
-				// addEmpree(db, emprees);
-				consultaEmpree2(db, emprees, manuts);
-			}
-
-			request.onerror = function (event) {
-				alert("Erro na criação: " + event.target.error);
-			}
 
 			var data_implantacao_sc;
 			var nome_empree = "";
@@ -533,19 +528,7 @@
 				}
 			];
 
-			manuts = [
-				{
-					id_prog_manut: "",
-					nome_sistema: "",
-					nome_atividade: "",
-					nome_periodicidade: "",
-					qtde_agrupamentos_eventos: "",
-					qtde_dias_periodicidade: "",
-					data_inicial_garantia: "",
-					prazo_garantia_dias: "",
-					formato_periodicidade: ""
-				}
-			];
+			manuts = [];
 
 			function consultaEmpree2(db, emprees, manuts) {
 				var tx = db.transaction(['mtab_empree'], 'readwrite');
@@ -561,156 +544,292 @@
 						nome_empree = cursor.value.nome_empree;
 						document.getElementById('nome_emp').innerHTML = nome_empree;
 
-						cursor.continue();
+						// cursor.continue();
 					}
 
 					consultaEmpreeOrderBy(db, manuts);
 				}
 			}
 
+			var meio_empree = "";
+			var final_empree = "";
+
+			var qtde_eventos = 0;
+			var str = ""
+			var str2 = ""
+			var compl2 = ""
+
+			var temp1 = ""
+			var aux1 = ""
+
 			function consultaEmpreeOrderBy(db, manuts) {
 				var tx = db.transaction(['mtab_prog_manut'], 'readwrite');
 				var store = tx.objectStore('mtab_prog_manut');
-				var keyRangeValue = IDBKeyRange.bound("A", "Z");
-				var objectStoreRequest = store.openCursor();
+				var keyRangeValue = IDBKeyRange.lowerBound("");
+				var objectStoreRequest = store.openCursor(null, "next");
 				objectStoreRequest.onsuccess = function (event) {
 					var cursor = event.target.result;
 
-					var meio_empree = "";
-					var final_empree = "";
-
-					var qtde_eventos = 0;
-					var str = ""
-					var str2 = ""
-					var compl2 = ""
-
-					var temp1 = ""
-					var aux1 = ""
-
+					// if (cursor) {
 					if (cursor) {
 						var data = cursor.value;
+
 						manuts.push(cursor.value);
 
-						qtde_eventos = parseInt(cursor.value.prazo_garantia_dias / (cursor.value.qtde_dias_periodicidade * cursor.value.qtde_agrupamentos_eventos))
+						for (var field in data) {
+							qtde_eventos = parseInt(data['prazo_garantia_dias'] / (data['qtde_dias_periodicidade'] * data['qtde_agrupamentos_eventos']))
 
-						str = cursor.value.formato_periodicidade;
-						var data_inicial_garantia = new Date(cursor.value.data_inicial_garantia);
-						str2 = str.split("_");
+							str = data['formato_periodicidade']
+							var data_inicial_garantia = new Date(data['data_inicial_garantia'])
+							str2 = str.split("_")
 
-						for (var j = 1; j <= qtde_eventos; j++) {
-							compl2 = j * str2[0] * cursor.value.qtde_agrupamentos_eventos;
+							for (var j = 1; j <= qtde_eventos; j++) {
+								compl2 = j * str2[0] * cursor.value.qtde_agrupamentos_eventos;
 
-							var new_data_evento = new Date(data_inicial_garantia);
+								var new_data_evento = new Date(data_inicial_garantia);
 
-							if (str2[1] == "d") {
-								new_data_evento.setDate(new_data_evento.getDate() + compl2);
-							}
-							if (str2[1] == "m") {
-
-								/////para soma em MESES
-								var inteiro_ano = compl2 / 12;
-								inteiro_ano = Math.floor(inteiro_ano);
-								var aux_mes = compl2 - (12 * inteiro_ano);
-								aux_mes = (new_data_evento.getMonth() + aux_mes)
-
-								var soma_ano
-								var aux_dia
-
-								if (aux_mes >= 12) {
-									aux_mes = aux_mes - 12;
-									soma_ano = 1;
+								if (str2[1] == "d") {
+									new_data_evento.setDate(new_data_evento.getDate() + compl2);
 								}
-								else {
-									aux_mes = aux_mes;
-									soma_ano = 0;
-								}
+								if (str2[1] == "m") {
 
-								var aux_ano = inteiro_ano + soma_ano
-								aux_ano = (new_data_evento.getFullYear() + aux_ano)
+									/////para soma em MESES
+									var inteiro_ano = compl2 / 12;
+									inteiro_ano = Math.floor(inteiro_ano);
+									var aux_mes = compl2 - (12 * inteiro_ano);
+									aux_mes = (new_data_evento.getMonth() + aux_mes)
 
-								if (new_data_evento.getDate() == 31) {
+									var soma_ano
+									var aux_dia
 
-									if (aux_mes == 03 || aux_mes == 05 || aux_mes == 08 || aux_mes == 10) {
-										aux_dia = 30;
-									} else if ((aux_mes == 01) && (aux_ano % 4 == 0)) {
-										aux_dia = 29;
-									} else if ((aux_mes == 01) && (aux_ano % 4 != 0)) {
-										aux_dia = 28;
-									} else {
-										aux_dia = 31;
-									}
-
-								} else if (new_data_evento.getDate() == 30) {
-
-									if ((aux_mes == 01) && (aux_ano % 4 == 0)) {
-										aux_dia = 29;
-									} else if ((aux_mes == 01) && (aux_ano % 4 != 0)) {
-										aux_dia = 28;
-									} else {
-										aux_dia = 30;
-									}
-
-								} else if (new_data_evento.getDate() == 29) {
-
-									if ((aux_mes == 01) && (aux_ano % 4 != 0)) {
-										aux_dia = 28;
-									} else {
-										aux_dia = 29;
-									}
-
-								} else {
-									aux_dia = new_data_evento.getDate();
-								}
-
-								new_data_evento = new Date(aux_ano, aux_mes, aux_dia)
-								/////para soma em MESES
-
-							}
-
-							if (str2[1] == "yyyy") {
-								new_data_evento.setFullYear(new_data_evento.getFullYear() + compl2);
-							}
-
-
-							if (new_data_evento >= data_implantacao_sc) {
-
-								if (new_data_evento >= data_ini_p_busca && new_data_evento <= data_final_p_busca) {
-
-									var texto_aux
-									if (new_data_evento > data_de_hoje) {
-										texto_aux = "faltam " + parseInt((new_data_evento.getTime() - data_de_hoje.getTime()) / (24 * 3600 * 1000), 10)
-										colorAux1 = "#42B750"
+									if (aux_mes >= 12) {
+										aux_mes = aux_mes - 12;
+										soma_ano = 1;
 									}
 									else {
-										texto_aux = "passados " + parseInt((data_de_hoje.getTime() - new_data_evento.getTime()) / (24 * 3600 * 1000), 10)
-										colorAux1 = "#D13434"
+										aux_mes = aux_mes;
+										soma_ano = 0;
 									}
 
-									temp1 = new_data_evento.getDate() + "/" + (new_data_evento.getMonth() + 1) + "/" + new_data_evento.getFullYear() + "<br>"
-									aux1 = "0" + (new_data_evento.getMonth() + 1)
-									aux2 = "0" + (new_data_evento.getDate())
+									var aux_ano = inteiro_ano + soma_ano
+									aux_ano = (new_data_evento.getFullYear() + aux_ano)
 
-									//var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); 
+									if (new_data_evento.getDate() == 31) {
 
-									meio_empree += "<li><a href='' onClick='ir_para(" + String.fromCharCode(34) + "?ipm=" + cursor.value.id_prog_manut + "&dia_ev=" + aux2.substring(aux2.length - 2, aux2.length) + "&mes_ev=" + aux1.substring(aux1.length - 2, aux1.length) + "&ano_ev=" + new_data_evento.getFullYear() + "" + String.fromCharCode(34) + ")'><table height='3' border='0' cellpadding='0' cellspacing='0'><tr><td><font size='3' face='Arial' color='#000000'>" + cursor.value.nome_sistema + "</font></td></tr></table><table height='3' border='0' cellpadding='0' cellspacing='0'><tr><td> <font size='2' face='Arial' color='#0033CC'>" + cursor.value.nome_atividade + "</font></td></tr></table>"
-									meio_empree += "<table height='3' border='0' cellpadding='0' cellspacing='0'><tr><td><font size='2' face='Arial'> (" + cursor.value.nome_periodicidade + ")</font></td></tr></table>"
-									meio_empree += "<table border='0' cellpadding='0' cellspacing='0'><tr><td><div align='center'><font size='3' face='Arial'>" + temp1 + "</font></div></td><td><font size='2' face='Arial' color='" + colorAux1 + "'>&nbsp;- " + texto_aux + " dias </font></td></tr></table>"
-									meio_empree += "</a></li>"
+										if (aux_mes == 03 || aux_mes == 05 || aux_mes == 08 || aux_mes == 10) {
+											aux_dia = 30;
+										} else if ((aux_mes == 01) && (aux_ano % 4 == 0)) {
+											aux_dia = 29;
+										} else if ((aux_mes == 01) && (aux_ano % 4 != 0)) {
+											aux_dia = 28;
+										} else {
+											aux_dia = 31;
+										}
 
-									alert(meio_empree)
+									} else if (new_data_evento.getDate() == 30) {
+
+										if ((aux_mes == 01) && (aux_ano % 4 == 0)) {
+											aux_dia = 29;
+										} else if ((aux_mes == 01) && (aux_ano % 4 != 0)) {
+											aux_dia = 28;
+										} else {
+											aux_dia = 30;
+										}
+
+									} else if (new_data_evento.getDate() == 29) {
+
+										if ((aux_mes == 01) && (aux_ano % 4 != 0)) {
+											aux_dia = 28;
+										} else {
+											aux_dia = 29;
+										}
+
+									} else {
+										aux_dia = new_data_evento.getDate();
+									}
+
+									new_data_evento = new Date(aux_ano, aux_mes, aux_dia)
+									/////para soma em MESES
+
 								}
 
-							}
+								if (str2[1] == "yyyy") {
+									new_data_evento.setFullYear(new_data_evento.getFullYear() + compl2);
+								}
 
-							if (new_data_evento > data_final_p_busca) { break; }
-						} //for next
 
-						// cursor.continue();
+								if (new_data_evento >= data_implantacao_sc) {
+
+									if (new_data_evento >= data_ini_p_busca && new_data_evento <= data_final_p_busca) {
+
+										var texto_aux
+										if (new_data_evento > data_de_hoje) {
+											texto_aux = "faltam " + parseInt((new_data_evento.getTime() - data_de_hoje.getTime()) / (24 * 3600 * 1000), 10)
+											colorAux1 = "#42B750"
+										}
+										else {
+											texto_aux = "passados " + parseInt((data_de_hoje.getTime() - new_data_evento.getTime()) / (24 * 3600 * 1000), 10)
+											colorAux1 = "#D13434"
+										}
+
+										temp1 = new_data_evento.getDate() + "/" + (new_data_evento.getMonth() + 1) + "/" + new_data_evento.getFullYear() + "<br>"
+										aux1 = "0" + (new_data_evento.getMonth() + 1)
+										aux2 = "0" + (new_data_evento.getDate())
+
+										//var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); 
+
+										if (meio_empree.indexOf(data['nome_sistema']) == -1) {
+											meio_empree += "<li><a href='' onClick='ir_para(" + String.fromCharCode(34) + "?ipm=" + data['id_prog_manut'] + "&dia_ev=" + aux2.substring(aux2.length - 2, aux2.length) + "&mes_ev=" + aux1.substring(aux1.length - 2, aux1.length) + "&ano_ev=" + new_data_evento.getFullYear() + "" + String.fromCharCode(34) + ")'><table height='3' border='0' cellpadding='0' cellspacing='0'><tr><td><font size='3' face='Arial' color='#000000'>" + data['nome_sistema'] + "</font></td></tr></table><table height='3' border='0' cellpadding='0' cellspacing='0'><tr><td> <font size='2' face='Arial' color='#0033CC'>" + data['nome_atividade'] + "</font></td></tr></table>"
+											meio_empree += "<table height='3' border='0' cellpadding='0' cellspacing='0'><tr><td><font size='2' face='Arial'> (" + data['nome_periodicidade'] + ")</font></td></tr></table>"
+											meio_empree += "<table border='0' cellpadding='0' cellspacing='0'><tr><td><div align='center'><font size='3' face='Arial'>" + temp1 + "</font></div></td><td><font size='2' face='Arial' color='" + colorAux1 + "'>&nbsp;- " + texto_aux + " dias </font></td></tr></table>"
+											meio_empree += "</a></li>"
+										}
+
+										// alert(meio_empree)
+									}
+
+								}
+
+								if (new_data_evento > data_final_p_busca) { break; }
+							} //for next
+						}
+
+						cursor.continue();
 					}
 
 					final_empree = ini_lista + meio_empree + fim_lista
+					// alert(final_empree)
 					document.getElementById('lista_empree').innerHTML = final_empree;
 					$('#q_empree').listview();
+
+
+
+
+
+
+					// var data = cursor.value;
+					// manuts.push(cursor.value);
+
+					// qtde_eventos = parseInt(cursor.value.prazo_garantia_dias / (cursor.value.qtde_dias_periodicidade * cursor.value.qtde_agrupamentos_eventos))
+
+					// str = cursor.value.formato_periodicidade;
+					// var data_inicial_garantia = new Date(cursor.value.data_inicial_garantia);
+					// str2 = str.split("_");
+
+					// for (var j = 1; j <= qtde_eventos; j++) {
+					// 	compl2 = j * str2[0] * cursor.value.qtde_agrupamentos_eventos;
+
+					// 	var new_data_evento = new Date(data_inicial_garantia);
+
+					// 	if (str2[1] == "d") {
+					// 		new_data_evento.setDate(new_data_evento.getDate() + compl2);
+					// 	}
+					// 	if (str2[1] == "m") {
+
+					// 		/////para soma em MESES
+					// 		var inteiro_ano = compl2 / 12;
+					// 		inteiro_ano = Math.floor(inteiro_ano);
+					// 		var aux_mes = compl2 - (12 * inteiro_ano);
+					// 		aux_mes = (new_data_evento.getMonth() + aux_mes)
+
+					// 		var soma_ano
+					// 		var aux_dia
+
+					// 		if (aux_mes >= 12) {
+					// 			aux_mes = aux_mes - 12;
+					// 			soma_ano = 1;
+					// 		}
+					// 		else {
+					// 			aux_mes = aux_mes;
+					// 			soma_ano = 0;
+					// 		}
+
+					// 		var aux_ano = inteiro_ano + soma_ano
+					// 		aux_ano = (new_data_evento.getFullYear() + aux_ano)
+
+					// 		if (new_data_evento.getDate() == 31) {
+
+					// 			if (aux_mes == 03 || aux_mes == 05 || aux_mes == 08 || aux_mes == 10) {
+					// 				aux_dia = 30;
+					// 			} else if ((aux_mes == 01) && (aux_ano % 4 == 0)) {
+					// 				aux_dia = 29;
+					// 			} else if ((aux_mes == 01) && (aux_ano % 4 != 0)) {
+					// 				aux_dia = 28;
+					// 			} else {
+					// 				aux_dia = 31;
+					// 			}
+
+					// 		} else if (new_data_evento.getDate() == 30) {
+
+					// 			if ((aux_mes == 01) && (aux_ano % 4 == 0)) {
+					// 				aux_dia = 29;
+					// 			} else if ((aux_mes == 01) && (aux_ano % 4 != 0)) {
+					// 				aux_dia = 28;
+					// 			} else {
+					// 				aux_dia = 30;
+					// 			}
+
+					// 		} else if (new_data_evento.getDate() == 29) {
+
+					// 			if ((aux_mes == 01) && (aux_ano % 4 != 0)) {
+					// 				aux_dia = 28;
+					// 			} else {
+					// 				aux_dia = 29;
+					// 			}
+
+					// 		} else {
+					// 			aux_dia = new_data_evento.getDate();
+					// 		}
+
+					// 		new_data_evento = new Date(aux_ano, aux_mes, aux_dia)
+					// 		/////para soma em MESES
+
+					// 	}
+
+					// 	if (str2[1] == "yyyy") {
+					// 		new_data_evento.setFullYear(new_data_evento.getFullYear() + compl2);
+					// 	}
+
+
+					// 	if (new_data_evento >= data_implantacao_sc) {
+
+					// 		if (new_data_evento >= data_ini_p_busca && new_data_evento <= data_final_p_busca) {
+
+					// 			var texto_aux
+					// 			if (new_data_evento > data_de_hoje) {
+					// 				texto_aux = "faltam " + parseInt((new_data_evento.getTime() - data_de_hoje.getTime()) / (24 * 3600 * 1000), 10)
+					// 				colorAux1 = "#42B750"
+					// 			}
+					// 			else {
+					// 				texto_aux = "passados " + parseInt((data_de_hoje.getTime() - new_data_evento.getTime()) / (24 * 3600 * 1000), 10)
+					// 				colorAux1 = "#D13434"
+					// 			}
+
+					// 			temp1 = new_data_evento.getDate() + "/" + (new_data_evento.getMonth() + 1) + "/" + new_data_evento.getFullYear() + "<br>"
+					// 			aux1 = "0" + (new_data_evento.getMonth() + 1)
+					// 			aux2 = "0" + (new_data_evento.getDate())
+
+					// 			//var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); 
+
+					// 			meio_empree += "<li><a href='' onClick='ir_para(" + String.fromCharCode(34) + "?ipm=" + cursor.value.id_prog_manut + "&dia_ev=" + aux2.substring(aux2.length - 2, aux2.length) + "&mes_ev=" + aux1.substring(aux1.length - 2, aux1.length) + "&ano_ev=" + new_data_evento.getFullYear() + "" + String.fromCharCode(34) + ")'><table height='3' border='0' cellpadding='0' cellspacing='0'><tr><td><font size='3' face='Arial' color='#000000'>" + cursor.value.nome_sistema + "</font></td></tr></table><table height='3' border='0' cellpadding='0' cellspacing='0'><tr><td> <font size='2' face='Arial' color='#0033CC'>" + cursor.value.nome_atividade + "</font></td></tr></table>"
+					// 			meio_empree += "<table height='3' border='0' cellpadding='0' cellspacing='0'><tr><td><font size='2' face='Arial'> (" + cursor.value.nome_periodicidade + ")</font></td></tr></table>"
+					// 			meio_empree += "<table border='0' cellpadding='0' cellspacing='0'><tr><td><div align='center'><font size='3' face='Arial'>" + temp1 + "</font></div></td><td><font size='2' face='Arial' color='" + colorAux1 + "'>&nbsp;- " + texto_aux + " dias </font></td></tr></table>"
+					// 			meio_empree += "</a></li>"
+
+					// 			alert(meio_empree)
+					// 		}
+
+					// 	}
+
+					// 	if (new_data_evento > data_final_p_busca) { break; }
+					// } //for next
+
+					// cursor.continue();
+					// }
+
+					// final_empree = ini_lista + meio_empree + fim_lista
+					// document.getElementById('lista_empree').innerHTML = final_empree;
+					// $('#q_empree').listview();
 				}
 			}
 

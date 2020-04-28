@@ -2021,7 +2021,125 @@
 			document.getElementById('rec_' + qual_id_prog_manut).style.display = "inline";
 			document.getElementById('latdir_' + qual_id_prog_manut).style.display = "inline";
 
-			var db2 = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+			var db;
+			var request = window.indexedDB.open("db_sigmacivil", "1");
+
+			request.onerror = function (event) {
+				alert("Erro ao criar o banco");
+			};
+
+			request.onsuccess = function (event) {
+				db = request.result;
+
+				consultaManutEventoAudio(db, manutsEvento);
+
+				db.onerror = function (event) {
+					alert("Database error: " + event.target.errorCode);
+				}
+			}
+
+			manutsEvento = [
+				{
+					id_prog_manut: qual_id_prog_manut,
+					dia_evento: dia_ev,
+					mes_evento: mes_ev,
+					ano_evento: ano_ev,
+					caminho_imagens: "",
+					caminho_audio: m_path,
+					caminho_video: "",
+					caminho_texto: "",
+					status_imagens_upl: "",
+					status_video_upl: "",
+					status_audio_upl: "0",
+					status_texto_upl: ""
+				}
+			];
+
+			function consultaManutEventoAudio(db, manutsEvento) {
+				var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+				var store = tx.objectStore('mtab_prog_manut_evento');
+				var index = store.index('comparar');
+				var whereEquals = IDBKeyRange.only([qual_id_prog_manut, dia_ev, mes_ev, ano_ev]);
+				var objectStoreRequest = index.openCursor(whereEquals);
+				objectStoreRequest.onsuccess = function (event) {
+					var cursor = event.target.result;
+					if (cursor) {
+						var data = cursor.value;
+						manutsEvento.push(cursor.value);
+
+						alert('ponto 2');
+
+						// updateManutEventoAudio(db, manutsEvento);
+
+						// cursor.continue();
+					} else {
+						var tx2 = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+						var store2 = tx2.objectStore('mtab_prog_manut_evento');
+
+						alert('ponto 3')
+
+						manutsEvento.map(function (manutEvento) {
+							store2.add(manutEvento);
+						});
+
+						tx2.oncomplete = function () {
+							alert('stored manut evento audio note!');
+							reload_page();
+						}
+
+						tx2.onerror = function (event) {
+							alert('error storing manut evento audio note ' + event.target.error);
+						}
+					}
+
+					updateManutEventoAudio(db, manutsEvento);
+
+					// reload_page();
+				}
+			}
+
+			function updateManutEventoAudio(db, manutsEvento) {
+				var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+				var store = tx.objectStore('mtab_prog_manut_evento');
+				var index = store.index('comparar');
+				var whereEquals = IDBKeyRange.only([qual_id_prog_manut, dia_ev, mes_ev, ano_ev]);
+				index.openCursor(whereEquals).onsuccess = function (event) {
+					var cursor = event.target.result;
+					if (cursor) {
+						var data = cursor.value;
+						manutsEvento.push(cursor.value);
+
+						data.id_prog_manut = qual_id_prog_manut;
+						data.dia_evento = dia_ev;
+						data.mes_evento = mes_ev;
+						data.ano_evento = ano_ev;
+
+						data.caminho_audio = m_path;
+						data.status_audio_upl = "0";
+
+						var request = cursor.update(data);
+						request.onsuccess = function (event) {
+							alert("Atualização realizada update audio win up!");
+							reload_page();
+						}
+
+						cursor.continue();
+					}
+
+					// reload_page();
+				}
+			}
+
+
+
+
+
+
+
+
+
+
+			/*var db2 = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
 			db2.transaction(function (tx) {
 
 				tx.executeSql('SELECT * FROM mtab_prog_manut_evento WHERE mtab_prog_manut_evento.id_prog_manut="' + qual_id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"  ', [], function (tx, results) {
@@ -2039,7 +2157,7 @@
 
 				}, null);
 
-			});
+			});*/
 
 		}
 	}
@@ -2079,13 +2197,62 @@
 
 	//// deletar audio ///////////////
 	function deletar_audio() {
+		var db;
+		var request = window.indexedDB.open("db_sigmacivil", "1");
 
-		var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+		request.onerror = function (event) {
+			alert("Erro ao criar o banco");
+		};
+
+		request.onsuccess = function (event) {
+			db = request.result;
+
+			deleteManutEventoAudio(db, manutsEvento);
+
+			db.onerror = function (event) {
+				alert("Database error: " + event.target.errorCode);
+			}
+		}
+
+		function deleteManutEventoAudio(db, manutsEvento) {
+			var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+			var store = tx.objectStore('mtab_prog_manut_evento');
+			var index = store.index('comparar');
+			var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+			index.openCursor(whereEquals).onsuccess = function (event) {
+				var cursor = event.target.result;
+				if (cursor) {
+					var data = cursor.value;
+					manutsEvento.push(cursor.value);
+
+					alert('ponto 5')
+					data.caminho_audio = "";
+					data.status_audio_upl = "0";
+
+					var request = cursor.update(data);
+					request.onsuccess = function (event) {
+						alert("Atualização realizada delete função audio!");
+						reload_page();
+					}
+					cursor.continue();
+				}
+
+				// reload_page();
+			}
+		}
+
+
+
+
+
+
+
+		/*var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
 		db.transaction(function (tx) {
 
 			tx.executeSql('UPDATE mtab_prog_manut_evento SET caminho_audio="" , status_audio_upl="0"  WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"');
 			reload_page();
-		});
+		});*/
 
 	}
 	/////////  fim  deletar audio///////
@@ -2095,7 +2262,57 @@
 
 		if (tem_conexao()) {
 
-			var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+			var db;
+			var request = window.indexedDB.open("db_sigmacivil", "1");
+
+			request.onerror = function (event) {
+				alert("Erro ao criar o banco");
+			};
+
+			request.onsuccess = function (event) {
+				db = request.result;
+
+				uploadManutEventoAudio(db, manutsEvento);
+
+				db.onerror = function (event) {
+					alert("Database error: " + event.target.errorCode);
+				}
+			}
+
+			function uploadManutEventoAudio(db, manutsEvento) {
+				var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+				var store = tx.objectStore('mtab_prog_manut_evento');
+				var index = store.index('comparar');
+				var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+				var objectStoreRequest = index.openCursor(whereEquals);
+				objectStoreRequest.onsuccess = function (event) {
+					var cursor = event.target.result;
+					if (cursor) {
+						var data = cursor.value;
+						manutsEvento.push(cursor.value);
+
+						if (cursor.value.status_audio_upl != '1') {
+							var aux_caminho_audio = cursor.value.caminho_audio;
+							up_loadAudio(aux_caminho_audio);
+						} else {
+							var aux_caminho_audio = cursor.value.caminho_audio;
+							up_loadAudio(aux_caminho_audio);
+						}
+
+						cursor.continue();
+					}
+				}
+			}
+
+
+
+
+
+
+
+
+
+			/*var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
 			db.transaction(function (tx) {
 
 				tx.executeSql('SELECT * FROM mtab_prog_manut_evento WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '" ', [], function (tx, results) {
@@ -2114,7 +2331,7 @@
 
 
 				}, null);
-			});
+			});*/
 
 		}
 	}
@@ -2139,13 +2356,69 @@
 
 
 	var win_up_a = function (r) {
-		var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+		var db;
+		var request = window.indexedDB.open("db_sigmacivil", "1");
+
+		request.onerror = function (event) {
+			alert("Erro ao criar o banco");
+		};
+
+		request.onsuccess = function (event) {
+			db = request.result;
+
+			updateManutEventoWinUpAudio(db, manutsEvento);
+
+			db.onerror = function (event) {
+				alert("Database error: " + event.target.errorCode);
+			}
+		}
+
+		function updateManutEventoWinUpAudio(db, manutsEvento) {
+			var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+			var store = tx.objectStore('mtab_prog_manut_evento');
+			var index = store.index('comparar');
+			var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+			index.openCursor(whereEquals).onsuccess = function (event) {
+				var cursor = event.target.result;
+				if (cursor) {
+					var data = cursor.value;
+					manutsEvento.push(cursor.value);
+
+					// data.status_audio_upl = "1";
+
+					// var request = cursor.update(data);
+					// request.onsuccess = function (event) {
+					//     alert("Atualização realizada update win up audio!");
+					// }
+
+					cursor.continue();
+				}
+
+				data.status_audio_upl = "1";
+
+				var request = cursor.update(data);
+				request.onsuccess = function (event) {
+					alert("Atualização realizada update win up audio!");
+					reload_page();
+				}
+
+				// reload_page();
+			}
+		}
+
+
+
+
+
+
+
+		/*var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
 		db.transaction(function (tx) {
 			tx.executeSql('UPDATE mtab_prog_manut_evento SET status_audio_upl="1" WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"');
 
 			reload_page();
 
-		});
+		});*/
 	}
 
 	var fail_up_a = function (error) {
@@ -2158,7 +2431,56 @@
 
 		if (tem_conexao()) {
 
-			var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+			var db;
+			var request = window.indexedDB.open("db_sigmacivil", "1");
+
+			request.onerror = function (event) {
+				alert("Erro ao criar o banco");
+			};
+
+			request.onsuccess = function (event) {
+				db = request.result;
+
+				uploadManutEventoTexto(db, manutsEvento);
+
+				db.onerror = function (event) {
+					alert("Database error: " + event.target.errorCode);
+				}
+			}
+
+			function uploadManutEventoTexto(db, manutsEvento) {
+				var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+				var store = tx.objectStore('mtab_prog_manut_evento');
+				var index = store.index('comparar');
+				var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+				var objectStoreRequest = index.openCursor(whereEquals);
+				objectStoreRequest.onsuccess = function (event) {
+					var cursor = event.target.result;
+					if (cursor) {
+						var data = cursor.value;
+						manutsEvento.push(cursor.value);
+
+						if (cursor.value.status_texto_upl != '1') {
+							var aux_caminho_texto = cursor.value.caminho_texto;
+							up_loadTexto(aux_caminho_texto);
+						} else {
+							var aux_caminho_texto = cursor.value.caminho_texto;
+							up_loadTexto(aux_caminho_texto);
+						}
+
+						cursor.continue();
+					}
+				}
+			}
+
+
+
+
+
+
+
+
+			/*var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
 			db.transaction(function (tx) {
 
 				tx.executeSql('SELECT * FROM mtab_prog_manut_evento WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '" ', [], function (tx, results) {
@@ -2177,7 +2499,7 @@
 
 
 				}, null);
-			});
+			});*/
 
 		}
 	}
@@ -2198,20 +2520,67 @@
 
 					var resposta_total = ajax.responseText;
 					if (resposta_total == "grav_ok") {
-						var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+						var db;
+						var request = window.indexedDB.open("db_sigmacivil", "1");
+
+						request.onerror = function (event) {
+							alert("Erro ao criar o banco");
+						};
+
+						request.onsuccess = function (event) {
+							db = request.result;
+
+							uploadManutEventoWinUpTexto(db, manutsEvento);
+
+							db.onerror = function (event) {
+								alert("Database error: " + event.target.errorCode);
+							}
+						}
+
+						function uploadManutEventoWinUpTexto(db, manutsEvento) {
+							var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+							var store = tx.objectStore('mtab_prog_manut_evento');
+							var index = store.index('comparar');
+							var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+							index.openCursor(whereEquals).onsuccess = function (event) {
+								var cursor = event.target.result;
+								if (cursor) {
+									var data = cursor.value;
+									manutsEvento.push(cursor.value);
+
+									data.status_texto_upl = "1";
+
+									var request = cursor.update(data);
+									request.onsuccess = function (event) {
+										alert("Atualização realizada update win up texto!");
+										reload_page();
+									}
+
+									cursor.continue();
+								}
+
+								// reload_page();
+							}
+						}
+
+
+
+
+
+
+
+						/*var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
 						db.transaction(function (tx) {
 							tx.executeSql('UPDATE mtab_prog_manut_evento SET status_texto_upl="1" WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"');
 							reload_page(); // adicionar aqui a estrutura para certiifcar que foi upado
 							alert("Texto upado com suceddo");
 
-						});
-					}
-					else {
+						});*/
+					} else {
 						alert("Problemas com a gravação do texto. Tentar novamente.");
 					}
 
-				}
-				else {
+				} else {
 					alert("Problemas com sua conexao internet. Erro: 01");
 				}
 			}

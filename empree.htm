@@ -565,7 +565,7 @@
 			function consultaEmpreeOrderBy(db, manuts) {
 				var tx = db.transaction(['mtab_prog_manut'], 'readwrite');
 				var store = tx.objectStore('mtab_prog_manut');
-				// var keyRangeValue = IDBKeyRange.bound("nome_sistema", "nome_atividade", false, true);
+				// var keyRangeValue = IDBKeyRange.bound();
 				var objectStoreRequest = store.openCursor(null, "next");
 				objectStoreRequest.onsuccess = function (event) {
 					var cursor = event.target.result;

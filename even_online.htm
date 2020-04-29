@@ -1730,7 +1730,7 @@
                     var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
                     var store = tx.objectStore('mtab_prog_manut_evento');
                     var index = store.index('comparar');
-                    var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+                    var whereEquals = IDBKeyRange.only([qual_id_prog_manut, dia_ev, mes_ev, ano_ev]);
                     var objectStoreRequest = index.openCursor(whereEquals);
                     objectStoreRequest.onsuccess = function (event) {
                         var cursor = event.target.result;
@@ -1773,7 +1773,7 @@
                     var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
                     var store = tx.objectStore('mtab_prog_manut_evento');
                     var index = store.index('comparar');
-                    var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+                    var whereEquals = IDBKeyRange.only([qual_id_prog_manut, dia_ev, mes_ev, ano_ev]);
                     index.openCursor(whereEquals).onsuccess = function (event) {
                         var cursor = event.target.result;
                         if (cursor) {

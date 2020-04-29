@@ -1108,23 +1108,6 @@
                 }
             ];
 
-            function addManutEvento(db, manutsEvento) {
-                var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
-                var store = tx.objectStore('mtab_prog_manut_evento');
-
-                manutsEvento.map(function (manutEvento) {
-                    store.add(manutEvento);
-                });
-
-                tx.oncomplete = function () {
-                    alert('stored manut evento note!')
-                }
-
-                tx.onerror = function (event) {
-                    alert('error storing manut evento note ' + event.target.error);
-                }
-            }
-
             function consultaManutEvento2(db, manutsEvento) {
                 var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
                 var store = tx.objectStore('mtab_prog_manut_evento');

@@ -39,68 +39,23 @@
 
 			var db;
 			alert("ponto B");
-			var DBOpenRequest = window.indexedDB.open("db_sigmacivil", "1");
+			var request = window.indexedDB.open("db_sigmacivil", "1");
 
-			DBOpenRequest.onerror = function (event) {
+			request.onerror = function (event) {
 				alert("Erro ao criar o banco");
 			};
 
-			DBOpenRequest.onsuccess = function (event) {
+			request.onsuccess = function (event) {
 				alert("ponto sucesso abetura banco");
-				db = DBOpenRequest.result;
+				db = request.result;
 				// db = event.target.result;
 				alert("ponto C1");
 
 				removerDados(db, 'mtab_cliente');
 				removerDados(db, 'mtab_empree');
 				removerDados(db, 'mtab_prog_manut_evento');
-				removerDados(db, 'mtab_prog_manut');
-
-				alert("Os dados do atual empreendimento já foram apagados. Você já pode importar um novo empreendimento!")
-				goto();
-
-				//db.onerror = function (event) {
-				//		alert("Database error: " + event.target.error);
-				//}
+				removerDadosMtabProgManut(db);
 			};
-
-			// alert(db)
-			// var tx = db.transaction(["mtab_cliente"], 'readwrite');
-			// alert("ponto C12");
-			// var store = tx.objectStore("mtab_cliente");
-			// alert("ponto C2");
-
-			// var objectStoreRequest = store.clear();
-			// alert("ponto C3");
-
-			// objectStoreRequest.onsuccess = function (event) {
-			// 	alert("dados apagados");
-			// }
-
-			//	request.onupgradeneeded = function (event) {
-			//		alert("ponto onupgradeneeded");
-			//		db = event.target.result;
-			// alert('tabela removida');
-			// removerTabela(db, 'mtab_cliente');
-			// removerTabela(db, 'mtab_empree');
-			// removerTabela(db, 'mtab_prog_manut_evento');
-			// removerTabela(db, 'mtab_prog_manut');
-			// goto();
-			//	};
-
-			// request.onsuccess = function (event) {
-			// 	alert("ponto D");
-			// 	db = request.result;
-			// 	//db = event.target.result;
-
-			// 	removerDados(db, 'mtab_cliente');
-			// 	removerDados(db, 'mtab_empree');
-			// 	removerDados(db, 'mtab_prog_manut_evento');
-			// 	removerDados(db, 'mtab_prog_manut');
-
-			// 	alert("Os dados do atual empreendimento já foram apagados. Você já pode importar um novo empreendimento!")
-			// 	goto();
-			// }
 
 			function removerDados(db, tabela) {
 				var tx = db.transaction([tabela], 'readwrite');
@@ -112,13 +67,16 @@
 				}
 			}
 
-			//request.onerror = function (event) {
-			//	alert("Erro na criação: " + event.target.error);
-			//}
+			function removerDadosMtabProgManut(db) {
+				var tx = db.transaction(['mtab_prog_manut'], 'readwrite');
+				var store = tx.objectStore('mtab_prog_manut');
 
-			function removerTabela(db, tabela) {
-				var request = db.deleteObjectStore(tabela);
-				alert("ponto3");
+				var objectStoreRequest = store.clear();
+				objectStoreRequest.onsuccess = function (event) {
+					alert("dados apagados mtab_prog_manut");
+					alert("Os dados do atual empreendimento já foram apagados. Você já pode importar um novo empreendimento!")
+					goto();
+				}
 			}
 
 			// var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it

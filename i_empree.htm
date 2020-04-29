@@ -112,102 +112,9 @@
 
 							var manuts = [];
 
-							// var todas_manutencoes = "";
-
 							for (i = 0; i < objEmpree.dados_empreendimento.length; i++) {
-
 								manuts.push(objEmpree.dados_empreendimento[i]);
-								// alert(manuts[i].nome_sistema)
-								// for (var k in manuts) {
-								// manuts += {
-								// 	id_prog_manut: objEmpree.dados_empreendimento[i].id_prog_manut,
-								// 	nome_sistema: objEmpree.dados_empreendimento[i].nome_sistema,
-								// 	nome_atividade: objEmpree.dados_empreendimento[i].nome_atividade,
-								// 	nome_periodicidade: objEmpree.dados_empreendimento[i].nome_periodicidade,
-								// 	qtde_agrupamentos_eventos: objEmpree.dados_empreendimento[i].qtde_agrupamentos_eventos,
-								// 	qtde_dias_periodicidade: objEmpree.dados_empreendimento[i].qtde_dias_periodicidade,
-								// 	data_inicial_garantia: objEmpree.dados_empreendimento[i].data_inicial_garantia,
-								// 	prazo_garantia_dias: objEmpree.dados_empreendimento[i].prazo_garantia_dias,
-								// 	formato_periodicidade: objEmpree.dados_empreendimento[i].formato_periodicidade
-								// }
-								// }
-								// alert(manuts[0].nome_sistema)
-
-
-								// todas_manutencoes = todas_manutencoes + "{" + "id_prog_manut:" + objEmpree.dados_empreendimento[i].id_prog_manut + "," + "nome_sistema:" + objEmpree.dados_empreendimento[i].nome_sistema + "," + "nome_atividade:" + objEmpree.dados_empreendimento[i].nome_atividade + "," + "nome_periodicidade:" + objEmpree.dados_empreendimento[i].nome_periodicidade + "," + "qtde_agrupamentos_eventos:" + objEmpree.dados_empreendimento[i].qtde_agrupamentos_eventos + "," + "qtde_dias_periodicidade:" + objEmpree.dados_empreendimento[i].qtde_dias_periodicidade + "," + "data_inicial_garantia:" + objEmpree.dados_empreendimento[i].data_inicial_garantia + "," + "prazo_garantia_dias:" + objEmpree.dados_empreendimento[i].prazo_garantia_dias + "," + "formato_periodicidade:" + objEmpree.dados_empreendimento[i].formato_periodicidade + "}, ";
-								// alert(todas_manutencoes)
-								// id_prog_manut: 'teste 1 id_prog_manut',
-								// nome_sistema: 'teste 1 nome_sistema',
-								// nome_atividade: 'teste 1 nome_atividade',
-								// nome_periodicidade: 'teste 1 nome_periodicidade',
-								// qtde_agrupamentos_eventos: 'teste 1 qtde_agrupamentos_eventos',
-								// qtde_dias_periodicidade: 'teste 1 qtde_dias_periodicidade',
-								// data_inicial_garantia: 'teste 1 data_inicial_garantia',
-								// prazo_garantia_dias: 'teste 1 prazo_garantia_dias',
-								// formato_periodicidade: 'teste 1 formato_periodicidade'
-
-								// 	"id_prog_manut:" +  objEmpree.dados_empreendimento[i].id_prog_manut + ","
-								// 	nome_sistema: objEmpree.dados_empreendimento[i].nome_sistema,
-								// 	nome_atividade: objEmpree.dados_empreendimento[i].nome_atividade,
-								// 	nome_periodicidade: objEmpree.dados_empreendimento[i].nome_periodicidade,
-								// 	qtde_agrupamentos_eventos: objEmpree.dados_empreendimento[i].qtde_agrupamentos_eventos,
-								// 	qtde_dias_periodicidade: objEmpree.dados_empreendimento[i].qtde_dias_periodicidade,
-								// 	data_inicial_garantia: objEmpree.dados_empreendimento[i].data_inicial_garantia,
-								// 	prazo_garantia_dias: objEmpree.dados_empreendimento[i].prazo_garantia_dias,
-								// 	formato_periodicidade: objEmpree.dados_empreendimento[i].formato_periodicidade
-								// },
-								// {
-								// 	id_prog_manut: 'teste 2 id_prog_manut',
-								// 	nome_sistema: 'teste 2 nome_sistema',
-								// 	nome_atividade: 'teste 2 nome_atividade',
-								// 	nome_periodicidade: 'teste 2 nome_periodicidade',
-								// 	qtde_agrupamentos_eventos: 'teste 2 qtde_agrupamentos_eventos',
-								// 	qtde_dias_periodicidade: 'teste 2 qtde_dias_periodicidade',
-								// 	data_inicial_garantia: 'teste 2 data_inicial_garantia',
-								// 	prazo_garantia_dias: 'teste 2 prazo_garantia_dias',
-								// 	formato_periodicidade: 'teste 2 formato_periodicidade'
-
-								// 	// id_prog_manut: objEmpree.dados_empreendimento[i].id_prog_manut,
-								// 	// nome_sistema: objEmpree.dados_empreendimento[i].nome_sistema,
-								// 	// nome_atividade: objEmpree.dados_empreendimento[i].nome_atividade,
-								// 	// nome_periodicidade: objEmpree.dados_empreendimento[i].nome_periodicidade,
-								// 	// qtde_agrupamentos_eventos: objEmpree.dados_empreendimento[i].qtde_agrupamentos_eventos,
-								// 	// qtde_dias_periodicidade: objEmpree.dados_empreendimento[i].qtde_dias_periodicidade,
-								// 	// data_inicial_garantia: objEmpree.dados_empreendimento[i].data_inicial_garantia,
-								// 	// prazo_garantia_dias: objEmpree.dados_empreendimento[i].prazo_garantia_dias,
-								// 	// formato_periodicidade: objEmpree.dados_empreendimento[i].formato_periodicidade
-								// },
-								// {
-								// 	id_prog_manut: 'teste 3 id_prog_manut',
-								// 	nome_sistema: 'teste 3 nome_sistema',
-								// 	nome_atividade: 'teste 3 nome_atividade',
-								// 	nome_periodicidade: 'teste 3 nome_periodicidade',
-								// 	qtde_agrupamentos_eventos: 'teste 3 qtde_agrupamentos_eventos',
-								// 	qtde_dias_periodicidade: 'teste 3 qtde_dias_periodicidade',
-								// 	data_inicial_garantia: 'teste 3 data_inicial_garantia',
-								// 	prazo_garantia_dias: 'teste 3 prazo_garantia_dias',
-								// 	formato_periodicidade: 'teste 3 formato_periodicidade'
-
-								// 	// id_prog_manut: objEmpree.dados_empreendimento[i].id_prog_manut,
-								// 	// nome_sistema: objEmpree.dados_empreendimento[i].nome_sistema,
-								// 	// nome_atividade: objEmpree.dados_empreendimento[i].nome_atividade,
-								// 	// nome_periodicidade: objEmpree.dados_empreendimento[i].nome_periodicidade,
-								// 	// qtde_agrupamentos_eventos: objEmpree.dados_empreendimento[i].qtde_agrupamentos_eventos,
-								// 	// qtde_dias_periodicidade: objEmpree.dados_empreendimento[i].qtde_dias_periodicidade,
-								// 	// data_inicial_garantia: objEmpree.dados_empreendimento[i].data_inicial_garantia,
-								// 	// prazo_garantia_dias: objEmpree.dados_empreendimento[i].prazo_garantia_dias,
-								// 	// formato_periodicidade: objEmpree.dados_empreendimento[i].formato_periodicidade
-								// }
-								// ];
-
-								//alert(manuts[i])
 							}
-
-							// Object.entries(manuts).forEach(([key, value]) => {
-							// 	alert(key + ' ' + value); // "a 5", "b 7", "c 9"     
-							// });
-
-							// var manuts = todas_manutencoes;
 
 							request.onsuccess = function (event) {
 								db = request.result;
@@ -229,84 +136,11 @@
 								}
 							};
 
-							// request.onupgradeneeded = function (event) {
-							// 	db = event.target.result;
-							// 	var mtab_cliente = db.createObjectStore("mtab_cliente", { keyPath: "id_cliente" });
-
-							// 	mtab_cliente.createIndex("id_cliente", "id_cliente", { unique: true });
-							// 	mtab_cliente.createIndex("e_construtora", "e_construtora", { unique: false });
-							// 	mtab_cliente.createIndex("text1", "text1", { unique: false });
-							// 	mtab_cliente.createIndex("text2", "text2", { unique: false });
-
-							// 	var mtab_empree = db.createObjectStore("mtab_empree", { keyPath: "id_empree" });
-
-							// 	mtab_empree.createIndex("id_empree", "id_empree", { unique: true });
-							// 	mtab_empree.createIndex("nome_empree", "nome_empree", { unique: false });
-							// 	mtab_empree.createIndex("status_sync", "status_sync", { unique: false });
-							// 	mtab_empree.createIndex("data_implantacao_sc", "data_implantacao_sc", { unique: false });
-
-							// 	var mtab_prog_manut = db.createObjectStore("mtab_prog_manut", { keyPath: "id_prog_manut" });
-
-							// 	mtab_prog_manut.createIndex("id_prog_manut", "id_prog_manut", { unique: true });
-							// 	mtab_prog_manut.createIndex("nome_sistema", "nome_sistema", { unique: false });
-							// 	mtab_prog_manut.createIndex("nome_atividade", "nome_atividade", { unique: false });
-							// 	mtab_prog_manut.createIndex("nome_periodicidade", "nome_periodicidade", { unique: false });
-							// 	mtab_prog_manut.createIndex("qtde_agrupamentos_eventos", "qtde_agrupamentos_eventos", { unique: false });
-							// 	mtab_prog_manut.createIndex("qtde_dias_periodicidade", "qtde_dias_periodicidade", { unique: false });
-							// 	mtab_prog_manut.createIndex("data_inicial_garantia", "data_inicial_garantia", { unique: false });
-							// 	mtab_prog_manut.createIndex("prazo_garantia_dias", "prazo_garantia_dias", { unique: false });
-							// 	mtab_prog_manut.createIndex("formato_periodicidade", "formato_periodicidade", { unique: false });
-
-							// 	var mtab_prog_manut_evento = db.createObjectStore("mtab_prog_manut_evento", { keyPath: "id_prog_manut" });
-
-							// 	mtab_prog_manut_evento.createIndex("id_prog_manut", "id_prog_manut", { unique: true });
-							// 	mtab_prog_manut_evento.createIndex("dia_evento", "dia_evento", { unique: false });
-							// 	mtab_prog_manut_evento.createIndex("mes_evento", "mes_evento", { unique: false });
-							// 	mtab_prog_manut_evento.createIndex("ano_evento", "ano_evento", { unique: false });
-							// 	mtab_prog_manut_evento.createIndex("caminho_imagens", "caminho_imagens", { unique: false });
-							// 	mtab_prog_manut_evento.createIndex("caminho_audio", "caminho_audio", { unique: false });
-							// 	mtab_prog_manut_evento.createIndex("caminho_video", "caminho_video", { unique: false });
-							// 	mtab_prog_manut_evento.createIndex("caminho_texto", "caminho_texto", { unique: false });
-							// 	mtab_prog_manut_evento.createIndex("status_imagens_upl", "status_imagens_upl", { unique: false });
-							// 	mtab_prog_manut_evento.createIndex("status_video_upl", "status_video_upl", { unique: false });
-							// 	mtab_prog_manut_evento.createIndex("status_audio_upl", "status_audio_upl", { unique: false });
-							// 	mtab_prog_manut_evento.createIndex("status_texto_upl", "status_texto_upl", { unique: false });
-							// };
-
-							// request.onsuccess = function (event) {
-							// 	db = event.target.result;
-
-							// 	removerDados(db, 'mtab_cliente');
-							// 	addCliente(db, clientes);
-
-							// 	removerDados(db, 'mtab_empree');
-							// 	addEmpree(db, emprees);
-
-							// 	removerDados(db, 'mtab_prog_manut');
-							// 	addManut(db, manuts);
-
-							// 	removerDados(db, 'mtab_prog_manut_evento');
-							// 	go_to();
-							// 	// consultaCliente(db, clientes, emprees);
-							// }
-
-							// request.onerror = function (event) {
-							// 	alert("Erro na criação: " + event.target.error);
-							// }
-
-
-							// alert(manuts.nome_sistema)
-
 							function addCliente(db, clientes) {
 								var tx = db.transaction(['mtab_cliente'], 'readwrite');
 								var store = tx.objectStore('mtab_cliente');
 
 								alert('ponto 1')
-								// for (var i in clientes) {
-								// 	store.add(clientes[i]);
-								// }
-
-								// var alim_cli=store.add(clientes);
 
 								clientes.map(function (cliente) {
 									store.add(cliente);
@@ -331,10 +165,6 @@
 									store.add(emprees[i]);
 								}
 
-								// emprees.map(function (empree) {
-								// 	store.add(empree);
-								// });
-
 								tx.oncomplete = function () {
 									alert('stored note empree!')
 								}
@@ -353,13 +183,6 @@
 								for (var i in manuts) {
 									store.add(manuts[i]);
 								}
-
-								// store.add(manuts)
-
-								// manuts.map(function (manut) {
-								// 	alert(manut.nome_sistema)
-								// 	store.add(manut);
-								// });
 
 								tx.oncomplete = function () {
 									alert('stored note manut!')

@@ -2384,23 +2384,24 @@
 					var data = cursor.value;
 					manutsEvento.push(cursor.value);
 
-					// data.status_audio_upl = "1";
+					data.status_audio_upl = "1";
 
-					// var request = cursor.update(data);
-					// request.onsuccess = function (event) {
-					//     alert("Atualização realizada update win up audio!");
-					// }
+					var request = cursor.update(data);
+					request.onsuccess = function (event) {
+						alert("Atualização realizada update win up audio!");
+						reload_page();
+					}
 
 					cursor.continue();
 				}
 
-				data.status_audio_upl = "1";
+				// data.status_audio_upl = "1";
 
-				var request = cursor.update(data);
-				request.onsuccess = function (event) {
-					alert("Atualização realizada update win up audio!");
-					reload_page();
-				}
+				// var request = cursor.update(data);
+				// request.onsuccess = function (event) {
+				// 	alert("Atualização realizada update win up audio!");
+				// 	reload_page();
+				// }
 
 				// reload_page();
 			}

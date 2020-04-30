@@ -318,43 +318,6 @@
 										}
 									};
 
-									// request.onupgradeneeded = function (event) {
-									// 	db = event.target.result;
-
-									// 	var mtb_empree = db.createObjectStore("mtab_empree", { keyPath: "id_empree" });
-									// };
-
-									// request.onsuccess = function (event) {
-									// 	db = event.target.result;
-									// 	consultaEmpree(db, emprees);
-									// 	// addEmpree(db, emprees);
-									// 	// addCliente(db, clientes);
-									// 	// consultaCliente(db, clientes, emprees);
-									// }
-
-									// request.onerror = function (event) {
-									// 	alert("Erro na criação: " + event.target.error);
-									// }
-
-
-
-									// function addEmpree(db, emprees) {
-									// 	var tx = db.transaction(['mtab_empree'], 'readwrite');
-									// 	var store = tx.objectStore('mtab_empree');
-
-									// 	emprees.map(function (empree) {
-									// 		store.add(empree)
-									// 	});
-
-									// 	tx.oncomplete = function () {
-									// 		alert('stored note empree!')
-									// 	}
-
-									// 	tx.onerror = function (event) {
-									// 		alert('error storing empree note ' + event.target.error);
-									// 	}
-									// }
-
 									function consultaEmpree(db, emprees) {
 										var tx = db.transaction(['mtab_empree'], 'readwrite');
 										var store = tx.objectStore('mtab_empree');

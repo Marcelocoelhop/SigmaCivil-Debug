@@ -27,7 +27,7 @@
 		/////////////////////////////
 		function iniciar() {
 
-			alert("ponto A");
+			// alert("ponto A");
 
 			window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
 			window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
@@ -38,7 +38,7 @@
 			}
 
 			var db;
-			alert("ponto B");
+			// alert("ponto B");
 			var request = window.indexedDB.open("db_sigmacivil", "1");
 
 			request.onerror = function (event) {
@@ -46,10 +46,10 @@
 			};
 
 			request.onsuccess = function (event) {
-				alert("ponto sucesso abetura banco");
+				// alert("ponto sucesso abetura banco");
 				db = request.result;
 				// db = event.target.result;
-				alert("ponto C1");
+				// alert("ponto C1");
 
 				removerDados(db, 'mtab_cliente');
 				removerDados(db, 'mtab_empree');
@@ -63,7 +63,7 @@
 
 				var objectStoreRequest = store.clear();
 				objectStoreRequest.onsuccess = function (event) {
-					alert("dados apagados");
+					// alert("dados apagados");
 				}
 			}
 
@@ -73,7 +73,7 @@
 
 				var objectStoreRequest = store.clear();
 				objectStoreRequest.onsuccess = function (event) {
-					alert("dados apagados mtab_prog_manut");
+					// alert("dados apagados mtab_prog_manut");
 					alert("Os dados do atual empreendimento já foram apagados. Você já pode importar um novo empreendimento!")
 					goto();
 				}

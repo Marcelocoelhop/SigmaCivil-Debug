@@ -82,7 +82,7 @@
 							var getEmpree = jsontext[1];
 							var objEmpree = JSON.parse(getEmpree);
 
-							alert("objEmpree.dados_empreendimento.length: " + objEmpree.dados_empreendimento.length)
+							// alert("objEmpree.dados_empreendimento.length: " + objEmpree.dados_empreendimento.length)
 
 							var db;
 							var request = window.indexedDB.open("db_sigmacivil", "1");
@@ -140,14 +140,14 @@
 								var tx = db.transaction(['mtab_cliente'], 'readwrite');
 								var store = tx.objectStore('mtab_cliente');
 
-								alert('ponto 1')
+								// alert('ponto 1')
 
 								clientes.map(function (cliente) {
 									store.add(cliente);
 								});
 
 								tx.oncomplete = function () {
-									alert('stored note!')
+									// alert('stored note!')
 								}
 
 								tx.onerror = function (event) {
@@ -159,14 +159,14 @@
 								var tx = db.transaction(['mtab_empree'], 'readwrite');
 								var store = tx.objectStore('mtab_empree');
 
-								alert('ponto 2')
+								// alert('ponto 2')
 
 								for (var i in emprees) {
 									store.add(emprees[i]);
 								}
 
 								tx.oncomplete = function () {
-									alert('stored note empree!')
+									// alert('stored note empree!')
 								}
 
 								tx.onerror = function (event) {
@@ -178,14 +178,14 @@
 								var tx = db.transaction(['mtab_prog_manut'], 'readwrite');
 								var store = tx.objectStore('mtab_prog_manut');
 
-								alert('ponto 3')
+								// alert('ponto 3')
 
 								for (var i in manuts) {
 									store.add(manuts[i]);
 								}
 
 								tx.oncomplete = function () {
-									alert('stored note manut!')
+									// alert('stored note manut!')
 								}
 
 								tx.onerror = function (event) {
@@ -199,7 +199,7 @@
 
 								var objectStoreRequest = store.clear();
 								objectStoreRequest.onsuccess = function (event) {
-									alert("dados apagados");
+									// alert("dados apagados");
 								}
 							}
 
@@ -209,7 +209,7 @@
 
 								var objectStoreRequest = store.clear();
 								objectStoreRequest.onsuccess = function (event) {
-									alert("dados apagados mtab_prog_manut_evento");
+									// alert("dados apagados mtab_prog_manut_evento");
 									go_to();
 								}
 							}

@@ -203,7 +203,7 @@
 					if (cursor) {
 						var data = cursor.value;
 
-						alert('ponto 3')
+						// alert('ponto 3')
 
 						nome_sistema = data.nome_sistema;
 						nome_atividade = data.nome_atividade;
@@ -905,7 +905,7 @@
 					});
 
 					tx2.oncomplete = function () {
-						alert('stored manut evento note!')
+						// alert('stored manut evento note!')
 						reload_page();
 					}
 
@@ -930,13 +930,13 @@
 					var data = cursor.value;
 					manutsEvento.push(cursor.value);
 
-					alert(data.caminho_texto);
+					// alert(data.caminho_texto);
 					data.caminho_texto = quale;
-					alert(data.caminho_texto);
+					// alert(data.caminho_texto);
 
 					var request = cursor.update(data);
 					request.onsuccess = function (event) {
-						alert("Atualização realizada update função!");
+						// alert("Atualização realizada update função!");
 						reload_page();
 					}
 
@@ -1086,7 +1086,7 @@
 
 					var request = cursor.update(data);
 					request.onsuccess = function (event) {
-						alert("Atualização realizada!");
+						// alert("Atualização realizada!");
 						reload_page();
 					}
 
@@ -1103,7 +1103,7 @@
 					});
 
 					tx2.oncomplete = function () {
-						alert('stored manut evento note!')
+						// alert('stored manut evento note!')
 						reload_page();
 					}
 
@@ -1135,7 +1135,7 @@
 
 					var request = cursor.update(data);
 					request.onsuccess = function (event) {
-						alert("Atualização realizada update função!");
+						// alert("Atualização realizada update função!");
 					}
 
 					cursor.continue();
@@ -1266,11 +1266,11 @@
 					}
 
 					if (taman > 1) {
-						alert('ponto 4')
+						// alert('ponto 4')
 						aux_2 = aux_1.substring(0, aux_1.length - 2);
 						aux_2_status = aux_1_status.substring(0, aux_1_status.length - 2);
 					} else if (taman == 0 || taman == 1) {
-						alert('ponto 5')
+						// alert('ponto 5')
 						aux_2 = "";
 						aux_2_status = "";
 					}
@@ -1295,15 +1295,15 @@
 					var data = cursor.value;
 					manutsEvento.push(cursor.value);
 
-					alert("data.caminho_imagens: " + data.caminho_imagens)
+					// alert("data.caminho_imagens: " + data.caminho_imagens)
 					data.caminho_imagens = aux_2;
-					alert("data.caminho_imagens: " + data.caminho_imagens)
+					// alert("data.caminho_imagens: " + data.caminho_imagens)
 					data.status_imagens_upl = aux_2_status;
 
 					var request = cursor.update(data);
-					alert(request)
+					// alert(request)
 					request.onsuccess = function (event) {
-						alert("Atualização realizada update delete!");
+						// alert("Atualização realizada update delete!");
 						reload_page();
 					}
 					cursor.continue();
@@ -1556,7 +1556,7 @@
 
 					var request = cursor.update(data);
 					request.onsuccess = function (event) {
-						alert("Atualização realizada update win up!");
+						// alert("Atualização realizada update win up!");
 						reload_page();
 					}
 
@@ -1653,7 +1653,7 @@
 						var data = cursor.value;
 						manutsEvento.push(cursor.value);
 
-						alert('ponto 2');
+						// alert('ponto 2');
 
 						// updateManutEventoVideo(db, manutsEvento);
 
@@ -1662,14 +1662,14 @@
 						var tx2 = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
 						var store2 = tx2.objectStore('mtab_prog_manut_evento');
 
-						alert('ponto 3')
+						// alert('ponto 3')
 
 						manutsEvento.map(function (manutEvento) {
 							store2.add(manutEvento);
 						});
 
 						tx2.oncomplete = function () {
-							alert('stored manut evento video note!')
+							// alert('stored manut evento video note!')
 							reload_page();
 						}
 
@@ -1695,7 +1695,7 @@
 						var data = cursor.value;
 						manutsEvento.push(cursor.value);
 
-						alert(m_path)
+						// alert(m_path)
 
 						data.id_prog_manut = qual_id_prog_manut;
 						data.dia_evento = dia_ev;
@@ -1707,7 +1707,7 @@
 
 						var request = cursor.update(data);
 						request.onsuccess = function (event) {
-							alert("Atualização realizada update video win up!");
+							// alert("Atualização realizada update video win up!");
 							reload_page();
 						}
 
@@ -1784,15 +1784,15 @@
 					var data = cursor.value;
 					manutsEvento.push(cursor.value);
 
-					alert('ponto 5')
-					alert("data.caminho_imagens: " + data.caminho_imagens)
-					alert("data.caminho_video: " + data.caminho_video)
+					// alert('ponto 5')
+					// alert("data.caminho_imagens: " + data.caminho_imagens)
+					// alert("data.caminho_video: " + data.caminho_video)
 					data.caminho_video = "";
 					data.status_video_upl = "0";
 
 					var request = cursor.update(data);
 					request.onsuccess = function (event) {
-						alert("Atualização realizada delete função video!");
+						// alert("Atualização realizada delete função video!");
 						reload_page();
 					}
 					cursor.continue();
@@ -1949,7 +1949,7 @@
 
 					var request = cursor.update(data);
 					request.onsuccess = function (event) {
-						alert("Atualização realizada update win up video!");
+						// alert("Atualização realizada update win up video!");
 						reload_page();
 					}
 
@@ -2067,7 +2067,7 @@
 						var data = cursor.value;
 						manutsEvento.push(cursor.value);
 
-						alert('ponto 2');
+						// alert('ponto 2');
 
 						// updateManutEventoAudio(db, manutsEvento);
 
@@ -2076,14 +2076,14 @@
 						var tx2 = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
 						var store2 = tx2.objectStore('mtab_prog_manut_evento');
 
-						alert('ponto 3')
+						// alert('ponto 3')
 
 						manutsEvento.map(function (manutEvento) {
 							store2.add(manutEvento);
 						});
 
 						tx2.oncomplete = function () {
-							alert('stored manut evento audio note!');
+							// alert('stored manut evento audio note!');
 							reload_page();
 						}
 
@@ -2119,7 +2119,7 @@
 
 						var request = cursor.update(data);
 						request.onsuccess = function (event) {
-							alert("Atualização realizada update audio win up!");
+							// alert("Atualização realizada update audio win up!");
 							reload_page();
 						}
 
@@ -2225,13 +2225,13 @@
 					var data = cursor.value;
 					manutsEvento.push(cursor.value);
 
-					alert('ponto 5')
+					// alert('ponto 5')
 					data.caminho_audio = "";
 					data.status_audio_upl = "0";
 
 					var request = cursor.update(data);
 					request.onsuccess = function (event) {
-						alert("Atualização realizada delete função audio!");
+						// alert("Atualização realizada delete função audio!");
 						reload_page();
 					}
 					cursor.continue();
@@ -2388,7 +2388,7 @@
 
 					var request = cursor.update(data);
 					request.onsuccess = function (event) {
-						alert("Atualização realizada update win up audio!");
+						// alert("Atualização realizada update win up audio!");
 						reload_page();
 					}
 
@@ -2553,7 +2553,7 @@
 
 									var request = cursor.update(data);
 									request.onsuccess = function (event) {
-										alert("Atualização realizada update win up texto!");
+										// alert("Atualização realizada update win up texto!");
 										reload_page();
 									}
 

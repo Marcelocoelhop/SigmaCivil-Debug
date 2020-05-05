@@ -18,6 +18,10 @@
 <body>
 
 	<script type="text/javascript">
+		window.onerror = function (message, url, lineNumber) {
+			//alert("Error: " + message + " in " + url + " at line " + lineNumber);
+			alert(`Error: ${message} in ${url} at line ${lineNumber}`);
+		}
 
 		var login = getquerystring("login");
 		var senha = getquerystring("senha");
@@ -119,16 +123,18 @@
 							request.onsuccess = function (event) {
 								db = request.result;
 
-								removerDados(db, 'mtab_cliente');
-								addCliente(db, clientes);
+								executar(db, clientes, emprees, manuts);
 
-								removerDados(db, 'mtab_empree');
-								addEmpree(db, emprees);
+								// removerDados(db, 'mtab_cliente');
+								// addCliente(db, clientes);
 
-								removerDados(db, 'mtab_prog_manut');
-								addManut(db, manuts);
+								// removerDados(db, 'mtab_empree');
+								// addEmpree(db, emprees);
 
-								removerDadosProgManutEvento(db);
+								// removerDados(db, 'mtab_prog_manut');
+								// addManut(db, manuts);
+
+								// removerDadosProgManutEvento(db);
 								// go_to(); 
 
 								db.onerror = function (event) {
@@ -136,7 +142,98 @@
 								}
 							};
 
-							function addCliente(db, clientes) {
+							var num = 0;
+
+							function executar(db, clientes, emprees, manuts) {
+								var tx = db.transaction(['mtab_cliente'], 'readwrite');
+								var store = tx.objectStore('mtab_cliente');
+
+								var objectStoreRequest = store.clear();
+								objectStoreRequest.onsuccess = function (event) {
+									num += 1;
+									// alert("dados apagados");
+								}
+
+								var tx2 = db.transaction(['mtab_cliente'], 'readwrite');
+								var store2 = tx2.objectStore('mtab_cliente');
+
+								clientes.map(function (cliente) {
+									store2.add(cliente);
+								});
+
+								tx2.oncomplete = function () {
+									executar2(db, emprees, manuts);
+								}
+
+								tx2.onerror = function (event) {
+									alert('error storing note ' + event.target.error);
+								}
+							}
+
+							function executar2(db, emprees, manuts) {
+								var tx = db.transaction(['mtab_empree'], 'readwrite');
+								var store = tx.objectStore('mtab_empree');
+
+								var objectStoreRequest = store.clear();
+								objectStoreRequest.onsuccess = function (event) {
+									num += 1;
+									// alert("dados apagados");
+								}
+
+								var tx2 = db.transaction(['mtab_empree'], 'readwrite');
+								var store2 = tx.objectStore('mtab_empree');
+
+								for (var i in emprees) {
+									store2.add(emprees[i]);
+								}
+
+								tx2.oncomplete = function () {
+									executar3(db, manuts);
+								}
+
+								tx2.onerror = function (event) {
+									alert('error storing empree note ' + event.target.error);
+								}
+							}
+
+							function executar3(db, manuts) {
+								var tx = db.transaction(['mtab_prog_manut'], 'readwrite');
+								var store = tx.objectStore('mtab_prog_manut');
+
+								var objectStoreRequest = store.clear();
+								objectStoreRequest.onsuccess = function (event) {
+									num += 1;
+								}
+
+								var tx2 = db.transaction(['mtab_prog_manut'], 'readwrite');
+								var store2 = tx.objectStore('mtab_prog_manut');
+
+								for (var i in manuts) {
+									store2.add(manuts[i]);
+								}
+
+								tx2.oncomplete = function () {
+									removerDadosProgManutEvento(db);
+									console.log(num);
+								}
+
+								tx2.onerror = function (event) {
+									alert('error storing manut note ' + event.target.error);
+								}
+							}
+
+							// alert(num)
+
+
+
+
+
+
+
+
+
+
+							/*function addCliente(db, clientes) {
 								var tx = db.transaction(['mtab_cliente'], 'readwrite');
 								var store = tx.objectStore('mtab_cliente');
 
@@ -185,6 +282,7 @@
 								}
 
 								tx.oncomplete = function () {
+									lucas += 1
 									// alert('stored note manut!')
 								}
 
@@ -199,10 +297,11 @@
 
 								var objectStoreRequest = store.clear();
 								objectStoreRequest.onsuccess = function (event) {
+									var lucas = 1
 									console.log('dados apagados');
 									// alert("dados apagados");
 								}
-							}
+							}*/
 
 							function removerDadosProgManutEvento(db) {
 								var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
@@ -211,7 +310,7 @@
 								var objectStoreRequest = store.clear();
 								objectStoreRequest.onsuccess = function (event) {
 									// alert("dados apagados mtab_prog_manut_evento");
-									setTimeout(go_to, 2000);
+									go_to();
 								}
 							}
 

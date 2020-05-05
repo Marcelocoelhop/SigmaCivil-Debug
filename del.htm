@@ -51,13 +51,54 @@
 				// db = event.target.result;
 				// alert("ponto C1");
 
-				removerDados(db, 'mtab_cliente');
-				removerDados(db, 'mtab_empree');
-				removerDados(db, 'mtab_prog_manut_evento');
-				removerDadosMtabProgManut(db);
+				executarRemoverDados(db);
+
+				// removerDados(db, 'mtab_cliente');
+				// removerDados(db, 'mtab_empree');
+				// removerDados(db, 'mtab_prog_manut_evento');
+				// removerDadosMtabProgManut(db);
 			};
 
-			function removerDados(db, tabela) {
+			var num = 0;
+
+			function executarRemoverDados(db) {
+				var tx = db.transaction(['mtab_cliente'], 'readwrite');
+				var store = tx.objectStore('mtab_cliente');
+
+				var objectStoreRequest = store.clear();
+				objectStoreRequest.onsuccess = function (event) {
+					removerDadosEmpree(db);
+					// alert("dados apagados");
+				}
+			}
+
+			function removerDadosEmpree(db) {
+				var tx = db.transaction(['mtab_empree'], 'readwrite');
+				var store = tx.objectStore('mtab_empree');
+
+				var objectStoreRequest = store.clear();
+				objectStoreRequest.onsuccess = function (event) {
+					removerDadosMtabProgManutEvento(db)
+					// alert("dados apagados");
+				}
+			}
+
+			function removerDadosMtabProgManutEvento(db) {
+				var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+				var store = tx.objectStore('mtab_prog_manut_evento');
+
+				var objectStoreRequest = store.clear();
+				objectStoreRequest.onsuccess = function (event) {
+					removerDadosMtabProgManut(db);
+					// alert("dados apagados");
+				}
+			}
+
+
+
+
+
+			/*function removerDados(db, tabela) {
 				var tx = db.transaction([tabela], 'readwrite');
 				var store = tx.objectStore(tabela);
 
@@ -65,7 +106,7 @@
 				objectStoreRequest.onsuccess = function (event) {
 					// alert("dados apagados");
 				}
-			}
+			}*/
 
 			function removerDadosMtabProgManut(db) {
 				var tx = db.transaction(['mtab_prog_manut'], 'readwrite');

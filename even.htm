@@ -992,6 +992,15 @@
 
 		qual_id_prog_manut = qual;
 
+		// RESTRIÇÕES DE DATAS
+		if (datadiff(Date.now(), d_min) > 0) {
+			alert("Essa ação só pode ser realizada a partir do dia " + dateToEN(d_min) + "!")
+			return
+		} else if (datadiff(Date.now(), d_max) < 0) {
+			alert("Essa ação não pode ser realizada após o dia " + dateToEN(d_max) + "!")
+			return
+		}
+
 		var r = confirm("Para tirar uma foto com a CÂMERA selecione OK. Para usar sua galeria de imagens selecione CANCELAR");
 		if (r == true) {
 			source = pictureSource.CAMERA;
@@ -1593,6 +1602,16 @@
 	////////////////////////////////////////// INICIO VIDEO  //////////////
 	function captureVideo(qual) {
 		qual_id_prog_manut = qual;
+
+		// RESTRIÇÕES DE DATAS
+		if (datadiff(Date.now(), d_min) > 0) {
+			alert("Essa ação só pode ser realizada a partir do dia " + dateToEN(d_min) + "!")
+			return
+		} else if (datadiff(Date.now(), d_max) < 0) {
+			alert("Essa ação não pode ser realizada após o dia " + dateToEN(d_max) + "!")
+			return
+		}
+
 		navigator.device.capture.captureVideo(videocaptureSuccess, videocaptureError, { limit: 1, duration: 15 });
 	}
 
@@ -1994,6 +2013,16 @@
 
 	function captureAudio(qual) {
 		qual_id_prog_manut = qual;
+
+		// RESTRIÇÕES DE DATAS
+		if (datadiff(Date.now(), d_min) > 0) {
+			alert("Essa ação só pode ser realizada a partir do dia " + dateToEN(d_min) + "!")
+			return
+		} else if (datadiff(Date.now(), d_max) < 0) {
+			alert("Essa ação não pode ser realizada após o dia " + dateToEN(d_max) + "!")
+			return
+		}
+
 		navigator.device.capture.captureAudio(captureSuccess, captureError, { limit: 1 });
 	}
 
@@ -2429,6 +2458,15 @@
 
 	/////// upload texto  //////////////////////
 	function upload_texto() {
+
+		// RESTRIÇÕES DE DATAS
+		if (datadiff(Date.now(), d_min) > 0) {
+			alert("Essa ação só pode ser realizada a partir do dia " + dateToEN(d_min) + "!")
+			return
+		} else if (datadiff(Date.now(), d_max) < 0) {
+			alert("Essa ação não pode ser realizada após o dia " + dateToEN(d_max) + "!")
+			return
+		}
 
 		if (tem_conexao()) {
 

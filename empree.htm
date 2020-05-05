@@ -500,6 +500,7 @@
 				objectStoreRequest.onsuccess = function (event) {
 					var cursor = event.target.result;
 					if (cursor) {
+						// alert('ponto 0')
 						var data = cursor.value;
 						emprees.push(cursor.value);
 
@@ -532,10 +533,12 @@
 				var keyRangeValue = IDBKeyRange.lowerBound('A', true);
 				var objectStoreRequest = index.openCursor(keyRangeValue, "next");
 				objectStoreRequest.onsuccess = function (event) {
+					// alert('ponto 1')
 					var cursor = event.target.result;
 
 					// if (cursor) {
 					if (cursor) {
+						// alert('ponto 2')
 						var data = cursor.value;
 
 						manuts.push(cursor.value);
@@ -621,6 +624,7 @@
 									new_data_evento.setFullYear(new_data_evento.getFullYear() + compl2);
 								}
 
+								// alert("new_data_evento: " + new_data_evento)
 
 								if (new_data_evento >= data_implantacao_sc) {
 

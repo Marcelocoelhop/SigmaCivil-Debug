@@ -199,6 +199,7 @@
 
 								var objectStoreRequest = store.clear();
 								objectStoreRequest.onsuccess = function (event) {
+									console.log('dados apagados');
 									// alert("dados apagados");
 								}
 							}
@@ -210,7 +211,7 @@
 								var objectStoreRequest = store.clear();
 								objectStoreRequest.onsuccess = function (event) {
 									// alert("dados apagados mtab_prog_manut_evento");
-									go_to();
+									setTimeout(go_to, 3000);
 								}
 							}
 

@@ -154,18 +154,15 @@
 									// alert("dados apagados");
 								}
 
-								var tx2 = db.transaction(['mtab_cliente'], 'readwrite');
-								var store2 = tx2.objectStore('mtab_cliente');
-
 								clientes.map(function (cliente) {
-									store2.add(cliente);
+									store.add(cliente);
 								});
 
-								tx2.oncomplete = function () {
+								tx.oncomplete = function () {
 									removerAdicionarDadosEmpree(db, emprees, manuts);
 								}
 
-								tx2.onerror = function (event) {
+								tx.onerror = function (event) {
 									alert('error storing note ' + event.target.error);
 								}
 							}
@@ -180,18 +177,15 @@
 									// alert("dados apagados");
 								}
 
-								var tx2 = db.transaction(['mtab_empree'], 'readwrite');
-								var store2 = tx.objectStore('mtab_empree');
-
 								for (var i in emprees) {
-									store2.add(emprees[i]);
+									store.add(emprees[i]);
 								}
 
-								tx2.oncomplete = function () {
+								tx.oncomplete = function () {
 									removerAdicionarDadosManuts(db, manuts);
 								}
 
-								tx2.onerror = function (event) {
+								tx.onerror = function (event) {
 									alert('error storing empree note ' + event.target.error);
 								}
 							}
@@ -205,19 +199,16 @@
 									num += 1;
 								}
 
-								var tx2 = db.transaction(['mtab_prog_manut'], 'readwrite');
-								var store2 = tx.objectStore('mtab_prog_manut');
-
 								for (var i in manuts) {
-									store2.add(manuts[i]);
+									store.add(manuts[i]);
 								}
 
-								tx2.oncomplete = function () {
+								tx.oncomplete = function () {
 									removerDadosProgManutEvento(db);
 									console.log(num);
 								}
 
-								tx2.onerror = function (event) {
+								tx.onerror = function (event) {
 									alert('error storing manut note ' + event.target.error);
 								}
 							}

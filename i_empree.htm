@@ -177,9 +177,9 @@
 									// alert("dados apagados");
 								}
 
-								for (var i in emprees) {
-									store.add(emprees[i]);
-								}
+								emprees.map(function (empree) {
+									store.add(empree);
+								});
 
 								tx.oncomplete = function () {
 									removerAdicionarDadosManuts(db, manuts);
@@ -199,9 +199,9 @@
 									num += 1;
 								}
 
-								for (var i in manuts) {
-									store.add(manuts[i]);
-								}
+								manuts.map(function (manut) {
+									store.add(manut);
+								});
 
 								tx.oncomplete = function () {
 									removerDadosProgManutEvento(db);

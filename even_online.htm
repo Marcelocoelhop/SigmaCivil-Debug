@@ -1141,7 +1141,7 @@
                             reload_page();
                         }
 
-                        updateManutEvento(db, manutsEvento);
+                        // updateManutEvento(db, manutsEvento);
 
                         // cursor.continue();
                     } else {
@@ -1168,31 +1168,31 @@
                 }
             }
 
-            function updateManutEvento(db, manutsEvento) {
-                var tx3 = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
-                var store3 = tx3.objectStore('mtab_prog_manut_evento');
-                var index = store3.index('comparar');
-                var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
-                index.openCursor(whereEquals).onsuccess = function (event) {
-                    var cursor = event.target.result;
-                    if (cursor) {
-                        var data = cursor.value;
-                        manutsEvento.push(cursor.value);
+            // function updateManutEvento(db, manutsEvento) {
+            //     var tx3 = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+            //     var store3 = tx3.objectStore('mtab_prog_manut_evento');
+            //     var index = store3.index('comparar');
+            //     var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+            //     index.openCursor(whereEquals).onsuccess = function (event) {
+            //         var cursor = event.target.result;
+            //         if (cursor) {
+            //             var data = cursor.value;
+            //             manutsEvento.push(cursor.value);
 
-                        data.id_prog_manut = qual_id_prog_manut;
-                        data.dia_evento = dia_ev;
-                        data.mes_evento = mes_ev;
-                        data.ano_evento = ano_ev;
+            //             data.id_prog_manut = qual_id_prog_manut;
+            //             data.dia_evento = dia_ev;
+            //             data.mes_evento = mes_ev;
+            //             data.ano_evento = ano_ev;
 
-                        var request = cursor.update(data);
-                        request.onsuccess = function (event) {
-                            // alert("Atualização realizada update função!");
-                        }
+            //             var request = cursor.update(data);
+            //             request.onsuccess = function (event) {
+            //                 // alert("Atualização realizada update função!");
+            //             }
 
-                        // cursor.continue();
-                    }
-                }
-            }
+            //             // cursor.continue();
+            //         }
+            //     }
+            // }
 
 
 
@@ -1613,8 +1613,8 @@
 
                         var request = cursor.update(data);
                         request.onsuccess = function (event) {
-                            // alert("Atualização realizada update win up!");
                             reload_page();
+                            // alert("Atualização realizada update win up!");
                         }
 
                         // cursor.continue();
@@ -1782,10 +1782,10 @@
 
                             // alert(m_path)
 
-                            data.id_prog_manut = qual_id_prog_manut;
-                            data.dia_evento = dia_ev;
-                            data.mes_evento = mes_ev;
-                            data.ano_evento = ano_ev;
+                            // data.id_prog_manut = qual_id_prog_manut;
+                            // data.dia_evento = dia_ev;
+                            // data.mes_evento = mes_ev;
+                            // data.ano_evento = ano_ev;
 
                             data.caminho_video = m_path;
                             data.status_video_upl = "0";
@@ -2221,10 +2221,10 @@
                             var data = cursor.value;
                             manutsEvento.push(cursor.value);
 
-                            data.id_prog_manut = qual_id_prog_manut;
-                            data.dia_evento = dia_ev;
-                            data.mes_evento = mes_ev;
-                            data.ano_evento = ano_ev;
+                            // data.id_prog_manut = qual_id_prog_manut;
+                            // data.dia_evento = dia_ev;
+                            // data.mes_evento = mes_ev;
+                            // data.ano_evento = ano_ev;
 
                             data.caminho_audio = m_path;
                             data.status_audio_upl = "0";
@@ -2384,7 +2384,7 @@
 
                 request.onsuccess = function (event) {
                     db = request.result;
-                    
+
                     uploadManutEventoAudio(db, manutsEvento);
 
                     db.onerror = function (event) {

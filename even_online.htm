@@ -1120,12 +1120,12 @@
                         var data = cursor.value;
                         manutsEvento.push(cursor.value);
 
-                        aux_caminho_imagens = cursor.value.caminho_imagens;
+                        aux_caminho_imagens = data.caminho_imagens;
 
                         if (aux_caminho_imagens != "") {
                             aux_caminho_imagens = aux_caminho_imagens + '**';
 
-                            aux_status_imagens_upl = cursor.value.status_imagens_upl;
+                            aux_status_imagens_upl = data.status_imagens_upl;
                             aux_status_imagens_upl = aux_status_imagens_upl + '**';
                             aux_status_imagens_upl = aux_status_imagens_upl + '0';
                         } else {
@@ -1287,8 +1287,8 @@
                         manutsEvento.push(cursor.value);
                         var k;
 
-                        aux_caminho_imagens = cursor.value.caminho_imagens;
-                        aux_status_imagens_upl = cursor.value.status_imagens_upl;
+                        aux_caminho_imagens = data.caminho_imagens;
+                        aux_status_imagens_upl = data.status_imagens_upl;
 
                         all_images = aux_caminho_imagens.split("**")
                         all_status_images = aux_status_imagens_upl.split("**")
@@ -1465,7 +1465,7 @@
                             manutsEvento.push(cursor.value);
 
                             var k;
-                            aux_caminho_imagens = cursor.value.caminho_imagens;
+                            aux_caminho_imagens = data.caminho_imagens;
 
                             all_images = aux_caminho_imagens.split("**");
 
@@ -1474,7 +1474,7 @@
 
                             // marcar que foi feito upload para esta imagem
 
-                            aux_status_imagens_upl = cursor.value.status_imagens_upl;
+                            aux_status_imagens_upl = data.status_imagens_upl;
 
                             all_status_images = aux_status_imagens_upl.split("**");
                             taman = all_status_images.length;
@@ -1942,11 +1942,11 @@
                             manutsEvento.push(cursor.value);
 
                             if (cursor.value.status_video_upl != '1') {
-                                var aux_caminho_video = cursor.value.caminho_video;
+                                var aux_caminho_video = data.caminho_video;
                                 up_loadVideo(aux_caminho_video);
                             }
                             else {
-                                var aux_caminho_video = cursor.value.caminho_video;
+                                var aux_caminho_video = data.caminho_video;
                                 up_loadVideo(aux_caminho_video);
                             }
 
@@ -2405,11 +2405,11 @@
                             manutsEvento.push(cursor.value);
 
                             if (cursor.value.status_audio_upl != '1') {
-                                var aux_caminho_audio = cursor.value.caminho_audio;
+                                var aux_caminho_audio = data.caminho_audio;
                                 up_loadAudio(aux_caminho_audio);
                             }
                             else {
-                                var aux_caminho_audio = cursor.value.caminho_audio;
+                                var aux_caminho_audio = data.caminho_audio;
                                 up_loadAudio(aux_caminho_audio);
                             }
 
@@ -2590,10 +2590,10 @@
                             manutsEvento.push(cursor.value);
 
                             if (cursor.value.status_texto_upl != '1') {
-                                var aux_caminho_texto = cursor.value.caminho_texto;
+                                var aux_caminho_texto = data.caminho_texto;
                                 up_loadTexto(aux_caminho_texto);
                             } else {
-                                var aux_caminho_texto = cursor.value.caminho_texto;
+                                var aux_caminho_texto = data.caminho_texto;
                                 up_loadTexto(aux_caminho_texto);
                             }
 

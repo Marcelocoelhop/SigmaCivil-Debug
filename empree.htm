@@ -26,6 +26,9 @@
 			alert(`Error: ${message} in ${url} at line ${lineNumber}`);
 		}
 
+		var contador1 = 0;
+		var contador2 = 0;
+
 		var login = getquerystring("l");
 		var senha = getquerystring("s");
 
@@ -543,127 +546,131 @@
 
 						manuts.push(cursor.value);
 
-						for (var field in data) {
-							qtde_eventos = parseInt(data['prazo_garantia_dias'] / (data['qtde_dias_periodicidade'] * data['qtde_agrupamentos_eventos']))
+						qtde_eventos = parseInt(data['prazo_garantia_dias'] / (data['qtde_dias_periodicidade'] * data['qtde_agrupamentos_eventos']))
 
-							str = data['formato_periodicidade']
-							var data_inicial_garantia = new Date(data['data_inicial_garantia'])
-							str2 = str.split("_")
+						str = data['formato_periodicidade']
+						var data_inicial_garantia = new Date(data['data_inicial_garantia'])
+						str2 = str.split("_")
 
-							for (var j = 1; j <= qtde_eventos; j++) {
-								compl2 = j * str2[0] * cursor.value.qtde_agrupamentos_eventos;
+						contador1 = contador1 + 1;
 
-								var new_data_evento = new Date(data_inicial_garantia);
+						for (var j = 1; j <= qtde_eventos; j++) {
+							contador2 = contador2 + 1;
+							compl2 = j * str2[0] * cursor.value.qtde_agrupamentos_eventos;
 
-								if (str2[1] == "d") {
-									new_data_evento.setDate(new_data_evento.getDate() + compl2);
+							var new_data_evento = new Date(data_inicial_garantia);
+
+							if (str2[1] == "d") {
+								new_data_evento.setDate(new_data_evento.getDate() + compl2);
+							}
+							if (str2[1] == "m") {
+
+								/////para soma em MESES
+								var inteiro_ano = compl2 / 12;
+								inteiro_ano = Math.floor(inteiro_ano);
+								var aux_mes = compl2 - (12 * inteiro_ano);
+								aux_mes = (new_data_evento.getMonth() + aux_mes)
+
+								var soma_ano
+								var aux_dia
+
+								if (aux_mes >= 12) {
+									aux_mes = aux_mes - 12;
+									soma_ano = 1;
 								}
-								if (str2[1] == "m") {
+								else {
+									aux_mes = aux_mes;
+									soma_ano = 0;
+								}
 
-									/////para soma em MESES
-									var inteiro_ano = compl2 / 12;
-									inteiro_ano = Math.floor(inteiro_ano);
-									var aux_mes = compl2 - (12 * inteiro_ano);
-									aux_mes = (new_data_evento.getMonth() + aux_mes)
+								var aux_ano = inteiro_ano + soma_ano
+								aux_ano = (new_data_evento.getFullYear() + aux_ano)
 
-									var soma_ano
-									var aux_dia
+								if (new_data_evento.getDate() == 31) {
 
-									if (aux_mes >= 12) {
-										aux_mes = aux_mes - 12;
-										soma_ano = 1;
+									if (aux_mes == 03 || aux_mes == 05 || aux_mes == 08 || aux_mes == 10) {
+										aux_dia = 30;
+									} else if ((aux_mes == 01) && (aux_ano % 4 == 0)) {
+										aux_dia = 29;
+									} else if ((aux_mes == 01) && (aux_ano % 4 != 0)) {
+										aux_dia = 28;
+									} else {
+										aux_dia = 31;
+									}
+
+								} else if (new_data_evento.getDate() == 30) {
+
+									if ((aux_mes == 01) && (aux_ano % 4 == 0)) {
+										aux_dia = 29;
+									} else if ((aux_mes == 01) && (aux_ano % 4 != 0)) {
+										aux_dia = 28;
+									} else {
+										aux_dia = 30;
+									}
+
+								} else if (new_data_evento.getDate() == 29) {
+
+									if ((aux_mes == 01) && (aux_ano % 4 != 0)) {
+										aux_dia = 28;
+									} else {
+										aux_dia = 29;
+									}
+
+								} else {
+									aux_dia = new_data_evento.getDate();
+								}
+
+								new_data_evento = new Date(aux_ano, aux_mes, aux_dia)
+								/////para soma em MESES
+
+							}
+
+							if (str2[1] == "yyyy") {
+								new_data_evento.setFullYear(new_data_evento.getFullYear() + compl2);
+							}
+
+							// alert("new_data_evento: " + new_data_evento)
+
+							if (new_data_evento >= data_implantacao_sc) {
+
+								if (new_data_evento >= data_ini_p_busca && new_data_evento <= data_final_p_busca) {
+
+									var texto_aux
+									if (new_data_evento > data_de_hoje) {
+										texto_aux = "faltam " + parseInt((new_data_evento.getTime() - data_de_hoje.getTime()) / (24 * 3600 * 1000), 10)
+										colorAux1 = "#42B750"
 									}
 									else {
-										aux_mes = aux_mes;
-										soma_ano = 0;
+										texto_aux = "passados " + parseInt((data_de_hoje.getTime() - new_data_evento.getTime()) / (24 * 3600 * 1000), 10)
+										colorAux1 = "#D13434"
 									}
 
-									var aux_ano = inteiro_ano + soma_ano
-									aux_ano = (new_data_evento.getFullYear() + aux_ano)
+									temp1 = new_data_evento.getDate() + "/" + (new_data_evento.getMonth() + 1) + "/" + new_data_evento.getFullYear() + "<br>"
+									aux1 = "0" + (new_data_evento.getMonth() + 1)
+									aux2 = "0" + (new_data_evento.getDate())
 
-									if (new_data_evento.getDate() == 31) {
+									//var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); 
 
-										if (aux_mes == 03 || aux_mes == 05 || aux_mes == 08 || aux_mes == 10) {
-											aux_dia = 30;
-										} else if ((aux_mes == 01) && (aux_ano % 4 == 0)) {
-											aux_dia = 29;
-										} else if ((aux_mes == 01) && (aux_ano % 4 != 0)) {
-											aux_dia = 28;
-										} else {
-											aux_dia = 31;
-										}
+									// if (meio_empree.indexOf(data['nome_sistema']) == -1) {
+									meio_empree += "<li><a href='' onClick='ir_para(" + String.fromCharCode(34) + "?ipm=" + data['id_prog_manut'] + "&dia_ev=" + aux2.substring(aux2.length - 2, aux2.length) + "&mes_ev=" + aux1.substring(aux1.length - 2, aux1.length) + "&ano_ev=" + new_data_evento.getFullYear() + "" + String.fromCharCode(34) + ")'><table height='3' border='0' cellpadding='0' cellspacing='0'><tr><td><font size='3' face='Arial' color='#000000'>" + data['nome_sistema'] + "</font></td></tr></table><table height='3' border='0' cellpadding='0' cellspacing='0'><tr><td> <font size='2' face='Arial' color='#0033CC'>" + data['nome_atividade'] + "</font></td></tr></table>"
+									meio_empree += "<table height='3' border='0' cellpadding='0' cellspacing='0'><tr><td><font size='2' face='Arial'> (" + data['nome_periodicidade'] + ")</font></td></tr></table>"
+									meio_empree += "<table border='0' cellpadding='0' cellspacing='0'><tr><td><div align='center'><font size='3' face='Arial'>" + temp1 + "</font></div></td><td><font size='2' face='Arial' color='" + colorAux1 + "'>&nbsp;- " + texto_aux + " dias </font></td></tr></table>"
+									meio_empree += "</a></li>"
+									// }
 
-									} else if (new_data_evento.getDate() == 30) {
-
-										if ((aux_mes == 01) && (aux_ano % 4 == 0)) {
-											aux_dia = 29;
-										} else if ((aux_mes == 01) && (aux_ano % 4 != 0)) {
-											aux_dia = 28;
-										} else {
-											aux_dia = 30;
-										}
-
-									} else if (new_data_evento.getDate() == 29) {
-
-										if ((aux_mes == 01) && (aux_ano % 4 != 0)) {
-											aux_dia = 28;
-										} else {
-											aux_dia = 29;
-										}
-
-									} else {
-										aux_dia = new_data_evento.getDate();
-									}
-
-									new_data_evento = new Date(aux_ano, aux_mes, aux_dia)
-									/////para soma em MESES
-
+									// alert(meio_empree)
 								}
 
-								if (str2[1] == "yyyy") {
-									new_data_evento.setFullYear(new_data_evento.getFullYear() + compl2);
-								}
+							}
 
-								// alert("new_data_evento: " + new_data_evento)
-
-								if (new_data_evento >= data_implantacao_sc) {
-
-									if (new_data_evento >= data_ini_p_busca && new_data_evento <= data_final_p_busca) {
-
-										var texto_aux
-										if (new_data_evento > data_de_hoje) {
-											texto_aux = "faltam " + parseInt((new_data_evento.getTime() - data_de_hoje.getTime()) / (24 * 3600 * 1000), 10)
-											colorAux1 = "#42B750"
-										}
-										else {
-											texto_aux = "passados " + parseInt((data_de_hoje.getTime() - new_data_evento.getTime()) / (24 * 3600 * 1000), 10)
-											colorAux1 = "#D13434"
-										}
-
-										temp1 = new_data_evento.getDate() + "/" + (new_data_evento.getMonth() + 1) + "/" + new_data_evento.getFullYear() + "<br>"
-										aux1 = "0" + (new_data_evento.getMonth() + 1)
-										aux2 = "0" + (new_data_evento.getDate())
-
-										//var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); 
-
-										if (meio_empree.indexOf(data['nome_sistema']) == -1) {
-											meio_empree += "<li><a href='' onClick='ir_para(" + String.fromCharCode(34) + "?ipm=" + data['id_prog_manut'] + "&dia_ev=" + aux2.substring(aux2.length - 2, aux2.length) + "&mes_ev=" + aux1.substring(aux1.length - 2, aux1.length) + "&ano_ev=" + new_data_evento.getFullYear() + "" + String.fromCharCode(34) + ")'><table height='3' border='0' cellpadding='0' cellspacing='0'><tr><td><font size='3' face='Arial' color='#000000'>" + data['nome_sistema'] + "</font></td></tr></table><table height='3' border='0' cellpadding='0' cellspacing='0'><tr><td> <font size='2' face='Arial' color='#0033CC'>" + data['nome_atividade'] + "</font></td></tr></table>"
-											meio_empree += "<table height='3' border='0' cellpadding='0' cellspacing='0'><tr><td><font size='2' face='Arial'> (" + data['nome_periodicidade'] + ")</font></td></tr></table>"
-											meio_empree += "<table border='0' cellpadding='0' cellspacing='0'><tr><td><div align='center'><font size='3' face='Arial'>" + temp1 + "</font></div></td><td><font size='2' face='Arial' color='" + colorAux1 + "'>&nbsp;- " + texto_aux + " dias </font></td></tr></table>"
-											meio_empree += "</a></li>"
-										}
-
-										// alert(meio_empree)
-									}
-
-								}
-
-								if (new_data_evento > data_final_p_busca) { break; }
-							} //for next
-						}
+							if (new_data_evento > data_final_p_busca) { break; }
+						} //for next
 
 						cursor.continue();
 					}
+
+					// alert("contador1: " + contador1);
+					// alert("contador2: " + contador2);
 
 					final_empree = ini_lista + meio_empree + fim_lista
 					// alert(final_empree)
@@ -799,7 +806,10 @@
 					// document.getElementById('lista_empree').innerHTML = final_empree;
 					// $('#q_empree').listview();
 				}
+
+
 			}
+
 
 
 

@@ -342,7 +342,7 @@
 						'<br>',
 						'<table width="90%" height="30" border="1" cellpadding="0" cellspacing="0" bordercolor="">',
 						'<tr>',
-						'<td height="30" bgcolor="#E5E5E5"  > <div align="center">' + nome_sistema + '</div>',
+						'<td height="30" bgcolor="#E5E5E5"  > <div align="center">' + colocarAcento(nome_sistema) + '</div>',
 						'<div align="center" ></div></td>',
 						'</tr>',
 						'</table>',
@@ -822,22 +822,22 @@
 		$("#idpopup_new_" + id).popup('open');
 	}
 
-	var manutsEvento = [
-		{
-			id_prog_manut: "",
-			dia_evento: dia_ev,
-			mes_evento: mes_ev,
-			ano_evento: ano_ev,
-			caminho_imagens: "",
-			caminho_audio: "",
-			caminho_video: "",
-			caminho_texto: "",
-			status_imagens_upl: "0",
-			status_video_upl: "",
-			status_audio_upl: "",
-			status_texto_upl: ""
-		}
-	];
+	// var manutsEvento = [
+	// 	{
+	// 		id_prog_manut: "",
+	// 		dia_evento: dia_ev,
+	// 		mes_evento: mes_ev,
+	// 		ano_evento: ano_ev,
+	// 		caminho_imagens: "",
+	// 		caminho_audio: "",
+	// 		caminho_video: "",
+	// 		caminho_texto: "",
+	// 		status_imagens_upl: "0",
+	// 		status_video_upl: "",
+	// 		status_audio_upl: "",
+	// 		status_texto_upl: ""
+	// 	}
+	// ];
 
 	var qual_id_prog_manut
 
@@ -853,7 +853,7 @@
 		request.onsuccess = function (event) {
 			db = request.result;
 
-			consultaManutEvento(db, manutsEvento);
+			consultaManutEvento(db, manutsEvento_texto);
 
 			db.onerror = function (event) {
 				alert("Database error: " + event.target.errorCode);
@@ -865,7 +865,7 @@
 		qual_id_prog_manut = qual;
 		quale = document.getElementById('textarea_' + qual).value;
 
-		manutsEvento = [
+		var manutsEvento_texto = [
 			{
 				id_prog_manut: qual_id_prog_manut,
 				dia_evento: dia_ev,
@@ -882,7 +882,7 @@
 			}
 		];
 
-		function consultaManutEvento(db, manutsEvento) {
+		function consultaManutEvento(db, manutsEvento_texto) {
 			var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
 			var store = tx.objectStore('mtab_prog_manut_evento');
 			var index = store.index('comparar');
@@ -892,16 +892,16 @@
 				var cursor = event.target.result;
 				if (cursor) {
 					var data = cursor.value;
-					manutsEvento.push(cursor.value);
+					manutsEvento_texto.push(cursor.value);
 
-					updateManutEvento(db, manutsEvento);
+					updateManutEvento(db, manutsEvento_texto);
 
 					// cursor.continue();
 				} else {
 					var tx2 = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
 					var store2 = tx2.objectStore('mtab_prog_manut_evento');
 
-					manutsEvento.map(function (manutEvento) {
+					manutsEvento_texto.map(function (manutEvento) {
 						store2.add(manutEvento);
 					});
 
@@ -920,7 +920,7 @@
 			}
 		}
 
-		function updateManutEvento(db, manutsEvento) {
+		function updateManutEvento(db, manutsEvento_texto) {
 			var tx3 = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
 			var store3 = tx3.objectStore('mtab_prog_manut_evento');
 			var index = store3.index('comparar');
@@ -933,7 +933,7 @@
 
 					// alert(data.caminho_texto);
 					data.caminho_texto = quale;
-					data.status_audio_upl = "0";
+					data.status_texto_upl = "0";
 					// alert(data.caminho_texto);
 
 					var request = cursor.update(data);
@@ -1035,14 +1035,14 @@
 		request.onsuccess = function (event) {
 			db = request.result;
 
-			consultaManutEvento2(db, manutsEvento);
+			consultaManutEvento2(db, manutsEvento_imagem);
 
 			db.onerror = function (event) {
 				alert("Database error: " + event.target.errorCode);
 			}
 		}
 
-		manutsEvento = [
+		var manutsEvento_imagem = [
 			{
 				id_prog_manut: qual_id_prog_manut,
 				dia_evento: dia_ev,
@@ -1059,7 +1059,7 @@
 			}
 		];
 
-		function consultaManutEvento2(db, manutsEvento) {
+		function consultaManutEvento2(db, manutsEvento_imagem) {
 			var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
 			var store = tx.objectStore('mtab_prog_manut_evento');
 			var index = store.index('comparar');
@@ -1100,7 +1100,7 @@
 					var tx2 = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
 					var store2 = tx2.objectStore('mtab_prog_manut_evento');
 
-					manutsEvento.map(function (manutEvento) {
+					manutsEvento_imagem.map(function (manutEvento) {
 						store2.add(manutEvento);
 					});
 
@@ -1268,13 +1268,13 @@
 					}
 
 					// if (taman > 1) {
-						// alert('ponto 4')
-						aux_2 = aux_1.substring(0, aux_1.length - 2);
-						aux_2_status = aux_1_status.substring(0, aux_1_status.length - 2);
+					// alert('ponto 4')
+					aux_2 = aux_1.substring(0, aux_1.length - 2);
+					aux_2_status = aux_1_status.substring(0, aux_1_status.length - 2);
 					// } else if (taman == 0 || taman == 1) {
-						// alert('ponto 5')
-						// aux_2 = "";
-						// aux_2_status = "";
+					// alert('ponto 5')
+					// aux_2 = "";
+					// aux_2_status = "";
 					// }
 
 					// cursor.continue();
@@ -1620,14 +1620,14 @@
 			request.onsuccess = function (event) {
 				db = request.result;
 
-				consultaManutEventoVideo(db, manutsEvento);
+				consultaManutEventoVideo(db, manutsEvento_video);
 
 				db.onerror = function (event) {
 					alert("Database error: " + event.target.errorCode);
 				}
 			}
 
-			manutsEvento = [
+			var manutsEvento_video = [
 				{
 					id_prog_manut: qual_id_prog_manut,
 					dia_evento: dia_ev,
@@ -1644,7 +1644,7 @@
 				}
 			];
 
-			function consultaManutEventoVideo(db, manutsEvento) {
+			function consultaManutEventoVideo(db, manutsEvento_video) {
 				var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
 				var store = tx.objectStore('mtab_prog_manut_evento');
 				var index = store.index('comparar');
@@ -1667,7 +1667,7 @@
 
 						// alert('ponto 3')
 
-						manutsEvento.map(function (manutEvento) {
+						manutsEvento_video.map(function (manutEvento) {
 							store2.add(manutEvento);
 						});
 
@@ -2029,14 +2029,14 @@
 			request.onsuccess = function (event) {
 				db = request.result;
 
-				consultaManutEventoAudio(db, manutsEvento);
+				consultaManutEventoAudio(db, manutsEvento_audio);
 
 				db.onerror = function (event) {
 					alert("Database error: " + event.target.errorCode);
 				}
 			}
 
-			manutsEvento = [
+			var manutsEvento_audio = [
 				{
 					id_prog_manut: qual_id_prog_manut,
 					dia_evento: dia_ev,
@@ -2053,7 +2053,7 @@
 				}
 			];
 
-			function consultaManutEventoAudio(db, manutsEvento) {
+			function consultaManutEventoAudio(db, manutsEvento_audio) {
 				var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
 				var store = tx.objectStore('mtab_prog_manut_evento');
 				var index = store.index('comparar');
@@ -2076,7 +2076,7 @@
 
 						// alert('ponto 3')
 
-						manutsEvento.map(function (manutEvento) {
+						manutsEvento_audio.map(function (manutEvento) {
 							store2.add(manutEvento);
 						});
 
@@ -2626,6 +2626,31 @@
 		} else {
 		}
 
+	}
+
+	function colocarAcento(text) {
+		text = text.replace(/AxcL1A/g, 'Á');
+		text = text.replace(/AxcL2A/g, 'À');
+		text = text.replace(/AxcL3A/g, 'Â');
+		text = text.replace(/AxcL4A/g, 'Ã');
+
+		text = text.replace(/ExcL1E/g, 'É');
+		text = text.replace(/ExcL2E/g, 'È');
+		text = text.replace(/ExcL3E/g, 'Ê');
+
+		text = text.replace(/IxcL1I/g, 'Í');
+		text = text.replace(/IxcL2I/g, 'Ì');
+		text = text.replace(/IxcL3I/g, 'Î');
+
+		text = text.replace(/OxcL1O/g, 'Ó');
+		text = text.replace(/OxcL2O/g, 'Ò');
+		text = text.replace(/OxcL3O/g, 'Ô');
+
+		text = text.replace(/UxcL1U/g, 'Ú');
+		text = text.replace(/UxcL2U/g, 'Ù');
+		text = text.replace(/UxcL3U/g, 'Û');
+
+		return text;
 	}
 
 </script>

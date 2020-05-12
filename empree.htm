@@ -644,27 +644,51 @@
 			}
 
 			function removerAcento(text) {
-				text = text.replace(/Á/g, 'AAxcL1A');
-				text = text.replace(/À/g, 'AAxcL2A');
-				text = text.replace(/Â/g, 'AAxcL3A');
-				text = text.replace(/Ã/g, 'AAxcL4A');
+				text = text.replace(/Á/g, 'AxcL1A');
+				text = text.replace(/À/g, 'AxcL2A');
+				text = text.replace(/Â/g, 'AxcL3A');
+				text = text.replace(/Ã/g, 'AxcL4A');
 
-				text = text.replace(/É/g, 'EExcL1E');
-				text = text.replace(/È/g, 'EExcL2E');
-				text = text.replace(/Ê/g, 'EExcL3E');
+				text = text.replace(/É/g, 'ExcL1E');
+				text = text.replace(/È/g, 'ExcL2E');
+				text = text.replace(/Ê/g, 'ExcL3E');
+
+				text = text.replace(/Í/g, 'IxcL1I');
+				text = text.replace(/Ì/g, 'IxcL2I');
+				text = text.replace(/Î/g, 'IxcL3I');
+
+				text = text.replace(/Ó/g, 'OxcL1O');
+				text = text.replace(/Ò/g, 'OxcL2O');
+				text = text.replace(/Ô/g, 'OxcL3O');
+
+				text = text.replace(/Ú/g, 'UxcL1U');
+				text = text.replace(/Ù/g, 'UxcL2U');
+				text = text.replace(/Û/g, 'UxcL3U');
 
 				return text;
 			}
 
 			function colocarAcento(text) {
-				text = text.replace(/AAxcL1A/g, 'Á');
-				text = text.replace(/AAxcL2A/g, 'À');
-				text = text.replace(/AAxcL3A/g, 'Â');
-				text = text.replace(/AAxcL4A/g, 'Ã');
+				text = text.replace(/AxcL1A/g, 'Á');
+				text = text.replace(/AxcL2A/g, 'À');
+				text = text.replace(/AxcL3A/g, 'Â');
+				text = text.replace(/AxcL4A/g, 'Ã');
 
-				text = text.replace(/É/g, 'EExcL1E');
-				text = text.replace(/È/g, 'EExcL2E');
-				text = text.replace(/Ê/g, 'EExcL3E');
+				text = text.replace(/ExcL1E/g, 'É');
+				text = text.replace(/ExcL2E/g, 'È');
+				text = text.replace(/ExcL3E/g, 'Ê');
+
+				text = text.replace(/IxcL1I/g, 'Í');
+				text = text.replace(/IxcL2I/g, 'Ì');
+				text = text.replace(/IxcL3I/g, 'Î');
+
+				text = text.replace(/OxcL1O/g, 'Ó');
+				text = text.replace(/OxcL2O/g, 'Ò');
+				text = text.replace(/OxcL3O/g, 'Ô');
+
+				text = text.replace(/UxcL1U/g, 'Ú');
+				text = text.replace(/UxcL2U/g, 'Ù');
+				text = text.replace(/UxcL3U/g, 'Û');
 
 				return text;
 			}

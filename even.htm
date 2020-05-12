@@ -44,6 +44,7 @@
 		var nome_atividade = "";
 		var data_de_hoje = new Date();
 		var e_construtora;
+		var nome_empree = "";
 
 		document.addEventListener("deviceready", onDeviceReady, false);
 
@@ -163,9 +164,9 @@
 						id_cliente = data.id_cliente;
 						e_construtora = data.e_construtora;
 
-						var nome_empree = "";
+						// var nome_empree = "";
 
-						cursor.continue();
+						// cursor.continue();
 					}
 
 					consultaEmpree(db);
@@ -186,7 +187,7 @@
 						id_empree = data.id_empree;
 						document.getElementById('nome_emp').innerHTML = nome_empree;
 
-						cursor.continue();
+						// cursor.continue();
 					}
 					consultaProgManut(db);
 				}
@@ -208,7 +209,7 @@
 						nome_sistema = data.nome_sistema;
 						nome_atividade = data.nome_atividade;
 
-						cursor.continue();
+						// cursor.continue();
 					}
 					consultaProgManutEvento(db);
 				}
@@ -928,10 +929,11 @@
 				var cursor = event.target.result;
 				if (cursor) {
 					var data = cursor.value;
-					manutsEvento.push(cursor.value);
+					// manutsEvento.push(cursor.value);
 
 					// alert(data.caminho_texto);
 					data.caminho_texto = quale;
+					data.status_audio_upl = "0";
 					// alert(data.caminho_texto);
 
 					var request = cursor.update(data);
@@ -940,7 +942,7 @@
 						reload_page();
 					}
 
-					cursor.continue();
+					// cursor.continue();
 				}
 			}
 		}
@@ -1067,7 +1069,7 @@
 				var cursor = event.target.result;
 				if (cursor) {
 					var data = cursor.value;
-					manutsEvento.push(cursor.value);
+					// manutsEvento.push(cursor.value);
 
 					aux_caminho_imagens = cursor.value.caminho_imagens;
 
@@ -1090,7 +1092,7 @@
 						reload_page();
 					}
 
-					updateManutEvento(db, manutsEvento);
+					// updateManutEvento(db, manutsEvento);
 
 					// cursor.continue();
 				} else {
@@ -1117,31 +1119,31 @@
 			}
 		}
 
-		function updateManutEvento(db, manutsEvento) {
-			var tx3 = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
-			var store3 = tx3.objectStore('mtab_prog_manut_evento');
-			var index = store3.index('comparar');
-			var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
-			index.openCursor(whereEquals).onsuccess = function (event) {
-				var cursor = event.target.result;
-				if (cursor) {
-					var data = cursor.value;
-					manutsEvento.push(cursor.value);
+		// function updateManutEvento(db, manutsEvento) {
+		// 	var tx3 = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+		// 	var store3 = tx3.objectStore('mtab_prog_manut_evento');
+		// 	var index = store3.index('comparar');
+		// 	var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+		// 	index.openCursor(whereEquals).onsuccess = function (event) {
+		// 		var cursor = event.target.result;
+		// 		if (cursor) {
+		// 			var data = cursor.value;
+		// 			manutsEvento.push(cursor.value);
 
-					data.id_prog_manut = qual_id_prog_manut;
-					data.dia_evento = dia_ev;
-					data.mes_evento = mes_ev;
-					data.ano_evento = ano_ev;
+		// 			data.id_prog_manut = qual_id_prog_manut;
+		// 			data.dia_evento = dia_ev;
+		// 			data.mes_evento = mes_ev;
+		// 			data.ano_evento = ano_ev;
 
-					var request = cursor.update(data);
-					request.onsuccess = function (event) {
-						// alert("Atualização realizada update função!");
-					}
+		// 			var request = cursor.update(data);
+		// 			request.onsuccess = function (event) {
+		// 				// alert("Atualização realizada update função!");
+		// 			}
 
-					cursor.continue();
-				}
-			}
-		}
+		// 			cursor.continue();
+		// 		}
+		// 	}
+		// }
 
 
 
@@ -1224,14 +1226,14 @@
 		request.onsuccess = function (event) {
 			db = request.result;
 
-			deletarManutEvento(db, manutsEvento);
+			deletarManutEvento(db);
 
 			db.onerror = function (event) {
 				alert("Database error: " + event.target.errorCode);
 			}
 		}
 
-		function deletarManutEvento(db, manutsEvento) {
+		function deletarManutEvento(db) {
 			var aux_2;
 			var aux_2_status;
 
@@ -1244,11 +1246,11 @@
 				var cursor = event.target.result;
 				if (cursor) {
 					var data = cursor.value;
-					var aux_dia_evento = data.dia_evento;
-					var aux_mes_evento = data.mes_evento;
-					var aux_ano_evento = data.ano_evento;
+					// var aux_dia_evento = data.dia_evento;
+					// var aux_mes_evento = data.mes_evento;
+					// var aux_ano_evento = data.ano_evento;
 
-					manutsEvento.push(cursor.value);
+					//manutsEvento.push(cursor.value);
 					var k;
 
 					aux_caminho_imagens = cursor.value.caminho_imagens;
@@ -1265,26 +1267,26 @@
 						}
 					}
 
-					if (taman > 1) {
+					// if (taman > 1) {
 						// alert('ponto 4')
 						aux_2 = aux_1.substring(0, aux_1.length - 2);
 						aux_2_status = aux_1_status.substring(0, aux_1_status.length - 2);
-					} else if (taman == 0 || taman == 1) {
+					// } else if (taman == 0 || taman == 1) {
 						// alert('ponto 5')
-						aux_2 = "";
-						aux_2_status = "";
-					}
+						// aux_2 = "";
+						// aux_2_status = "";
+					// }
 
-					cursor.continue();
+					// cursor.continue();
 				}
 
-				deleteUpdateManutEvento(db, manutsEvento, aux_2, aux_2_status);
+				deleteUpdateManutEvento(db, aux_2, aux_2_status);
 
 				// reload_page();
 			}
 		}
 
-		function deleteUpdateManutEvento(db, manutsEvento, aux_2, aux_2_status) {
+		function deleteUpdateManutEvento(db, aux_2, aux_2_status) {
 			var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
 			var store = tx.objectStore('mtab_prog_manut_evento');
 			var index = store.index('comparar');
@@ -1293,7 +1295,7 @@
 				var cursor = event.target.result;
 				if (cursor) {
 					var data = cursor.value;
-					manutsEvento.push(cursor.value);
+					//manutsEvento.push(cursor.value);
 
 					// alert("data.caminho_imagens: " + data.caminho_imagens)
 					data.caminho_imagens = aux_2;
@@ -1306,7 +1308,7 @@
 						// alert("Atualização realizada update delete!");
 						reload_page();
 					}
-					cursor.continue();
+					//cursor.continue();
 				}
 
 				// reload_page();
@@ -1383,14 +1385,14 @@
 			request.onsuccess = function (event) {
 				db = request.result;
 
-				uploadManutEvento(db, manutsEvento);
+				uploadManutEvento(db);
 
 				db.onerror = function (event) {
 					alert("Database error: " + event.target.errorCode);
 				}
 			}
 
-			function uploadManutEvento(db, manutsEvento) {
+			function uploadManutEvento(db) {
 				var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
 				var store = tx.objectStore('mtab_prog_manut_evento');
 				var index = store.index('comparar');
@@ -1399,7 +1401,7 @@
 					var cursor = event.target.result;
 					if (cursor) {
 						var data = cursor.value;
-						manutsEvento.push(cursor.value);
+						// manutsEvento.push(cursor.value);
 
 						var k;
 						aux_caminho_imagens = cursor.value.caminho_imagens;
@@ -1435,7 +1437,7 @@
 							up_loadPhoto(aux_2, q_id, aux_status_imagens_upl);
 						}
 
-						cursor.continue();
+						//cursor.continue();
 					}
 				}
 			}
@@ -1534,14 +1536,14 @@
 		request.onsuccess = function (event) {
 			db = request.result;
 
-			updateManutEventoWinUp(db, manutsEvento);
+			updateManutEventoWinUp(db);
 
 			db.onerror = function (event) {
 				alert("Database error: " + event.target.errorCode);
 			}
 		}
 
-		function updateManutEventoWinUp(db, manutsEvento) {
+		function updateManutEventoWinUp(db) {
 			var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
 			var store = tx.objectStore('mtab_prog_manut_evento');
 			var index = store.index('comparar');
@@ -1550,7 +1552,7 @@
 				var cursor = event.target.result;
 				if (cursor) {
 					var data = cursor.value;
-					manutsEvento.push(cursor.value);
+					// manutsEvento.push(cursor.value);
 
 					data.status_imagens_upl = aux_1_status;
 
@@ -1560,7 +1562,7 @@
 						reload_page();
 					}
 
-					cursor.continue();
+					// cursor.continue();
 				}
 
 				// reload_page();

@@ -753,7 +753,7 @@
                     ];
 
                     var item_texto = [
-                        '<div style="display: flex"><img src="images/file-alt.svg" style="margin-top: 10px; float: left; display: inline; text-shadow: none;" width="40" height="30"></i><textarea style="display: flex; border-color: #e4e4e4; border-radius: 3px; width: 100%; padding: 5px; outline: none; resize: none" class="size-14 text_hover" rows="3" cols="32" name="textarea-1" id="textarea_' + rrr_id_prog_manut + '" data-placeholder="true" placeholder="Digite suas observações aqui..." onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)" maxlength="700">' + selec_texto + '</textarea></div><img src="images/save.svg" style="position: relative; float: left; left: 120px; top: 3px; text-shadow: none;" class="icon-size" width="15" onclick="atualizar_texto(' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')" style="cursor:pointer"><div align="center">' + bot_up + '</div>'
+                        '<div style="display: flex"><img src="images/file-alt.svg" style="margin-top: 10px; float: left; display: inline; text-shadow: none;" width="40" height="30"></i><textarea style="display: flex; border-color: #e4e4e4; border-radius: 3px; width: 100%; padding: 5px; outline: none; resize: none" class="size-14 text_hover textarea_obs" rows="3" cols="32" name="textarea-1" id="textarea_' + rrr_id_prog_manut + '" data-placeholder="true" placeholder="Digite suas observações aqui..." onclick="RestricaoData();" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)" maxlength="700">' + selec_texto + '</textarea></div><img src="images/save.svg" style="position: relative; float: left; left: 120px; top: 3px; text-shadow: none;" class="icon-size" width="15" onclick="atualizar_texto(' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')" style="cursor:pointer"><div align="center">' + bot_up + '</div>'
                     ];
 
                     var item_voltar = [
@@ -1590,7 +1590,6 @@
                 myMedia3.play();
                 esta_pausado = 0;
             }
-            alert('abrir_audio')
         }
 
         function pause_audio() {
@@ -1598,7 +1597,6 @@
                 myMedia3.pause();
                 esta_pausado = 1;
             }
-            alert('pause_audio');
         }
 
         function stop_audio() {
@@ -1606,7 +1604,6 @@
                 myMedia3.stop();
                 esta_pausado = 0;
             }
-            alert('stop_audio')
         }
         // FIM CAPTURAR AUDIO
 
@@ -1765,14 +1762,14 @@
         // UPLOAD TEXTO
         function upload_texto() {
 
-            // RESTRIÇÕES DE DATAS
-            if (datadiff(Date.now(), d_min) > 0) {
-                alert("Essa ação só pode ser realizada a partir do dia " + dateToEN(d_min) + "!")
-                return
-            } else if (datadiff(Date.now(), d_max) < 0) {
-                alert("Essa ação não pode ser realizada após o dia " + dateToEN(d_max) + "!")
-                return
-            }
+            // // RESTRIÇÕES DE DATAS
+            // if (datadiff(Date.now(), d_min) > 0) {
+            //     alert("Essa ação só pode ser realizada a partir do dia " + dateToEN(d_min) + "!")
+            //     return
+            // } else if (datadiff(Date.now(), d_max) < 0) {
+            //     alert("Essa ação não pode ser realizada após o dia " + dateToEN(d_max) + "!")
+            //     return
+            // }
 
             if (tem_conexao()) {
                 var db;
@@ -2797,6 +2794,20 @@
 
     function onFocus(element) {
         alert(element)
+    }
+
+    function RestricaoData() {
+        // RESTRIÇÕES DE DATAS
+        var textarea = document.querySelector('.textarea_obs');
+        if (datadiff(Date.now(), d_min) > 0) {
+            textarea.setAttribute("readonly", "readonly");
+            alert("Essa ação só pode ser realizada a partir do dia " + dateToEN(d_min) + "!")
+            return
+        } else if (datadiff(Date.now(), d_max) < 0) {
+            textarea.setAttribute("readonly", "readonly");
+            alert("Essa ação não pode ser realizada após o dia " + dateToEN(d_max) + "!")
+            return
+        }
     }
 
 </script>

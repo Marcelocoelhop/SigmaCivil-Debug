@@ -3,7 +3,6 @@
 
 <head>
 	<meta charset="utf-8" />
-	<!-- <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"> -->
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="css/jquery.mobile-1.0.1.min.css" />
 	<script type="text/javascript" src="cordova.js"></script>
@@ -26,9 +25,6 @@
 
 		/////////////////////////////
 		function iniciar() {
-
-			// alert("ponto A");
-
 			window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
 			window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
 			window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
@@ -38,7 +34,6 @@
 			}
 
 			var db;
-			// alert("ponto B");
 			var request = window.indexedDB.open("db_sigmacivil", "1");
 
 			request.onerror = function (event) {
@@ -46,17 +41,13 @@
 			};
 
 			request.onsuccess = function (event) {
-				// alert("ponto sucesso abetura banco");
 				db = request.result;
-				// db = event.target.result;
-				// alert("ponto C1");
 
 				executarRemoverDados(db);
 
-				// removerDados(db, 'mtab_cliente');
-				// removerDados(db, 'mtab_empree');
-				// removerDados(db, 'mtab_prog_manut_evento');
-				// removerDadosMtabProgManut(db);
+				db.onerror = function (event) {
+					alert("Database error: " + event.target.error);
+				}
 			};
 
 			var num = 0;
@@ -68,7 +59,6 @@
 				var objectStoreRequest = store.clear();
 				objectStoreRequest.onsuccess = function (event) {
 					removerDadosEmpree(db);
-					// alert("dados apagados");
 				}
 			}
 
@@ -79,7 +69,6 @@
 				var objectStoreRequest = store.clear();
 				objectStoreRequest.onsuccess = function (event) {
 					removerDadosMtabProgManutEvento(db)
-					// alert("dados apagados");
 				}
 			}
 
@@ -90,23 +79,8 @@
 				var objectStoreRequest = store.clear();
 				objectStoreRequest.onsuccess = function (event) {
 					removerDadosMtabProgManut(db);
-					// alert("dados apagados");
 				}
 			}
-
-
-
-
-
-			/*function removerDados(db, tabela) {
-				var tx = db.transaction([tabela], 'readwrite');
-				var store = tx.objectStore(tabela);
-
-				var objectStoreRequest = store.clear();
-				objectStoreRequest.onsuccess = function (event) {
-					// alert("dados apagados");
-				}
-			}*/
 
 			function removerDadosMtabProgManut(db) {
 				var tx = db.transaction(['mtab_prog_manut'], 'readwrite');
@@ -114,33 +88,10 @@
 
 				var objectStoreRequest = store.clear();
 				objectStoreRequest.onsuccess = function (event) {
-					// alert("dados apagados mtab_prog_manut");
 					alert("Os dados do atual empreendimento já foram apagados. Você já pode importar um novo empreendimento!")
 					goto();
 				}
 			}
-
-			// var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
-
-			// db.transaction(function (tx) {
-			// 	tx.executeSql('DROP TABLE if exists mtab_cliente', [], function (tx, results) {
-
-			// 		tx.executeSql('DROP TABLE if exists mtab_empree', [], function (tx, results) {
-
-			// 			tx.executeSql('DROP TABLE if exists mtab_prog_manut_evento', [], function (tx, results) {
-
-			// 				tx.executeSql('DROP TABLE if exists mtab_prog_manut', [], function (tx, results) {
-			// 					alert("Os dados do atual empreendimento já foram apagados. Você já pode importar um novo empreendimento!")
-			// 					goto();
-			// 				}, null);
-
-			// 			}, null);
-			// 		}, null);
-
-			// 	}, null);
-
-			// });
-
 
 		}
 

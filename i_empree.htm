@@ -2,7 +2,6 @@
 <html>
 
 <head>
-	<!-- <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"> -->
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
@@ -19,7 +18,6 @@
 
 	<script type="text/javascript">
 		window.onerror = function (message, url, lineNumber) {
-			//alert("Error: " + message + " in " + url + " at line " + lineNumber);
 			alert(`Error: ${message} in ${url} at line ${lineNumber}`);
 		}
 
@@ -43,14 +41,6 @@
 			}
 
 		}
-
-		// setTimeout(() => {
-		// 	try {
-		// 		iniciar()
-		// 	} catch(err) {
-		// 		window.location.assign("login.htm")
-		// 	}
-		// }, 3000)
 
 		/////////////////////////////
 		function iniciar() {
@@ -85,8 +75,6 @@
 
 							var getEmpree = jsontext[1];
 							var objEmpree = JSON.parse(getEmpree);
-
-							// alert("objEmpree.dados_empreendimento.length: " + objEmpree.dados_empreendimento.length)
 
 							var db;
 							var request = window.indexedDB.open("db_sigmacivil", "1");
@@ -125,18 +113,6 @@
 
 								executarRemoverAdicionarDados(db, clientes, emprees, manuts);
 
-								// removerDados(db, 'mtab_cliente');
-								// addCliente(db, clientes);
-
-								// removerDados(db, 'mtab_empree');
-								// addEmpree(db, emprees);
-
-								// removerDados(db, 'mtab_prog_manut');
-								// addManut(db, manuts);
-
-								// removerDadosProgManutEvento(db);
-								// go_to(); 
-
 								db.onerror = function (event) {
 									alert("Database error: " + event.target.error);
 								}
@@ -151,7 +127,6 @@
 								var objectStoreRequest = store.clear();
 								objectStoreRequest.onsuccess = function (event) {
 									num += 1;
-									// alert("dados apagados");
 								}
 
 								clientes.map(function (cliente) {
@@ -174,7 +149,6 @@
 								var objectStoreRequest = store.clear();
 								objectStoreRequest.onsuccess = function (event) {
 									num += 1;
-									// alert("dados apagados");
 								}
 
 								emprees.map(function (empree) {
@@ -213,126 +187,16 @@
 								}
 							}
 
-							// alert(num)
-
-
-
-
-
-
-
-
-
-
-							/*function addCliente(db, clientes) {
-								var tx = db.transaction(['mtab_cliente'], 'readwrite');
-								var store = tx.objectStore('mtab_cliente');
-
-								// alert('ponto 1')
-
-								clientes.map(function (cliente) {
-									store.add(cliente);
-								});
-
-								tx.oncomplete = function () {
-									// alert('stored note!')
-								}
-
-								tx.onerror = function (event) {
-									alert('error storing note ' + event.target.error);
-								}
-							}
-
-							function addEmpree(db, emprees) {
-								var tx = db.transaction(['mtab_empree'], 'readwrite');
-								var store = tx.objectStore('mtab_empree');
-
-								// alert('ponto 2')
-
-								for (var i in emprees) {
-									store.add(emprees[i]);
-								}
-
-								tx.oncomplete = function () {
-									// alert('stored note empree!')
-								}
-
-								tx.onerror = function (event) {
-									alert('error storing empree note ' + event.target.error);
-								}
-							}
-
-							function addManut(db, manuts) {
-								var tx = db.transaction(['mtab_prog_manut'], 'readwrite');
-								var store = tx.objectStore('mtab_prog_manut');
-
-								// alert('ponto 3')
-
-								for (var i in manuts) {
-									store.add(manuts[i]);
-								}
-
-								tx.oncomplete = function () {
-									// alert('stored note manut!')
-								}
-
-								tx.onerror = function (event) {
-									alert('error storing manut note ' + event.target.error);
-								}
-							}
-
-							function removerDados(db, tabela) {
-								var tx = db.transaction([tabela], 'readwrite');
-								var store = tx.objectStore(tabela);
-
-								var objectStoreRequest = store.clear();
-								objectStoreRequest.onsuccess = function (event) {
-									console.log('dados apagados');
-									// alert("dados apagados");
-								}
-							}*/
-
 							function removerDadosProgManutEvento(db) {
 								var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
 								var store = tx.objectStore('mtab_prog_manut_evento');
 
 								var objectStoreRequest = store.clear();
 								objectStoreRequest.onsuccess = function (event) {
-									// alert("dados apagados mtab_prog_manut_evento");
 									go_to();
 								}
 							}
 
-							// var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
-
-							// ///////////////  tabela cliente //////////////
-							// db.transaction(function (tx) {
-							// 	tx.executeSql('CREATE TABLE IF NOT EXISTS mtab_cliente (id_cliente INTEGER, e_construtora TEXT,text1 TEXT, text2 TEXT)');
-							// 	tx.executeSql('Delete FROM mtab_cliente');
-							// 	tx.executeSql('INSERT INTO mtab_cliente(id_cliente,e_construtora,text1,text2) VALUES (?,?,?,?)', [qual_id_cliente, q_e_construtora, login, senha]);
-
-							// 	/////////////// fim  tabela cliente //////////////
-
-							// 	///////////////  tabela empree //////////////
-							// 	tx.executeSql('CREATE TABLE IF NOT EXISTS mtab_empree (id_empree INTEGER, nome_empree TEXT, status_sync TEXT, data_implantacao_sc TEXT)');
-							// 	tx.executeSql('Delete FROM mtab_empree');
-							// 	tx.executeSql('INSERT INTO mtab_empree(id_empree,nome_empree,status_sync,data_implantacao_sc) VALUES (?,?,?,?)', [num_empree, nome_empree, status_sync, data_implantacao_sc]);
-							// 	/////////////// fim  tabela empree //////////////
-
-							// 	///////////////  tabela programa_manutenção //////////////
-							// 	tx.executeSql('CREATE TABLE IF NOT EXISTS mtab_prog_manut (id_prog_manut INTEGER, nome_sistema TEXT,nome_atividade TEXT, nome_periodicidade TEXT, qtde_agrupamentos_eventos INTEGER, qtde_dias_periodicidade INTEGER, data_inicial_garantia TEXT, prazo_garantia_dias INTEGER, formato_periodicidade TEXT)');
-							// 	tx.executeSql('Delete FROM mtab_prog_manut');
-							// 	for (i = 0; i < objEmpree.dados_empreendimento.length; i++) {
-							// 		tx.executeSql('INSERT INTO mtab_prog_manut(id_prog_manut,nome_sistema,nome_atividade,nome_periodicidade,qtde_agrupamentos_eventos,qtde_dias_periodicidade,data_inicial_garantia,prazo_garantia_dias,formato_periodicidade) VALUES (?,?,?,?,?,?,?,?,?)', [objEmpree.dados_empreendimento[i].id_prog_manut, objEmpree.dados_empreendimento[i].nome_sistema, objEmpree.dados_empreendimento[i].nome_atividade, objEmpree.dados_empreendimento[i].nome_periodicidade, objEmpree.dados_empreendimento[i].qtde_agrupamentos_eventos, objEmpree.dados_empreendimento[i].qtde_dias_periodicidade, objEmpree.dados_empreendimento[i].data_inicial_garantia, objEmpree.dados_empreendimento[i].prazo_garantia_dias, objEmpree.dados_empreendimento[i].formato_periodicidade]);
-							// 	}
-
-							// 	///////////////  tabela programa_manutenção + evento //////////////
-							// 	tx.executeSql('CREATE TABLE IF NOT EXISTS mtab_prog_manut_evento (id_prog_manut INTEGER, dia_evento TEXT, mes_evento TEXT, ano_evento TEXT, caminho_imagens TEXT, caminho_audio TEXT, caminho_video TEXT, caminho_texto TEXT, status_imagens_upl TEXT, status_video_upl TEXT , status_audio_upl TEXT, status_texto_upl TEXT)');
-							// 	tx.executeSql('Delete FROM mtab_prog_manut_evento');
-
-							// 	go_to()
-
-							// });
 							///////////////  FIM tabela programa_manutenção //////////////	  
 
 						}

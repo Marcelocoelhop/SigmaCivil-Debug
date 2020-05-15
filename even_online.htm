@@ -597,8 +597,9 @@
 
             request.onsuccess = function (event) {
                 db = request.result;
-                // alert('ponto 1');
+
                 consultaManutEvento(db);
+
                 db.onerror = function (event) {
                     alert("Database error: " + event.target.errorCode);
                 }
@@ -620,8 +621,6 @@
                     var aux_image_upload;
 
                     if (cursor) {
-                        // manutsEvento.push(cursor.value);
-
                         var rrr_caminho_imagens = cursor.value.caminho_imagens;
                         var rrr_caminho_texto = cursor.value.caminho_texto;
                         var rrr_caminho_audio = cursor.value.caminho_audio;
@@ -635,7 +634,6 @@
                         var rrr_status_caminho_audio = cursor.value.status_audio_upl;
                         var rrr_status_caminho_texto = cursor.value.status_texto_upl;
 
-                        // cursor.continue();
                     } else {
                         var rrr_caminho_imagens = ""
                         var rrr_caminho_texto = ""
@@ -796,237 +794,7 @@
                     $("#idpopup_new_" + rrr2_id_prog_manut).popup();
                 }
             }
-
-
-
-
-
-
-
-
-
-
-            //var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
-
-            /*db.transaction(function (tx) {
-                tx.executeSql('SELECT * FROM mtab_prog_manut_evento WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '" ', [], function (tx, results) {
-                    var len = results.rows.length;
-                    var i;
-                    var meio_empree = "";
-                    var final_empree = "";
-                    var tam_ti;
-                    var aux_image_upload;
-
-
-                    if (len == 0) {
-                        var rrr_caminho_imagens = ""
-                        var rrr_caminho_texto = ""
-                        var rrr_caminho_audio = ""
-                        var rrr_caminho_video = ""
-                        var rrr_id_prog_manut = id_prog_manut
-                        var rrr_status_caminho_imagens = ""
-                        var rrr_status_caminho_video = ""
-                        var rrr_status_caminho_audio = ""
-                        var rrr_status_caminho_texto = ""
-                    }
-                    else {
-                        var row = results.rows.item(0)
-                        var rrr_caminho_imagens = row['caminho_imagens'];
-                        var rrr_caminho_texto = row['caminho_texto'];
-                        var rrr_caminho_audio = row['caminho_audio'];
-
-                        apagar1 = rrr_caminho_audio
-
-                        var rrr_caminho_video = row['caminho_video'];
-                        var rrr_id_prog_manut = row['id_prog_manut']
-                        var rrr_status_caminho_imagens = row['status_imagens_upl']
-                        var rrr_status_caminho_video = row['status_video_upl']
-                        var rrr_status_caminho_audio = row['status_audio_upl']
-                        var rrr_status_caminho_texto = row['status_texto_upl']
-                    }
-
-                    var todas_imagens = ""
-                    var todas_status_imagens = ""
-                    if (rrr_caminho_imagens == null || rrr_caminho_imagens == "") {
-                        tam_ti = 0;
-                    }
-                    else {
-                        todas_imagens = rrr_caminho_imagens.split("**")
-                        todas_status_imagens = rrr_status_caminho_imagens.split("**")
-                        tam_ti = todas_imagens.length;
-                    }
-
-                    var selec_imagens_thumb = ""
-                    var selec_imagens = ""
-
-                    for (k = 0; k < tam_ti; k++) {
-
-                        if (todas_status_imagens[k] == '0') {
-                            aux_image_upload = 'upload.png';
-                            qtdDocs_Device += 1
-                        }
-                        else {
-                            aux_image_upload = 'upload_verde.png';
-                        }
-                        //imagens da seta, preta ou verde
-
-                        selec_imagens_thumb = selec_imagens_thumb + "<div style='float:left; position: relative; left: 1.5px;'><div style='border: 1px solid #5d5d5d'><table cellpadding='0' cellspacing='0'><img src='" + todas_imagens[k] + "'  onclick='abrir_popup(" + String.fromCharCode(34) + rrr_id_prog_manut + String.fromCharCode(34) + "," + String.fromCharCode(34) + k + String.fromCharCode(34) + " )'  width='106' height='70' hspace='2' vspace='2'/><div align='center'><img src='images/trash.svg' style='float: left; padding: 0.5rem; position: relative; left: 5px; text-shadow: none;' class='icon-size' width='15' onclick='deletar_imagem(" + String.fromCharCode(34) + k + String.fromCharCode(34) + ")'></div><div align='center'><img src='images/" + aux_image_upload + "' style='float: right; padding: 0.5rem; position: relative; right: 5px; text-shadow: none;' class='icon-size' width='17' onclick='upload_imagem(" + String.fromCharCode(34) + k + String.fromCharCode(34) + ")' s></div></table></div></div></div>"
-                        selec_imagens = selec_imagens + "<div data-role='popup' id='idpopup_" + rrr_id_prog_manut + "_" + k + "'><a href='#' data-rel='back' class='ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right'>Close</a> <img class='popphoto' src='" + todas_imagens[k] + "' style='max-height:512px;'> </div>"
-
-                        //Popup
-                    }
-
-
-                    if (rrr_status_caminho_audio == '0') {
-                        aux_image_upload = "upload.png";
-                    }
-                    else {
-                        aux_image_upload = "upload_verde.png";
-                    }
-                    //se ta preta ou verde do áudio
-
-                    var selec_audio;
-                    if (rrr_caminho_audio == "") {
-                        selec_audio = "<div style='position: relative; left: 15px; top: 17px;'><table cellpadding='0' cellspacing='0'><div id='latesq_" + rrr_id_prog_manut + "'width='40' height='30' style='display:none'></div><img src='images/play.svg' width='15' class='button-play top-9px' id='player_" + rrr_id_prog_manut + "'onclick='abrir_audio(" + String.fromCharCode(34) + rrr_caminho_audio + String.fromCharCode(34) + ")'  style='display:none'><img src='images/pause.svg' width='15' class='button-pause top-9px position-icons' id='pause_" + rrr_id_prog_manut + "'onclick='pause_audio()' style='display:none'><img src='images/stop.svg' width='15' class='button-stop top-9px position-icons' id='stop_" + rrr_id_prog_manut + "'onclick='stop_audio()' style='display:none'><img src='images/microphone.svg' width='15' class='button-microfone top-9px position-icons' id='rec_" + rrr_id_prog_manut + "'onclick='captureAudio(" + String.fromCharCode(34) + rrr_id_prog_manut + String.fromCharCode(34) + ")' style='display:none'><div id='latdir_" + rrr_id_prog_manut + "'width='40' height='30' style='display:none'></div><div align='center'><img src='images/trash.svg' class='icon-size' width='15' onclick='deletar_audio()' style='display:none'></div><div align='center'><img src='images/" + aux_image_upload + "' class='icon-size' width='16' onclick='upload_audio()' style='display:none'></div></table></div>"
-                    }
-                    else {
-                        selec_audio = "<div class='icon-size' style='position: relative; text-align: center; top: 10px;'><table cellpadding='0' cellspacing='0'><div id='latesq_" + rrr_id_prog_manut + "'width='40' height='30'></div><div style='border: 1px solid black; width: 60%; border-radius: 20px; margin: 0 auto; padding: 5px;'><img src='images/play.svg' width='15' style='margin-right: 5px;' class='top-9px' id='player_" + rrr_id_prog_manut + "'onclick='abrir_audio(" + String.fromCharCode(34) + rrr_caminho_audio + String.fromCharCode(34) + ")' ><img src='images/pause.svg' width='15' style='margin-right: 5px;' class='top-9px position-icons' id='pause_" + rrr_id_prog_manut + "' onclick='pause_audio()'><img src='images/stop.svg' width='15' style='margin-right: 5px;' class='top-9px position-icons' id='stop_" + rrr_id_prog_manut + "'onclick='stop_audio()'><img src='images/microphone.svg' width='15' style='margin-right: 5px;' class='top-9px position-icons' id='rec_" + rrr_id_prog_manut + "'onclick='captureAudio(" + String.fromCharCode(34) + rrr_id_prog_manut + String.fromCharCode(34) + ")'></div><div id='latdir_" + rrr_id_prog_manut + "'width='40' height='30'></div><div align='center'><img src='images/trash.svg' style='position: relative; top: 8px; right: 55px; text-align: center; text-shadow: none;' class='icon-size' width='15' onclick='deletar_audio()'></div><div align='center'><img src='images/" + aux_image_upload + "' style='position: relative; bottom: 10px; left: 45px; text-align: center; text-shadow: none;' class='icon-size' width='17' onclick='upload_audio()'></div></table></div>"
-                        if (aux_image_upload === "upload.png") {
-                            qtdDocs_Device += 1
-                        }
-                    }
-                    //barra do áudio
-
-
-                    if (rrr_status_caminho_video == '0') {
-                        aux_image_upload = 'upload.png';
-                    }
-                    else {
-                        aux_image_upload = 'upload_verde.png';
-                    }
-                    //setinha do vídeo
-
-                    var selec_video;
-                    if (rrr_caminho_video == "") {
-                        selec_video = "<div id='video_invis_" + rrr_id_prog_manut + "' style='display:none; margin-left: 5px;'><table cellpadding='0' cellspacing='0'><video id='qvideo_" + rrr_id_prog_manut + "' controls poster='images/video.png' width='150' height='150'>   <source id='qsource_" + rrr_id_prog_manut + "' src='" + rrr_caminho_video + "' type='video/mp4'></video><div align='center'><img src='images/trash.svg' style='float: left; padding: 0.5rem; position: relative; left: 55px;' class='icon-size' width='15' onclick='deletar_video()'></div><div align='center'><img src='images/" + aux_image_upload + "' style='padding: 0.5rem;' class='icon-size' width='17' onclick='upload_video()'></div></table></div>"
-                    }
-                    else {
-                        selec_video = "<div id='video_invis_" + rrr_id_prog_manut + "' style='display:inline; margin-left: 5px;'><table cellpadding='0' cellspacing='0'><video id='qvideo_" + rrr_id_prog_manut + "' controls poster='images/video.png' width='150' height='150'>   <source id='qsource_" + rrr_id_prog_manut + "' src='" + rrr_caminho_video + "' type='video/mp4'></video><div align='center'><img src='images/trash.svg' style='float: left; padding: 0.5rem; position: relative; left: 55px; text-shadow: none;' class='icon-size' width='15' onclick='deletar_video()'></div><div align='center'><img src='images/" + aux_image_upload + "' style='padding: 0.5rem; float: left; position: relative; left: 120px; text-shadow: none;' class='icon-size' width='17' onclick='upload_video()'/></div></table></div>"
-                        if (aux_image_upload === "upload.png") {
-                            qtdDocs_Device += 1
-                        }
-                    }
-                    //barrinha do vídeo
-
-                    if (rrr_status_caminho_texto == '0') {
-                        aux_image_upload = 'upload.png';
-                    }
-                    else {
-                        aux_image_upload = 'upload_verde.png';
-                    }
-                    //seta do texto
-
-                    var selec_texto;
-                    selec_texto = rrr_caminho_texto;
-
-                    var bot_up
-                    if (rrr_caminho_texto == "") {
-                        bot_up = "<div style='display:none'><img src='images/" + aux_image_upload + "' class='icon-size' width='17' onclick='upload_texto()'></i></div>"
-                    }
-                    else {
-                        bot_up = "<img src='images/" + aux_image_upload + "' style='float: right; position: relative; right: 120px; top: 3px; text-shadow: none;' class='icon-size' width='17' onclick='upload_texto()'></i>"
-                        if (aux_image_upload === "upload.png") {
-                            qtdDocs_Device += 1
-                        }
-                    }
-
-                    var item_camera = [
-                        '<img src="images/camera.svg" style="margin-top: 10px; float: left; text-shadow: none;" onclick="getPhoto(pictureSource.CAMERA,' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')" width="40" height="30" style="cursor:pointer"><div style="width: 200px;"><img id="foto_' + rrr_id_prog_manut + '" src=""  onclick="abrir_popup_new(' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')"  width="106" height="70" hspace="2" vspace="2"  style="display:none"/> </div>  <div data-role="popup" id="idpopup_new_' + rrr_id_prog_manut + '"> <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a> <img id="foto_big_' + rrr_id_prog_manut + '"  class="popphoto" src="" style="max-height:512px;"> </div> ' + selec_imagens_thumb + selec_imagens
-                        // '<i class="fas fa-camera fa-2x top-9px" style="margin-top: 10px; height: 100%; float: left; text-shadow: none;" onclick="getPhoto(pictureSource.CAMERA,' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')" width="38" height="28" style="cursor:pointer"></i><div style="width: 200px;"><img id="foto_' + rrr_id_prog_manut + '" src=""  onclick="abrir_popup_new(' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')"  width="106" height="70" hspace="2" vspace="2"  style="display:none"/> </div>  <div data-role="popup" id="idpopup_new_' + rrr_id_prog_manut + '"> <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a> <img id="foto_big_' + rrr_id_prog_manut + '"  class="popphoto" src="" style="max-height:512px;"> </div> ' + selec_imagens_thumb + selec_imagens
-                    ]
-
-                    var item_video = [
-                        '<img src="images/video.svg" id="campo3" style="margin-top: 10px; float: left; text-shadow: none;" width="40" height="30" onclick="captureVideo(' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')"><div style="display: inline">' + selec_video + '</div>'
-                    ]
-
-                    var item_audio = [
-                        '<img src="images/volume-up.svg" style="margin-top: 10px; float: left; text-shadow: none;" width="40" height="30" onclick="captureAudio(' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')" style="cursor:pointer"></i>' + selec_audio
-                    ]
-
-                    var item_texto = [
-                        '<div style="display: flex"><img src="images/file-alt.svg" style="margin-top: 10px; float: left; display: inline; text-shadow: none;" width="40" height="30"></i><textarea style="display: flex; border-color: #e4e4e4; border-radius: 3px; width: 100%; padding: 5px; outline: none; resize: none" class="size-14 text_hover" rows="3" cols="32" name="textarea-1" id="textarea_' + rrr_id_prog_manut + '" data-placeholder="true" placeholder="Digite suas observações aqui..." onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)" maxlength="700">' + selec_texto + '</textarea></div><img src="images/save.svg" style="position: relative; float: left; left: 120px; top: 3px; text-shadow: none;" class="icon-size" width="15" onclick="atualizar_texto(' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')" style="cursor:pointer"><div align="center">' + bot_up + '</div>'
-                    ]
-
-                    var item_voltar = [
-                        '<button onclick="atualizar_texto_empree(' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')" type="button" class="ui-btn block btn-radius btn-voltar">Voltar</button>'
-                    ]
-
-                    document.getElementById('capturar_foto').innerHTML = item_camera;
-                    document.getElementById('capturar_video').innerHTML = item_video;
-                    document.getElementById('capturar_audio').innerHTML = item_audio;
-                    document.getElementById('capturar_texto').innerHTML = item_texto;
-                    document.getElementById('btn-voltar').innerHTML = item_voltar;
-
-                    ///////////////////  Acionar .popup para imagens iniciarem escondidas  //////////////
-                    tx.executeSql('SELECT * FROM mtab_prog_manut_evento WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '" ', [], function (tx, results) {
-                        var len2 = results.rows.length;
-                        var i2;
-                        var tam_ti2;
-
-                        if (len2 == 0) {
-                            var rrr2_caminho_imagens = ""
-                            var rrr2_id_prog_manut = id_prog_manut
-                        }
-                        else {
-                            var row2 = results.rows.item(0)
-
-                            var rrr2_caminho_imagens = row2['caminho_imagens'];
-                            var rrr2_id_prog_manut = row2['id_prog_manut']
-                        }
-
-
-                        var todas_imagens2 = ""
-                        var tam_ti2
-                        if (rrr2_caminho_imagens == null || rrr2_caminho_imagens == "") {
-                            tam_ti2 = 0;
-                        }
-                        else {
-                            todas_imagens2 = rrr2_caminho_imagens.split("**")
-                            tam_ti2 = todas_imagens2.length;
-                        }
-
-
-                        for (k = 0; k < tam_ti2; k++) {
-                            $("#idpopup_" + rrr2_id_prog_manut + "_" + k).popup();
-                        }
-
-                        $("#idpopup_new_" + rrr2_id_prog_manut).popup();
-
-                    }, null);
-                    /////////////////// FIM - Acionar .popup para imagens iniciarem escondidas  //////////////
-
-
-                }, null);
-            });*/
-
         }
-
-        // var manutsEvento = [
-        //     {
-        //         id_prog_manut: "",
-        //         dia_evento: dia_ev,
-        //         mes_evento: mes_ev,
-        //         ano_evento: ano_ev,
-        //         caminho_imagens: "",
-        //         caminho_audio: "",
-        //         caminho_video: "",
-        //         caminho_texto: "",
-        //         status_imagens_upl: "0",
-        //         status_video_upl: "",
-        //         status_audio_upl: "",
-        //         status_texto_upl: ""
-        //     }
-        // ];
 
         var aux_caminho_imagens = ""
         var aux_status_imagens_upl = ""
@@ -1072,8 +840,6 @@
             document.getElementById('foto_' + qual_id_prog_manut).src = imageURI;
             document.getElementById('foto_' + qual_id_prog_manut).style.display = "inline";
 
-            // alert("qual_id_prog_manut: " + qual_id_prog_manut)
-
             var db;
             var request = window.indexedDB.open("db_sigmacivil", "1");
 
@@ -1118,7 +884,6 @@
                     var cursor = event.target.result;
                     if (cursor) {
                         var data = cursor.value;
-                        // manutsEvento.push(cursor.value);
 
                         aux_caminho_imagens = data.caminho_imagens;
 
@@ -1137,24 +902,19 @@
 
                         var request = cursor.update(data);
                         request.onsuccess = function (event) {
-                            // alert("Atualização realizada!");
                             reload_page();
                         }
 
-                        // updateManutEvento(db, manutsEvento);
-
-                        // cursor.continue();
                     } else {
                         aux_caminho_imagens = "";
                         var tx2 = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
                         var store2 = tx2.objectStore('mtab_prog_manut_evento');
 
-                        manutsEvento_imagem.map(function (manutEvento) {
-                            store2.add(manutEvento);
+                        manutsEvento_imagem.map(function (manutEvento_imagem) {
+                            store2.add(manutEvento_imagem);
                         });
 
                         tx2.oncomplete = function () {
-                            // alert('stored manut evento note!')
                             reload_page();
                         }
 
@@ -1162,82 +922,8 @@
                             alert('error storing manut evento note ' + event.target.error);
                         }
                     }
-
-                    // reload_page();
-                    // terminou de tirar a foto, aqui é a seleção da seta
                 }
             }
-
-            // function updateManutEvento(db, manutsEvento) {
-            //     var tx3 = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
-            //     var store3 = tx3.objectStore('mtab_prog_manut_evento');
-            //     var index = store3.index('comparar');
-            //     var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
-            //     index.openCursor(whereEquals).onsuccess = function (event) {
-            //         var cursor = event.target.result;
-            //         if (cursor) {
-            //             var data = cursor.value;
-            //             manutsEvento.push(cursor.value);
-
-            //             data.id_prog_manut = qual_id_prog_manut;
-            //             data.dia_evento = dia_ev;
-            //             data.mes_evento = mes_ev;
-            //             data.ano_evento = ano_ev;
-
-            //             var request = cursor.update(data);
-            //             request.onsuccess = function (event) {
-            //                 // alert("Atualização realizada update função!");
-            //             }
-
-            //             // cursor.continue();
-            //         }
-            //     }
-            // }
-
-
-
-
-
-
-
-
-            /*var db2 = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
-
-            db2.transaction(function (tx) {
-
-                tx.executeSql('SELECT * FROM mtab_prog_manut_evento WHERE mtab_prog_manut_evento.id_prog_manut="' + qual_id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"  ', [], function (tx, results) {
-                    var len = results.rows.length;
-                    var i;
-
-                    if (len == 0) {
-                        aux_caminho_imagens = ""
-                        tx.executeSql('INSERT INTO mtab_prog_manut_evento(id_prog_manut,dia_evento,mes_evento,ano_evento,caminho_imagens,caminho_audio, caminho_video, caminho_texto, status_imagens_upl,status_video_upl,status_audio_upl,status_texto_upl) VALUES (?,?,?,?,?,"","","","0","","","")', [qual_id_prog_manut, dia_ev, mes_ev, ano_ev, imageURI]);
-                    }
-                    else {
-                        var row = results.rows.item(0)
-                        aux_caminho_imagens = row['caminho_imagens'];
-
-                        if (aux_caminho_imagens != "") {
-                            aux_caminho_imagens = aux_caminho_imagens + '**';
-
-                            aux_status_imagens_upl = row['status_imagens_upl'];
-                            aux_status_imagens_upl = aux_status_imagens_upl + '**';
-                            aux_status_imagens_upl = aux_status_imagens_upl + '0';
-                        } else {
-                            aux_status_imagens_upl = '0';
-                        }
-
-                        tx.executeSql('UPDATE mtab_prog_manut_evento SET caminho_imagens="' + aux_caminho_imagens + imageURI + '" , status_imagens_upl="' + aux_status_imagens_upl + '" WHERE mtab_prog_manut_evento.id_prog_manut="' + qual_id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"');
-
-                    }
-
-                    reload_page();
-                    // terminou de tirar a foto, aqui é a seleção da seta
-
-                }, null);
-
-            });*/
-
         }
 
         // DELETAR IMAGEM
@@ -1278,13 +964,8 @@
                 objectStoreRequest.onsuccess = function (event) {
                     var cursor = event.target.result;
                     if (cursor) {
-                        // alert('ponto 3')
                         var data = cursor.value;
-                        // var aux_dia_evento = data.dia_evento;
-                        // var aux_mes_evento = data.mes_evento;
-                        // var aux_ano_evento = data.ano_evento;
 
-                        // manutsEvento.push(cursor.value);
                         var k;
 
                         aux_caminho_imagens = data.caminho_imagens;
@@ -1302,21 +983,15 @@
                         }
 
                         if (taman > 1) {
-                            // alert('ponto 4')
                             aux_2 = aux_1.substring(0, aux_1.length - 2);
                             aux_2_status = aux_1_status.substring(0, aux_1_status.length - 2);
                         } else if (taman == 0 || taman == 1) {
-                            // alert('ponto 5')
                             aux_2 = "";
                             aux_2_status = "";
                         }
-
-                        // cursor.continue();
                     }
 
                     deleteUpdateManutEvento(db, aux_2, aux_2_status);
-
-                    // reload_page();
                 }
             }
 
@@ -1329,97 +1004,17 @@
                     var cursor = event.target.result;
                     if (cursor) {
                         var data = cursor.value;
-                        // manutsEvento.push(cursor.value);
 
-                        // alert("data.caminho_imagens: " + data.caminho_imagens)
                         data.caminho_imagens = aux_2;
-                        // alert("data.caminho_imagens: " + data.caminho_imagens)
                         data.status_imagens_upl = aux_2_status;
 
                         var request = cursor.update(data);
-                        // alert(request)
                         request.onsuccess = function (event) {
-                            // alert("Atualização realizada update delete!");
                             reload_page();
                         }
-                        // cursor.continue();
                     }
-
-                    // reload_page();
                 }
             }
-
-            // function deleteManutEventoVideo(db, manutsEvento) {
-            //     var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
-            //     var store = tx.objectStore('mtab_prog_manut_evento');
-            //     var index = store.index('comparar');
-            //     var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
-            //     index.openCursor(whereEquals).onsuccess = function (event) {
-            //         var cursor = event.target.result;
-            //         if (cursor) {
-            //             var data = cursor.value;
-            //             manutsEvento.push(cursor.value);
-
-            //             alert('ponto 5')
-            //             alert("data.caminho_imagens: " + data.caminho_imagens)
-            //             alert("data.caminho_video: " + data.caminho_video)
-            //             data.caminho_video = "";
-            //             data.status_video_upl = "0";
-
-            //             var request = cursor.update(data);
-            //             request.onsuccess = function (event) {
-            //                 alert("Atualização realizada delete função video!");
-            //             }
-            //             cursor.continue();
-            //         }
-
-            //         reload_page();
-            //     }
-            // }
-
-
-
-
-
-
-
-
-            /*var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
-            db.transaction(function (tx) {
-
-                tx.executeSql('SELECT * FROM mtab_prog_manut_evento WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '" ', [], function (tx, results) {
-                    var k;
-
-                    var row = results.rows.item(0)
-                    aux_caminho_imagens = row['caminho_imagens'];
-                    aux_status_imagens_upl = row['status_imagens_upl'];
-
-                    all_images = aux_caminho_imagens.split("**")
-                    all_status_images = aux_status_imagens_upl.split("**")
-                    taman = all_images.length;
-
-                    for (k = 0; k < taman; k++) {
-                        if (q_id != k) {
-                            aux_1 = aux_1 + all_images[k] + "**"
-                            aux_1_status = aux_1_status + all_status_images[k] + "**"
-                        }
-                    }
-
-                    if (taman > 1) {
-                        var aux_2 = aux_1.substring(0, aux_1.length - 2)
-                        var aux_2_status = aux_1_status.substring(0, aux_1_status.length - 2)
-                    } else if (taman == 0 || taman == 1) {
-                        var aux_2 = ""
-                        var aux_2_status = ""
-                    }
-
-                    tx.executeSql('UPDATE mtab_prog_manut_evento SET caminho_imagens="' + aux_2 + '" , status_imagens_upl="' + aux_2_status + '"  WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"');
-
-                    reload_page();
-
-                }, null);
-            });*/
-
         }
         // FIM DELETAR IMAGEM
 
@@ -1462,7 +1057,6 @@
                         var cursor = event.target.result;
                         if (cursor) {
                             var data = cursor.value;
-                            // manutsEvento.push(cursor.value);
 
                             var k;
                             aux_caminho_imagens = data.caminho_imagens;
@@ -1491,67 +1085,16 @@
 
                             aux_1_status = aux_1_status.substring(0, aux_1_status.length - 2)
                             // fim  marcar que foi feito upload para esta imagem
+
                             if (ja_fez_upload != '1') {
                                 up_loadPhoto(aux_2, q_id, aux_1_status);
                             }
                             else {
                                 up_loadPhoto(aux_2, q_id, aux_status_imagens_upl);
                             }
-
-                            // cursor.continue();
                         }
                     }
                 }
-
-
-
-
-
-
-
-                /*var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
-                db.transaction(function (tx) {
-
-                    tx.executeSql('SELECT * FROM mtab_prog_manut_evento WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '" ', [], function (tx, results) {
-                        var k;
-
-                        var row = results.rows.item(0)
-                        aux_caminho_imagens = row['caminho_imagens'];
-
-                        all_images = aux_caminho_imagens.split("**")
-
-                        aux_1 = aux_1 + all_images[q_id] + "**"
-                        var aux_2 = aux_1.substring(0, aux_1.length - 2)
-
-                        // marcar que foi feito upload para esta imagem
-
-                        aux_status_imagens_upl = row['status_imagens_upl'];
-
-                        all_status_images = aux_status_imagens_upl.split("**");
-                        taman = all_status_images.length;
-
-                        for (k = 0; k < taman; k++) {
-                            if (q_id != k) {
-                                aux_1_status = aux_1_status + all_status_images[k] + "**"
-                            }
-                            else {
-                                aux_1_status = aux_1_status + "1" + "**"
-                                var ja_fez_upload = all_status_images[k]
-                            }
-                        }
-
-                        aux_1_status = aux_1_status.substring(0, aux_1_status.length - 2)
-                        // fim  marcar que foi feito upload para esta imagem
-                        if (ja_fez_upload != '1') {
-                            up_loadPhoto(aux_2, q_id, aux_1_status);
-                        }
-                        else {
-                            up_loadPhoto(aux_2, q_id, aux_status_imagens_upl);
-                        }
-
-                    }, null);
-                });*/
-
             }
         }
 
@@ -1607,38 +1150,16 @@
                     var cursor = event.target.result;
                     if (cursor) {
                         var data = cursor.value;
-                        // manutsEvento.push(cursor.value);
 
                         data.status_imagens_upl = aux_1_status;
 
                         var request = cursor.update(data);
                         request.onsuccess = function (event) {
                             reload_page();
-                            // alert("Atualização realizada update win up!");
                         }
-
-                        // cursor.continue();
                     }
-
-                    // reload_page();
                 }
             }
-
-
-
-
-
-
-
-            /*var db3 = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000);
-            db3.transaction(function (tx) {
-
-                tx.executeSql('UPDATE mtab_prog_manut_evento SET status_imagens_upl="' + aux_1_status + '" WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"');
-
-                reload_page();
-
-            });*/
-
         }
 
         var fail_up = function (error) {
@@ -1649,23 +1170,6 @@
         // FIM UPLOAD IMAGEM
 
         // FIM CAMERA
-
-        // var manutsEventoVd = [
-        //     {
-        //         id_prog_manut: "",
-        //         dia_evento: "",
-        //         mes_evento: "",
-        //         ano_evento: "",
-        //         caminho_imagens: "",
-        //         caminho_audio: "",
-        //         caminho_video: "",
-        //         caminho_texto: "",
-        //         status_imagens_upl: "",
-        //         status_video_upl: "0",
-        //         status_audio_upl: "",
-        //         status_texto_upl: ""
-        //     }
-        // ];
 
         // CAPTURAR VIDEO
         function captureVideo(qual) {
@@ -1736,25 +1240,17 @@
                         var cursor = event.target.result;
                         if (cursor) {
                             var data = cursor.value;
-                            // manutsEvento.push(cursor.value);
-
-                            // alert('ponto 2');
 
                             updateManutEventoVideo(db);
-
-                            // cursor.continue();
                         } else {
                             var tx2 = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
                             var store2 = tx2.objectStore('mtab_prog_manut_evento');
 
-                            // alert('ponto 3')
-
-                            manutsEvento_video.map(function (manutEvento) {
-                                store2.add(manutEvento);
+                            manutsEvento_video.map(function (manutEvento_video) {
+                                store2.add(manutEvento_video);
                             });
 
                             tx2.oncomplete = function () {
-                                // alert('stored manut evento video note!')
                                 reload_page();
                             }
 
@@ -1762,10 +1258,6 @@
                                 alert('error storing manut evento video note ' + event.target.error);
                             }
                         }
-
-                        // updateManutEventoVideo(db, manutsEvento);
-
-                        // reload_page();
                     }
                 }
 
@@ -1778,54 +1270,18 @@
                         var cursor = event.target.result;
                         if (cursor) {
                             var data = cursor.value;
-                            // manutsEvento.push(cursor.value);
-
-                            // alert(m_path)
 
                             data.caminho_video = m_path;
                             data.status_video_upl = "0";
 
                             var request = cursor.update(data);
                             request.onsuccess = function (event) {
-                                // alert("Atualização realizada update video win up!");
                                 reload_page();
                             }
 
-                            // cursor.continue();
                         }
-
-                        // reload_page();
                     }
                 }
-
-
-
-
-
-
-
-
-
-                // var db2 = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
-                // db2.transaction(function (tx) {
-
-                //     tx.executeSql('SELECT * FROM mtab_prog_manut_evento WHERE mtab_prog_manut_evento.id_prog_manut="' + qual_id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"  ', [], function (tx, results) {
-                //         var len2 = results.rows.length;
-
-                //         if (len2 == 0) {
-                //             tx.executeSql('INSERT INTO mtab_prog_manut_evento(id_prog_manut,dia_evento,mes_evento,ano_evento,caminho_video,caminho_imagens,caminho_audio, caminho_texto, status_imagens_upl,status_video_upl,status_audio_upl,status_texto_upl) VALUES (?,?,?,?,?,"","","","","0","","")', [qual_id_prog_manut, dia_ev, mes_ev, ano_ev, m_path]);
-                //         }
-                //         else {
-                //             var row = results.rows.item(0)
-                //             tx.executeSql('UPDATE mtab_prog_manut_evento SET caminho_video="' + m_path + '" , status_video_upl="0" WHERE mtab_prog_manut_evento.id_prog_manut="' + qual_id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"');
-                //         }
-
-                //         reload_page();
-
-                //     }, null);
-
-                // });
-
             }
 
         }
@@ -1865,41 +1321,17 @@
                     var cursor = event.target.result;
                     if (cursor) {
                         var data = cursor.value;
-                        // manutsEvento.push(cursor.value);
 
-                        // alert('ponto 5')
-                        // alert("data.caminho_imagens: " + data.caminho_imagens)
-                        // alert("data.caminho_video: " + data.caminho_video)
                         data.caminho_video = "";
                         data.status_video_upl = "0";
 
                         var request = cursor.update(data);
                         request.onsuccess = function (event) {
-                            // alert("Atualização realizada delete função video!");
                             reload_page();
                         }
-                        // cursor.continue();
                     }
-
-                    // reload_page();
                 }
             }
-
-
-
-
-
-
-
-
-
-            /*var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
-            db.transaction(function (tx) {
-
-                tx.executeSql('UPDATE mtab_prog_manut_evento SET caminho_video="" , status_video_upl="0"  WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"');
-                reload_page();
-            });*/
-
         }
         // FIM DELETAR VIDEO
 
@@ -1934,7 +1366,6 @@
                         var cursor = event.target.result;
                         if (cursor) {
                             var data = cursor.value;
-                            // manutsEvento.push(cursor.value);
 
                             if (cursor.value.status_video_upl != '1') {
                                 var aux_caminho_video = data.caminho_video;
@@ -1944,41 +1375,9 @@
                                 var aux_caminho_video = data.caminho_video;
                                 up_loadVideo(aux_caminho_video);
                             }
-
-                            // cursor.continue();
                         }
                     }
                 }
-
-
-
-
-
-
-
-
-
-
-                /*var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
-                db.transaction(function (tx) {
-
-                    tx.executeSql('SELECT * FROM mtab_prog_manut_evento WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '" ', [], function (tx, results) {
-
-                        var row = results.rows.item(0)
-
-                        if (row['status_video_upl'] != '1') {
-                            var aux_caminho_video = row['caminho_video'];
-                            //tx.executeSql('UPDATE mtab_prog_manut_evento SET status_video_upl="1" WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"' );
-                            up_loadVideo(aux_caminho_video);
-                        }
-                        else {
-                            var aux_caminho_video = row['caminho_video'];
-                            up_loadVideo(aux_caminho_video);
-                        }
-
-                    }, null);
-                });*/
-
             }
         }
 
@@ -2027,38 +1426,16 @@
                     var cursor = event.target.result;
                     if (cursor) {
                         var data = cursor.value;
-                        // manutsEvento.push(cursor.value);
 
                         data.status_video_upl = "1";
 
                         var request = cursor.update(data);
                         request.onsuccess = function (event) {
-                            // alert("Atualização realizada update win up video!");
                             reload_page();
                         }
-
-                        // cursor.continue();
                     }
-
-                    // reload_page();
                 }
             }
-
-
-
-
-
-
-
-
-
-            /*var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
-            db.transaction(function (tx) {
-                tx.executeSql('UPDATE mtab_prog_manut_evento SET status_video_upl="1" WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"');
-
-                // alert("Vídeo enviado com sucesso!");
-                reload_page();
-            });*/
         }
 
         var fail_up_v = function (error) {
@@ -2067,23 +1444,6 @@
             alert("Não foi feito o upload da vídeo!");
         }
         // FIM UPLOAD VIDEO
-
-        // var manutsEventoAudio = [
-        //     {
-        //         id_prog_manut: "",
-        //         dia_evento: "",
-        //         mes_evento: "",
-        //         ano_evento: "",
-        //         caminho_imagens: "",
-        //         caminho_audio: "",
-        //         caminho_video: "",
-        //         caminho_texto: "",
-        //         status_imagens_upl: "",
-        //         status_video_upl: "",
-        //         status_audio_upl: "0",
-        //         status_texto_upl: ""
-        //     }
-        // ];
 
         // CAPTURAR AUDIO
         var myMedia3 = null;
@@ -2172,25 +1532,18 @@
                         var cursor = event.target.result;
                         if (cursor) {
                             var data = cursor.value;
-                            // manutsEvento.push(cursor.value);
-
-                            // alert('ponto 2');
 
                             updateManutEventoAudio(db);
 
-                            // cursor.continue();
                         } else {
                             var tx2 = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
                             var store2 = tx2.objectStore('mtab_prog_manut_evento');
 
-                            // alert('ponto 3')
-
-                            manutsEvento_audio.map(function (manutEvento) {
-                                store2.add(manutEvento);
+                            manutsEvento_audio.map(function (manutEvento_audio) {
+                                store2.add(manutEvento_audio);
                             });
 
                             tx2.oncomplete = function () {
-                                // alert('stored manut evento audio note!');
                                 reload_page();
                             }
 
@@ -2198,10 +1551,6 @@
                                 alert('error storing manut evento audio note ' + event.target.error);
                             }
                         }
-
-                        // updateManutEventoAudio(db, manutsEvento);
-
-                        // reload_page();
                     }
                 }
 
@@ -2214,54 +1563,17 @@
                         var cursor = event.target.result;
                         if (cursor) {
                             var data = cursor.value;
-                            // manutsEvento.push(cursor.value);
 
                             data.caminho_audio = m_path;
                             data.status_audio_upl = "0";
 
                             var request = cursor.update(data);
                             request.onsuccess = function (event) {
-                                // alert("Atualização realizada update audio win up!");
                                 reload_page();
                             }
-
-                            // cursor.continue();
                         }
-
-                        // reload_page();
                     }
                 }
-
-
-
-
-
-
-
-
-
-
-
-                /*var db2 = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
-                db2.transaction(function (tx) {
-
-                    tx.executeSql('SELECT * FROM mtab_prog_manut_evento WHERE mtab_prog_manut_evento.id_prog_manut="' + qual_id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"  ', [], function (tx, results) {
-                        var len2 = results.rows.length;
-
-                        if (len2 == 0) {
-                            tx.executeSql('INSERT INTO mtab_prog_manut_evento(id_prog_manut,dia_evento,mes_evento,ano_evento,caminho_video,caminho_imagens,caminho_audio, caminho_texto, status_imagens_upl,status_video_upl,status_audio_upl,status_texto_upl) VALUES (?,?,?,?,"","",?,"","","","0","")', [qual_id_prog_manut, dia_ev, mes_ev, ano_ev, m_path]);
-                        }
-                        else {
-                            var row = results.rows.item(0)
-                            tx.executeSql('UPDATE mtab_prog_manut_evento SET caminho_audio="' + m_path + '" , status_audio_upl="0" WHERE mtab_prog_manut_evento.id_prog_manut="' + qual_id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"');
-                        }
-
-                        reload_page();
-
-                    }, null);
-
-                });*/
-
             }
         }
 
@@ -2326,37 +1638,17 @@
                     var cursor = event.target.result;
                     if (cursor) {
                         var data = cursor.value;
-                        // manutsEvento.push(cursor.value);
 
-                        // alert('ponto 5')
                         data.caminho_audio = "";
                         data.status_audio_upl = "0";
 
                         var request = cursor.update(data);
                         request.onsuccess = function (event) {
-                            // alert("Atualização realizada delete função audio!");
                             reload_page();
                         }
-                        // cursor.continue();
                     }
-
-                    // reload_page();
                 }
             }
-
-
-
-
-
-
-
-
-            /*var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
-            db.transaction(function (tx) {
-
-                tx.executeSql('UPDATE mtab_prog_manut_evento SET caminho_audio="" , status_audio_upl="0"  WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"');
-                reload_page();
-            });*/
         }
         // FIM DELETAR AUDIO
 
@@ -2392,7 +1684,6 @@
                         var cursor = event.target.result;
                         if (cursor) {
                             var data = cursor.value;
-                            // manutsEvento.push(cursor.value);
 
                             if (cursor.value.status_audio_upl != '1') {
                                 var aux_caminho_audio = data.caminho_audio;
@@ -2402,44 +1693,9 @@
                                 var aux_caminho_audio = data.caminho_audio;
                                 up_loadAudio(aux_caminho_audio);
                             }
-
-                            // cursor.continue();
                         }
                     }
                 }
-
-
-
-
-
-
-
-
-
-
-
-
-                /*var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
-                db.transaction(function (tx) {
-
-                    tx.executeSql('SELECT * FROM mtab_prog_manut_evento WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '" ', [], function (tx, results) {
-
-                        var row = results.rows.item(0)
-
-                        if (row['status_audio_upl'] != '1') {
-                            var aux_caminho_audio = row['caminho_audio'];
-                            //tx.executeSql('UPDATE mtab_prog_manut_evento SET status_audio_upl="1" WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"' );
-                            up_loadAudio(aux_caminho_audio);
-                        }
-                        else {
-                            var aux_caminho_audio = row['caminho_audio'];
-                            up_loadAudio(aux_caminho_audio);
-                        }
-
-
-                    }, null);
-                });*/
-
             }
         }
 
@@ -2487,47 +1743,16 @@
                     var cursor = event.target.result;
                     if (cursor) {
                         var data = cursor.value;
-                        // manutsEvento.push(cursor.value);
 
                         data.status_audio_upl = "1";
 
                         var request = cursor.update(data);
                         request.onsuccess = function (event) {
-                            // alert("Atualização realizada update win up audio!");
                             reload_page();
                         }
-
-                        // cursor.continue();
                     }
-
-                    // data.status_audio_upl = "1";
-
-                    // var request = cursor.update(data);
-                    // request.onsuccess = function (event) {
-                    //     alert("Atualização realizada update win up audio!");
-                    //     reload_page();
-                    // }
-
-                    // reload_page();
                 }
             }
-
-
-
-
-
-
-
-
-
-
-            /*var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
-            db.transaction(function (tx) {
-                tx.executeSql('UPDATE mtab_prog_manut_evento SET status_audio_upl="1" WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"');
-
-                reload_page();
-
-            });*/
         }
 
         var fail_up_a = function (error) {
@@ -2577,7 +1802,6 @@
                         var cursor = event.target.result;
                         if (cursor) {
                             var data = cursor.value;
-                            // manutsEvento.push(cursor.value);
 
                             if (cursor.value.status_texto_upl != '1') {
                                 var aux_caminho_texto = data.caminho_texto;
@@ -2586,42 +1810,9 @@
                                 var aux_caminho_texto = data.caminho_texto;
                                 up_loadTexto(aux_caminho_texto);
                             }
-
-                            // cursor.continue();
                         }
                     }
                 }
-
-
-
-
-
-
-
-
-
-
-
-                /*var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
-                db.transaction(function (tx) {
-
-                    tx.executeSql('SELECT * FROM mtab_prog_manut_evento WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '" ', [], function (tx, results) {
-
-                        var row = results.rows.item(0)
-
-                        if (row['status_texto_upl'] != '1') {
-                            var aux_caminho_texto = row['caminho_texto'];
-                            //tx.executeSql('UPDATE mtab_prog_manut_evento SET status_texto_upl="1" WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"' );
-                            up_loadTexto(aux_caminho_texto);
-                        }
-                        else {
-                            var aux_caminho_texto = row['caminho_texto'];
-                            up_loadTexto(aux_caminho_texto);
-                        }
-
-                    }, null);
-                });*/
-
             }
         }
 
@@ -2667,40 +1858,16 @@
                                     var cursor = event.target.result;
                                     if (cursor) {
                                         var data = cursor.value;
-                                        // manutsEvento.push(cursor.value);
 
                                         data.status_texto_upl = "1";
 
                                         var request = cursor.update(data);
                                         request.onsuccess = function (event) {
-                                            // alert("Atualização realizada update win up texto!");
                                             reload_page();
                                         }
-
-                                        // cursor.continue();
                                     }
-
-                                    // reload_page();
                                 }
                             }
-
-
-
-
-
-
-
-
-
-
-
-
-                            /*var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
-                            db.transaction(function (tx) {
-                                tx.executeSql('UPDATE mtab_prog_manut_evento SET status_texto_upl="1" WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"');
-                                // alert("Texto enviado com sucesso!");
-                                reload_page(); // adicionar aqui a estrutura para certiifcar que foi upado
-                            });*/
                         } else {
                             alert("Problemas com a gravação do texto. Tente novamente mais tarde.");
                         }
@@ -3108,25 +2275,18 @@
                 var cursor = event.target.result;
                 if (cursor) {
                     var data = cursor.value;
-                    // manutsEvento.push(cursor.value);
-
-                    // alert('ponto 7')
 
                     updateManutEventoTexto(db);
 
-                    // cursor.continue();
                 } else {
                     var tx2 = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
                     var store2 = tx2.objectStore('mtab_prog_manut_evento');
 
-                    // alert('ponto 8');
-
-                    manutsEvento_texto.map(function (manutEvento) {
-                        store2.add(manutEvento);
+                    manutsEvento_texto.map(function (manutEvento_texto) {
+                        store2.add(manutEvento_texto);
                     });
 
                     tx2.oncomplete = function () {
-                        // alert('stored manut evento texto note!');
                         reload_page();
                     }
 
@@ -3134,10 +2294,6 @@
                         alert('error storing manut evento texto note ' + event.target.error);
                     }
                 }
-
-                // updateManutEventoTexto(db, manutsEvento);
-
-                // reload_page();
             }
         }
 
@@ -3150,52 +2306,17 @@
                 var cursor = event.target.result;
                 if (cursor) {
                     var data = cursor.value;
-                    // manutsEvento.push(cursor.value);
 
                     data.caminho_texto = quale;
                     data.status_texto_upl = "0";
 
                     var request = cursor.update(data);
                     request.onsuccess = function (event) {
-                        // alert("Atualização realizada update função texto!");
                         reload_page();
                     }
-
-                    // cursor.continue();
                 }
-
-                // reload_page();
             }
         }
-
-
-
-
-
-
-
-
-
-
-        /*var db2 = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
-        db2.transaction(function (tx) {
-
-            tx.executeSql('SELECT * FROM mtab_prog_manut_evento WHERE mtab_prog_manut_evento.id_prog_manut="' + qual_id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"  ', [], function (tx, results) {
-                var len2 = results.rows.length;
-
-                if (len2 == 0) {
-                    tx.executeSql('INSERT INTO mtab_prog_manut_evento(id_prog_manut,dia_evento,mes_evento,ano_evento,caminho_texto,caminho_video,caminho_audio, caminho_imagens, status_imagens_upl,status_video_upl,status_audio_upl,status_texto_upl) VALUES (?,?,?,?,?,"","","","","","","0")', [qual_id_prog_manut, dia_ev, mes_ev, ano_ev, quale]);
-                }
-                else {
-                    var row = results.rows.item(0)
-                    tx.executeSql('UPDATE mtab_prog_manut_evento SET caminho_texto="' + quale + '" , status_texto_upl="0" WHERE mtab_prog_manut_evento.id_prog_manut="' + qual_id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"');
-                }
-
-                reload_page();
-
-            }, null);
-
-        });*/
     }
     // FIM ATUALIZAR O TEXTO
 
@@ -3250,36 +2371,26 @@
                 var cursor = event.target.result;
                 if (cursor) {
                     var data = cursor.value;
-                    // manutsEvento.push(cursor.value);
 
                     updateManutEventoTextoEmpree(db);
 
-                    // data.caminho_texto = quale;
-                    // data.status_texto_upl = "0";
-
-                    // cursor.continue();
                 } else {
                     var tx2 = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
                     var store2 = tx2.objectStore('mtab_prog_manut_evento');
 
-                    manutsEvento_texto_empree.map(function (manutEvento) {
-                        store2.add(manutEvento);
+                    manutsEvento_texto_empree.map(function (manutEvento_texto_empree) {
+                        store2.add(manutEvento_texto_empree);
                     });
 
                     tx2.oncomplete = function () {
-                        // alert('stored manut evento audio note!');
                         reload_page_empree();
                     }
 
                     tx2.onerror = function (event) {
-                        alert('error storing manut evento audio note ' + event.target.error);
+                        alert('error storing manut evento texto_empree note ' + event.target.error);
                     }
 
                 }
-
-                // updateManutEventoTextoEmpree(db, manutsEvento)
-
-                // reload_page_empree();
             }
         }
 
@@ -3292,60 +2403,18 @@
                 var cursor = event.target.result;
                 if (cursor) {
                     var data = cursor.value;
-                    // manutsEvento.push(cursor.value);
-
-                    // alert('Ponto texto Empree')
-
-                    // alert(data.caminho_texto)
 
                     data.caminho_texto = quale;
-
-                    // alert(data.caminho_texto)
 
                     data.status_texto_upl = "0";
 
                     var request = cursor.update(data);
                     request.onsuccess = function (event) {
-                        // alert("Atualização realizada update função texto empree!");
                         reload_page_empree();
                     }
-
-                    // cursor.continue();
                 }
-
-                // reload_page_empree();
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-        /*var db2 = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
-        db2.transaction(function (tx) {
-
-            tx.executeSql('SELECT * FROM mtab_prog_manut_evento WHERE mtab_prog_manut_evento.id_prog_manut="' + qual_id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"  ', [], function (tx, results) {
-                var len2 = results.rows.length;
-
-                if (len2 == 0) {
-                    tx.executeSql('INSERT INTO mtab_prog_manut_evento(id_prog_manut,dia_evento,mes_evento,ano_evento,caminho_texto,caminho_video,caminho_audio, caminho_imagens, status_imagens_upl,status_video_upl,status_audio_upl,status_texto_upl) VALUES (?,?,?,?,?,"","","","","","","0")', [qual_id_prog_manut, dia_ev, mes_ev, ano_ev, quale]);
-                }
-                else {
-                    var row = results.rows.item(0)
-                    tx.executeSql('UPDATE mtab_prog_manut_evento SET caminho_texto="' + quale + '" , status_texto_upl="0" WHERE mtab_prog_manut_evento.id_prog_manut="' + qual_id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"');
-                }
-
-                reload_page_empree();
-
-            }, null);
-
-        });*/
     }
 
     function reload_page() {

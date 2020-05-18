@@ -57,21 +57,21 @@
 			request.onupgradeneeded = function (event) {
 				db = event.target.result;
 
-				var mtab_cliente = db.createObjectStore("mtab_cliente", { keyPath: "id_cliente" });
+				var mtab_cliente = db.createObjectStore("mtab_cliente");
 
 				mtab_cliente.createIndex("id_cliente", "id_cliente", { unique: false });
 				mtab_cliente.createIndex("e_construtora", "e_construtora", { unique: false });
 				mtab_cliente.createIndex("text1", "text1", { unique: false });
 				mtab_cliente.createIndex("text2", "text2", { unique: false });
 
-				var mtab_empree = db.createObjectStore("mtab_empree", { keyPath: "id_empree" });
+				var mtab_empree = db.createObjectStore("mtab_empree");
 
 				mtab_empree.createIndex("id_empree", "id_empree", { unique: false });
 				mtab_empree.createIndex("nome_empree", "nome_empree", { unique: false });
 				mtab_empree.createIndex("status_sync", "status_sync", { unique: false });
 				mtab_empree.createIndex("data_implantacao_sc", "data_implantacao_sc", { unique: false });
 
-				var mtab_prog_manut = db.createObjectStore("mtab_prog_manut", { keyPath: "id_prog_manut" });
+				var mtab_prog_manut = db.createObjectStore("mtab_prog_manut");
 
 				mtab_prog_manut.createIndex("id_prog_manut", "id_prog_manut", { unique: false });
 				mtab_prog_manut.createIndex("nome_sistema", "nome_sistema", { unique: false });
@@ -84,7 +84,7 @@
 				mtab_prog_manut.createIndex("formato_periodicidade", "formato_periodicidade", { unique: false });
 				mtab_prog_manut.createIndex("comparar_prog_manut", ["id_prog_manut"], { unique: false });
 
-				var mtab_prog_manut_evento = db.createObjectStore("mtab_prog_manut_evento", { keyPath: "id_prog_manut" });
+				var mtab_prog_manut_evento = db.createObjectStore("mtab_prog_manut_evento");
 
 				mtab_prog_manut_evento.createIndex("id_prog_manut", "id_prog_manut", { unique: false });
 				mtab_prog_manut_evento.createIndex("dia_evento", "dia_evento", { unique: false });

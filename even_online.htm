@@ -1762,15 +1762,6 @@
         // UPLOAD TEXTO
         function upload_texto() {
 
-            // // RESTRIÇÕES DE DATAS
-            // if (datadiff(Date.now(), d_min) > 0) {
-            //     alert("Essa ação só pode ser realizada a partir do dia " + dateToEN(d_min) + "!")
-            //     return
-            // } else if (datadiff(Date.now(), d_max) < 0) {
-            //     alert("Essa ação não pode ser realizada após o dia " + dateToEN(d_max) + "!")
-            //     return
-            // }
-
             if (tem_conexao()) {
                 var db;
                 var request = window.indexedDB.open("db_sigmacivil", "1");
@@ -2201,9 +2192,7 @@
         $("#idpopup_new_" + id).popup();
         $("#idpopup_new_" + id).popup('open');
     }
-
-
-
+    
     function abrir_popup_gal(id1) {
         var id1;
         $("#idpopup_img_" + id1).css({ display: "flex" });
@@ -2222,6 +2211,15 @@
 
     // ATUALIZAR O TEXTO
     function atualizar_texto(qual) {
+        // RESTRIÇÕES DE DATAS
+        if (datadiff(Date.now(), d_min) > 0) {
+            alert("Essa ação só pode ser realizada a partir do dia " + dateToEN(d_min) + "!")
+            return
+        } else if (datadiff(Date.now(), d_max) < 0) {
+            alert("Essa ação não pode ser realizada após o dia " + dateToEN(d_max) + "!")
+            return
+        }
+
         // var db2 = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000);
         var quale;
 

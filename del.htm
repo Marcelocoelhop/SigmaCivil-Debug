@@ -50,8 +50,6 @@
 				}
 			};
 
-			var num = 0;
-
 			function executarRemoverDados(db) {
 				var tx = db.transaction(['mtab_cliente'], 'readwrite');
 				var store = tx.objectStore('mtab_cliente');

@@ -2192,7 +2192,7 @@
         $("#idpopup_new_" + id).popup();
         $("#idpopup_new_" + id).popup('open');
     }
-    
+
     function abrir_popup_gal(id1) {
         var id1;
         $("#idpopup_img_" + id1).css({ display: "flex" });
@@ -2316,6 +2316,15 @@
     // FIM ATUALIZAR O TEXTO
 
     function atualizar_texto_empree(qual) {
+        // RESTRIÇÕES DE DATAS
+        if (datadiff(Date.now(), d_min) > 0) {
+            reload_page_empree();
+            return;
+        } else if (datadiff(Date.now(), d_max) < 0) {
+            reload_page_empree()
+            return;
+        }
+        
         // var db2 = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000);
         var quale;
 
@@ -2366,20 +2375,20 @@
                 var cursor = event.target.result;
                 if (cursor) {
                     alert('ja tem registro');
-					alert(qual_id_prog_manut);
-					alert(dia_ev);
-					alert(mes_ev);
-					alert(ano_ev);
+                    alert(qual_id_prog_manut);
+                    alert(dia_ev);
+                    alert(mes_ev);
+                    alert(ano_ev);
                     var data = cursor.value;
 
                     updateManutEventoTextoEmpree(db);
 
                 } else {
                     alert('nao tem registro');
-					alert(qual_id_prog_manut);
-					alert(dia_ev);
-					alert(mes_ev);
-					alert(ano_ev);
+                    alert(qual_id_prog_manut);
+                    alert(dia_ev);
+                    alert(mes_ev);
+                    alert(ano_ev);
                     var tx2 = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
                     var store2 = tx2.objectStore('mtab_prog_manut_evento');
 

@@ -2335,7 +2335,7 @@
             atualizarManutEventoEmpree(db, manutsEvento_texto_empree);
 
             db.onerror = function (event) {
-                alert("Database error: " + event.target.errorCode);
+                alert("Database error text empree: " + event.target.errorCode);
             }
         }
 
@@ -2365,11 +2365,21 @@
             objectStoreRequest.onsuccess = function (event) {
                 var cursor = event.target.result;
                 if (cursor) {
+                    alert('ja tem registro');
+					alert(qual_id_prog_manut);
+					alert(dia_ev);
+					alert(mes_ev);
+					alert(ano_ev);
                     var data = cursor.value;
 
                     updateManutEventoTextoEmpree(db);
 
                 } else {
+                    alert('nao tem registro');
+					alert(qual_id_prog_manut);
+					alert(dia_ev);
+					alert(mes_ev);
+					alert(ano_ev);
                     var tx2 = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
                     var store2 = tx2.objectStore('mtab_prog_manut_evento');
 
@@ -2382,7 +2392,7 @@
                     }
 
                     tx2.onerror = function (event) {
-                        alert('error storing manut evento texto_empree note ' + event.target.error);
+                        alert('error storing manut evento texto_empree note text empree ' + event.target.error);
                     }
 
                 }

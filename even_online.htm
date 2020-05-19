@@ -492,7 +492,7 @@
                                     '<tbody>',
                                     '<label style="font-weight: 600;" class="label-center" for="textarea-1">Observações</label>',
                                     '<label style="margin-top: 15px;" for="">Condomínio:</label>',
-                                    '<textarea rows="3" style="width: 100%; border-color: #dddddd; font-size: 13px; outline: none; border-radius: 4px; padding: 5px; resize: none" class="size-14 condominio" name="textarea-1" id="txt_dado_condominio" data-placeholder="true" placeholder="Condomínio..." onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)">' + observacao_evento + '</textarea>',
+                                    '<textarea rows="3" style="width: 100%; border-color: #dddddd; font-size: 13px; outline: none; border-radius: 4px; padding: 5px; resize: none" class="size-14 condominio condominio_obs" name="textarea-1" id="txt_dado_condominio" data-placeholder="true" placeholder="Condomínio..." onclick="RestricaoData_obs();" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)">' + observacao_evento + '</textarea>',
                                     '<fieldset data-role="controlgroup">',
                                     '<div id="form_email" style="background: #f5f5f5; position: relative; top: 3px; padding: 3px; border-radius: 4px; border: 1px solid #dddddd;">',
                                     '<input style="position: relative; top: 1px; padding-right: 100%;" type="checkbox" name="email_condominio" id="email_condominio">',
@@ -524,7 +524,7 @@
                                     '</tbody>',
                                     '<tbody>',
                                     '<label style="margin-top: 10px;" for="">Construtora:</label>',
-                                    '<textarea rows="3" style="width: 100%; border-color: #dddddd; font-size: 13px; outline: none; border-radius: 4px; padding: 5px; resize: none" class="size-14 construtora" name="textarea-1" id="txt_dado_construtora" data-placeholder="true" placeholder="Construtora..." onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)">' + observacao_evento_construtora + '</textarea>',
+                                    '<textarea rows="3" style="width: 100%; border-color: #dddddd; font-size: 13px; outline: none; border-radius: 4px; padding: 5px; resize: none" class="size-14 construtora construtora_obs" name="textarea-1" id="txt_dado_construtora" data-placeholder="true" placeholder="Construtora..." onclick="RestricaoData_obs_constr();" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)">' + observacao_evento_construtora + '</textarea>',
                                     '<fieldset data-role="controlgroup">',
                                     '<div style="background: #f5f5f5; position: relative; top: 3px; padding: 3px; border-radius: 4px; border: 1px solid #dddddd;">',
                                     '<input style="position: relative; top: 1px; padding-right: 100%;" type="checkbox" name="email_construtora" id="email_construtora">',
@@ -760,6 +760,12 @@
                         '<button onclick="atualizar_texto_empree(' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')" type="button" class="ui-btn block btn-radius btn-voltar">Voltar</button>'
                     ];
 
+                    $(".loading_page").hide();
+
+                    $(".btn-bars").show();
+                    $(".shadow_box_gallery").show();
+                    $(".shadow_box").show();
+
                     document.getElementById('capturar_foto').innerHTML = item_camera;
                     document.getElementById('capturar_video').innerHTML = item_video;
                     document.getElementById('capturar_audio').innerHTML = item_audio;
@@ -812,7 +818,7 @@
                 return
             }
 
-            var r = confirm("Para tirar uma foto com a câmera selecione OK.");
+            var r = confirm("Para tirar uma foto com a câmera selecione OK. Para acessar sua galeria de imagens clique em CANCELAR");
             if (r == true) {
                 source = pictureSource.CAMERA;
             } else {
@@ -1888,6 +1894,10 @@
     <!-- POPUP DA IMAGEM DA GALERIA DE IMAGENS SERVIDOR -->
     <div style="position: fixed; z-index: 5000;" id="popup_img"></div>
 
+    <div class="loading_page">
+        <img src="images/loading.gif" width="40" alt="loading" />
+    </div>
+
     <div id="parte_load_content"
         style="width: 100%; height: 100%; position: fixed; background: rgba(0,0,0,.5); z-index: 10;"></div>
 
@@ -1914,7 +1924,7 @@
     <!-- <span id="vistoria"></!-->
 
     <!-- MENU BURGER -->
-    <div class="btn-bars">
+    <div class="btn-bars" style="display: none;">
         <div style="top:4;" data-role="collapsible" data-collapsed="true" class="ui-btn-left menu" data-mini="true">
             <h4 class="btn-bars-bars">
                 <!-- <span class="fas fa-bars"></span> -->
@@ -1942,7 +1952,7 @@
         <!-- <div id="dados_val"></div> -->
 
         <!-- BLOCO GALERIA DE IMAGENS DO APARELHO -->
-        <li class="shadow_box_gallery" style="border-radius: 0; background: #e7d8fc">
+        <li class="shadow_box_gallery" style="border-radius: 0; background: #e7d8fc; display: none;">
             <table>
                 <div class="ui-grid ui-responsive">
                     <div class="ui-block-a ui-grid-full">
@@ -2009,7 +2019,7 @@
         <div id="dados_obs"></div>
 
         <!-- BLOCO DE CÓDIGO DA GALERIA DE IMAGENS SERVIDOR E BOTÕES SALVAR E VOLTAR -->
-        <li class="shadow_box" style="border-radius: 0; padding-left: 1em;">
+        <li class="shadow_box" style="border-radius: 0; padding-left: 1em; display: none;">
             <table>
                 <div style="text-align: center;" class="ui-grid-a">
                     <a href="#overlay" data-transition="slideup"
@@ -2106,7 +2116,7 @@
         </li>
 
         <!-- BOTÕES SALVAR E VOLTAR -->
-        <li class="shadow_box" style="border-radius: 0;">
+        <li class="shadow_box" style="border-radius: 0; display: none;">
             <table>
                 <fieldset class="ui-grid-a">
                     <div class="ui-block-a ui-responsive">
@@ -2324,7 +2334,7 @@
             reload_page_empree()
             return;
         }
-        
+
         // var db2 = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000);
         var quale;
 
@@ -2374,21 +2384,11 @@
             objectStoreRequest.onsuccess = function (event) {
                 var cursor = event.target.result;
                 if (cursor) {
-                    alert('ja tem registro');
-                    alert(qual_id_prog_manut);
-                    alert(dia_ev);
-                    alert(mes_ev);
-                    alert(ano_ev);
                     var data = cursor.value;
 
                     updateManutEventoTextoEmpree(db);
 
                 } else {
-                    alert('nao tem registro');
-                    alert(qual_id_prog_manut);
-                    alert(dia_ev);
-                    alert(mes_ev);
-                    alert(ano_ev);
                     var tx2 = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
                     var store2 = tx2.objectStore('mtab_prog_manut_evento');
 
@@ -2816,6 +2816,34 @@
     function RestricaoData() {
         // RESTRIÇÕES DE DATAS
         var textarea = document.querySelector('.textarea_obs');
+        if (datadiff(Date.now(), d_min) > 0) {
+            textarea.setAttribute("readonly", "readonly");
+            alert("Essa ação só pode ser realizada a partir do dia " + dateToEN(d_min) + "!")
+            return
+        } else if (datadiff(Date.now(), d_max) < 0) {
+            textarea.setAttribute("readonly", "readonly");
+            alert("Essa ação não pode ser realizada após o dia " + dateToEN(d_max) + "!")
+            return
+        }
+    }
+
+    function RestricaoData_obs() {
+        // RESTRIÇÕES DE DATAS
+        var textarea = document.querySelector('.condominio_obs');
+        if (datadiff(Date.now(), d_min) > 0) {
+            textarea.setAttribute("readonly", "readonly");
+            alert("Essa ação só pode ser realizada a partir do dia " + dateToEN(d_min) + "!")
+            return
+        } else if (datadiff(Date.now(), d_max) < 0) {
+            textarea.setAttribute("readonly", "readonly");
+            alert("Essa ação não pode ser realizada após o dia " + dateToEN(d_max) + "!")
+            return
+        }
+    }
+
+    function RestricaoData_obs_constr() {
+        // RESTRIÇÕES DE DATAS
+        var textarea = document.querySelector('.construtora_obs');
         if (datadiff(Date.now(), d_min) > 0) {
             textarea.setAttribute("readonly", "readonly");
             alert("Essa ação só pode ser realizada a partir do dia " + dateToEN(d_min) + "!")

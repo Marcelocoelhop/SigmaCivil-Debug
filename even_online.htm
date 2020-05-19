@@ -1894,7 +1894,8 @@
     <!-- POPUP DA IMAGEM DA GALERIA DE IMAGENS SERVIDOR -->
     <div style="position: fixed; z-index: 5000;" id="popup_img"></div>
 
-    <div class="loading_page" style="width: 100%; height: 100vh; display: flex; position: fixed; justify-content: center; align-items: center; z-index: 14;">
+    <div class="loading_page"
+        style="width: 100%; height: 100vh; display: flex; position: fixed; justify-content: center; align-items: center; z-index: 14;">
         <img src="images/loading.gif" width="40" alt="loading" />
     </div>
 
@@ -2559,10 +2560,7 @@
                 ev_email = 0
             }
 
-            if (data.value == 0) {
-                alert('Obrigatório o preenchimento da data da realização da manutenção!')
-                FocusInput(data)
-            } else if (datadiff(Date.now(), d_min) > 0) {
+            if (datadiff(Date.now(), d_min) > 0) {
                 alert("Essa manutenção só pode ser informada a partir do dia " + dateToEN(d_min) + "!")
             } else if (datadiff(Date.now(), d_max) < 0) {
                 alert("Essa manutenção não pode ser informada após o dia " + dateToEN(d_max) + "!")
@@ -2572,6 +2570,9 @@
                 alert("Essa manutenção não pode ser realizada após o dia " + dateToEN(d_max) + "!")
             } else if (datadiff(dateToEN2(document.getElementById('in_data_realizacao').value), data_hoje_formatada) < 0) {
                 alert("Essa manutenção não pode ser realizada após o dia de hoje!")
+            } else if (data.value == 0) {
+                alert('Obrigatório o preenchimento da data da realização da manutenção!')
+                FocusInput(data)
             } else if (nivel_manut == 2 && qt_docs == 0) {
                 alert('Esta manutenção precisa de pelo menos 1 documento comprovatório anexado!')
             } else {

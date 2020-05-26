@@ -2520,12 +2520,25 @@
     }
 
     function datadiff(d1, d2) {
+        alert('d2: ' + d2);
+        alert('new Date(d2): ' + new Date(d2));
         var t2 = new Date(d2).getTime();
         alert('t2: ' + t2);
+
+        var data_form= d2.replace('-',',');
+        data_form = data_form + ",00,00,00"
+        alert('data_form1: ' + data_form);
+        data_form= new Date(data_form).getTime();
+        alert('data_form2: ' + data_form);
+
+        
+
+        alert('d1: ' + d1);
         var t1 = new Date(d1).getTime();
         alert('t1: ' + t1);
         alert('parseInt: ' + parseInt((t2 - t1) / (24 * 3600 * 1000)));
-        alert('solucao: ' + parseInt((t2 - d1) / (24 * 3600 * 1000)));
+
+        alert('solucao: ' + parseInt((data_form - d1) / (24 * 3600 * 1000)));
 
         return parseInt((t2 - t1) / (24 * 3600 * 1000));
     }

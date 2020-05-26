@@ -491,7 +491,7 @@
                                     '<tbody>',
                                     '<label style="font-weight: 600;" class="label-center" for="textarea-1">Observações</label>',
                                     '<label style="margin-top: 15px;" for="">Condomínio:</label>',
-                                    '<textarea rows="3" style="width: 100%; border-color: #dddddd; font-size: 13px; outline: none; border-radius: 4px; padding: 5px; resize: none" class="size-14 condominio condominio_obs" name="textarea-1" id="txt_dado_condominio" data-placeholder="true" placeholder="Condomínio..." onclick="RestricaoData_obs();" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)">' + observacao_evento + '</textarea>',
+                                    '<textarea rows="3" style="width: 100%; border-color: #dddddd; font-size: 13px; outline: none; border-radius: 4px; padding: 5px; resize: none" class="size-14 condominio condominio_obs" name="textarea-1" id="txt_dado_condominio" data-placeholder="true" placeholder="Condomínio..." autocomplete="off" onclick="RestricaoData_obs();" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)">' + observacao_evento + '</textarea>',
                                     '<fieldset data-role="controlgroup">',
                                     '<div id="form_email" style="background: #f5f5f5; position: relative; top: 3px; padding: 3px; border-radius: 4px; border: 1px solid #dddddd;">',
                                     '<input style="position: relative; top: 1px; padding-right: 100%;" type="checkbox" name="email_condominio" id="email_condominio">',
@@ -501,7 +501,7 @@
                                     '</tbody>',
                                     '<tbody>',
                                     '<label style="margin-top: 10px;" for="">Construtora:</label>',
-                                    '<textarea rows="3" style="background: #e7e7e7; width: 100%; border-color: #dddddd; font-size: 13px; outline: none; border-radius: 4px; padding: 5px; resize: none" class="size-14 construtora" name="textarea-1" id="txt_dado_construtora" data-placeholder="true" placeholder="Construtora..." onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)" readonly="readonly">' + observacao_evento_construtora + '</textarea>',
+                                    '<textarea rows="3" style="background: #e7e7e7; width: 100%; border-color: #dddddd; font-size: 13px; outline: none; border-radius: 4px; padding: 5px; resize: none" class="size-14 construtora" name="textarea-1" id="txt_dado_construtora" data-placeholder="true" placeholder="Construtora..." autocomplete="off" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)" readonly="readonly">' + observacao_evento_construtora + '</textarea>',
                                     '</tbody>',
                                     '</table>',
                                     '</div>',
@@ -519,11 +519,11 @@
                                     '<tbody>',
                                     '<label style="font-weight: 600;" class="label-center" for="textarea-1">Observações</label>',
                                     '<label style="margin-top: 15px;" for="">Condomínio:</label>',
-                                    '<textarea rows="3" style="background: #e7e7e7; width: 100%; border-color: #dddddd; font-size: 13px; outline: none; border-radius: 4px; padding: 5px; resize: none" class="size-14 condominio" name="textarea-1" id="txt_dado_condominio" data-placeholder="true" placeholder="Condomínio..." onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)" readonly="readonly">' + observacao_evento + '</textarea>',
+                                    '<textarea rows="3" style="background: #e7e7e7; width: 100%; border-color: #dddddd; font-size: 13px; outline: none; border-radius: 4px; padding: 5px; resize: none" class="size-14 condominio" name="textarea-1" id="txt_dado_condominio" data-placeholder="true" placeholder="Condomínio..." autocomplete="off" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)" readonly="readonly">' + observacao_evento + '</textarea>',
                                     '</tbody>',
                                     '<tbody>',
                                     '<label style="margin-top: 10px;" for="">Construtora:</label>',
-                                    '<textarea rows="3" style="width: 100%; border-color: #dddddd; font-size: 13px; outline: none; border-radius: 4px; padding: 5px; resize: none" class="size-14 construtora construtora_obs" name="textarea-1" id="txt_dado_construtora" data-placeholder="true" placeholder="Construtora..." onclick="RestricaoData_obs_constr();" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)">' + observacao_evento_construtora + '</textarea>',
+                                    '<textarea rows="3" style="width: 100%; border-color: #dddddd; font-size: 13px; outline: none; border-radius: 4px; padding: 5px; resize: none" class="size-14 construtora construtora_obs" name="textarea-1" id="txt_dado_construtora" data-placeholder="true" placeholder="Construtora..." autocomplete="off" onclick="RestricaoData_obs_constr();" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)">' + observacao_evento_construtora + '</textarea>',
                                     '<fieldset data-role="controlgroup">',
                                     '<div style="background: #f5f5f5; position: relative; top: 3px; padding: 3px; border-radius: 4px; border: 1px solid #dddddd;">',
                                     '<input style="position: relative; top: 1px; padding-right: 100%;" type="checkbox" name="email_construtora" id="email_construtora">',
@@ -2540,7 +2540,7 @@
             var texto = ""
             var continuar = null
 
-            var d = new Date()
+            var d = new Date();
 
             var aux_mes_novo = d.getMonth() + 1;
             aux_mes_novo = '0' + aux_mes_novo
@@ -2560,6 +2560,9 @@
             }
 
             if (datadiff(Date.now(), d_min) > 0) {
+                alert("data_now: " + Date.now());
+                alert("d_min: " + d_min);
+                alert(datadiff(Date.now(), d_min));
                 alert("Essa manutenção só pode ser informada a partir do dia " + dateToEN(d_min) + "!")
             } else if (datadiff(Date.now(), d_max) < 0) {
                 alert("Essa manutenção não pode ser informada após o dia " + dateToEN(d_max) + "!")

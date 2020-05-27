@@ -2531,6 +2531,24 @@
         var teste456 = new Date(data_form).getTime();
         alert('teste456: ' + teste456)
 
+        var teste_isolado = new Date(2020,01,02,10,10,10).getTime();
+        alert('teste_isolado: ' + teste_isolado)
+
+        var teste_isolado2 = new Date("2020-05-01T00:00:00").getTime();
+        alert('teste_isolado2: ' + teste_isolado2)
+
+        var teste_isolado3 = new Date("2020-05-01 00:00:00").getTime();
+        alert('teste_isolado3: ' + teste_isolado3)
+
+        var teste_isolado3b = new Date("2020/05/01 00:00:00").getTime();
+        alert('teste_isolado3b: ' + teste_isolado3b)
+
+        var teste_isolado4 = new Date("2020/05/01T00:00:00").getTime();
+        alert('teste_isolado4: ' + teste_isolado4)
+
+        var teste_isolado5 = new Date("01/05/2020 00:00:00").getTime();
+        alert('teste_isolado5: ' + teste_isolado5)
+
         // data_form = data_form + "," + parseFloat(00,00,00)
         // alert('data_form1: ' + data_form);
         
@@ -2542,12 +2560,12 @@
         
 
         alert('d1: ' + d1);
-        var t1 = new Date(d1).getTime();
-        alert('t1: ' + t1);
-        alert('parseInt: ' + parseInt((t2 - t1) / (24 * 3600 * 1000)));
+        //var t1 = new Date(d1).getTime();
+        //alert('t1: ' + t1);
+        //alert('parseInt: ' + parseInt((t2 - t1) / (24 * 3600 * 1000)));
 
         // alert('solucao: ' + parseInt((teste456 - d1) / (24 * 3600 * 1000)));
-        alert('solucao: ' + parseInt((teste456 - t1) / (24 * 3600 * 1000)));
+        alert('solucao: ' + parseInt((teste456 - d1) / (24 * 3600 * 1000)));
 
         return parseInt((teste456 - t1) / (24 * 3600 * 1000));
     }

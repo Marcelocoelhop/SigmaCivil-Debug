@@ -2522,44 +2522,44 @@
     function datadiff(d1, d2) {
         alert('d2: ' + d2);
         // alert('new Date(d2): ' + new Date(d2));
-        var t2 = new Date(d2 + " 00:00:00").getTime();
-        alert('t2: ' + t2);
+        // var t2 = new Date(d2 + " 00:00:00").getTime();
+        // alert('t2: ' + t2);
 
         //var data_form= d2.replace(/[-]/g,',');
         
-        var data_form=d2 + "T00:00:00"
-        var teste_primeiro = new Date(data_form).getTime();
-        alert('teste_primeiro: ' + teste_primeiro);  // nan para android
+        // var data_form=d2 + "T00:00:00"
+        // var teste_primeiro = new Date(data_form).getTime();
+        // alert('teste_primeiro: ' + teste_primeiro);  // nan para android
 
-        var data_form3=d2 + " 00:00:00"
-        var teste_primeiro3 = new Date(data_form3).getTime();
-        alert('teste_primeiro3: ' + teste_primeiro3);  // ok para android
+        // var data_form3=d2 + " 00:00:00"
+        // var teste_primeiro3 = new Date(data_form3).getTime();
+        // alert('teste_primeiro3: ' + teste_primeiro3);  // ok para android
 
-        var data_form2=d2.replace(/[-]/g,'/') + " 00:00:00"
-        var teste_primeiro2 = new Date(data_form2).getTime();
-        alert('teste_primeiro2: ' + teste_primeiro2); // ok para android
+        var data_form=d2.replace(/[-]/g,'/') + " 00:00:00"
+        var data_form2 = new Date(data_form).getTime();
+        alert('data_form2: ' + data_form2); // ok para android       ok para IOS
 
 
-        var teste456 = new Date(data_form).getTime();
-        alert('teste456: ' + teste456)  // nan para android
+        // var teste456 = new Date(data_form).getTime();
+        // alert('teste456: ' + teste456)  // nan para android
 
-        var teste_isolado = new Date(2020,01,02,10,10,10).getTime();
-        alert('teste_isolado: ' + teste_isolado) // funcionou IOS       ok para android
+        // var teste_isolado = new Date(2020,01,02,10,10,10).getTime();
+        // alert('teste_isolado: ' + teste_isolado) // funcionou IOS       ok para android
 
-        var teste_isolado2 = new Date("2020-05-01T00:00:00").getTime();
-        alert('teste_isolado2: ' + teste_isolado2) // funcionou IOS      ok para android
+        // var teste_isolado2 = new Date("2020-05-01T00:00:00").getTime();
+        // alert('teste_isolado2: ' + teste_isolado2) // funcionou IOS      ok para android
 
-        var teste_isolado3 = new Date("2020-05-01 00:00:00").getTime();
-        alert('teste_isolado3: ' + teste_isolado3) // NaN IOS        ok para android
+        // var teste_isolado3 = new Date("2020-05-01 00:00:00").getTime();
+        // alert('teste_isolado3: ' + teste_isolado3) // NaN IOS        ok para android
 
-        var teste_isolado3b = new Date("2020/05/01 00:00:00").getTime();
-        alert('teste_isolado3b: ' + teste_isolado3b) // funcionou IOS      ok para android
+        // var teste_isolado3b = new Date("2020/05/01 00:00:00").getTime();
+        // alert('teste_isolado3b: ' + teste_isolado3b) // funcionou IOS      ok para android
 
-        var teste_isolado4 = new Date("2020/05/01T00:00:00").getTime();
-        alert('teste_isolado4: ' + teste_isolado4) // NaN IOS       NAN para android
+        // var teste_isolado4 = new Date("2020/05/01T00:00:00").getTime();
+        // alert('teste_isolado4: ' + teste_isolado4) // NaN IOS       NAN para android
 
-        var teste_isolado5 = new Date("01/05/2020 00:00:00").getTime();
-        alert('teste_isolado5: ' + teste_isolado5) // funcionou IOS      ok para android
+        // var teste_isolado5 = new Date("01/05/2020 00:00:00").getTime();
+        // alert('teste_isolado5: ' + teste_isolado5) // funcionou IOS      ok para android
 
         // data_form = data_form + "," + parseFloat(00,00,00)
         // alert('data_form1: ' + data_form);
@@ -2577,9 +2577,9 @@
         //alert('parseInt: ' + parseInt((t2 - t1) / (24 * 3600 * 1000)));
 
         // alert('solucao: ' + parseInt((teste456 - d1) / (24 * 3600 * 1000)));
-        alert('solucao: ' + parseInt((teste456 - d1) / (24 * 3600 * 1000)));
+        alert('solucao: ' + parseInt((data_form2 - d1) / (24 * 3600 * 1000)));
 
-        return parseInt((teste456 - d1) / (24 * 3600 * 1000));
+        return parseInt((data_form2 - d1) / (24 * 3600 * 1000));
     }
 
     function datadiff2(d1, d2) {

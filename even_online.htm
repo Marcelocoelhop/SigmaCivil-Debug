@@ -2582,12 +2582,7 @@
         return parseInt((data_form2 - d1) / (24 * 3600 * 1000));
     }
 
-    function datadiff2(d1, d2) {
-        var t2 = Math.abs(new Date(d2).getTime());
-        var t1 = Math.abs(new Date(d1).getTime());
-        return Math.ceil(parseInt((t2 - t1) / (1000 * 3600 * 24)));
-    }
-
+ 
     function enviar_dados() {
         var crypt_segur = (parseInt(id_empree) * 3) + 5 + (parseInt(id_cliente)) * 2 + 7
 
@@ -2617,9 +2612,6 @@
             }
 
             if (datadiff(Date.now(), d_min) > 0) {
-                alert("data_now: " + Date.now());
-                alert("d_min: " + d_min);
-                alert(datadiff(Date.now(), d_min));
                 alert("Essa manutenção só pode ser informada a partir do dia " + dateToEN(d_min) + "!")
             } else if (datadiff(Date.now(), d_max) < 0) {
                 alert("Essa manutenção não pode ser informada após o dia " + dateToEN(d_max) + "!")

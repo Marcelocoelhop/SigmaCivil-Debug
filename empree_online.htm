@@ -267,15 +267,15 @@
 
             string_auxiliar += "INICIO:" + Date(Date.now()) + "<br>"
 
-            function datadiff(d1, d2,par) {
-                alert('par:' + par)
-                alert('d2: ' + d2);
+            function datadiff(d1, d2/*,par*/) {
+                //alert('par:' + par)
+                //alert('d2: ' + d2);
 
                 var data_form = d2.replace(/[-]/g, '/') + " 00:00:00"
                 var data_form2 = new Date(data_form).getTime();
-                alert('data_form2: ' + data_form2); // ok para android       ok para IOS
+                //alert('data_form2: ' + data_form2); // ok para android       ok para IOS
 
-                alert('d1: ' + d1);
+                //alert('d1: ' + d1);
                 
                 alert('solucao: ' + parseInt((data_form2 - d1) / (24 * 3600 * 1000)));
 
@@ -361,7 +361,7 @@
             var data2_aux = q_mes + "/" + q_dia + "/" + q_ano
 
             var data_final_p_busca = new Date(data2_aux)
-            alert('data_final_p_busca: ' + data_final_p_busca)
+//alert('data_final_p_busca: ' + data_final_p_busca)
             /////////////////////////////////////////////
 
             var ini_lista = "<ul id='q_empree' class='list-content' data-mini='true' data-role='listview' data-filter='true' data-filter-placeholder='Buscar...' data-inset='true'>"
@@ -384,7 +384,7 @@
                         var nome_empree = getLogin.nome_empree;
                         var q_e_construtora = getLogin.e_construtora;
                         var data_implantacao_sc = new Date(getLogin.data_implantacao_sc)
-alert('data_implantacao_sc: ' + data_implantacao_sc)
+//alert('data_implantacao_sc: ' + data_implantacao_sc)
 
                         var resultado_consulta = getLogin.status_sync;
                         var parte_resultado = resultado_consulta.split('_')
@@ -606,7 +606,7 @@ alert('data_implantacao_sc: ' + data_implantacao_sc)
                                                     }
 
                                                     aux_new_event = new Date(cada_parte_vet_manut[9])
-alert('aux_new_event: ' + aux_new_event)
+//alert('aux_new_event: ' + aux_new_event)
 
                                                     data_minima_alteracao = new Date(cada_parte_vet_manut[9])
                                                     data_minima_alteracao.setDate(data_minima_alteracao.getDate() - dias_gap);
@@ -635,7 +635,7 @@ alert('aux_new_event: ' + aux_new_event)
 
                                                         data_maxima_alteracao = (aux_mes + '/' + '1' + '/' + aux_ano);
                                                         data_maxima_alteracao = new Date(data_maxima_alteracao)
-alert('data_maxima_alteracao: ' + data_maxima_alteracao)
+//alert('data_maxima_alteracao: ' + data_maxima_alteracao)
 
                                                         data_maxima_alteracao.setDate(data_maxima_alteracao.getDate() - 1);
                                                         var mes_auxiliar = data_maxima_alteracao.getMonth() + 1
@@ -648,17 +648,17 @@ alert('data_maxima_alteracao: ' + data_maxima_alteracao)
                                                     string_auxiliar += " <br><br><br>------- INI data_maxima_alteracao------------------ " + fator_freq + "--" + dias_gap + "--" + data_maxima_alteracao + "---------FIM data_maxima_alteracao------------<br>"
 
                                                     data_minima_alteracao = dateToEN(data_minima_alteracao)
-                                                    aux_dias1 = datadiff(Date.now(), data_minima_alteracao,1)
+                                                    aux_dias1 = datadiff(Date.now(), data_minima_alteracao/*,1*/)
                                                     
                                                     var data_format_1 = new Date(cada_parte_vet_manut[9]);
                                                     var mes_format_1 = data_format_1.getMonth()+1
                                                     var format_1=dateToEN(data_format_1.getDate() + '/' + mes_format_1 + '/' + data_format_1.getFullYear())
-                                                    aux_dias_ev = datadiff(Date.now(), format_1,2)
+                                                    aux_dias_ev = datadiff(Date.now(), format_1/*,2*/)
 
                                                     //aux_dias_ev = datadiff(Date.now(), cada_parte_vet_manut[9],2)
                                                     
                                                     data_maxima_alteracao = dateToEN(data_maxima_alteracao)
-                                                    aux_dias2 = datadiff(Date.now(), data_maxima_alteracao,3)
+                                                    aux_dias2 = datadiff(Date.now(), data_maxima_alteracao/*,3*/)
 
                                                     if (aux_dias1 > 0) {
                                                         imagem1 = '<img src="images/hand-paper.svg" width="24" class="is-opacity">'
@@ -686,11 +686,11 @@ alert('data_maxima_alteracao: ' + data_maxima_alteracao)
                                                     var format_faixa_dias = data_minima_alteracao.replace(/[-]/g, '/') + " 00:00:00"
                                                     var format_faixa_dias_B = new Date(format_faixa_dias).getTime();
 
-                                                    alert("format_faixa_dias: " + format_faixa_dias)
-                                                    faixa_dias = datadiff(format_faixa_dias_B, data_maxima_alteracao,4) + 1
+//alert("format_faixa_dias: " + format_faixa_dias)
+                                                    faixa_dias = datadiff(format_faixa_dias_B, data_maxima_alteracao/*,4*/) + 1
                                                     
                                                     //aux_dist = datadiff(data_minima_alteracao, Date.now(),5)
-                                                    aux_dist = (-1) * datadiff(Date.now(),data_minima_alteracao,5)
+                                                    aux_dist = (-1) * datadiff(Date.now(),data_minima_alteracao/*,5*/)
 
                                                     if (aux_dias1 > 0) {
                                                         barra = '<img src="images/Barra_1.png" width="120" height="23">'
@@ -820,7 +820,7 @@ alert('data_maxima_alteracao: ' + data_maxima_alteracao)
                                 ajax2.send();
 
                                 // Define a ordem que irá aparecer cada manutenção
-                                if (datadiff(Date.now(), data_maxima_alteracao, 6) < 0 || datadiff(Date.now(), data_minima_alteracao, 7) > 0) {
+                                if (datadiff(Date.now(), data_maxima_alteracao/*, 6*/) < 0 || datadiff(Date.now(), data_minima_alteracao/*, 7*/) > 0) {
                                     document.getElementById('box-content').innerHTML = ini_lista + dados_1 + dados_0 + fim_lista //+ string_auxiliar
                                 } else {
                                     document.getElementById('box-content').innerHTML = ini_lista + dados_0 + dados_1 + fim_lista //+ string_auxiliar

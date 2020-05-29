@@ -2520,7 +2520,7 @@
     }
 
     function datadiff(d1, d2) {
-        alert('d2: ' + d2);
+        // alert('d2: ' + d2);
         // alert('new Date(d2): ' + new Date(d2));
         // var t2 = new Date(d2 + " 00:00:00").getTime();
         // alert('t2: ' + t2);
@@ -2537,7 +2537,7 @@
 
         var data_form=d2.replace(/[-]/g,'/') + " 00:00:00"
         var data_form2 = new Date(data_form).getTime();
-        alert('data_form2: ' + data_form2); // ok para android       ok para IOS
+        // alert('data_form2: ' + data_form2); // ok para android       ok para IOS
 
 
         // var teste456 = new Date(data_form).getTime();
@@ -2571,13 +2571,13 @@
 
         
 
-        alert('d1: ' + d1);
+        // alert('d1: ' + d1);
         //var t1 = new Date(d1).getTime();
         //alert('t1: ' + t1);
         //alert('parseInt: ' + parseInt((t2 - t1) / (24 * 3600 * 1000)));
 
         // alert('solucao: ' + parseInt((teste456 - d1) / (24 * 3600 * 1000)));
-        alert('solucao: ' + parseInt((data_form2 - d1) / (24 * 3600 * 1000)));
+        // alert('solucao: ' + parseInt((data_form2 - d1) / (24 * 3600 * 1000)));
 
         return parseInt((data_form2 - d1) / (24 * 3600 * 1000));
     }

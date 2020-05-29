@@ -384,7 +384,7 @@
 
 			var data1_aux = q_mes + "/01/" + q_ano
 			var data_ini_p_busca = new Date(data1_aux)
-alert('data_ini_p_busca: ' + data_ini_p_busca)
+// alert('data_ini_p_busca: ' + data_ini_p_busca)
 
 			var q_dia
 
@@ -401,7 +401,7 @@ alert('data_ini_p_busca: ' + data_ini_p_busca)
 			var data2_aux = q_mes + "/" + q_dia + "/" + q_ano
 
 			var data_final_p_busca = new Date(data2_aux)
-alert('data_final_p_busca: ' + data_final_p_busca)
+// alert('data_final_p_busca: ' + data_final_p_busca)
 
 			var db;
 			var request = window.indexedDB.open("db_sigmacivil", "1");
@@ -436,7 +436,7 @@ alert('data_final_p_busca: ' + data_final_p_busca)
 						var data = cursor.value;
 
 						data_implantacao_sc = new Date(cursor.value.data_implantacao_sc);
-alert('data_implantacao_sc: ' + data_implantacao_sc)
+// alert('data_implantacao_sc: ' + data_implantacao_sc)
 						nome_empree = cursor.value.nome_empree;
 						document.getElementById('nome_emp').innerHTML = nome_empree;
 					}
@@ -495,14 +495,14 @@ alert('data_implantacao_sc: ' + data_implantacao_sc)
 
 						str = data['formato_periodicidade']
 						var data_inicial_garantia = new Date(data['data_inicial_garantia'])
-alert('data_inicial_garantia: ' + data_inicial_garantia)
+// alert('data_inicial_garantia: ' + data_inicial_garantia)
 						str2 = str.split("_")
 
 						for (var j = 1; j <= qtde_eventos; j++) {
 							compl2 = j * str2[0] * cursor.value.qtde_agrupamentos_eventos;
 
 							var new_data_evento = new Date(data_inicial_garantia);
-alert('new_data_evento: ' + new_data_evento)
+// alert('new_data_evento: ' + new_data_evento)
 
 							if (str2[1] == "d") {
 								new_data_evento.setDate(new_data_evento.getDate() + compl2);
@@ -565,7 +565,7 @@ alert('new_data_evento: ' + new_data_evento)
 								}
 
 								new_data_evento = new Date(aux_ano, aux_mes, aux_dia)
-alert('new_data_evento2: ' + new_data_evento)
+// alert('new_data_evento2: ' + new_data_evento)
 								/////para soma em MESES
 
 							}

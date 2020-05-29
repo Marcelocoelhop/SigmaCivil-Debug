@@ -809,7 +809,7 @@
             qual_id_prog_manut = qual;
 
             // RESTRIÇÕES DE DATAS
-            if (datadiff(Date.now(), d_min) > 0) {
+            if (datadiff2(Date.now(), d_min) > 0) {
                 alert("Essa ação só pode ser realizada a partir do dia " + dateToEN(d_min) + "!")
                 return
             } else if (datadiff(Date.now(), d_max) < 0) {
@@ -1181,7 +1181,7 @@
             qual_id_prog_manut = qual;
 
             // RESTRIÇÕES DE DATAS
-            if (datadiff(Date.now(), d_min) > 0) {
+            if (datadiff2(Date.now(), d_min) > 0) {
                 alert("Essa ação só pode ser realizada a partir do dia " + dateToEN(d_min) + "!")
                 return
             } else if (datadiff(Date.now(), d_max) < 0) {
@@ -1458,7 +1458,7 @@
             qual_id_prog_manut = qual;
 
             // RESTRIÇÕES DE DATAS
-            if (datadiff(Date.now(), d_min) > 0) {
+            if (datadiff2(Date.now(), d_min) > 0) {
                 alert("Essa ação só pode ser realizada a partir do dia " + dateToEN(d_min) + "!")
                 return
             } else if (datadiff(Date.now(), d_max) < 0) {
@@ -2222,7 +2222,7 @@
     // ATUALIZAR O TEXTO
     function atualizar_texto(qual) {
         // RESTRIÇÕES DE DATAS
-        if (datadiff(Date.now(), d_min) > 0) {
+        if (datadiff2(Date.now(), d_min) > 0) {
             alert("Essa ação só pode ser realizada a partir do dia " + dateToEN(d_min) + "!")
             return
         } else if (datadiff(Date.now(), d_max) < 0) {
@@ -2327,7 +2327,7 @@
 
     function atualizar_texto_empree(qual) {
         // RESTRIÇÕES DE DATAS
-        if (datadiff(Date.now(), d_min) > 0) {
+        if (datadiff2(Date.now(), d_min) > 0) {
             reload_page_empree();
             return;
         } else if (datadiff(Date.now(), d_max) < 0) {
@@ -2582,6 +2582,14 @@
         return parseInt((data_form2 - d1) / (24 * 3600 * 1000));
     }
 
+    function datadiff2(d1, d2) {
+
+        var data_form = d2.replace(/[-]/g, '/') + " 23:59:59"
+        var data_form2 = new Date(data_form).getTime();
+        alert('data_form2: ' + data_form2); // ok para android       ok para IOS
+
+        return parseInt((data_form2 - d1) / (24 * 3600 * 1000));
+    }
 
     function enviar_dados() {
         var crypt_segur = (parseInt(id_empree) * 3) + 5 + (parseInt(id_cliente)) * 2 + 7
@@ -2611,10 +2619,13 @@
                 ev_email = 0
             }
 
+
+            //alert('datadiff: ' + datadiff(Date.now(), d_min))
+
             if (data.value == 0) {
                 alert('Obrigatório o preenchimento da data da realização da manutenção!')
                 FocusInput(data)
-            } else if (datadiff(Date.now(), d_min) > 0) {
+            } else if (datadiff2(Date.now(), d_min) > 0) {
                 alert("Essa manutenção só pode ser informada a partir do dia " + dateToEN(d_min) + "!")
             } else if (datadiff(Date.now(), d_max) < 0) {
                 alert("Essa manutenção não pode ser informada após o dia " + dateToEN(d_max) + "!")
@@ -2663,7 +2674,7 @@
                     ajax3.send();
                 }
             }
-            
+
         } else if (e_construtora == 1) {
             var $email_construtora = document.getElementById('email_construtora')
             if ($email_construtora.checked == true) {
@@ -2672,7 +2683,7 @@
                 ev_email = 0
             }
 
-            if (datadiff(Date.now(), d_min) > 0) {
+            if (datadiff2(Date.now(), d_min) > 0) {
                 alert("Essa manutenção só pode ser informada a partir do dia " + dateToEN(d_min) + '!')
             } else if (datadiff(Date.now(), d_max) <= 0) {
                 alert("Essa manutenção não pode ser informada após o dia " + dateToEN(d_max) + '!')
@@ -2714,7 +2725,7 @@
 
             var res = confirm('Tem certeza que deseja excluir este arquivo?');
             if (res == true) {
-                if (datadiff(Date.now(), d_min) > 0 || datadiff(Date.now(), d_max) < 0) {
+                if (datadiff2(Date.now(), d_min) > 0 || datadiff(Date.now(), d_max) < 0) {
                     alert("A exclusão deste arquivo só pode ser realizada entre o período " + dateToEN(d_min) + ' a ' + dateToEN(d_max) + '!')
                 } else if (nivel_manut == 2 && qt_docs == 1) {
                     alert('Não é possível a exclusão, pois esta manutenção precisa de pelo menos 1 documento comprovatório anexado!')
@@ -2756,7 +2767,7 @@
         } else if (e_construtora == 1) {
             var res = confirm('Tem certeza que deseja excluir este arquivo?');
             if (res == true) {
-                if (datadiff(Date.now(), d_min) > 0 || datadiff(Date.now(), d_max) < 0) {
+                if (datadiff2(Date.now(), d_min) > 0 || datadiff(Date.now(), d_max) < 0) {
                     alert("A exclusão deste arquivo só pode ser realizada no período de " + dateToEN(d_min) + ' a ' + dateToEN(d_max) + '!')
                 } else {
 
@@ -2869,7 +2880,7 @@
     function RestricaoData() {
         // RESTRIÇÕES DE DATAS
         var textarea = document.querySelector('.textarea_obs');
-        if (datadiff(Date.now(), d_min) > 0) {
+        if (datadiff2(Date.now(), d_min) > 0) {
             textarea.setAttribute("readonly", "readonly");
             alert("Essa ação só pode ser realizada a partir do dia " + dateToEN(d_min) + "!")
             return
@@ -2883,7 +2894,7 @@
     function RestricaoData_obs() {
         // RESTRIÇÕES DE DATAS
         var textarea = document.querySelector('.condominio_obs');
-        if (datadiff(Date.now(), d_min) > 0) {
+        if (datadiff2(Date.now(), d_min) > 0) {
             textarea.setAttribute("readonly", "readonly");
             alert("Essa ação só pode ser realizada a partir do dia " + dateToEN(d_min) + "!")
             return
@@ -2897,7 +2908,7 @@
     function RestricaoData_obs_constr() {
         // RESTRIÇÕES DE DATAS
         var textarea = document.querySelector('.construtora_obs');
-        if (datadiff(Date.now(), d_min) > 0) {
+        if (datadiff2(Date.now(), d_min) > 0) {
             textarea.setAttribute("readonly", "readonly");
             alert("Essa ação só pode ser realizada a partir do dia " + dateToEN(d_min) + "!")
             return

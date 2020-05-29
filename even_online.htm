@@ -2526,7 +2526,7 @@
         // alert('t2: ' + t2);
 
         //var data_form= d2.replace(/[-]/g,',');
-        
+
         // var data_form=d2 + "T00:00:00"
         // var teste_primeiro = new Date(data_form).getTime();
         // alert('teste_primeiro: ' + teste_primeiro);  // nan para android
@@ -2535,7 +2535,7 @@
         // var teste_primeiro3 = new Date(data_form3).getTime();
         // alert('teste_primeiro3: ' + teste_primeiro3);  // ok para android
 
-        var data_form=d2.replace(/[-]/g,'/') + " 00:00:00"
+        var data_form = d2.replace(/[-]/g, '/') + " 00:00:00"
         var data_form2 = new Date(data_form).getTime();
         // alert('data_form2: ' + data_form2); // ok para android       ok para IOS
 
@@ -2563,13 +2563,13 @@
 
         // data_form = data_form + "," + parseFloat(00,00,00)
         // alert('data_form1: ' + data_form);
-        
+
         // var teste123= new Date(data_form)
 
         // var data_form2= new Date(teste123).getTime();
         // alert('data_form2: ' + data_form2);
 
-        
+
 
         // alert('d1: ' + d1);
         //var t1 = new Date(d1).getTime();
@@ -2582,7 +2582,7 @@
         return parseInt((data_form2 - d1) / (24 * 3600 * 1000));
     }
 
- 
+
     function enviar_dados() {
         var crypt_segur = (parseInt(id_empree) * 3) + 5 + (parseInt(id_cliente)) * 2 + 7
 
@@ -2611,7 +2611,10 @@
                 ev_email = 0
             }
 
-            if (datadiff(Date.now(), d_min) > 0) {
+            if (data.value == 0) {
+                alert('Obrigatório o preenchimento da data da realização da manutenção!')
+                FocusInput(data)
+            } else if (datadiff(Date.now(), d_min) > 0) {
                 alert("Essa manutenção só pode ser informada a partir do dia " + dateToEN(d_min) + "!")
             } else if (datadiff(Date.now(), d_max) < 0) {
                 alert("Essa manutenção não pode ser informada após o dia " + dateToEN(d_max) + "!")
@@ -2621,9 +2624,6 @@
                 alert("Essa manutenção não pode ser realizada após o dia " + dateToEN(d_max) + "!")
             } else if (datadiff(dateToEN2(document.getElementById('in_data_realizacao').value), data_hoje_formatada) < 0) {
                 alert("Essa manutenção não pode ser realizada após o dia de hoje!")
-            } else if (data.value == 0) {
-                alert('Obrigatório o preenchimento da data da realização da manutenção!')
-                FocusInput(data)
             } else if (nivel_manut == 2 && qt_docs == 0) {
                 alert('Esta manutenção precisa de pelo menos 1 documento comprovatório anexado!')
             } else {
@@ -2663,6 +2663,7 @@
                     ajax3.send();
                 }
             }
+            
         } else if (e_construtora == 1) {
             var $email_construtora = document.getElementById('email_construtora')
             if ($email_construtora.checked == true) {

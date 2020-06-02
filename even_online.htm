@@ -2503,7 +2503,7 @@
             if (len > 5) {
                 var x = len - 5
                     , er = new RegExp('(\\d{' + x + '})(\\d)');
-                v = v.replace(er, '$1.$2');
+                v = v.replace(er, '$1$2');
             }
         }
         return v;

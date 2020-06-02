@@ -195,14 +195,17 @@
 						var data = cursor.value;
 
 						nome_sistema = data.nome_sistema;
+alert('nome_sistema1: ' + nome_sistema)
 						nome_atividade = data.nome_atividade;
 					}
-
+alert('nome_sistema2: ' + nome_sistema)
 					consultaProgManutEvento(db);
 				}
 			}
 
 			function consultaProgManutEvento(db) {
+alert('nome_sistema3: ' + nome_sistema)
+
 				var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
 				var store = tx.objectStore('mtab_prog_manut_evento');
 				var index = store.index('comparar');

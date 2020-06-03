@@ -578,13 +578,13 @@
 
 								if (new_data_evento >= data_ini_p_busca && new_data_evento <= data_final_p_busca) {
 
-									var texto_aux
+									//var texto_aux
 									if (new_data_evento > data_de_hoje) {
-										texto_aux = "faltam " + parseInt((new_data_evento.getTime() - data_de_hoje.getTime()) / (24 * 3600 * 1000), 10)
+										//texto_aux = "faltam " + parseInt((new_data_evento.getTime() - data_de_hoje.getTime()) / (24 * 3600 * 1000), 10)
 										colorAux1 = "#42B750"
 									}
 									else {
-										texto_aux = "passados " + parseInt((data_de_hoje.getTime() - new_data_evento.getTime()) / (24 * 3600 * 1000), 10)
+										//texto_aux = "passados " + parseInt((data_de_hoje.getTime() - new_data_evento.getTime()) / (24 * 3600 * 1000), 10)
 										colorAux1 = "#D13434"
 									}
 
@@ -596,7 +596,7 @@
 
 									meio_empree += "<li><a href='' onClick='ir_para(" + String.fromCharCode(34) + "?ipm=" + data['id_prog_manut'] + "&dia_ev=" + aux2.substring(aux2.length - 2, aux2.length) + "&mes_ev=" + aux1.substring(aux1.length - 2, aux1.length) + "&ano_ev=" + new_data_evento.getFullYear() + "" + String.fromCharCode(34) + ")'><table height='3' border='0' cellpadding='0' cellspacing='0'><tr><td><font size='3' face='Arial' color='#000000'>" + colocarAcento(data['nome_sistema']) + "</font></td></tr></table><table height='3' border='0' cellpadding='0' cellspacing='0'><tr><td> <font size='2' face='Arial' color='#0033CC'>" + data['nome_atividade'] + "</font></td></tr></table>"
 									meio_empree += "<table height='3' border='0' cellpadding='0' cellspacing='0'><tr><td><font size='2' face='Arial'> (" + data['nome_periodicidade'] + ")</font></td></tr></table>"
-									meio_empree += "<table border='0' cellpadding='0' cellspacing='0'><tr><td><div align='center'><font size='3' face='Arial'>" + temp1 + "</font></div></td><td><font size='2' face='Arial' color='" + colorAux1 + "'>&nbsp;- " + texto_aux + " dias </font></td></tr></table>"
+									meio_empree += "<table border='0' cellpadding='0' cellspacing='0'><tr><td><div align='center'><font size='3' face='Arial'>" + temp1 + "</font></div></td><td></td></tr></table>"
 									meio_empree += "</a></li>"
 
 								}

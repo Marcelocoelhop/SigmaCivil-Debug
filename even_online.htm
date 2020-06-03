@@ -410,12 +410,12 @@
                                     '<div class="ui-grid-a">',
                                     '<div class="ui-block-a custo-estimado">',
                                     '<label for="">Custo estimado:</label>',
-                                    '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-estimado-input" type="tel" name="text-basic" id="in_dado_custo_estimado" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeypress="mascara(this, mascaraTeste)" placeholder="Custo estimado" value="' + aux_custoEstim_preench + '" />',
+                                    '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-estimado-input" type="tel" name="text-basic" id="in_dado_custo_estimado" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo estimado" value="' + aux_custoEstim_preench + '" />',
                                     '<img src="images/money-bill-alt-verde.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
                                     '</div>',
                                     '<div class="ui-block-b custo-real">',
                                     '<label for="">Custo real:</label>',
-                                    '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-real-input" type="tel" name="text-basic" id="in_dado_custo_real" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeypress="mascara(this, mascaraTeste)" placeholder="Custo real" value="' + aux_custoReal_preench + '" />',
+                                    '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-real-input" type="tel" name="text-basic" id="in_dado_custo_real" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo real" value="' + aux_custoReal_preench + '" />',
                                     '<img src="images/money-bill-alt-verde.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
                                     '</div>',
                                     '</div>',
@@ -467,12 +467,12 @@
                                     '<div class="ui-grid-a">',
                                     '<div class="ui-block-a custo-estimado">',
                                     '<label for="">Custo estimado:</label>',
-                                    '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-estimado-input" type="tel" name="text-basic" id="in_dado_custo_estimado" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeypress="mascara(this, mascaraTeste)" placeholder="Custo estimado" disabled="" value="' + aux_custoEstim_preench + '" />',
+                                    '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-estimado-input" type="tel" name="text-basic" id="in_dado_custo_estimado" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo estimado" disabled="" value="' + aux_custoEstim_preench + '" />',
                                     '<img src="images/money-bill-alt.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
                                     '</div>',
                                     '<div class="ui-block-b custo-real">',
                                     '<label for="">Custo real:</label>',
-                                    '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-real-input" type="tel" name="text-basic" id="in_dado_custo_real" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeypress="mascara(this, mascaraTeste)" placeholder="Custo real" disabled="" value="' + aux_custoReal_preench + '" />',
+                                    '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-real-input" type="tel" name="text-basic" id="in_dado_custo_real" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo real" disabled="" value="' + aux_custoReal_preench + '" />',
                                     '<img src="images/money-bill-alt.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
                                     '</div>',
                                     '</div>',
@@ -2495,7 +2495,7 @@
         v = new String(Number(v));
         var len = v.length;
         if (1 == len)
-            v = v.replace(/(\d)/, "0,0$1");
+            v = v.replace(/(\d)/, "0,$1");
         else if (2 == len)
             v = v.replace(/(\d)/, "0,$1");
         else if (len > 2) {

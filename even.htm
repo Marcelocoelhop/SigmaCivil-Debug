@@ -184,6 +184,7 @@
 			}
 
 			function consultaProgManut(db) {
+alert('id_prog_manut: ' + id_prog_manut)				
 				var tx = db.transaction(['mtab_prog_manut'], 'readwrite');
 				var store = tx.objectStore('mtab_prog_manut');
 				var index = store.index('comparar_prog_manut');

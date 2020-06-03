@@ -141,12 +141,41 @@
 			request.onsuccess = function (event) {
 				db = request.result;
 
+
+
+//apagar ///////////////////////
+alert('----  id_prog_manut: ' + id_prog_manut)				
+			var tx = db.transaction(['mtab_prog_manut'], 'readwrite');
+			var store = tx.objectStore('mtab_prog_manut');
+			var index = store.index('comparar_prog_manut');
+			var whereEquals = IDBKeyRange.only([id_prog_manut]);
+			var objectStoreRequest = index.openCursor(whereEquals);
+			objectStoreRequest.onsuccess = function (event) {
+				var cursor = event.target.result;
+				
+				if (cursor) {
+					var data = cursor.value;
+
+					nome_sistema = data.nome_sistema;
+alert('-------- nome_sistema1: ' + nome_sistema)
+					nome_atividade = data.nome_atividade;
+				}
+alert('-------- nome_sistema2: ' + nome_sistema)
+				
+			}
+		
+//apagar  FIm ///////////////////////
+
+
+
 				consultaCliente(db);
 
 				db.onerror = function (event) {
 					alert("Database error: " + event.target.errorCode);
 				}
 			}
+
+
 
 			function consultaCliente(db) {
 				var tx = db.transaction(['mtab_cliente'], 'readwrite');
@@ -192,6 +221,7 @@ alert('id_prog_manut: ' + id_prog_manut)
 				var objectStoreRequest = index.openCursor(whereEquals);
 				objectStoreRequest.onsuccess = function (event) {
 					var cursor = event.target.result;
+
 					if (cursor) {
 						var data = cursor.value;
 
@@ -426,6 +456,7 @@ alert('nome_sistema3: ' + nome_sistema)
 					var tam_ti2;
 
 					if (cursor) {
+alert('id_prog_manut do COMPARAR: ' + id_prog_manut)
 						var data = cursor.value;
 
 						var rrr2_caminho_imagens = data.caminho_imagens;

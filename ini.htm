@@ -82,7 +82,7 @@
 				mtab_prog_manut.createIndex("data_inicial_garantia", "data_inicial_garantia", { unique: false });
 				mtab_prog_manut.createIndex("prazo_garantia_dias", "prazo_garantia_dias", { unique: false });
 				mtab_prog_manut.createIndex("formato_periodicidade", "formato_periodicidade", { unique: false });
-				mtab_prog_manut.createIndex("comparar_prog_manut", ["id_prog_manut"], { unique: false });
+				mtab_prog_manut.createIndex("comparar_prog_manut", "id_prog_manut", { unique: false });
 
 				var mtab_prog_manut_evento = db.createObjectStore("mtab_prog_manut_evento", { keyPath: ["id_prog_manut", "dia_evento", "mes_evento", "ano_evento"] });
 

@@ -217,7 +217,7 @@ alert('id_prog_manut: ' + id_prog_manut)
 				var tx = db.transaction(['mtab_prog_manut'], 'readwrite');
 				var store = tx.objectStore('mtab_prog_manut');
 				var index = store.index('comparar_prog_manut');
-				var whereEquals = IDBKeyRange.only([id_prog_manut]);
+				var whereEquals = IDBKeyRange.only(id_prog_manut);
 				var objectStoreRequest = index.openCursor(whereEquals);
 				objectStoreRequest.onsuccess = function (event) {
 					var cursor = event.target.result;
@@ -251,6 +251,7 @@ alert('nome_sistema3: ' + nome_sistema)
 					var aux_image_upload;
 
 					if (cursor) {
+alert('************   id_prog_manut: COMPARAR 1' + id_prog_manut)
 						var data = cursor.value;
 
 						var rrr_caminho_imagens = data.caminho_imagens;

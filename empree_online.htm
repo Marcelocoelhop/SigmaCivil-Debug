@@ -268,20 +268,22 @@
             string_auxiliar += "INICIO:" + Date(Date.now()) + "<br>"
 
             function datadiff(d1, d2/*,par*/) {
+                if (d1 && d2) {
+                    var data_form = d2.replace(/[-]/g, '/') + " 00:00:00"
+                    var data_form2 = new Date(data_form).getTime();
 
-                var data_form = d2.replace(/[-]/g, '/') + " 00:00:00"
-                var data_form2 = new Date(data_form).getTime();
-
-                return parseInt((data_form2 - d1) / (24 * 3600 * 1000));
+                    return parseInt((data_form2 - d1) / (24 * 3600 * 1000));
+                }
             }
 
             function datadiff2(d1, d2) {
+                if (d1 && d2) {
+                    var data_form = d2.replace(/[-]/g, '/') + " 23:59:59"
+                    var data_form2 = new Date(data_form).getTime();
+                    // alert('data_form2: ' + data_form2); 
 
-                var data_form = d2.replace(/[-]/g, '/') + " 23:59:59"
-                var data_form2 = new Date(data_form).getTime();
-                // alert('data_form2: ' + data_form2); 
-
-                return parseInt((data_form2 - d1) / (24 * 3600 * 1000));
+                    return parseInt((data_form2 - d1) / (24 * 3600 * 1000));
+                }
             }
 
             var menu_sup_offline = [

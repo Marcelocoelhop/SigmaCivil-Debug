@@ -246,7 +246,6 @@
             '<option value="2024"' + marca2024 + '>2024</option>',
             '</select>',
             '</fieldset>',
-            // '<i class="fas fa-filter" onclick="enviar()">',
             '</div>'
         ].join('')
         // FIM VARIAVEIS PARA MÊS E ANO
@@ -267,7 +266,7 @@
 
             string_auxiliar += "INICIO:" + Date(Date.now()) + "<br>"
 
-            function datadiff(d1, d2/*,par*/) {
+            function datadiff(d1, d2) {
                 if (d1 && d2) {
                     var data_form = d2.replace(/[-]/g, '/') + " 00:00:00"
                     var data_form2 = new Date(data_form).getTime();
@@ -280,7 +279,6 @@
                 if (d1 && d2) {
                     var data_form = d2.replace(/[-]/g, '/') + " 23:59:59"
                     var data_form2 = new Date(data_form).getTime();
-                    // alert('data_form2: ' + data_form2); 
 
                     return parseInt((data_form2 - d1) / (24 * 3600 * 1000));
                 }
@@ -340,15 +338,11 @@
 
             var statusRelacionamento;
             var statusDocumentacao;
-            // var mudaStatus = '<i class="fas fa-exclamation-triangle is-white" width="50" height="50"></i>'
-            // var mudaStatus = '<img src="images/danger.svg" style="opacity: .4" width="25" height="25" />'
             var mudaStatus = '<img src="images/danger.svg" width="25" height="25" />'
 
             /////////////////////////////////
             var data1_aux = q_mes + "/01/" + q_ano
             var data_ini_p_busca = new Date(data1_aux)
-            //alert('data1_aux: ' + data1_aux)
-            //alert('data_ini_p_busca: ' + data_ini_p_busca)
 
             var q_dia
 
@@ -365,7 +359,6 @@
             var data2_aux = q_mes + "/" + q_dia + "/" + q_ano
 
             var data_final_p_busca = new Date(data2_aux)
-            //alert('data_final_p_busca: ' + data_final_p_busca)
             /////////////////////////////////////////////
 
             var ini_lista = "<ul id='q_empree' class='list-content' data-mini='true' data-role='listview' data-filter='true' data-filter-placeholder='Buscar...' data-inset='true'>"
@@ -388,7 +381,6 @@
                         var nome_empree = getLogin.nome_empree;
                         var q_e_construtora = getLogin.e_construtora;
                         var data_implantacao_sc = new Date(getLogin.data_implantacao_sc)
-                        //alert('data_implantacao_sc: ' + data_implantacao_sc)
 
                         var resultado_consulta = getLogin.status_sync;
                         var parte_resultado = resultado_consulta.split('_')
@@ -421,9 +413,6 @@
                                 var data_minima_alteracao;
 
                                 for (i = 0; i < objEmpree.dados_empreendimento.length; i++) {
-
-                                    //string_auxiliar += "ponto 0 - inicio da manutencao:" + Date(Date.now()) + ": " + new Date(Date.now()).getMilliseconds() + "<br>"
-
                                     //calculo da data do evento
                                     qtde_eventos = parseInt(objEmpree.dados_empreendimento[i].dias_garant / (objEmpree.dados_empreendimento[i].qdp * objEmpree.dados_empreendimento[i].qtae))
                                     str = objEmpree.dados_empreendimento[i].formato_periodicidade
@@ -510,8 +499,6 @@
 
                                             if (new_data_evento >= data_ini_p_busca && new_data_evento <= data_final_p_busca) {
 
-                                                //string_auxiliar += "ponto 1:" + Date(Date.now()) + ": " + new Date(Date.now()).getMilliseconds() + "<br>"
-
                                                 temp1 = new_data_evento.getDate() + "/" + (new_data_evento.getMonth() + 1) + "/" + new_data_evento.getFullYear() + "<br>"
                                                 var aux_mes_novo = new_data_evento.getMonth() + 1;
                                                 aux_mes_novo = '0' + aux_mes_novo
@@ -521,7 +508,6 @@
                                                 aux_dia_novo = '0' + aux_dia_novo
                                                 aux_dia_novo = aux_dia_novo.substring(aux_dia_novo.length - 2, aux_dia_novo.length);
 
-                                                //vetor_consulta_evento += objEmpree.dados_empreendimento[i].id_prog_manut + '*' + new_data_evento.getFullYear() + '*' + aux_mes_novo + '*' + new_data_evento.getDate() + ';'
                                                 vetor_consulta_evento += objEmpree.dados_empreendimento[i].id_prog_manut + '*' + new_data_evento.getFullYear() + '*' + aux_mes_novo + '*' + aux_dia_novo + ';'
                                                 vetor_dados_manutencao += objEmpree.dados_empreendimento[i].id_prog_manut + '*' + objEmpree.dados_empreendimento[i].nome_sistema + '*' + objEmpree.dados_empreendimento[i].nome_atividade + '*' + objEmpree.dados_empreendimento[i].nome_periodicidade + '*' + objEmpree.dados_empreendimento[i].resp + '*' + temp1 + '*' + objEmpree.dados_empreendimento[i].qdp + '*' + objEmpree.dados_empreendimento[i].qtae + '*' + objEmpree.dados_empreendimento[i].gap + '*' + new_data_evento + ';'
                                             }
@@ -610,7 +596,6 @@
                                                     }
 
                                                     aux_new_event = new Date(cada_parte_vet_manut[9])
-                                                    //alert('aux_new_event: ' + aux_new_event)
 
                                                     data_minima_alteracao = new Date(cada_parte_vet_manut[9])
                                                     data_minima_alteracao.setDate(data_minima_alteracao.getDate() - dias_gap);
@@ -652,17 +637,15 @@
                                                     string_auxiliar += " <br><br><br>------- INI data_maxima_alteracao------------------ " + fator_freq + "--" + dias_gap + "--" + data_maxima_alteracao + "---------FIM data_maxima_alteracao------------<br>"
 
                                                     data_minima_alteracao = dateToEN(data_minima_alteracao)
-                                                    aux_dias1 = datadiff2(Date.now(), data_minima_alteracao/*,1*/)
+                                                    aux_dias1 = datadiff2(Date.now(), data_minima_alteracao)
 
                                                     var data_format_1 = new Date(cada_parte_vet_manut[9]);
                                                     var mes_format_1 = data_format_1.getMonth() + 1
                                                     var format_1 = dateToEN(data_format_1.getDate() + '/' + mes_format_1 + '/' + data_format_1.getFullYear())
-                                                    aux_dias_ev = datadiff(Date.now(), format_1/*,2*/)
-
-                                                    //aux_dias_ev = datadiff(Date.now(), cada_parte_vet_manut[9],2)
+                                                    aux_dias_ev = datadiff(Date.now(), format_1)
 
                                                     data_maxima_alteracao = dateToEN(data_maxima_alteracao)
-                                                    aux_dias2 = datadiff(Date.now(), data_maxima_alteracao/*,3*/)
+                                                    aux_dias2 = datadiff(Date.now(), data_maxima_alteracao)
 
                                                     if (aux_dias1 > 0) {
                                                         imagem1 = '<img src="images/hand-paper.svg" width="24" class="is-opacity">'
@@ -690,11 +673,9 @@
                                                     var format_faixa_dias = data_minima_alteracao.replace(/[-]/g, '/') + " 00:00:00"
                                                     var format_faixa_dias_B = new Date(format_faixa_dias).getTime();
 
-                                                    //alert("format_faixa_dias: " + format_faixa_dias)
-                                                    faixa_dias = datadiff(format_faixa_dias_B, data_maxima_alteracao/*,4*/) + 1
+                                                    faixa_dias = datadiff(format_faixa_dias_B, data_maxima_alteracao) + 1
 
-                                                    //aux_dist = datadiff(data_minima_alteracao, Date.now(),5)
-                                                    aux_dist = (-1) * datadiff2(Date.now(), data_minima_alteracao/*,5*/)
+                                                    aux_dist = (-1) * datadiff2(Date.now(), data_minima_alteracao)
 
                                                     if (aux_dias1 > 0) {
                                                         barra = '<img src="images/Barra_1.png" width="120" height="23">'
@@ -716,7 +697,6 @@
                                                         barra = '<img src="images/Barra_9.png" width="120" height="23">'
                                                     }
 
-                                                    // alert(barra)
                                                     /////////////////////////////////////////////////
 
                                                     if (ev == "1") {
@@ -824,10 +804,10 @@
                                 ajax2.send();
 
                                 // Define a ordem que irá aparecer cada manutenção
-                                if (datadiff(Date.now(), data_maxima_alteracao/*, 6*/) < 0 || datadiff2(Date.now(), data_minima_alteracao/*, 7*/) > 0) {
-                                    document.getElementById('box-content').innerHTML = ini_lista + dados_1 + dados_0 + fim_lista //+ string_auxiliar
+                                if (datadiff(Date.now(), data_maxima_alteracao) < 0 || datadiff2(Date.now(), data_minima_alteracao) > 0) {
+                                    document.getElementById('box-content').innerHTML = ini_lista + dados_1 + dados_0 + fim_lista 
                                 } else {
-                                    document.getElementById('box-content').innerHTML = ini_lista + dados_0 + dados_1 + fim_lista //+ string_auxiliar
+                                    document.getElementById('box-content').innerHTML = ini_lista + dados_0 + dados_1 + fim_lista 
                                 }
                                 $(".loading_page").hide();
                                 $('#q_empree').listview();
@@ -859,7 +839,6 @@
             }
             else {
                 // alert('Você está onlline');
-                // window.location.assign("even_oonline.htm?ipm=1043&dia_ev=26&mes_ev=10&ano_ev=2019");
                 window.location.assign('even_online.htm' + qlink + "&l=" + login + "&s=" + senha);
             }
 
@@ -878,7 +857,6 @@
         }
 
         function enviar() {
-            // window.location.assign("empree_online.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + document.getElementById('idmes').value + "&qa=" + document.getElementById('idano').value);    
             if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
                 window.location.assign("empree.htm?l=" + login + "&s=" + senha + "&e=" + num_empree + "&qm=" + document.getElementById('idmes').value + "&qa=" + document.getElementById('idano').value);
             } else {

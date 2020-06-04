@@ -72,6 +72,7 @@
         var senha = getquerystring("s");
 
         var ipm = getquerystring("ipm");
+        var dia_focus = getquerystring("dia_ev");
 
         /////////////////////////
         var q_mes = getquerystring("qm");
@@ -702,7 +703,7 @@
                                                     /////////////////////////////////////////////////
 
                                                     var focus = "";
-                                                    if (ipm == cada_parte_vet_manut[0]) {
+                                                    if (ipm == cada_parte_vet_manut[0] && dia_focus == cada_parte_vet_evento[3]) {
                                                         focus = "ui-focus";
                                                     }
 

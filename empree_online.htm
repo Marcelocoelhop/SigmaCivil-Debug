@@ -71,6 +71,8 @@
         var login = getquerystring("l");
         var senha = getquerystring("s");
 
+        var ipm = getquerystring("ipm");
+
         /////////////////////////
         var q_mes = getquerystring("qm");
         var q_ano = getquerystring("qa");
@@ -699,10 +701,15 @@
 
                                                     /////////////////////////////////////////////////
 
+                                                    var focus = "";
+                                                    if (ipm == cada_parte_vet_manut[0]) {
+                                                        focus = "ui-focus";
+                                                    }
+
                                                     if (ev == "1") {
 
                                                         dados_1 += [
-                                                            '<li class="shadow-box">',
+                                                            '<li class="shadow-box ' + focus + '">',
                                                             '<a href="#" onclick="ir_para(' + String.fromCharCode(39) + '?ipm=' + cada_parte_vet_manut[0] + '&dia_ev=' + cada_parte_vet_evento[3] + '&mes_ev=' + cada_parte_vet_evento[2] + '&ano_ev=' + cada_parte_vet_evento[1] + '&d_min=' + data_minima_alteracao + '&d_max=' + data_maxima_alteracao + '&tipo=alt&x=' + Math.random() + String.fromCharCode(39) + ')">',
                                                             '<font size="4" face="Arial">' + cada_parte_vet_manut[1] + '</font>',
                                                             '<p class="text-size-content" size="2" face="Arial" color="#0000FF">' + cada_parte_vet_manut[2] + '</p>',
@@ -743,7 +750,7 @@
                                                     } else if (ev == 0) {
 
                                                         dados_0 += [
-                                                            '<li class="shadow-box">',
+                                                            '<li class="shadow-box ' + focus + '">',
                                                             '<a href="#" onclick="ir_para(' + String.fromCharCode(39) + '?ipm=' + cada_parte_vet_manut[0] + '&dia_ev=' + cada_parte_vet_evento[3] + '&mes_ev=' + cada_parte_vet_evento[2] + '&ano_ev=' + cada_parte_vet_evento[1] + '&d_min=' + data_minima_alteracao + '&d_max=' + data_maxima_alteracao + '&tipo=ins&x=' + Math.random() + String.fromCharCode(39) + ')">',
                                                             '<font size="4" face="Arial">' + cada_parte_vet_manut[1] + '</font>',
                                                             '<p class="text-size-content" size="2" face="Arial" color="#0000FF">' + cada_parte_vet_manut[2] + '</p>',

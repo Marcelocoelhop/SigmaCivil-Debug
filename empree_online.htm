@@ -673,7 +673,7 @@
                                                         document.getElementById('qtd_manut_pendentes').innerHTML = qtdEv
                                                     }
 
-                                                    var format_faixa_dias = data_minima_alteracao.replace(/[-]/g, '/') + " 00:00:00"
+                                                    var format_faixa_dias = data_minima_alteracao.replace(/[-]/g, '/') + " 23:59:59"
                                                     var format_faixa_dias_B = new Date(format_faixa_dias).getTime();
 
                                                     faixa_dias = datadiff(format_faixa_dias_B, data_maxima_alteracao) + 1

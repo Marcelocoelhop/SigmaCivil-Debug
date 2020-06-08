@@ -813,9 +813,9 @@
 
                                 // Define a ordem que irá aparecer cada manutenção
                                 if (datadiff(Date.now(), data_maxima_alteracao) < 0 || datadiff2(Date.now(), data_minima_alteracao) > 0) {
-                                    document.getElementById('box-content').innerHTML = ini_lista + dados_1 + dados_0 + fim_lista 
+                                    document.getElementById('box-content').innerHTML = ini_lista + dados_1 + dados_0 + fim_lista
                                 } else {
-                                    document.getElementById('box-content').innerHTML = ini_lista + dados_0 + dados_1 + fim_lista 
+                                    document.getElementById('box-content').innerHTML = ini_lista + dados_0 + dados_1 + fim_lista
                                 }
                                 $(".loading_page").hide();
                                 $('#q_empree').listview();

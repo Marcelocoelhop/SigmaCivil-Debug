@@ -287,7 +287,7 @@
 						}
 					} else {
 						if (getMobileOperatingSystem() == "iOS") {
-							selec_audio = "<div><table cellpadding='0' cellspacing='0'><tr><td height='15' colspan='2'></td></tr><tr><audio style='margin-bottom: 5px; width: 80%; display: inline;' controls><source src='" + rrr_caminho_audio + "'></audio></tr><tr><td height='13' colspan='2'></td></tr><tr><td><div align='center'><img src='images/trash.gif' width='25' height='25' onclick='deletar_audio()'/></div></td><td><div align='center'><img src='images/" + aux_image_upload + "' width='25' height='25' onclick='upload_audio()'/></div></td></tr></table></div>"
+							selec_audio = "<div><table cellpadding='0' cellspacing='0'><tr><td height='15' colspan='2'></td></tr><tr><audio style='margin-bottom: 5px; width: 80%; display: inline;' controls><source src='" + rrr_caminho_audio + "'></audio></tr><tr><td height='13' colspan='2'></td></tr><tr><td><div align='center'><img src='images/trash.gif' width='25' height='25' onclick='deletar_audio()' style='position: relative; left: 120px; bottom: 10px;' /></div></td><td><div align='center'><img src='images/" + aux_image_upload + "' width='25' height='25' onclick='upload_audio()' style='position: relative; left: 20px; bottom: 10px;' /></div></td></tr></table></div>"
 						} else {
 							selec_audio = "<div><table cellpadding='0' cellspacing='0'><tr><td height='15' colspan='2'></td></tr><tr><td colspan='2'><img id='latesq_" + rrr_id_prog_manut + "' src='images/player_latesq.gif'  width='40' height='30' /><img id='player_" + rrr_id_prog_manut + "' src='images/player_play.gif'  onclick='abrir_audio(" + String.fromCharCode(34) + rrr_caminho_audio + String.fromCharCode(34) + ")'  width='40' height='30'/><img id='pause_" + rrr_id_prog_manut + "' src='images/player_pause.gif'  onclick='pause_audio()'  width='40' height='30' /><img id='stop_" + rrr_id_prog_manut + "' src='images/player_stop.gif'  onclick='stop_audio()'  width='40' height='30'/><img id='rec_" + rrr_id_prog_manut + "' src='images/player_rec.gif'  onclick='captureAudio(" + String.fromCharCode(34) + rrr_id_prog_manut + String.fromCharCode(34) + ")'  width='40' height='30' /><img id='latdir_" + rrr_id_prog_manut + "' src='images/player_latdir.gif'  width='40' height='30' /></td></tr><tr><td height='13' colspan='2'></td></tr><tr><td><div align='center'><img src='images/trash.gif' width='25' height='25' onclick='deletar_audio()'/></div></td><td><div align='center'><img src='images/" + aux_image_upload + "' width='25' height='25' onclick='upload_audio()'/></div></td></tr></table></div>"
 						}
@@ -1488,7 +1488,6 @@
 		}
 	}
 
-
 	function up_loadAudio(audioURL) {
 
 		document.getElementById("parte_load").style.display = "block";
@@ -1504,8 +1503,6 @@
 		ft.upload(audioURL, "http://www.sigmacivil.com.br/app_sc/rec_audio_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.0&econst=" + e_construtora + "&idc=" + id_cliente, win_up_a, fail_up_a, options);
 
 	}
-
-
 
 	var win_up_a = function (r) {
 		var db;

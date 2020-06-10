@@ -823,6 +823,7 @@
                 function (results) {
                     for (var i = 0; i < results.length; i++) {
                         alert('Image URI: ' + results[i]);
+                        document.getElementById('foto_' + qual_id_prog_manut).src = results[i];
                     }
                 }, function (error) {
                     alert('Error: ' + error);

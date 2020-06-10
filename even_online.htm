@@ -819,131 +819,131 @@
                 return
             }
 
-            window.imagePicker.getPictures(
-                function (results) {
-                    for (var i = 0; i < results.length; i++) {
-                        alert('Image URI: ' + results[i]);
-                        document.getElementById('foto_' + qual_id_prog_manut).src = results[i];
-                        document.getElementById('foto_' + qual_id_prog_manut).style.display = "inline";
-                    }
-                }, function (error) {
-                    alert('Error: ' + error);
-                }
-            );
+            // window.imagePicker.getPictures(
+            //     function (results) {
+            //         for (var i = 0; i < results.length; i++) {
+            //             alert('Image URI: ' + results[i]);
+            //             document.getElementById('foto_' + qual_id_prog_manut).src += results[i];
+            //             document.getElementById('foto_' + qual_id_prog_manut).style.display = "inline";
+            //         }
+            //     }, function (error) {
+            //         alert('Error: ' + error);
+            //     }
+            // );
 
-            // var r = confirm("Para tirar uma foto com a câmera selecione OK. Para acessar sua galeria de imagens clique em CANCELAR");
-            // if (r == true) {
-            //     source = pictureSource.CAMERA;
-            // } else {
-            //     source = pictureSource.PHOTOLIBRARY;
-            // }
+            var r = confirm("Para tirar uma foto com a câmera selecione OK. Para acessar sua galeria de imagens clique em CANCELAR");
+            if (r == true) {
+                source = pictureSource.CAMERA;
+            } else {
+                source = pictureSource.PHOTOLIBRARY;
+            }
 
-            // navigator.camera.getPicture(onPhotoURISuccess, onFail, {
-            //     quality: 50,
-            //     destinationType: destinationType.FILE_URI,
-            //     encodingType: Camera.EncodingType.JPEG,
-            //     popoverOptions: CameraPopoverOptions,
-            //     saveToPhotoAlbum: true,
-            //     sourceType: source
-            // });
+            navigator.camera.getPicture(onPhotoURISuccess, onFail, {
+                quality: 50,
+                destinationType: destinationType.FILE_URI,
+                encodingType: Camera.EncodingType.JPEG,
+                popoverOptions: CameraPopoverOptions,
+                saveToPhotoAlbum: true,
+                sourceType: source
+            });
 
         }
 
-        // function onFail(message) {
-        //     // alert('Failed because: ' + message);
-        // }
+        function onFail(message) {
+            // alert('Failed because: ' + message);
+        }
 
-        // var qual_id_prog_manut;
+        var qual_id_prog_manut;
 
-        // function onPhotoURISuccess(imageURI) {
-        //     document.getElementById('foto_' + qual_id_prog_manut).src = imageURI;
-        //     document.getElementById('foto_' + qual_id_prog_manut).style.display = "inline";
+        function onPhotoURISuccess(imageURI) {
+            document.getElementById('foto_' + qual_id_prog_manut).src = imageURI;
+            document.getElementById('foto_' + qual_id_prog_manut).style.display = "inline";
 
-        //     var db;
-        //     var request = window.indexedDB.open("db_sigmacivil", "1");
+            var db;
+            var request = window.indexedDB.open("db_sigmacivil", "1");
 
-        //     request.onerror = function (event) {
-        //         alert("Erro ao criar o banco (cod 02)");
-        //     };
+            request.onerror = function (event) {
+                alert("Erro ao criar o banco (cod 02)");
+            };
 
-        //     request.onsuccess = function (event) {
-        //         db = request.result;
+            request.onsuccess = function (event) {
+                db = request.result;
 
-        //         consultaManutEvento2(db, manutsEvento_imagem);
+                consultaManutEvento2(db, manutsEvento_imagem);
 
-        //         db.onerror = function (event) {
-        //             alert("Database error: " + event.target.errorCode);
-        //         }
-        //     }
+                db.onerror = function (event) {
+                    alert("Database error: " + event.target.errorCode);
+                }
+            }
 
-        //     var manutsEvento_imagem = [
-        //         {
-        //             id_prog_manut: qual_id_prog_manut,
-        //             dia_evento: dia_ev,
-        //             mes_evento: mes_ev,
-        //             ano_evento: ano_ev,
-        //             caminho_imagens: imageURI,
-        //             caminho_audio: "",
-        //             caminho_video: "",
-        //             caminho_texto: "",
-        //             status_imagens_upl: "0",
-        //             status_video_upl: "",
-        //             status_audio_upl: "",
-        //             status_texto_upl: ""
-        //         }
-        //     ];
+            var manutsEvento_imagem = [
+                {
+                    id_prog_manut: qual_id_prog_manut,
+                    dia_evento: dia_ev,
+                    mes_evento: mes_ev,
+                    ano_evento: ano_ev,
+                    caminho_imagens: imageURI,
+                    caminho_audio: "",
+                    caminho_video: "",
+                    caminho_texto: "",
+                    status_imagens_upl: "0",
+                    status_video_upl: "",
+                    status_audio_upl: "",
+                    status_texto_upl: ""
+                }
+            ];
 
-        //     function consultaManutEvento2(db, manutsEvento_imagem) {
-        //         var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
-        //         var store = tx.objectStore('mtab_prog_manut_evento');
-        //         var index = store.index('comparar');
-        //         var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
-        //         var objectStoreRequest = index.openCursor(whereEquals);
-        //         objectStoreRequest.onsuccess = function (event) {
-        //             var cursor = event.target.result;
-        //             if (cursor) {
-        //                 var data = cursor.value;
+            function consultaManutEvento2(db, manutsEvento_imagem) {
+                var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+                var store = tx.objectStore('mtab_prog_manut_evento');
+                var index = store.index('comparar');
+                var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+                var objectStoreRequest = index.openCursor(whereEquals);
+                objectStoreRequest.onsuccess = function (event) {
+                    var cursor = event.target.result;
+                    if (cursor) {
+                        var data = cursor.value;
 
-        //                 aux_caminho_imagens = data.caminho_imagens;
+                        aux_caminho_imagens = data.caminho_imagens;
 
-        //                 if (aux_caminho_imagens != "") {
-        //                     aux_caminho_imagens = aux_caminho_imagens + '**';
+                        if (aux_caminho_imagens != "") {
+                            aux_caminho_imagens = aux_caminho_imagens + '**';
 
-        //                     aux_status_imagens_upl = data.status_imagens_upl;
-        //                     aux_status_imagens_upl = aux_status_imagens_upl + '**';
-        //                     aux_status_imagens_upl = aux_status_imagens_upl + '0';
-        //                 } else {
-        //                     aux_status_imagens_upl = '0';
-        //                 }
+                            aux_status_imagens_upl = data.status_imagens_upl;
+                            aux_status_imagens_upl = aux_status_imagens_upl + '**';
+                            aux_status_imagens_upl = aux_status_imagens_upl + '0';
+                        } else {
+                            aux_status_imagens_upl = '0';
+                        }
 
-        //                 data.caminho_imagens = aux_caminho_imagens + imageURI;
-        //                 data.status_imagens_upl = aux_status_imagens_upl;
+                        data.caminho_imagens = aux_caminho_imagens + imageURI;
+                        data.status_imagens_upl = aux_status_imagens_upl;
 
-        //                 var request = cursor.update(data);
-        //                 request.onsuccess = function (event) {
-        //                     reload_page();
-        //                 }
+                        var request = cursor.update(data);
+                        request.onsuccess = function (event) {
+                            reload_page();
+                        }
 
-        //             } else {
-        //                 aux_caminho_imagens = "";
-        //                 var tx2 = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
-        //                 var store2 = tx2.objectStore('mtab_prog_manut_evento');
+                    } else {
+                        aux_caminho_imagens = "";
+                        var tx2 = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+                        var store2 = tx2.objectStore('mtab_prog_manut_evento');
 
-        //                 manutsEvento_imagem.map(function (manutEvento_imagem) {
-        //                     store2.add(manutEvento_imagem);
-        //                 });
+                        manutsEvento_imagem.map(function (manutEvento_imagem) {
+                            store2.add(manutEvento_imagem);
+                        });
 
-        //                 tx2.oncomplete = function () {
-        //                     reload_page();
-        //                 }
+                        tx2.oncomplete = function () {
+                            reload_page();
+                        }
 
-        //                 tx2.onerror = function (event) {
-        //                     alert('error storing manut evento note ' + event.target.error);
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
+                        tx2.onerror = function (event) {
+                            alert('error storing manut evento note ' + event.target.error);
+                        }
+                    }
+                }
+            }
+        }
 
         // DELETAR IMAGEM
         function deletar_imagem(q_id) {

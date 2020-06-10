@@ -591,7 +591,7 @@
             var request = window.indexedDB.open("db_sigmacivil", "1");
 
             request.onerror = function (event) {
-                alert("Erro ao criar o banco");
+                alert("Erro ao criar o banco (cod 01)");
             };
 
             request.onsuccess = function (event) {
@@ -851,7 +851,7 @@
             var request = window.indexedDB.open("db_sigmacivil", "1");
 
             request.onerror = function (event) {
-                alert("Erro ao criar o banco");
+                alert("Erro ao criar o banco (cod 02)");
             };
 
             request.onsuccess = function (event) {
@@ -946,7 +946,7 @@
             var request = window.indexedDB.open("db_sigmacivil", "1");
 
             request.onerror = function (event) {
-                alert("Erro ao criar o banco");
+                alert("Erro ao criar o banco (cod 03)");
             };
 
             request.onsuccess = function (event) {
@@ -1042,7 +1042,7 @@
                 var request = window.indexedDB.open("db_sigmacivil", "1");
 
                 request.onerror = function (event) {
-                    alert("Erro ao criar o banco");
+                    alert("Erro ao criar o banco (cod 04)");
                 };
 
                 request.onsuccess = function (event) {
@@ -1135,7 +1135,7 @@
             var request = window.indexedDB.open("db_sigmacivil", "1");
 
             request.onerror = function (event) {
-                alert("Erro ao criar o banco");
+                alert("Erro ao criar o banco (cod 05)");
             };
 
             request.onsuccess = function (event) {
@@ -1207,7 +1207,7 @@
                 var request = window.indexedDB.open("db_sigmacivil", "1");
 
                 request.onerror = function (event) {
-                    alert("Erro ao criar o banco");
+                    alert("Erro ao criar o banco (cod 06)");
                 };
 
                 request.onsuccess = function (event) {
@@ -1306,7 +1306,7 @@
             var request = window.indexedDB.open("db_sigmacivil", "1");
 
             request.onerror = function (event) {
-                alert("Erro ao criar o banco");
+                alert("Erro ao criar o banco (cod 07)");
             };
 
             request.onsuccess = function (event) {
@@ -1350,7 +1350,7 @@
                 var request = window.indexedDB.open("db_sigmacivil", "1");
 
                 request.onerror = function (event) {
-                    alert("Erro ao criar o banco");
+                    alert("Erro ao criar o banco (cod 08)");
                 };
 
                 request.onsuccess = function (event) {
@@ -1411,7 +1411,7 @@
             var request = window.indexedDB.open("db_sigmacivil", "1");
 
             request.onerror = function (event) {
-                alert("Erro ao criar o banco");
+                alert("Erro ao criar o banco (cod 09)");
             };
 
             request.onsuccess = function (event) {
@@ -1489,7 +1489,7 @@
                 var request = window.indexedDB.open("db_sigmacivil", "1");
 
                 request.onerror = function (event) {
-                    alert("Erro ao criar o banco");
+                    alert("Erro ao criar o banco (cod 10)");
                 };
 
                 request.onsuccess = function (event) {
@@ -1581,21 +1581,16 @@
         function abrir_audio(qual) {
 
             if (esta_pausado == 0) {
-                alert('ponto 0');
                 myMedia3 = new Media(qual);
-                alert('ponto 1');
                 myMedia3.play();
-                alert('ponto 2');
             }
             if (esta_pausado == 1) {
-                alert('ponto 3');
                 myMedia3.play();
                 esta_pausado = 0;
             }
         }
 
         function pause_audio() {
-            alert('ponto pp');
             if (myMedia3) {
                 myMedia3.pause();
                 esta_pausado = 1;
@@ -1603,7 +1598,6 @@
         }
 
         function stop_audio() {
-            alert('ponto stop');
             if (myMedia3) {
                 myMedia3.stop();
                 esta_pausado = 0;
@@ -1617,7 +1611,7 @@
             var request = window.indexedDB.open("db_sigmacivil", "1");
 
             request.onerror = function (event) {
-                alert("Erro ao criar o banco");
+                alert("Erro ao criar o banco (cod 11)");
             };
 
             request.onsuccess = function (event) {
@@ -1662,7 +1656,7 @@
                 var request = window.indexedDB.open("db_sigmacivil", "1");
 
                 request.onerror = function (event) {
-                    alert("Erro ao criar o banco");
+                    alert("Erro ao criar o banco (cod 12)");
                 };
 
                 request.onsuccess = function (event) {
@@ -1722,7 +1716,7 @@
             var request = window.indexedDB.open("db_sigmacivil", "1");
 
             request.onerror = function (event) {
-                alert("Erro ao criar o banco");
+                alert("Erro ao criar o banco (cod 13)");
             };
 
             request.onsuccess = function (event) {
@@ -1771,7 +1765,7 @@
                 var request = window.indexedDB.open("db_sigmacivil", "1");
 
                 request.onerror = function (event) {
-                    alert("Erro ao criar o banco");
+                    alert("Erro ao criar o banco (cod 14)");
                 };
 
                 request.onsuccess = function (event) {
@@ -1828,7 +1822,7 @@
                             var request = window.indexedDB.open("db_sigmacivil", "1");
 
                             request.onerror = function (event) {
-                                alert("Erro ao criar o banco");
+                                alert("Erro ao criar o banco (cod 15)");
                             };
 
                             request.onsuccess = function (event) {
@@ -1861,11 +1855,11 @@
                                 }
                             }
                         } else {
-                            alert("Problemas com a gravação do texto. Tente novamente mais tarde.");
+                            alert("Problemas com a gravação do texto. Tente novamente mais tarde (cod 08).");
                         }
 
                     } else {
-                        alert("Problemas com sua conexão internet. Erro: 01");
+                        alert("Problemas com sua conexão internet. Cod: 01");
                     }
                 }
 
@@ -2239,7 +2233,7 @@
         var request = window.indexedDB.open("db_sigmacivil", "1");
 
         request.onerror = function (event) {
-            alert("Erro ao criar o banco");
+            alert("Erro ao criar o banco (cod 16)");
         };
 
         request.onsuccess = function (event) {
@@ -2343,7 +2337,7 @@
         var request = window.indexedDB.open("db_sigmacivil", "1");
 
         request.onerror = function (event) {
-            alert("Erro ao criar o banco");
+            alert("Erro ao criar o banco (cod 17)");
         };
 
         request.onsuccess = function (event) {
@@ -2627,7 +2621,7 @@
                                 reload_page_empree();
 
                             } else {
-                                alert("Problemas com sua conexão internet. Erro: 0166");
+                                alert("Problemas com sua conexão internet. Cod: 0166");
                             }
                         }
                     }
@@ -2668,7 +2662,7 @@
                             reload_page_empree();
 
                         } else {
-                            alert("Problemas com sua conexão internet. Erro: 0137");
+                            alert("Problemas com sua conexão internet. Cod: 0137");
                         }
                     }
                 }
@@ -2714,7 +2708,7 @@
                                     reload_page_even();
 
                                 } else {
-                                    alert("Problemas com sua conexão internet. Erro: 0147");
+                                    alert("Problemas com sua conexão internet. Cod: 0147");
                                 }
                             }
                         }
@@ -2747,7 +2741,7 @@
                                 reload_page_even();
 
                             } else {
-                                alert("Problemas com sua conexão internet. Erro: 0157");
+                                alert("Problemas com sua conexão internet. Cod: 0157");
                             }
                         }
                     }

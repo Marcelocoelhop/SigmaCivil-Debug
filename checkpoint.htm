@@ -131,6 +131,8 @@
 					if (cursor) {
 						var data = cursor.value;
 
+						alert('ponto consulta')
+
 						id_cliente = data['id_cliente'];
 
 						var tx2 = db.transaction(['mtab_checkpoint'], 'readwrite');
@@ -151,6 +153,7 @@
 								var atualizado_serv = data2['atualizado_serv'];
 
 								dados_checkpoint = dados_checkpoint + id_empree + "_" + id_sistema + "_" + data_checkpoint + "_" + latitude_checkpoint + "_" + longitude_checkpoint + "_" + altura_checkpoint + "_" + atualizado_serv + "*";
+								alert('dados_checkpoint: ' + dados_checkpoint)
 							}
 
 							if (dados_checkpoint != "") {

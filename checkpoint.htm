@@ -131,8 +131,6 @@
 					if (cursor) {
 						var data = cursor.value;
 
-						alert('ponto consulta')
-
 						id_cliente = data['id_cliente'];
 
 						var tx2 = db.transaction(['mtab_checkpoint'], 'readwrite');
@@ -141,7 +139,6 @@
 						objectStoreRequest2.onsuccess = function (event) {
 							var cursor2 = event.target.result;
 							if (cursor2) {
-								alert('ponto 0')
 								var data2 = cursor2.value;
 
 								id_empree = data2['id_empree'];
@@ -153,16 +150,13 @@
 								var atualizado_serv = data2['atualizado_serv'];
 
 								dados_checkpoint = dados_checkpoint + id_empree + "_" + id_sistema + "_" + data_checkpoint + "_" + latitude_checkpoint + "_" + longitude_checkpoint + "_" + altura_checkpoint + "_" + atualizado_serv + "*";
-								alert('dados_checkpoint: ' + dados_checkpoint)
 							}
 
 							if (dados_checkpoint != "") {
-								alert('ponto 1')
 								dados_checkpoint = dados_checkpoint.substring(0, (dados_checkpoint.length - 1))
 							}
 
 							if (!cursor2) {
-								alert('ponto 2')
 								var botao_sincro = [
 									'<table width="85%" height="51" border="0" cellpadding="0" cellspacing="0">',
 									'<tr>',
@@ -177,7 +171,6 @@
 									'</a></td></tr></table>'
 								].join('');
 							} else {
-								alert('ponto 3')
 								var botao_sincro = [
 									'<table width="85%" height="51" border="0" cellpadding="0" cellspacing="0">',
 									'<tr>',
@@ -447,12 +440,8 @@
 
 							var qatualizado_serv = "N";
 
-							alert('num_empree: ' + num_empree)
-							alert('qid_sistema: ' + qid_sistema)
-
 							navigator.geolocation.getCurrentPosition(	
 								function (position) {
-									alert('ponto getCurrentPosition')
 									var qlatitude_checkpoint = position.coords.latitude;
 									var qlongitude_checkpoint = position.coords.longitude;
 									var qaltura_checkpoint = position.coords.altitude;
@@ -467,7 +456,6 @@
 									request.onsuccess = function (event) {
 										db = request.result;
 
-										alert('onsuccess')
 										inserirDadosCheckpoint(db, dadosCheckpoint);
 
 										db.onerror = function (event) {
@@ -487,20 +475,15 @@
 										}
 									];
 
-									alert('dadosCheckpoint: ' + dadosCheckpoint);
-
 									function inserirDadosCheckpoint(db, dadosCheckpoint) {
 										var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
 										var store = tx.objectStore('mtab_checkpoint');
-
-										alert('inserirDadosCheckpoint 1')
 
 										dadosCheckpoint.map(function (dadoCheckpoint) {
 											store.add(dadoCheckpoint);
 										});
 
 										tx.oncomplete = function () {
-											alert('inserirDadosCheckpoint oncomplete')
 											go_to_page(qid_sistema, qid_empree);
 										}
 
@@ -533,7 +516,6 @@
 									request.onsuccess = function (event) {
 										db = request.result;
 
-										alert('onsuccess')
 										inserirDadosCheckpointError(db, dadosCheckpointError);
 
 										db.onerror = function (event) {
@@ -553,20 +535,15 @@
 										}
 									];
 
-									alert('dadosCheckpointError: ' + dadosCheckpointError)
-
 									function inserirDadosCheckpointError(db, dadosCheckpointError) {
 										var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
 										var store = tx.objectStore('mtab_checkpoint');
-
-										alert('inserirDadosCheckpointError 1')
 
 										dadosCheckpointError.map(function (dadoCheckpointError) {
 											store.add(dadoCheckpointError);
 										});
 
 										tx.oncomplete = function () {
-											alert('inserirDadosCheckpointError oncomplete')
 											go_to_page(qid_sistema, qid_empree);
 										}
 
@@ -650,11 +627,9 @@
 								var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
 								var store = tx.objectStore('mtab_checkpoint');
 
-								alert('executarRemoverDadosCheckpoint 1')
 
 								var objectStoreRequest = store.clear();
 								objectStoreRequest.onsuccess = function (event) {
-									alert('executarRemoverDadosCheckpoint clear')
 									go_page_check();
 								}
 							}
@@ -716,14 +691,11 @@
 		xhr.onreadystatechange = function () {
 			if (xhr.readyState == 4) {
 				if (xhr.status == 200 || xhr.status == 0) {
-					alert('ponto 4')
 					var response = xhr.responseText;
 					var pedaco = response.split('*//*');
 					tem_alguma_manut = pedaco[0];
-					alert('tem_alguma_manut: ' + tem_alguma_manut)
 
 					nome_sistema = pedaco[1];
-					alert('nome_sistema: ' + nome_sistema)
 
 					if (tem_alguma_manut == "0") {
 						alert('Não possui manutenção para ser registrada!');

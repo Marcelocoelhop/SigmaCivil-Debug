@@ -447,8 +447,12 @@
 
 							var qatualizado_serv = "N";
 
-							navigator.geolocation.getCurrentPosition(
+							alert('num_empree: ' + num_empree)
+							alert('qid_sistema: ' + qid_sistema)
+
+							navigator.geolocation.getCurrentPosition(	
 								function (position) {
+									alert('ponto getCurrentPosition')
 									var qlatitude_checkpoint = position.coords.latitude;
 									var qlongitude_checkpoint = position.coords.longitude;
 									var qaltura_checkpoint = position.coords.altitude;

@@ -694,8 +694,10 @@
 					var response = xhr.responseText;
 					var pedaco = response.split('*//*');
 					tem_alguma_manut = pedaco[0];
+					alert('tem_alguma_manut: ' + tem_alguma_manut)
 
 					nome_sistema = pedaco[1];
+					alert('nome_sistema: ' + nome_sistema)
 
 					if (tem_alguma_manut == "0") {
 						alert('Não possui manutenção para ser registrada!');

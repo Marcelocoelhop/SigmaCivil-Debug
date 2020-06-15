@@ -463,6 +463,7 @@
 									request.onsuccess = function (event) {
 										db = request.result;
 
+										alert('onsuccess')
 										inserirDadosCheckpoint(db, dadosCheckpoint);
 
 										db.onerror = function (event) {
@@ -481,6 +482,8 @@
 											atualizado_serv: qatualizado_serv,
 										}
 									];
+
+									alert('dadosCheckpoint: ' + dadosCheckpoint);
 
 									function inserirDadosCheckpoint(db, dadosCheckpoint) {
 										var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
@@ -526,6 +529,7 @@
 									request.onsuccess = function (event) {
 										db = request.result;
 
+										alert('onsuccess')
 										inserirDadosCheckpointError(db, dadosCheckpointError);
 
 										db.onerror = function (event) {
@@ -544,6 +548,8 @@
 											atualizado_serv: qatualizado_serv,
 										}
 									];
+
+									alert('dadosCheckpointError: ' + dadosCheckpointError)
 
 									function inserirDadosCheckpointError(db, dadosCheckpointError) {
 										var tx = db.transaction(['mtab_checkpoint'], 'readwrite');

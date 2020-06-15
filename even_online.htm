@@ -1918,14 +1918,20 @@
 
     <!-- MENU BURGER -->
     <div class="btn-bars" style="display: none;">
-        <div style="top:4;" data-role="collapsible" data-collapsed="true" class="ui-btn-left menu" data-mini="true">
+        <div style="top:4; z-index: 15;" data-role="collapsible" data-collapsed="true" class="ui-btn-left menu" data-mini="true">
             <h4 class="btn-bars-bars">
                 <!-- <span class="fas fa-bars"></span> -->
                 <img class="is-bars" src="images/bars.svg" width="14" alt="Menu" />
                 <img class="is-times is-disabled" src="images/times.svg" width="13" alt="Menu" />
             </h4>
             <ul style="border: 1px solid #e0e0e0;" data-role="listview" data-mini="true">
-                <li><a style="z-index: 10" class="click" href="#" onClick="enviar_sync()">Novo Login</a></li>
+                <li>
+                    <a style="z-index: 10" class="click" href="#" onClick="enviar_sync()">Novo Login</a>
+                </li>
+                <li>
+                    <a style="z-index: 11;" class="ui-btn ui-icon-clock ui-btn-icon-right ui-shadow ui-corner-all" href="#"
+                        onClick="go_page_check()">Checkpoint</a>
+                </li>
             </ul>
         </div>
     </div>
@@ -2869,6 +2875,8 @@
         }
     }
 
-
+    function go_page_check() {
+        window.location.assign("checkpoint.htm?e=" + id_empree + "&l=" + login + "&s=" + senha + "&qm=" + mes_ev + "&qa=" + ano_ev);
+    }
 
 </script>

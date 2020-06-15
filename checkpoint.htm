@@ -483,11 +483,14 @@
 										var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
 										var store = tx.objectStore('mtab_checkpoint');
 
+										alert('inserirDadosCheckpoint 1')
+
 										dadosCheckpoint.map(function (dadoCheckpoint) {
 											store.add(dadoCheckpoint);
 										});
 
 										tx.oncomplete = function () {
+											alert('inserirDadosCheckpoint oncomplete')
 											go_to_page(qid_sistema, qid_empree);
 										}
 
@@ -543,11 +546,14 @@
 										var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
 										var store = tx.objectStore('mtab_checkpoint');
 
+										alert('inserirDadosCheckpointError 1')
+
 										dadosCheckpointError.map(function (dadoCheckpointError) {
 											store.add(dadoCheckpointError);
 										});
 
 										tx.oncomplete = function () {
+											alert('inserirDadosCheckpointError oncomplete')
 											go_to_page(qid_sistema, qid_empree);
 										}
 
@@ -620,19 +626,22 @@
 							request.onsuccess = function (event) {
 								db = request.result;
 
-								executarRemoverDados(db);
+								executarRemoverDadosCheckpoint(db);
 
 								db.onerror = function (event) {
 									alert("Database error: " + event.target.error);
 								}
 							};
 
-							function executarRemoverDados(db) {
+							function executarRemoverDadosCheckpoint(db) {
 								var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
 								var store = tx.objectStore('mtab_checkpoint');
 
+								alert('executarRemoverDadosCheckpoint 1')
+
 								var objectStoreRequest = store.clear();
 								objectStoreRequest.onsuccess = function (event) {
+									alert('executarRemoverDadosCheckpoint clear')
 									go_page_check();
 								}
 							}
@@ -694,10 +703,14 @@
 		xhr.onreadystatechange = function () {
 			if (xhr.readyState == 4) {
 				if (xhr.status == 200 || xhr.status == 0) {
+					alert('ponto 4')
 					var response = xhr.responseText;
 					var pedaco = response.split('*//*');
 					tem_alguma_manut = pedaco[0];
+					alert('tem_alguma_manut: ' + tem_alguma_manut)
+
 					nome_sistema = pedaco[1];
+					alert('nome_sistema: ' + nome_sistema)
 
 					if (tem_alguma_manut == "0") {
 						alert('Não possui manutenção para ser registrada!');

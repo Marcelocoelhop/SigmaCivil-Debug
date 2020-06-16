@@ -12,7 +12,6 @@
 	<script type="text/javascript" src="cordova.js"></script>
 	<script src="js/jquery.js"></script>
 	<script src="js/jquery.mobile-1.4.5.min.js"></script>
-	<script src="https://kit.fontawesome.com/c202879e33.js" crossorigin="anonymous"></script>
 	<style>
 		.menu .ui-mini.ui-btn-icon-left:after,
 		.ui-mini .ui-btn-icon-left:after,
@@ -415,6 +414,14 @@
 
 	var q_mes = getquerystring("qm")
 	var q_ano = getquerystring("qa")
+
+	if (navigator.geolocation) {
+		alert('entrou')
+		navigator.geolocation.getCurrentPosition(function(position) {
+			alert('entrou 2')
+			alert('posicao: ' + position);
+		})
+	}
 
 	//////////////////////////////////
 	function scan() {

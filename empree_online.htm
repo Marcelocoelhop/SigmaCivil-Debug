@@ -377,7 +377,7 @@
 
             // carregar dados das manutenções do servidor 
             var ajax = new XMLHttpRequest();
-            ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_emp_online.asp?l=" + login + "&s=" + senha + "&versao=2.0&t=" + Math.random(), true);
+            ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_emp_online.asp?l=" + login + "&s=" + senha + "&versao=2.2&t=" + Math.random(), true);
             ajax.onreadystatechange = function () {
                 if (ajax.readyState == 4) { //Request complete !!
                     if (ajax.status == 200 || ajax.status == 0) { // OK response
@@ -538,7 +538,7 @@
                                 vetor_dados_manutencao = vetor_dados_manutencao.substring(0, vetor_dados_manutencao.length - 1);
 
                                 var ajax2 = new XMLHttpRequest();
-                                ajax2.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_evento_onlineB.asp?l=" + login + "&s=" + senha + "&d=" + vetor_consulta_evento + "&versao=2.0&t=" + Math.random(), false);
+                                ajax2.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_evento_onlineB.asp?l=" + login + "&s=" + senha + "&d=" + vetor_consulta_evento + "&versao=2.2&t=" + Math.random(), false);
                                 ajax2.onreadystatechange = function () {
                                     if (ajax2.readyState == 4) { //Request complete !!
                                         if (ajax2.status == 200 || ajax2.status == 0) { // OK response

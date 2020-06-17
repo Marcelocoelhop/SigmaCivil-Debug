@@ -713,9 +713,9 @@
 					nome_sistema = pedaco[1];
 					alert('nome_sistema: ' + nome_sistema)
 
-					//if (tem_alguma_manut == "0") {
-					//	alert('Não possui manutenção para ser registrada!');
-					//} else if (tem_alguma_manut == "1") {
+					if (tem_alguma_manut == "0") {
+						alert('Não possui manutenção para ser registrada!');
+					} else if (tem_alguma_manut == "1") {
 						var redirecionar = confirm(`Deseja registrar a manutenção?`);
 						if (redirecionar == true) {
 							if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
@@ -727,7 +727,7 @@
 						} else {
 							go_page_check();
 						}
-					//}
+					}
 				} else {
 					alert("Problemas com sua conexao internet. Erro: 0146");
 				}

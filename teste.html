@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="css/custom.css" />
+    <link rel="stylesheet" href="css/custom-mobile.css" />
+    <link rel="stylesheet" href="css/custom-even.css" />
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
+    <title>Teste</title>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" src="js/mc.js"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/jquery.mobile-1.4.5.min.js"></script>
+</head>
+
+<body>
+    <div id="demo"></div>
+
+    <button type="button" onclick="handleClickPhoto()">Get Photo</button>
+
+    <script>
+        function handleClickPhoto() {
+            alert('ponto 1')
+            var data = "";
+
+            window.imagePicker.getPicture(
+                function (results) {
+                    for (var i = 0; i < results.length; i++) {
+                        alert('Image URI: ' + results[i]);
+
+                        data += "<img src=" + results[i] + " alt='photo'>";
+                    }
+
+                    document.getElementById("demo").innerHTML = data;
+                }, function (error) {
+                    alert('Error: ' + error);
+                }
+            );
+        }
+    </script>
+</body>
+
+</html>

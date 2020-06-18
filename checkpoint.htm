@@ -714,9 +714,9 @@
 					alert('nome_sistema: ' + nome_sistema)
 
 					if (tem_alguma_manut == "0") {
-						alert('Não possui manutenção para ser registrada!');
+						alert('Não há manutenções para serem registradas!');
 					} else if (tem_alguma_manut == "1") {
-						var redirecionar = confirm(`Deseja registrar a manutenção?`);
+						var redirecionar = confirm(`Deseja registrar esta manutenção? <br> Caso não haja manutenções deste sistema neste mês, elas não serão mostradas a seguir.`);
 						if (redirecionar == true) {
 							if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
 								window.location.assign("empree.htm?l=" + login + "&s=" + senha + "&e=" + qual_num_empree + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&fil=" + removeAcento(nome_sistema));

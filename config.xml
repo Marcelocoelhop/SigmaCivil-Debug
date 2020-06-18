@@ -4,8 +4,8 @@
 <widget xmlns     = "http://www.w3.org/ns/widgets"
         xmlns:gap = "http://phonegap.com/ns/1.0"
  		xmlns:android   = "http://schemas.android.com/apk/res/android"
-        id        = "br.com.sigmacivil.sigc"
-        version   = "2.1">
+        id        = "br.com.sigmacivil.sc"
+        version   = "2.0.125">
 
     <name>SigmaCivil</name>
 
@@ -129,6 +129,9 @@
     <plugin name="cordova-plugin-statusbar" source="npm" spec="~2.1.2" />
     <plugin name="cordova-plugin-vibration" source="npm" spec="~2.1.0" />
     <plugin name="cordova-sqlite-storage" spec="~0.8.5" />
+    <plugin name="cordova-plugin-barcodescanner" source="npm" spec="~0.7.4" />
+    
+    <plugin name="cordova-plugin-image-picker" source="npm" spec="~1.1.1" />
     
     <!-- <plugin name="cordova-plugin-wkwebview-engine" source="npm" spec="~1.2.1" /> -->
     

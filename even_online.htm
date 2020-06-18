@@ -829,7 +829,7 @@
                         dados_imagem += '<img id="foto_' + rrr_id_prog_manut + '" src="' + results[i] + '"  onclick="abrir_popup_new(' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')"  width="106" height="70" hspace="2" vspace="2"  style="display:none"/> </>  <div data-role="popup" id="idpopup_new_' + rrr_id_prog_manut + '"> <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a> <img id="foto_big_' + rrr_id_prog_manut + '"  class="popphoto" src="" style="max-height:512px;"> </div> ';
                     }
 
-                    document.getElementById('foto_' + qual_id_prog_manut).innerHTML = data;
+                    document.getElementById('foto_' + qual_id_prog_manut).innerHTML = dados_imagem;
                     document.getElementById('foto_' + qual_id_prog_manut).style.display = "inline";
                 }, function (error) {
                     alert('Error: ' + error);

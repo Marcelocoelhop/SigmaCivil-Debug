@@ -53,7 +53,7 @@
 			}
 
 			var ajax = new XMLHttpRequest();
-			ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_emp.asp?l=" + login + "&s=" + senha + "&versao=2.1&t=" + Math.random(), true);
+			ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_emp.asp?l=" + login + "&s=" + senha + "&versao=2.2&t=" + Math.random(), true);
 			ajax.onreadystatechange = function () {
 				if (ajax.readyState == 4) {//Request complete !!
 					if (ajax.status == 200 || ajax.status == 0) { // OK response

@@ -164,7 +164,7 @@
 
             // CAPTURANDO DADOS DO EVENTO
             var ajax2 = new XMLHttpRequest();
-            ajax2.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_dados_evento_online.asp?l=" + login + "&s=" + senha + "&ipm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&versao=2.1&t=" + Math.random(), false);
+            ajax2.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_dados_evento_online.asp?l=" + login + "&s=" + senha + "&ipm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&versao=2.2&t=" + Math.random(), false);
             ajax2.onreadystatechange = function () {
                 if (ajax2.readyState == 4) { //Request complete !!
                     if (ajax2.status == 200 || ajax2.status == 0) { // OK response
@@ -823,7 +823,11 @@
                 function (results) {
                     for (var i = 0; i < results.length; i++) {
                         alert('Image URI: ' + results[i]);
+
+                        data += "<img src=" + results[i] + " alt='photo'>";
                     }
+
+                    document.getElementById("demo").innerHTML = data;
                 }, function (error) {
                     alert('Error: ' + error);
                 }
@@ -1135,7 +1139,7 @@
             options.chunkedMode = false;
 
             var ft = new FileTransfer();
-            ft.upload(imageURI, "http://www.sigmacivil.com.br/app_sc/rec_foto_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up, fail_up, options);
+            ft.upload(imageURI, "http://www.sigmacivil.com.br/app_sc/rec_foto_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up, fail_up, options);
 
         }
 
@@ -1412,7 +1416,7 @@
             options.chunkedMode = false;
 
             var ft = new FileTransfer();
-            ft.upload(videoURL, "http://www.sigmacivil.com.br/app_sc/rec_video_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente, win_up_v, fail_up_v, options);
+            ft.upload(videoURL, "http://www.sigmacivil.com.br/app_sc/rec_video_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente, win_up_v, fail_up_v, options);
 
         }
 
@@ -1717,7 +1721,7 @@
             options.chunkedMode = false;
 
             var ft = new FileTransfer();
-            ft.upload(audioURL, "http://www.sigmacivil.com.br/app_sc/rec_audio_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente, win_up_a, fail_up_a, options);
+            ft.upload(audioURL, "http://www.sigmacivil.com.br/app_sc/rec_audio_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente, win_up_a, fail_up_a, options);
 
         }
 
@@ -1820,7 +1824,7 @@
 
             var data = 'tx=' + encodeURIComponent(textoURL) + '&ipm=' + id_prog_manut + '&d=' + dia_ev + '&m=' + mes_ev + '&a=' + ano_ev + "&econst=" + e_construtora + "&idc=" + id_cliente;
             var ajax = new XMLHttpRequest();
-            ajax.open("POST", "https://www.sigmacivil.com.br/app_sc/rec_texto_uploaded.asp?versao=2.1", true);
+            ajax.open("POST", "https://www.sigmacivil.com.br/app_sc/rec_texto_uploaded.asp?versao=2.2", true);
             ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             ajax.onreadystatechange = function () {
                 if (ajax.readyState == 4) {//Request complete !!
@@ -1911,7 +1915,7 @@
     <!-- <span id="nome_emp"></span> -->
 
     <!-- TELA DE LOADING AO ENVIAR ALGUM ARQUIVO PARA A GALERIA DE IMAGENS SERVIDOR -->
-    <div id="parte_load" align="center">
+    <div id="parte_load" style="z-index: 50;" align="center">
         <table width="224" border="0" cellpadding="0" cellspacing="0">
             <tr>
                 <td width="42" height="49">
@@ -1928,14 +1932,21 @@
 
     <!-- MENU BURGER -->
     <div class="btn-bars" style="display: none;">
-        <div style="top:4;" data-role="collapsible" data-collapsed="true" class="ui-btn-left menu" data-mini="true">
+        <div style="top:4; z-index: 15;" data-role="collapsible" data-collapsed="true" class="ui-btn-left menu"
+            data-mini="true">
             <h4 class="btn-bars-bars">
                 <!-- <span class="fas fa-bars"></span> -->
                 <img class="is-bars" src="images/bars.svg" width="14" alt="Menu" />
                 <img class="is-times is-disabled" src="images/times.svg" width="13" alt="Menu" />
             </h4>
             <ul style="border: 1px solid #e0e0e0;" data-role="listview" data-mini="true">
-                <li><a style="z-index: 10" class="click" href="#" onClick="enviar_sync()">Novo Login</a></li>
+                <li>
+                    <a style="z-index: 10" class="click" href="#" onClick="enviar_sync()">Novo Login</a>
+                </li>
+                <li>
+                    <a style="z-index: 11;" class="ui-btn ui-icon-clock ui-btn-icon-right ui-shadow ui-corner-all"
+                        href="#" onClick="go_page_check()">Checkpoint</a>
+                </li>
             </ul>
         </div>
     </div>
@@ -2135,6 +2146,8 @@
 
     </ul>
     <div id="id_ev_email"></div>
+
+    <div id="demo"></div>
 </body>
 
 </html>
@@ -2623,7 +2636,7 @@
                 }
                 if (prosseguir == true || ((nivel_manut == 1 || nivel_manut == 2) && qt_docs > 0)) {
                     var ajax3 = new XMLHttpRequest();
-                    ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/salvar_manut.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&econst=" + e_construtora + "&idpm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&d_data_realiz=" + document.getElementById('in_data_realizacao').value + "&d_forn=" + document.getElementById('valores').value + "&d_custoReal=" + document.getElementById('in_dado_custo_real').value + "&d_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value) + "&tipo=" + tipo + "&versao=2.1&env_em=" + ev_email + "&segur=" + crypt_segur + "&t=" + Math.random(), false);
+                    ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/salvar_manut.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&econst=" + e_construtora + "&idpm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&d_data_realiz=" + document.getElementById('in_data_realizacao').value + "&d_forn=" + document.getElementById('valores').value + "&d_custoReal=" + document.getElementById('in_dado_custo_real').value + "&d_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value) + "&tipo=" + tipo + "&versao=2.2&env_em=" + ev_email + "&segur=" + crypt_segur + "&t=" + Math.random(), false);
                     ajax3.onreadystatechange = function () {
                         if (ajax3.readyState == 4) {
                             if (ajax3.status == 200 || ajax3.status == 0) {
@@ -2668,7 +2681,7 @@
                     if (continuar == false) { return }
                 }
                 var ajax3 = new XMLHttpRequest();
-                ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/salvar_manut.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&econst=" + e_construtora + "&idpm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&d_data_realiz=" + document.getElementById('in_data_realizacao').value + "&d_forn=" + document.getElementById('valores').value + "&d_custoReal=" + document.getElementById('in_dado_custo_real').value + "&d_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value) + "&tipo=" + tipo + "&versao=2.1&env_em=" + ev_email + "&segur=" + crypt_segur + "&t=" + Math.random(), false);
+                ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/salvar_manut.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&econst=" + e_construtora + "&idpm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&d_data_realiz=" + document.getElementById('in_data_realizacao').value + "&d_forn=" + document.getElementById('valores').value + "&d_custoReal=" + document.getElementById('in_dado_custo_real').value + "&d_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value) + "&tipo=" + tipo + "&versao=2.2&env_em=" + ev_email + "&segur=" + crypt_segur + "&t=" + Math.random(), false);
                 ajax3.onreadystatechange = function () {
                     if (ajax3.readyState == 4) {
                         if (ajax3.status == 200 || ajax3.status == 0) {
@@ -2716,7 +2729,7 @@
                         var verif_fim = verific1 + "S" + verific2 + "C" + verific3
 
                         var ajax3 = new XMLHttpRequest();
-                        ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_excluir_arq.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&e_const=" + e_construtora + "&seg=" + verif_fim + "&cam=" + q_cam + "&versao=2.1")
+                        ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_excluir_arq.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&e_const=" + e_construtora + "&seg=" + verif_fim + "&cam=" + q_cam + "&versao=2.2")
                         ajax3.onreadystatechange = function () {
                             if (ajax3.readyState == 4) {
                                 if (ajax3.status == 200 || ajax3.status == 0) {
@@ -2748,7 +2761,7 @@
                     var verif_fim = verific1 + "S" + verific2 + "C" + verific3
 
                     var ajax3 = new XMLHttpRequest();
-                    ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_excluir_arq.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&e_const=" + e_construtora + "&seg=" + verif_fim + "&cam=" + q_cam + "&versao=2.1")
+                    ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_excluir_arq.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&e_const=" + e_construtora + "&seg=" + verif_fim + "&cam=" + q_cam + "&versao=2.2")
                     ajax3.onreadystatechange = function () {
                         if (ajax3.readyState == 4) {
                             if (ajax3.status == 200 || ajax3.status == 0) {
@@ -2886,6 +2899,8 @@
         }
     }
 
-
+    function go_page_check() {
+        window.location.assign("checkpoint.htm?e=" + id_empree + "&l=" + login + "&s=" + senha + "&qm=" + mes_ev + "&qa=" + ano_ev);
+    }
 
 </script>

@@ -645,8 +645,6 @@
                         var rrr_status_caminho_texto = ""
                     }
 
-                    alert('rrr_caminho_imagens: ' + rrr_caminho_imagens)
-
                     var todas_imagens = ""
                     var todas_status_imagens = ""
                     if (rrr_caminho_imagens == null || rrr_caminho_imagens == "") {
@@ -848,8 +846,6 @@
         var qual_id_prog_manut;
 
         function onPhotoURISuccess(imageURI) {
-            // alert(imageURI.map(img => alert(img)));
-
             document.getElementById('foto_' + qual_id_prog_manut).src = imageURI;
             document.getElementById('foto_' + qual_id_prog_manut).style.display = "inline";
 
@@ -1454,7 +1450,7 @@
         var fail_up_v = function (error) {
             document.getElementById("parte_load_content").style.display = "none";
             document.getElementById("parte_load").style.display = "none";
-            alert("Não foi feito o upload da vídeo!");
+            alert("Não foi feito o upload do vídeo!");
         }
         // FIM UPLOAD VIDEO
 
@@ -1759,7 +1755,7 @@
         var fail_up_a = function (error) {
             document.getElementById("parte_load_content").style.display = "none";
             document.getElementById("parte_load").style.display = "none";
-            alert("Não foi feito o upload da áudio!");
+            alert("Não foi feito o upload do áudio!");
         }
         // FIM UPLOAD AUDIO
 

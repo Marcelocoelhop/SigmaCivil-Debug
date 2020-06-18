@@ -96,6 +96,8 @@
             }
         }
 
+        var rrr_id_prog_manut = id_prog_manut
+
         // EXECUTA CASO TENHA INTERNET
         function iniciar() {
 
@@ -106,8 +108,6 @@
             if (!window.indexedDB) {
                 alert("Seu navegador não suporta uma versão estável do IndexedDB. Alguns recursos não estarão disponíveis.");
             }
-
-            var rrr_id_prog_manut = id_prog_manut
 
             // CASCA OFFLINE
             var menu_sup_offline = [
@@ -744,7 +744,7 @@
                     }
 
                     var item_camera = [
-                        '<img src="images/camera.svg" style="margin-top: 10px; float: left; text-shadow: none;" onclick="getPhoto(pictureSource.CAMERA,' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')" width="40" height="30" style="cursor:pointer"><div style="width: 200px;"><img id="foto_' + rrr_id_prog_manut + '" src=""  onclick="abrir_popup_new(' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')"  width="106" height="70" hspace="2" vspace="2"  style="display:none"/> </>  <div data-role="popup" id="idpopup_new_' + rrr_id_prog_manut + '"> <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a> <img id="foto_big_' + rrr_id_prog_manut + '"  class="popphoto" src="" style="max-height:512px;"> </div> ' + selec_imagens_thumb + selec_imagens
+                        '<img src="images/camera.svg" style="margin-top: 10px; float: left; text-shadow: none;" onclick="getPhoto(pictureSource.CAMERA,' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')" width="40" height="30" style="cursor:pointer"><div style="width: 200px;">' + dados_imagem + selec_imagens_thumb + selec_imagens
                     ];
 
                     var item_video = [

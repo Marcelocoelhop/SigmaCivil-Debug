@@ -645,6 +645,8 @@
                         var rrr_status_caminho_texto = ""
                     }
 
+                    alert('rrr_caminho_imagens: ' + rrr_caminho_imagens)
+
                     var todas_imagens = ""
                     var todas_status_imagens = ""
                     if (rrr_caminho_imagens == null || rrr_caminho_imagens == "") {
@@ -819,23 +821,23 @@
                 return
             }
 
-            window.imagePicker.getPictures(onPhotoURISuccess, onFail);
+            // window.imagePicker.getPictures(onPhotoURISuccess, onFail);
 
-            // var r = confirm("Para tirar uma foto com a câmera selecione OK. Para acessar sua galeria de imagens clique em CANCELAR");
-            // if (r == true) {
-            //     source = pictureSource.CAMERA;
-            // } else {
-            //     source = pictureSource.PHOTOLIBRARY;
-            // }
+            var r = confirm("Para tirar uma foto com a câmera selecione OK. Para acessar sua galeria de imagens clique em CANCELAR");
+            if (r == true) {
+                source = pictureSource.CAMERA;
+            } else {
+                source = pictureSource.PHOTOLIBRARY;
+            }
 
-            // navigator.camera.getPicture(onPhotoURISuccess, onFail, {
-            //     quality: 50,
-            //     destinationType: destinationType.FILE_URI,
-            //     encodingType: Camera.EncodingType.JPEG,
-            //     popoverOptions: CameraPopoverOptions,
-            //     saveToPhotoAlbum: true,
-            //     sourceType: source
-            // });
+            navigator.camera.getPicture(onPhotoURISuccess, onFail, {
+                quality: 50,
+                destinationType: destinationType.FILE_URI,
+                encodingType: Camera.EncodingType.JPEG,
+                popoverOptions: CameraPopoverOptions,
+                saveToPhotoAlbum: true,
+                sourceType: source
+            });
 
         }
 
@@ -846,8 +848,8 @@
         var qual_id_prog_manut;
 
         function onPhotoURISuccess(imageURI) {
-            alert(imageURI.map(img => alert(img)));
-            
+            // alert(imageURI.map(img => alert(img)));
+
             document.getElementById('foto_' + qual_id_prog_manut).src = imageURI;
             document.getElementById('foto_' + qual_id_prog_manut).style.display = "inline";
 

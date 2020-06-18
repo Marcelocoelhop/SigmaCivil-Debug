@@ -20,11 +20,15 @@
     <button type="button" onclick="handleClickPhoto()">Get Photo</button>
 
     <script>
+        window.onerror = function (message, url, lineNumber) {
+            alert("Error: " + message + " in " + url + " at line " + lineNumber);
+        }
+
         function handleClickPhoto() {
             alert('ponto 1')
             var data = "";
 
-            window.imagePicker.getPicture(
+            window.imagePicker.getPictures(
                 function (results) {
                     for (var i = 0; i < results.length; i++) {
                         alert('Image URI: ' + results[i]);

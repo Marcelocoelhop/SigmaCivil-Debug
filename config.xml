@@ -4,8 +4,8 @@
 <widget xmlns     = "http://www.w3.org/ns/widgets"
         xmlns:gap = "http://phonegap.com/ns/1.0"
  		xmlns:android   = "http://schemas.android.com/apk/res/android"
-        id        = "br.com.sigmacivil.sc"
-        version   = "2.1">
+        id        = "br.com.sigmacivil.sigc"
+        version   = "2.1.1">
 
     <name>SigmaCivil</name>
 

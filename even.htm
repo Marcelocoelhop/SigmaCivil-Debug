@@ -88,7 +88,7 @@
 				'<div align="center">',
 				'<a href="#" onClick="volta_uni()"><button style="background: #e9e9e9; border-color: #e9e9e9;" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-left ui-icon-carat-l">Voltar</button></a>', '<table width="30" border="0" cellpadding="0" cellspacing="0" >',
 				'<tr>',
-				'<td width="30" ><img src="images/logo4.png" width="142"> </td>',
+				'<td width="30" ><img src="images/logo6.png" width="142"> </td>',
 				'</tr>',
 				'</table>',
 				'</div>',
@@ -108,7 +108,7 @@
 				'<a href="#" onClick="volta_uni()"><button style="background: #e9e9e9; border-color: #e9e9e9;" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-left ui-icon-carat-l">Voltar</button></a>',
 				'<table width="30" border="0" cellpadding="0" cellspacing="0" >',
 				'<tr>',
-				'<td width="30" ><img src="images/logo4.png" width="142"> </td>',
+				'<td width="30" ><img src="images/logo6.png" width="142"> </td>',
 				'</tr>',
 				'</table>',
 				'</div>',
@@ -925,7 +925,7 @@
 		options.chunkedMode = false;
 
 		var ft = new FileTransfer();
-		ft.upload(imageURI, "http://www.sigmacivil.com.br/app_sc/rec_foto_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up, fail_up, options);
+		ft.upload(imageURI, "http://www.sigmacivil.com.br/app_sc/rec_foto_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up, fail_up, options);
 
 	}
 
@@ -1191,7 +1191,7 @@
 		options.chunkedMode = false;
 
 		var ft = new FileTransfer();
-		ft.upload(videoURL, "http://www.sigmacivil.com.br/app_sc/rec_video_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente, win_up_v, fail_up_v, options);
+		ft.upload(videoURL, "http://www.sigmacivil.com.br/app_sc/rec_video_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente, win_up_v, fail_up_v, options);
 
 	}
 
@@ -1500,7 +1500,7 @@
 		options.chunkedMode = false;
 
 		var ft = new FileTransfer();
-		ft.upload(audioURL, "http://www.sigmacivil.com.br/app_sc/rec_audio_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente, win_up_a, fail_up_a, options);
+		ft.upload(audioURL, "http://www.sigmacivil.com.br/app_sc/rec_audio_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente, win_up_a, fail_up_a, options);
 
 	}
 
@@ -1602,7 +1602,7 @@
 
 		var data = 'tx=' + encodeURIComponent(textoURL) + '&ipm=' + id_prog_manut + '&d=' + dia_ev + '&m=' + mes_ev + '&a=' + ano_ev + "&econst=" + e_construtora + "&idc=" + id_cliente;
 		var ajax = new XMLHttpRequest();
-		ajax.open("POST", "https://www.sigmacivil.com.br/app_sc/rec_texto_uploaded.asp?versao=2.1", true);
+		ajax.open("POST", "https://www.sigmacivil.com.br/app_sc/rec_texto_uploaded.asp?versao=2.2", true);
 		ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 		ajax.onreadystatechange = function () {
 			if (ajax.readyState == 4) {//Request complete !!

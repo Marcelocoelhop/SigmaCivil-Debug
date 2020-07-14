@@ -1,0 +1,866 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Check Point</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="stylesheet" href="css/custom.css" />
+	<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
+	<script type="text/javascript" src="js/mc.js"></script>
+	<script type="text/javascript" src="cordova.js"></script>
+	<script src="js/jquery.js"></script>
+	<script src="js/jquery.mobile-1.4.5.min.js"></script>
+	<style>
+		.menu .ui-mini.ui-btn-icon-left:after,
+		.ui-mini .ui-btn-icon-left:after,
+		.ui-header .ui-btn-icon-left:after,
+		.ui-footer .ui-btn-icon-left:after {
+			display: none;
+		}
+
+		.ui-btn-icon-left {
+			position: relative;
+			padding-left: 12px !important;
+		}
+
+		.ui-collapsible-inset .ui-collapsible-heading .ui-btn {
+			box-shadow: none !important;
+		}
+
+		.ui-page-theme-a a {
+			color: transparent;
+		}
+
+		.ui-page-theme-a a:hover {
+			color: transparent;
+		}
+	</style>
+
+	<script>
+
+		window.onerror = function (errorMsg, url, lineNumber) {
+			alert('Erro: ' + errorMsg + '\nArquivo: ' + url + '\nLinha: ' + lineNumber);
+		}
+
+		var dados_checkpoint = "";
+		var id_cliente;
+		var id_empree;
+
+		document.addEventListener("deviceready", onDeviceReady, false);
+
+		function onDeviceReady() {
+			iniciar();
+		}
+
+		function iniciar() {
+			window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+			window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
+			window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
+
+			var menu_sup_offline = [
+				'<form name="form_sup" action="" method="get">',
+				'<div data-role="header" data-position="fixed" data-theme="a">',
+				'<div class="ui-corner-all custom-corners">',
+				'<div class="ui-bar ui-bar-a" style="height:38;text-align:center">',
+				'<div class="barra1" align="left"><img src="images/wifi_vermelho.png" style="position: absolute; left: 70px; top: 20px;" width="17" /></div>',
+				'<div align="center">',
+				'<a style="position: relative; float: right; left: 15px; bottom: 4px;" href="#"><button style="box-shadow: none !important; background: #ebebeb !important; border: none;" onclick="volta_uni()" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right ui-icon-carat-l">Voltar</button></a>',
+				'<table width="30" border="0" cellpadding="0" cellspacing="0" >',
+				'<tr>',
+				'<td width="30" ><img src="images/logo6.png" width="142"> </td>',
+				'</tr>',
+				'</table>',
+				'</div>',
+				'</div>',
+				'</div>',
+				'</div>',
+				'</form>'
+			].join('');
+
+			var menu_sup_online = [
+				'<form name="form_sup" action="" method="get">',
+				'<div data-role="header" data-position="fixed" data-theme="a">',
+				'<div class="ui-corner-all custom-corners">',
+				'<div class="ui-bar ui-bar-a" style="height:38;text-align:center">',
+				'<div class="barra1" align="left"><img src="images/wifi_verde.png" style="position: absolute; left: 70px; top: 20px;" width="17" /></div>',
+				'<div align="center">',
+				'<a style="position: relative; float: right; left: 15px; bottom: 4px;" href="#"><button style="box-shadow: none !important; background: #ebebeb !important; border: none;" onclick="volta_uni()" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right ui-icon-carat-l">Voltar</button></a>',
+				'<table width="30" border="0" cellpadding="0" cellspacing="0" >',
+				'<tr>',
+				'<td width="30" ><img src="images/logo6.png" width="142"> </td>',
+				'</tr>',
+				'</table>',
+				'</div>',
+				'</div>',
+				'</div>',
+				'</div>',
+				'</form>'
+			].join('');
+
+			document.getElementById('menu_opc2').innerHTML = menu_sup_online;
+
+			setInterval(function () {
+				if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
+					document.getElementById('menu_opc2').innerHTML = menu_sup_offline;
+					return false;
+				}
+				else {
+					document.getElementById('menu_opc2').innerHTML = menu_sup_online;
+					return true;
+				}
+			}, 5000);
+
+			var db;
+			var request = window.indexedDB.open("db_sigmacivil", "1");
+
+			request.onerror = function (event) {
+				alert("Erro ao criar o banco (cod 01)");
+			};
+
+			request.onsuccess = function (event) {
+				db = request.result;
+
+				consultaCliente(db);
+
+				db.onerror = function (event) {
+					alert("Database error: " + event.target.errorCode);
+				}
+			}
+
+			function consultaCliente(db) {
+				var tx = db.transaction(['mtab_cliente'], 'readwrite');
+				var store = tx.objectStore('mtab_cliente');
+				var objectStoreRequest = store.openCursor();
+				objectStoreRequest.onsuccess = function (event) {
+					var cursor = event.target.result;
+					if (cursor) {
+						var data = cursor.value;
+
+						id_cliente = data['id_cliente'];
+
+						var tx2 = db.transaction(['mtab_checkpoint'], 'readwrite');
+						var store2 = tx2.objectStore('mtab_checkpoint');
+						var objectStoreRequest2 = store2.openCursor();
+						objectStoreRequest2.onsuccess = function (event) {
+							var cursor2 = event.target.result;
+							if (cursor2) {
+								var data2 = cursor2.value;
+
+								id_empree = data2['id_empree'];
+								var id_sistema = data2['id_sistema'];
+								var data_checkpoint = data2['data_checkpoint'];
+								var latitude_checkpoint = data2['latitude_checkpoint'];
+								var longitude_checkpoint = data2['longitude_checkpoint'];
+								var altura_checkpoint = data2['altura_checkpoint'];
+								var atualizado_serv = data2['atualizado_serv'];
+
+								dados_checkpoint = dados_checkpoint + id_empree + "_" + id_sistema + "_" + data_checkpoint + "_" + latitude_checkpoint + "_" + longitude_checkpoint + "_" + altura_checkpoint + "_" + atualizado_serv + "*";
+							}
+
+							if (dados_checkpoint != "") {
+								dados_checkpoint = dados_checkpoint.substring(0, (dados_checkpoint.length - 1))
+							}
+
+							if (!cursor2) {
+								var botao_sincro = [
+									'<table width="95%" height="51" border="0" cellpadding="0" cellspacing="0">',
+									'<tr>',
+									'<td width="100%" height="51">',
+									'<a href="#" class="is-not-decoration">',
+									'<button style="width: 100%;" class="ui-btn ui-shadow ui-corner-all">',
+									'<table width="100%" height="51" border="0" cellpadding="0" cellspacing="0"><tr>',
+									'<td width="10%" height="51"><div align="left"><img src="images/check-circle.png" width="25" /></div></td>',
+									'<td width="90%"><div align="center"><span style="text-decoration: none;">CheckPoints Sincronizados</span></div></td></tr>',
+									'</table>',
+									'</button>',
+									'</a></td></tr></table>'
+								].join('');
+							} else {
+								var botao_sincro = [
+									'<table width="95%" height="51" border="0" cellpadding="0" cellspacing="0">',
+									'<tr>',
+									'<td width="100%" height="51">',
+									'<a href="#" class="is-not-decoration" onClick="sincronizar()">',
+									'<button style="width: 100%;" class="ui-btn ui-shadow ui-corner-all" data-theme="b">',
+									'<table width="100%" height="51" border="0" cellpadding="0" cellspacing="0"><tr>',
+									'<td width="10%" height="51"><div align="left"><img src="images/exclamation-circle.png" width="25" /></div></td>',
+									'<td width="90%"><div align="center"><span style="text-decoration: none;">Sincronizar CheckPoints</span></div></td></tr>',
+									'</table>',
+									'</button>',
+									'</a></td></tr></table>'
+								].join('');
+							}
+
+							document.getElementById('bot_sincro').innerHTML = botao_sincro;
+
+							if (tem_conexao()) {
+								sincronizar();
+							}
+						}
+					}
+				}
+			}
+
+
+
+
+
+
+
+
+
+			/*var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+			db.transaction(function (tx) {
+
+
+				tx.executeSql('SELECT * FROM mtab_cliente', [], function (tx, results) {
+					var len1 = results.rows.length;
+
+					var j;
+					for (j = 0; j < len1; j++) {
+						var row = results.rows.item(j);
+						id_cliente = row['id_cliente'];
+					}
+
+				}, null);
+
+				tx.executeSql('CREATE TABLE IF NOT EXISTS mtab_checkpoint (id_empree INTEGER, id_sistema INTEGER, data_checkpoint TEXT, latitude_checkpoint TEXT, longitude_checkpoint TEXT, altura_checkpoint TEXT, atualizado_serv TEXT)');
+
+				tx.executeSql('SELECT * FROM mtab_checkpoint ', [], function (tx, results) {
+					var len = results.rows.length;
+
+					//document.getElementById('visual_apagar').innerHTML = document.getElementById('visual_apagar').innerHTML + " compr:"  + len +"<br>";
+
+					var i;
+					for (i = 0; i < len; i++) {
+						var row = results.rows.item(i)
+						id_empree = row['id_empree'];
+						var id_sistema = row['id_sistema'];
+						var data_checkpoint = row['data_checkpoint'];
+						var latitude_checkpoint = row['latitude_checkpoint'];
+						var longitude_checkpoint = row['longitude_checkpoint'];
+						var altura_checkpoint = row['altura_checkpoint'];
+						var atualizado_serv = row['atualizado_serv'];
+						//document.getElementById('visual_apagar').innerHTML =  document.getElementById('visual_apagar').innerHTML + id_empree + "  " + id_sistema + "  " + data_checkpoint + "  " + latitude_checkpoint + "  "  + longitude_checkpoint + "  "  + altura_checkpoint + "  "  + atualizado_serv +"<br>";
+						dados_checkpoint = dados_checkpoint + id_empree + "_" + id_sistema + "_" + data_checkpoint + "_" + latitude_checkpoint + "_" + longitude_checkpoint + "_" + altura_checkpoint + "_" + atualizado_serv + "*";
+					}
+
+					if (dados_checkpoint != "") {
+						dados_checkpoint = dados_checkpoint.substring(0, (dados_checkpoint.length - 1))
+					}
+
+					if (len == 0) {
+						var botao_sincro = [
+							'<table width="85%" height="51" border="0" cellpadding="0" cellspacing="0">',
+							'<tr>',
+							'<td width="85%" height="51">',
+							'<a href="#" class="is-not-decoration">',
+							'<button class="ui-btn ui-shadow ui-corner-all">',
+							'<table width="100%" height="51" border="0" cellpadding="0" cellspacing="0"><tr>',
+							'<td width="20%" height="51"><div align="right"><img src="images/check-circle.png" width="35" /></div></td>',
+							'<td width="80%"><div align="center"><font size="3" face="Arial, Helvetica, sans-serif">CheckPoints Sincronizados</font></div></td></tr>',
+							'</table>',
+							'</button>',
+							'</a></td></tr></table>'
+						].join('');
+					} else {
+						var botao_sincro = [
+							'<table width="85%" height="51" border="0" cellpadding="0" cellspacing="0">',
+							'<tr>',
+							'<td width="85%" height="51">',
+							'<a href="#" class="is-not-decoration" onClick="sincronizar()">',
+							'<button class="ui-btn ui-shadow ui-corner-all" data-theme="b">',
+							'<table width="100%" height="51" border="0" cellpadding="0" cellspacing="0"><tr>',
+							'<td width="20%" height="51"><div align="right"><img src="images/exclamation-circle.png" width="35" /></div></td>',
+							'<td width="80%"><div align="center"><font size="3" face="Arial, Helvetica, sans-serif">Sincronizar CheckPoints</font></div></td></tr>',
+							'</table>',
+							'</button>',
+							'</a></td></tr></table>'
+						].join('');
+					}
+					document.getElementById('bot_sincro').innerHTML = botao_sincro;
+
+					if (tem_conexao()) {
+						sincronizar();
+					}
+
+				}, null);
+
+			});*/
+
+
+		}
+
+	</script>
+
+</head>
+
+<body>
+
+	<div align="center">
+
+		<span id="menu_opc2"></span>
+
+		<span id="visual_apagar"></span>
+
+		<div class="btn-bars">
+			<div style="top:4; z-index: 1" data-role="collapsible" data-collapsed="true" class="ui-btn-left menu"
+				data-mini="true">
+				<h4 class="btn-bars-bars">
+					<img class="is-bars" src="images/bars.svg" width="14" alt="Menu" />
+					<img class="is-times is-disabled" src="images/times.svg" width="13" alt="Menu" />
+				</h4>
+				<ul style="border: 1px solid #e0e0e0;" data-role="listview" data-mini="true">
+					<li><a class="click" href="#" onClick="enviar_sync()">Novo Login</a></li>
+					<li><a class="ui-btn ui-icon-clock ui-btn-icon-right ui-shadow ui-corner-all" href="#"
+							onClick="go_page_check()">Checkpoint</a></li>
+				</ul>
+			</div>
+		</div>
+
+		<h3 style="border-radius: 0; background: transparent; border: 0; margin: 0; padding: 5px 20px;"
+			class="ui-bar ui-bar-a ui-corner-all">
+			<div align="center">
+				<table width="100%" height="27" border="0" cellpadding="0" cellspacing="0">
+					<tr>
+						<td width="20" class="menu_2">
+							<div align="center"></div>
+						</td>
+						<td width="130" height="27">
+							<div align="center"><strong>Check Point</strong></div>
+						</td>
+						<td width="20" class="menu_2">
+							<div align="right">
+								<a href="#transitionExample" data-transition="pop" data-rel="popup">
+									<img src="images/question-circle.png" width="15" alt="">
+								</a>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</h3>
+
+		<div data-role="popup" id="transitionExample" class="ui-content" data-theme="a">
+			<h2>Como funciona?</h2>
+			<p>Com o Checkpoint do SigmaCivil é possível registrar dia e
+				horário da presença física de algum usuário ou
+				funcionário à frente dos QRCodes de cada sistema do empreendimento.</p>
+			<ol>
+				<li>Leia os QRCodes do SigmaCivil para marcar a presença do usuário em determinado sistema e horário.
+				</li>
+				<li>Sincronize os dados para enviar essas informações ao servidor.</li>
+				<li>Acompanhe os relatórios online.</li>
+			</ol>
+		</div>
+
+		<span id="bot_sincro"></span>
+
+		<table width="95%" height="51" border="0" cellpadding="0" cellspacing="0">
+			<tr>
+				<td width="85%" height="51">
+
+					<a href="#" class="is-not-decoration" onclick="scan();">
+						<button class="ui-btn ui-shadow ui-corner-all">
+							<table width="100%" height="51" border="0" cellpadding="0" cellspacing="0">
+								<tr>
+									<td width="10%" height="51">
+										<div align="left"><img src="images/qrcode.svg" width="25" alt=""></div>
+									</td>
+									<td width="90%">
+										<div align="center">
+											<span>Ler QR Code</span>
+										</div>
+									</td>
+								</tr>
+							</table>
+						</button>
+					</a>
+
+				</td>
+			</tr>
+		</table>
+
+
+		<table width="95%" height="51" border="0" cellpadding="0" cellspacing="0">
+			<tr>
+				<td width="100%" height="51">
+					<a href="#" class="is-not-decoration" onClick="go_relat_check2()">
+						<button style="width: 100%;" class="ui-btn ui-shadow ui-corner-all">
+							<table width="100%" height="51" border="0" cellpadding="0" cellspacing="0">
+								<tr>
+									<td width="10%" height="51">
+										<div align="left"><img src="images/chart.svg" width="25" alt=""></div>
+									</td>
+									<td width="90%">
+										<div align="center">
+											<span style="text-decoration: none;">Relatório de CheckPoints</span>
+										</div>
+									</td>
+								</tr>
+							</table>
+						</button>
+					</a>
+				</td>
+			</tr>
+		</table>
+
+	</div>
+
+</body>
+
+</html>
+
+<script>
+
+	var num_empree = getquerystring("e");
+
+	var login = getquerystring("l");
+	var senha = getquerystring("s");
+
+	var q_mes = getquerystring("qm")
+	var q_ano = getquerystring("qa")
+
+	/*if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(function(position) {
+			console.log(position);
+		})
+	}*/
+
+	//////////////////////////////////
+	function scan() {
+		cordova.plugins.barcodeScanner.scan(
+			function (result) {
+				if (!result.cancelled) {
+					// In this case we only want to process QR Codes
+					if (result.format == "QR_CODE") {
+						var value = result.text;
+
+						var ponto_ini = value.indexOf("www.sigmacivil.com.br/us/new_qr_hist_mp.asp?c=");
+						var parte1 = value.substring(ponto_ini + 46);
+
+						var pedaco = parte1.split("_");
+
+						if (num_empree == pedaco[0]) {
+
+							var qid_empree = num_empree;
+							var qid_sistema = pedaco[1];
+
+							var d = new Date();
+							var qdata_checkpoint = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+
+							var qatualizado_serv = "N";
+
+							navigator.geolocation.getCurrentPosition(
+								function (position) {
+									var qlatitude_checkpoint = position.coords.latitude;
+									var qlongitude_checkpoint = position.coords.longitude;
+									var qaltura_checkpoint = position.coords.altitude;
+
+									var db;
+									var request = window.indexedDB.open("db_sigmacivil", "1");
+
+									request.onerror = function (event) {
+										alert("Erro ao criar o banco (cod 02)");
+									};
+
+									request.onsuccess = function (event) {
+										db = request.result;
+
+										inserirDadosCheckpoint(db, dadosCheckpoint);
+
+										db.onerror = function (event) {
+											alert("Database error: " + event.target.errorCode);
+										}
+									}
+
+									var dadosCheckpoint = [
+										{
+											id_empree: qid_empree,
+											id_sistema: qid_sistema,
+											data_checkpoint: qdata_checkpoint,
+											latitude_checkpoint: qlatitude_checkpoint,
+											longitude_checkpoint: qlongitude_checkpoint,
+											altura_checkpoint: qaltura_checkpoint,
+											atualizado_serv: qatualizado_serv,
+										}
+									];
+
+									function inserirDadosCheckpoint(db, dadosCheckpoint) {
+										var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
+										var store = tx.objectStore('mtab_checkpoint');
+
+										dadosCheckpoint.map(function (dadoCheckpoint) {
+											store.add(dadoCheckpoint);
+										});
+
+										tx.oncomplete = function () {
+											go_to_page(qid_sistema, qid_empree);
+										}
+
+										tx.onerror = function (event) {
+											alert('error storing checkpoint note ' + event.target.error);
+										}
+									}
+
+
+
+
+
+
+
+									/*var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+									db.transaction(function (tx) {
+										tx.executeSql('INSERT INTO mtab_checkpoint(id_empree,id_sistema,data_checkpoint,latitude_checkpoint,longitude_checkpoint,altura_checkpoint,atualizado_serv) VALUES (?,?,?,?,?,?,?)', [qid_empree, qid_sistema, qdata_checkpoint, qlatitude_checkpoint, qlongitude_checkpoint, qaltura_checkpoint, qatualizado_serv]);
+										go_to_page(qid_sistema, qid_empree)
+										// go_page_check();
+									});*/
+								},
+								function (error) {
+									var db;
+									var request = window.indexedDB.open("db_sigmacivil", "1");
+
+									request.onerror = function (event) {
+										alert("Erro ao criar o banco (cod 03)");
+									};
+
+									request.onsuccess = function (event) {
+										db = request.result;
+
+										inserirDadosCheckpointError(db, dadosCheckpointError);
+
+										db.onerror = function (event) {
+											alert("Database error: " + event.target.errorCode);
+										}
+									}
+
+									var dadosCheckpointError = [
+										{
+											id_empree: qid_empree,
+											id_sistema: qid_sistema,
+											data_checkpoint: qdata_checkpoint,
+											latitude_checkpoint: "",
+											longitude_checkpoint: "",
+											altura_checkpoint: "",
+											atualizado_serv: qatualizado_serv,
+										}
+									];
+
+									function inserirDadosCheckpointError(db, dadosCheckpointError) {
+										var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
+										var store = tx.objectStore('mtab_checkpoint');
+
+										dadosCheckpointError.map(function (dadoCheckpointError) {
+											store.add(dadoCheckpointError);
+										});
+
+										tx.oncomplete = function () {
+											go_to_page(qid_sistema, qid_empree);
+										}
+
+										tx.onerror = function (event) {
+											alert('error storing checkpointError note ' + event.target.error);
+										}
+									}
+
+
+
+
+
+
+
+
+									/*var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+									db.transaction(function (tx) {
+										tx.executeSql('INSERT INTO mtab_checkpoint(id_empree,id_sistema,data_checkpoint,latitude_checkpoint,longitude_checkpoint,altura_checkpoint,atualizado_serv) VALUES (?,?,?,"","","",?)', [qid_empree, qid_sistema, qdata_checkpoint, qatualizado_serv]);
+										go_to_page(qid_sistema, qid_empree)
+										// go_page_check();
+									});*/
+								}
+							);
+
+						} else {
+							alert("Esse QRCode não é válido");
+						}
+
+					} else {
+						alert("Desculpe, só é possível ler QRCODES");
+					}
+				} else {
+					alert("Leitura do QRCODE cancelada");
+				}
+			},
+			function (error) {
+				// alert("Erro: " + error);
+			}
+		);
+	}
+
+	/////////////////////////////////////
+	function sincronizar() {
+
+		var status_sync = "";
+
+		if (navigator.connection.type == 0 || navigator.connection.type == 'none')  //checa internet
+		{
+			alert("Sem conexão com internet! Não é possível sincronizar!");
+		}
+		else {
+
+			var ajax = new XMLHttpRequest();
+			ajax.open("GET", "http://www.sigmacivil.com.br/app_sc/sincronizar_checkpoint.asp?retor=" + dados_checkpoint + "&l=" + login + "&s=" + senha, true);
+			ajax.onreadystatechange = function () {
+
+				if (ajax.readyState == 4) {//Request complete !!
+					if (ajax.status == 200 || ajax.status == 0) { // OK response
+
+						var resposta_total = ajax.responseText;
+
+						if (resposta_total == 'sim') {
+							var db;
+							var request = window.indexedDB.open("db_sigmacivil", "1");
+
+							request.onerror = function (event) {
+								alert("Erro ao criar o banco (cod 04)");
+							};
+
+							request.onsuccess = function (event) {
+								db = request.result;
+
+								executarRemoverDadosCheckpoint(db);
+
+								db.onerror = function (event) {
+									alert("Database error: " + event.target.error);
+								}
+							};
+
+							function executarRemoverDadosCheckpoint(db) {
+								var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
+								var store = tx.objectStore('mtab_checkpoint');
+
+								var objectStoreRequest = store.clear();
+								objectStoreRequest.onsuccess = function (event) {
+									go_page_check();
+								}
+							}
+
+
+
+
+
+							//////////////////////////////
+							/*var db2 = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+							db2.transaction(function (tx) {
+
+								tx.executeSql('DELETE FROM mtab_checkpoint');
+								go_page_check();
+
+							});*/ //var db2
+							//////////////////////////////
+						}
+
+					}
+					else {
+						alert("Problemas com sua conexao internet. Erro: 0145");
+					}
+				}
+			}
+			ajax.send();
+
+		} //checa internet
+	}
+
+	//////////////////////////////////////
+
+	// perguntar se ele quer ir para a manutencao
+
+	// se ele quiser entao:
+	// fazer aqui ajax para pegar nome do sistema
+	//var nome_sistema="Elevadores"
+	// coloca o nome no scan e da ENTER
+
+	// se ele nao quiser vai para go_page_check
+
+	function go_to_page(q_id_sistema, q_num_empree) {
+		var nome_sistema = ""
+		var tem_alguma_manut = "";
+		var qual_id_sistema = q_id_sistema
+		var qual_num_empree = q_num_empree
+		// alert("qual_num_empree" + qual_num_empree)
+		// alert("qual_id_sistema" + qual_id_sistema)
+
+		// requisicao
+		// tem_alguma_manut = 1
+		// if tem_alguma_manut=1
+
+
+		// var redirecionar = confirm(`Deseja registrar a manutenção?`)
+		// if (redirecionar == true) {
+		var xhr = new XMLHttpRequest();
+		xhr.open("GET", "http://www.sigmacivil.com.br/app_sc/consult_sist_checkpoint.asp?id_sis=" + qual_id_sistema + "&l=" + login + "&s=" + senha, true)
+		xhr.onreadystatechange = function () {
+			if (xhr.readyState == 4) {
+				if (xhr.status == 200 || xhr.status == 0) {
+					var response = xhr.responseText;
+					var pedaco = response.split('*//*');
+					tem_alguma_manut = pedaco[0];
+
+					nome_sistema = pedaco[1];
+
+					if (tem_alguma_manut == "0") {
+						alert('Não há manutenções para serem registradas!');
+					} else if (tem_alguma_manut == "1") {
+						var redirecionar = confirm(`Deseja registrar esta manutenção? Caso não haja manutenções deste sistema neste mês, elas não serão mostradas a seguir.`);
+						if (redirecionar == true) {
+							if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
+								window.location.assign("empree.htm?l=" + login + "&s=" + senha + "&e=" + qual_num_empree + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&fil=" + removeAcento(nome_sistema));
+							} else {
+								window.location.assign("empree_online.htm?l=" + login + "&s=" + senha + "&e=" + qual_num_empree + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&fil=" + removeAcento(nome_sistema));
+							}
+						} else {
+							go_page_check();
+						}
+					}
+				} else {
+					alert("Problemas com sua conexao internet. Erro: 0146");
+				}
+			}
+		}
+		xhr.send()
+
+		// } 
+	}
+
+	function go_page_check() {
+		window.location.assign("checkpoint.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano));
+	}
+
+
+	function go_relat_check() {
+		var qpor = id_cliente + "_" + num_empree + "_" + (3 * (id_cliente) + 5 * (num_empree)) + "S" + (Math.abs(6 * (id_cliente) - 4 * (num_empree))) + "C" + Math.abs((3 * (id_cliente) - 3 * (num_empree)))
+		// alert(qpor)
+		window.location.href = 'https://www.sigmacivil.com.br/us/new_checkpoint_hist.asp?c=' + qpor;
+	}
+
+	function volta_uni() {
+		if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
+			// alert('Está offline');
+			window.location.assign("empree.htm?l=" + login + "&s=" + senha + "&e=" + id_empree + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano));
+		}
+		else {
+			// alert('Está onlline');
+			window.location.assign("empree_online.htm?l=" + login + "&s=" + senha + "&e=" + id_empree + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano));
+		}
+	}
+
+	function go_relat_check2() {
+
+		if (tem_conexao()) {
+			window.location.assign("new_checkpoint_hist.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano))
+		}
+		else {
+			alert('Você está sem conexão com a internet. Para visualizar o relatório online é necessário estar conectado. Favor se conectar.');
+		}
+
+	}
+
+	function tem_conexao() {
+
+		if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
+			return false;
+		}
+		else {
+			return true;
+		}
+
+	}
+
+	function enviar_sync() {
+		decisao = confirm("Deseja efetuar novo login? Será possível se logar novamente em qualquer empreendimento atualizando o Plano de Manutenção!");
+
+		if (decisao) {
+			document.form_sup.action = "del.htm";
+			document.form_sup.submit();
+
+		} else {
+
+		}
+	}
+
+	function removeAcento(text) {
+		// text = text.toLowerCase();
+
+		// a
+		text = text.replace(/Á/g, 'xcL1A')
+		text = text.replace(/À/g, 'xcL2A')
+		text = text.replace(/Ã/g, 'xcL3A')
+		text = text.replace(/Â/g, 'xcL4A')
+
+		text = text.replace(/á/g, 'xcL1a')
+		text = text.replace(/à/g, 'xcL2a')
+		text = text.replace(/ã/g, 'xcL3a')
+		text = text.replace(/â/g, 'xcL4a')
+
+		// e
+		text = text.replace(/É/g, 'xcL1E')
+		text = text.replace(/È/g, 'xcL2E')
+		text = text.replace(/Ê/g, 'xcL4E')
+
+		text = text.replace(/é/g, 'xcL1e')
+		text = text.replace(/è/g, 'xcL2e')
+		text = text.replace(/ê/g, 'xcL4e')
+
+		// i
+		text = text.replace(/Í/g, 'xcL1I')
+		text = text.replace(/Ì/g, 'xcL2I')
+		text = text.replace(/Î/g, 'xcL4I')
+
+		text = text.replace(/í/g, 'xcL1i')
+		text = text.replace(/ì/g, 'xcL2i')
+		text = text.replace(/î/g, 'xcL4i')
+
+		// o
+		text = text.replace(/Ó/g, 'xcL1O')
+		text = text.replace(/Ò/g, 'xcL2O')
+		text = text.replace(/Õ/g, 'xcL3O')
+		text = text.replace(/Ô/g, 'xcL4O')
+
+		text = text.replace(/ó/g, 'xcL1o')
+		text = text.replace(/ò/g, 'xcL2o')
+		text = text.replace(/õ/g, 'xcL3o')
+		text = text.replace(/ô/g, 'xcL4o')
+
+		// u
+		text = text.replace(/Ú/g, 'xcL1U')
+		text = text.replace(/Ù/g, 'xcL2U')
+		text = text.replace(/Û/g, 'xcL4U')
+
+		text = text.replace(/ú/g, 'xcL1u')
+		text = text.replace(/ù/g, 'xcL2u')
+		text = text.replace(/û/g, 'xcL4u')
+
+		// ç
+		text = text.replace(/Ç/g, 'xcL0C')
+
+		text = text.replace(/ç/g, 'xcL0c')
+
+		return text;
+	}
+
+</script>
+<script>
+	$(document).ready(function () {
+		$('.on').click(function () {
+			$('ui-slider-label ui-slider-label-a ui-btn-active').toggleClass('background-red')
+		})
+		$('.btn-bars .ui-btn').click(function () {
+			$('.menu .fa-bars').toggleClass('fa-times')
+		})
+		$('.btn-bars-bars').click(function () {
+			$('.is-bars').toggleClass('is-disabled')
+			$('.is-times').toggleClass('is-disabled')
+		})
+	})
+</script>

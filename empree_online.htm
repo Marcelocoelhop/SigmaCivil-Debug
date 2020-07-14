@@ -41,14 +41,20 @@
     <div id="qtd_manut_pendentes"></div>
 
     <div class="btn-bars">
-        <div style="top:4;" data-role="collapsible" data-collapsed="true" class="ui-btn-left menu" data-mini="true">
+        <div style="top:4; z-index: 1;" data-role="collapsible" data-collapsed="true" class="ui-btn-left menu" data-mini="true">
             <h4 class="btn-bars-bars">
                 <!-- <span class="fas fa-bars"></span> -->
                 <img class="is-bars" src="images/bars.svg" width="14" alt="Menu" />
                 <img class="is-times is-disabled" src="images/times.svg" width="13" alt="Menu" />
             </h4>
             <ul style="border: 1px solid #e0e0e0;" data-role="listview" data-mini="true">
-                <li><a class="click" href="#" onClick="enviar_sync()">Novo Login</a></li>
+                <li>
+                    <a class="click" href="#" onClick="enviar_sync()">Novo Login</a>
+                </li>
+                <li>
+                    <a class="ui-btn ui-icon-clock ui-btn-icon-right ui-shadow ui-corner-all" href="#"
+                        onClick="go_page_check()">Checkpoint</a>
+                </li>
             </ul>
         </div>
     </div>
@@ -73,6 +79,8 @@
 
         var ipm = getquerystring("ipm");
         var dia_focus = getquerystring("dia_ev");
+        
+        var filtro_sis = getquerystring("fil");
 
         /////////////////////////
         var q_mes = getquerystring("qm");
@@ -296,7 +304,7 @@
                 '<div align="center">',
                 '<table width="30" border="0" cellpadding="0" cellspacing="0" >',
                 '<tr>',
-                '<td width="30" ><img src="images/logo4.png" width="142"> </td>',
+                '<td width="30" ><img src="images/logo6.png" width="142"> </td>',
                 '</tr>',
                 '</table>',
                 '</div>',
@@ -315,7 +323,7 @@
                 '<div align="center">',
                 '<table width="30" border="0" cellpadding="0" cellspacing="0" >',
                 '<tr>',
-                '<td width="30" ><img src="images/logo4.png" width="142"> </td>',
+                '<td width="30" ><img src="images/logo6.png" width="142"> </td>',
                 '</tr>',
                 '</table>',
                 '</div>',
@@ -364,12 +372,12 @@
             var data_final_p_busca = new Date(data2_aux)
             /////////////////////////////////////////////
 
-            var ini_lista = "<ul id='q_empree' class='list-content' data-mini='true' data-role='listview' data-filter='true' data-filter-placeholder='Buscar...' data-inset='true'>"
+            var ini_lista = "<form class='ui-filterable'><div class='ui-input-search ui-body-inherit ui-corner-all ui-shadow-inset ui-input-has-clear'><input data-role='listview' value='" + addAcento(filtro_sis) + "' placeholder='Buscar...' id='filterBasic-input' data-type='search'><a href='#' tabindex='-1' aria-hidden='true' class='ui-input-clear ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all ui-input-clear-hidden' title='Clear text'>Clear text</a></div></form><ul data-input='#filterBasic-input' id='q_empree' class='list-content' data-mini='true' data-role='listview' data-filter='true' data-filter-placeholder='Buscar...' data-inset='true'>"
             var fim_lista = "</ul>"
 
             // carregar dados das manutenções do servidor 
             var ajax = new XMLHttpRequest();
-            ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_emp_online.asp?l=" + login + "&s=" + senha + "&versao=2.1&t=" + Math.random(), true);
+            ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_emp_online.asp?l=" + login + "&s=" + senha + "&versao=2.2&t=" + Math.random(), true);
             ajax.onreadystatechange = function () {
                 if (ajax.readyState == 4) { //Request complete !!
                     if (ajax.status == 200 || ajax.status == 0) { // OK response
@@ -530,7 +538,7 @@
                                 vetor_dados_manutencao = vetor_dados_manutencao.substring(0, vetor_dados_manutencao.length - 1);
 
                                 var ajax2 = new XMLHttpRequest();
-                                ajax2.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_evento_onlineB.asp?l=" + login + "&s=" + senha + "&d=" + vetor_consulta_evento + "&versao=2.1&t=" + Math.random(), false);
+                                ajax2.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_evento_onlineB.asp?l=" + login + "&s=" + senha + "&d=" + vetor_consulta_evento + "&versao=2.2&t=" + Math.random(), false);
                                 ajax2.onreadystatechange = function () {
                                     if (ajax2.readyState == 4) { //Request complete !!
                                         if (ajax2.status == 200 || ajax2.status == 0) { // OK response
@@ -818,6 +826,7 @@
                                     document.getElementById('box-content').innerHTML = ini_lista + dados_0 + dados_1 + fim_lista
                                 }
                                 $(".loading_page").hide();
+                                
                                 $('#q_empree').listview();
                                 document.getElementById('nome_empree_').innerHTML = nome_empree
 
@@ -886,6 +895,70 @@
 
         function dateToEN(date) {
             return date.split('/').reverse().join('-');
+        }
+
+        function go_page_check() {
+            window.location.assign("checkpoint.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano));
+        }
+
+        function addAcento(text) {
+            // text = text.toLowerCase();
+
+            // a
+            text = text.replace(/xcL1A/g, 'Á')
+            text = text.replace(/xcL2A/g, 'À')
+            text = text.replace(/xcL3A/g, 'Ã')
+            text = text.replace(/xcL4A/g, 'Â')
+
+            text = text.replace(/xcL1a/g, 'á')
+            text = text.replace(/xcL2a/g, 'à')
+            text = text.replace(/xcL3a/g, 'ã')
+            text = text.replace(/xcL4a/g, 'â')
+
+            // e
+            text = text.replace(/xcL1E/g, 'É')
+            text = text.replace(/xcL2E/g, 'È')
+            text = text.replace(/xcL4E/g, 'Ê')
+
+            text = text.replace(/xcL1e/g, 'é')
+            text = text.replace(/xcL2e/g, 'è')
+            text = text.replace(/xcL4e/g, 'ê')
+
+            // i
+            text = text.replace(/xcL1I/g, 'Í')
+            text = text.replace(/xcL2I/g, 'Ì')
+            text = text.replace(/xcL4I/g, 'Î')
+
+            text = text.replace(/xcL1i/g, 'í')
+            text = text.replace(/xcL2i/g, 'ì')
+            text = text.replace(/xcL4i/g, 'î')
+
+            // o
+            text = text.replace(/xcL1O/g, 'Ó')
+            text = text.replace(/xcL2O/g, 'Ò')
+            text = text.replace(/xcL3O/g, 'Õ')
+            text = text.replace(/xcL4O/g, 'Ô')
+
+            text = text.replace(/xcL1o/g, 'ó')
+            text = text.replace(/xcL2o/g, 'ò')
+            text = text.replace(/xcL3o/g, 'õ')
+            text = text.replace(/xcL4o/g, 'ô')
+
+            // u
+            text = text.replace(/xcL1U/g, 'Ú')
+            text = text.replace(/xcL2U/g, 'Ù')
+            text = text.replace(/xcL4U/g, 'Û')
+
+            text = text.replace(/xcL1u/g, 'ú')
+            text = text.replace(/xcL2u/g, 'ù')
+            text = text.replace(/xcL4u/g, 'û')
+
+            // ç
+            text = text.replace(/xcL0C/g, 'Ç')
+
+            text = text.replace(/xcL0c/g, 'ç')
+
+            return text;
         }
 
     </script>

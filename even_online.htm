@@ -759,11 +759,11 @@
                     ];
 
                     var item_audio = [
-                        '<img src="images/volume-up.svg" style="margin-top: 10px; float: left; text-shadow: none;" width="40" height="30" onclick="captureAudio(' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')" style="cursor:pointer"></i>' + selec_audio
+                        '<img src="images/volume-up.svg" style="margin-top: 10px; float: left; text-shadow: none;" width="40" height="30" onclick="captureAudio(' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')" />' + selec_audio
                     ];
 
                     var item_texto = [
-                        '<div style="display: flex"><img src="images/file-alt.svg" style="margin-top: 10px; float: left; display: inline; text-shadow: none;" width="40" height="30"></i><textarea style="display: flex; border-color: #e4e4e4; border-radius: 3px; width: 100%; padding: 5px; outline: none; resize: none" autocomplete="off" class="size-14 text_hover textarea_obs" rows="3" cols="32" name="textarea-1" id="textarea_' + rrr_id_prog_manut + '" data-placeholder="true" placeholder="Digite suas observações aqui..." onclick="RestricaoData();" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)" maxlength="700">' + selec_texto + '</textarea></div><img src="images/save.svg" style="position: relative; float: left; left: 110px; top: 3px; text-shadow: none;" class="icon-size" width="15" onclick="atualizar_texto(' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')" style="cursor:pointer"><div align="center">' + bot_up + '</div>'
+                        '<div style="display: flex"><img src="images/file-alt.svg" style="margin-top: 10px; float: left; display: inline; text-shadow: none;" width="40" height="30"><textarea style="display: flex; border-color: #e4e4e4; border-radius: 3px; width: 100%; padding: 5px; outline: none; resize: none" autocomplete="off" class="size-14 text_hover textarea_obs" rows="3" cols="32" name="textarea-1" id="textarea_' + rrr_id_prog_manut + '" data-placeholder="true" placeholder="Digite suas observações aqui..." onclick="RestricaoData();" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)" maxlength="700">' + selec_texto + '</textarea></div><img src="images/save.svg" style="position: relative; float: left; left: 110px; top: 3px; text-shadow: none;" class="icon-size" width="15" onclick="atualizar_texto(' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')" style="cursor:pointer"><div align="center">' + bot_up + '</div>'
                     ];
 
                     var item_voltar = [
@@ -1192,6 +1192,8 @@
         // CAPTURAR VIDEO
         function captureVideo(qual) {
             qual_id_prog_manut = qual;
+
+            alert('entrou');
 
             // RESTRIÇÕES DE DATAS
             if (datadiff2(Date.now(), d_min) > 0) {

@@ -97,6 +97,10 @@
         // EXECUTA CASO TENHA INTERNET
         function iniciar() {
 
+            document.addEventListener('click', function(event) {
+                alert(event.target.className);
+            });
+
             window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
             window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
             window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
@@ -139,7 +143,7 @@
                 '<a href="#"><button style="box-shadow: none !important; background: #ebebeb !important; border: none;" onclick="atualizar_texto_empree(' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right ui-icon-carat-l">Voltar</button></a>',
                 '<table width="30" border="0" cellpadding="0" cellspacing="0" >',
                 '<tr>',
-                '<td width="30" ><img src="images/logo4.png" width="142"> </td>',
+                '<td width="30" ><img src="images/logo4.png" onclick="dispareAlert()" width="142"> </td>',
                 '</tr>',
                 '</table>',
                 '</div>',
@@ -148,7 +152,11 @@
                 '</div>',
                 '</form>'
             ].join('');
-
+            
+            function dispareAlert() {
+                return alert('logo sigmacivil');
+            }
+                                  
             document.getElementById('menu_opc2').innerHTML = menu_sup_online;
 
             // FUNÇÃO QUE VERIFICA SE TEM INTERNET A CADA 5 SEGUNDOS
@@ -691,7 +699,7 @@
                         // selec_audio = "<div style='position: relative; left: 15px; top: 17px;'><table cellpadding='0' cellspacing='0'><div id='latesq_" + rrr_id_prog_manut + "'width='40' height='30' style='display:none'></div><img src='images/play.svg' width='15' class='button-play top-9px' id='player_" + rrr_id_prog_manut + "'onclick='abrir_audio(" + String.fromCharCode(34) + rrr_caminho_audio + String.fromCharCode(34) + ")'  style='display:none'><img src='images/pause.svg' width='15' class='button-pause top-9px position-icons' id='pause_" + rrr_id_prog_manut + "'onclick='pause_audio()' style='display:none'><img src='images/stop.svg' width='15' class='button-stop top-9px position-icons' id='stop_" + rrr_id_prog_manut + "'onclick='stop_audio()' style='display:none'><img src='images/microphone.svg' width='15' class='button-microfone top-9px position-icons' id='rec_" + rrr_id_prog_manut + "'onclick='captureAudio(" + String.fromCharCode(34) + rrr_id_prog_manut + String.fromCharCode(34) + ")' style='display:none'><div id='latdir_" + rrr_id_prog_manut + "'width='40' height='30' style='display:none'></div><div align='center'><img src='images/trash.svg' class='icon-size' width='15' onclick='deletar_audio()' style='display:none'></div><div align='center'><img src='images/" + aux_image_upload + "' class='icon-size' width='16' onclick='upload_audio()' style='display:none'></div></table></div>       <audio style='margin-bottom: 10px; width: 100%;' controls><source src='" + rrr_caminho_audio + "'></audio>"
                     }
                     else {
-                        selec_audio = "<table cellpadding='0' cellspacing='0'><audio class='audio' style='margin-left: 10px; width: 80%; display: inline;' controls><source src='" + rrr_caminho_audio + "'></audio><div align='center'><img src='images/trash.svg' style='position: relative; top: 8px; right: 50px; text-align: center; text-shadow: none;' class='icon-size' width='15' onclick='deletar_audio()'></div><div align='center'><img src='images/" + aux_image_upload + "' style='position: relative; bottom: 10px; left: 50px; text-align: center; text-shadow: none;' class='icon-size' width='17' onclick='upload_audio()'></div></table>"
+                        selec_audio = "<table cellpadding='0' cellspacing='0'><audio style='margin-left: 10px; width: 80%; display: inline;' controls><source src='" + rrr_caminho_audio + "'></audio><div align='center'><img src='images/trash.svg' style='position: relative; top: 8px; right: 50px; text-align: center; text-shadow: none;' class='icon-size' width='15' onclick='deletar_audio()'></div><div align='center'><img src='images/" + aux_image_upload + "' style='position: relative; bottom: 10px; left: 50px; text-align: center; text-shadow: none;' class='icon-size' width='17' onclick='upload_audio()'></div></table>"
                         // selec_audio = "<div class='icon-size' style='position: relative; text-align: center; top: 10px;'><table cellpadding='0' cellspacing='0'><div id='latesq_" + rrr_id_prog_manut + "'width='40' height='30'></div><div style='border: 1px solid black; width: 60%; border-radius: 3px; margin: 0 auto; padding: 4px;'><img src='images/play.svg' width='15' style='margin-right: 5px;' class='top-9px' id='player_" + rrr_id_prog_manut + "'onclick='abrir_audio(" + String.fromCharCode(34) + rrr_caminho_audio + String.fromCharCode(34) + ")' ><img src='images/pause.svg' width='15' style='margin-right: 5px;' class='top-9px position-icons' id='pause_" + rrr_id_prog_manut + "' onclick='pause_audio()'><img src='images/stop.svg' width='15' style='margin-right: 5px;' class='top-9px position-icons' id='stop_" + rrr_id_prog_manut + "'onclick='stop_audio()'><img src='images/microphone.svg' width='15' style='margin-right: 5px;' class='top-9px position-icons' id='rec_" + rrr_id_prog_manut + "'onclick='captureAudio(" + String.fromCharCode(34) + rrr_id_prog_manut + String.fromCharCode(34) + ")'></div><div id='latdir_" + rrr_id_prog_manut + "'width='40' height='30'></div><div align='center'><img src='images/trash.svg' style='position: relative; top: 8px; right: 55px; text-align: center; text-shadow: none;' class='icon-size' width='15' onclick='deletar_audio()'></div><div align='center'><img src='images/" + aux_image_upload + "' style='position: relative; bottom: 10px; left: 45px; text-align: center; text-shadow: none;' class='icon-size' width='17' onclick='upload_audio()'></div></table></div>            <audio style='margin-bottom: 10px; width: 100%;' controls><source src='" + rrr_caminho_audio + "'></audio>"
                         if (aux_image_upload === "upload.png") {
                             qtdDocs_Device += 1
@@ -1957,7 +1965,7 @@
                                         <label style="text-shadow: none; font-weight: 600;" class="label_center_"
                                             for="textarea-1">Galeria
                                             de imagens do
-                                            aparelho</label>
+                                            aparelho 2.1</label>
                                         <a style="float: right; position: relative; bottom: 28px; left: 16px;"
                                             href="#transitionExample" data-transition="pop" class="ui-btn-inline"
                                             data-rel="popup">

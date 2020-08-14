@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="css/jquery.mobile-1.0.1.min.css" />
+	<script type="text/javascript" src="cordova.js"></script>
+	<script type="text/javascript" src="js/mc.js" />
+	</script>
+
+	<script src="js/jquery.js"></script>
+	<script src="js/jquery.mobile-1.4.5.min.js"></script>
+</head>
+
+<body>
+
+	<script type="text/javascript">
+
+		window.onerror = function (message, url, lineNumber) {
+			alert(`Error: ${message} in ${url} at line ${lineNumber}`);
+		}
+
+		document.addEventListener("deviceready", onDeviceReady, false);
+
+		function onDeviceReady() {
+			iniciar();
+		}
+
+		/////////////////////////////
+		function iniciar() {
+			window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+			window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
+			window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
+
+			if (!window.indexedDB) {
+				alert("Seu navegador não suporta uma versão estável do IndexedDB. Alguns recursos não estarão disponíveis.");
+			}
+
+			var db;
+			var request = window.indexedDB.open("db_sigmacivil", "1");
+
+			request.onerror = function (event) {
+				alert("Erro ao criar o banco (cod 01)");
+			};
+
+			request.onsuccess = function (event) {
+				db = request.result;
+
+				consultaCliente(db, clientes, emprees);
+
+				db.onerror = function (event) {
+					alert("Database error: " + event.target.error);
+				}
+			};
+
+			request.onupgradeneeded = function (event) {
+				db = event.target.result;
+
+				var mtab_cliente = db.createObjectStore("mtab_cliente", { keyPath: "id_cliente" });
+
+				mtab_cliente.createIndex("id_cliente", "id_cliente", { unique: true });
+				mtab_cliente.createIndex("e_construtora", "e_construtora", { unique: false });
+				mtab_cliente.createIndex("text1", "text1", { unique: false });
+				mtab_cliente.createIndex("text2", "text2", { unique: false });
+
+				var mtab_empree = db.createObjectStore("mtab_empree", { keyPath: "id_empree" });
+
+				mtab_empree.createIndex("id_empree", "id_empree", { unique: true });
+				mtab_empree.createIndex("nome_empree", "nome_empree", { unique: false });
+				mtab_empree.createIndex("status_sync", "status_sync", { unique: false });
+				mtab_empree.createIndex("data_implantacao_sc", "data_implantacao_sc", { unique: false });
+
+				var mtab_prog_manut = db.createObjectStore("mtab_prog_manut", { keyPath: "id_prog_manut" });
+
+				mtab_prog_manut.createIndex("id_prog_manut", "id_prog_manut", { unique: true });
+				mtab_prog_manut.createIndex("nome_sistema", "nome_sistema", { unique: false });
+				mtab_prog_manut.createIndex("nome_atividade", "nome_atividade", { unique: false });
+				mtab_prog_manut.createIndex("nome_periodicidade", "nome_periodicidade", { unique: false });
+				mtab_prog_manut.createIndex("qtde_agrupamentos_eventos", "qtde_agrupamentos_eventos", { unique: false });
+				mtab_prog_manut.createIndex("qtde_dias_periodicidade", "qtde_dias_periodicidade", { unique: false });
+				mtab_prog_manut.createIndex("data_inicial_garantia", "data_inicial_garantia", { unique: false });
+				mtab_prog_manut.createIndex("prazo_garantia_dias", "prazo_garantia_dias", { unique: false });
+				mtab_prog_manut.createIndex("formato_periodicidade", "formato_periodicidade", { unique: false });
+				mtab_prog_manut.createIndex("comparar_prog_manut", "id_prog_manut", { unique: false });
+
+				var mtab_prog_manut_evento = db.createObjectStore("mtab_prog_manut_evento", { keyPath: ["id_prog_manut", "dia_evento", "mes_evento", "ano_evento"] });
+
+				mtab_prog_manut_evento.createIndex("id_prog_manut", "id_prog_manut", { unique: false });
+				mtab_prog_manut_evento.createIndex("dia_evento", "dia_evento", { unique: false });
+				mtab_prog_manut_evento.createIndex("mes_evento", "mes_evento", { unique: false });
+				mtab_prog_manut_evento.createIndex("ano_evento", "ano_evento", { unique: false });
+				mtab_prog_manut_evento.createIndex("caminho_imagens", "caminho_imagens", { unique: false });
+				mtab_prog_manut_evento.createIndex("caminho_audio", "caminho_audio", { unique: false });
+				mtab_prog_manut_evento.createIndex("caminho_video", "caminho_video", { unique: false });
+				mtab_prog_manut_evento.createIndex("caminho_texto", "caminho_texto", { unique: false });
+				mtab_prog_manut_evento.createIndex("status_imagens_upl", "status_imagens_upl", { unique: false });
+				mtab_prog_manut_evento.createIndex("status_video_upl", "status_video_upl", { unique: false });
+				mtab_prog_manut_evento.createIndex("status_audio_upl", "status_audio_upl", { unique: false });
+				mtab_prog_manut_evento.createIndex("status_texto_upl", "status_texto_upl", { unique: false });
+				mtab_prog_manut_evento.createIndex("comparar", ["id_prog_manut", "dia_evento", "mes_evento", "ano_evento"], { unique: false });
+			};
+
+			var clientes = [];
+
+			var emprees = [];
+
+			function consultaCliente(db, clientes, emprees) {
+				var login = "";
+				var senha = "";
+				var tx = db.transaction(['mtab_cliente'], 'readwrite');
+				var store = tx.objectStore('mtab_cliente');
+				var objectStoreRequest = store.openCursor();
+				objectStoreRequest.onsuccess = function (event) {
+					var cursor = event.target.result;
+					if (cursor) {
+						clientes.push(cursor.value);
+
+						login = cursor.value.text1;
+						senha = cursor.value.text2;
+
+						var tx2 = db.transaction(['mtab_empree'], 'readwrite');
+						var store2 = tx2.objectStore('mtab_empree');
+						var objectStoreRequest2 = store2.openCursor();
+						objectStoreRequest2.onsuccess = function (event) {
+							var cursor2 = event.target.result;
+							if (cursor2) {
+								emprees.push(cursor2.value);
+
+								var id_empree = cursor2.value.id_empree;
+
+								if (clientes.length > 0 && emprees.length > 0) {
+									cliente_existe("?e=" + id_empree + "&l=" + login + "&s=" + senha);
+								}
+
+							} else {
+								cliente_nao_existe();
+							}
+
+						}
+					}
+					else {
+						cliente_nao_existe();
+					}
+				}
+			}
+		}
+
+		function tem_conexao() {
+
+			if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
+				// alert('Sem conexão com internet. Favor se conectar.');
+				return false;
+			}
+			else {
+				return true;
+			}
+
+		}
+
+		function cliente_nao_existe() {
+
+			window.location.assign("login.htm");
+		}
+
+		function cliente_existe(parametro1) {
+
+			if (tem_conexao()) {
+
+				window.location.assign("empree_online.htm" + parametro1)
+			} else {
+
+				window.location.assign("empree.htm" + parametro1);
+			}
+		}
+
+	</script>
+
+</body>
+
+</html>

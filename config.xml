@@ -5,7 +5,7 @@
         xmlns:gap = "http://phonegap.com/ns/1.0"
  		xmlns:android   = "http://schemas.android.com/apk/res/android"
         id        = "br.com.sigmacivil.sc"
-        version   = "2.1.7">
+        version   = "2.1.5">
 
     <name>SigmaCivil</name>
 
@@ -13,7 +13,7 @@
         Sigmacivil
     </description>
 
-    <author href="http://www.sigmacivil.com.br" email="suporte@sigmacivil.com.br">
+    <author href="http://www.sigma-civil.com.br" email="suporte@sigmacivil.com.br">
         Sigmacivil
     </author>
 

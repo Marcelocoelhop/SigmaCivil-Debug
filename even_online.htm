@@ -1813,7 +1813,7 @@
             var data = 'tx=' + encodeURIComponent(textoURL) + '&ipm=' + id_prog_manut + '&d=' + dia_ev + '&m=' + mes_ev + '&a=' + ano_ev + "&econst=" + e_construtora + "&idc=" + id_cliente;
             var ajax = new XMLHttpRequest();
             //ajax.open("POST", "https://www.sigma-civil.com.br/app_sc/rec_texto_uploaded.asp?versao=2.1", true);
-            ajax.open("POST", "https://www.newdot.com.br/sigmacivil/app_sc/rec124_texto_uploaded.asp?versao=2.1", true);
+            ajax.open("POST", "https://www.newdot.com.br/phonegap/app_sc/rec124_texto_uploaded.asp?versao=2.1", true);
             ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             ajax.onreadystatechange = function () {
                 if (ajax.readyState == 4) {//Request complete !!

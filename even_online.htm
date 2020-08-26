@@ -1127,7 +1127,7 @@
             var ft = new FileTransfer();
             // ft.upload(imageURI, "http://www.newdot.com.br/phonegap/app_sc/apagar_aws1.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up, fail_up, options);
             
-            ft.upload("http://www.sigma-civil.com.br/app_sc/rec_foto_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up, fail_up, options);
+            ft.upload(imageURI, "http://www.sigma-civil.com.br/app_sc/rec_foto_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up, fail_up, options);
         }
 
         var win_up = function (r) {
@@ -1403,8 +1403,9 @@
             options.chunkedMode = false;
 
             var ft = new FileTransfer();
-          //ft.upload(videoURL, "http://www.sigma-civil.com.br/app_sc/rec_video_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente, win_up_v, fail_up_v, options);
-            ft.upload(videoURL, "http://www.newdot.com.br/phonegap/app_sc/apagar_aws1_video.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente, win_up_v, fail_up_v, options);
+            // ft.upload(videoURL, "http://www.sigma-civil.com.br/app_sc/rec_video_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente, win_up_v, fail_up_v, options);
+            // ft.upload(videoURL, "http://www.newdot.com.br/phonegap/app_sc/apagar_aws1_video.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente, win_up_v, fail_up_v, options);
+            ft.upload(videoURL, "http://www.sigmacivil.com.br/app_sc/rec_video_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente, win_up_v, fail_up_v, options);
         }
 
         var win_up_v = function (r) {
@@ -1717,11 +1718,16 @@
             var db;
             var request = window.indexedDB.open("db_sigmacivil", "1");
 
+    alert('rodou win_up_a')        
+
             request.onerror = function (event) {
                 alert("Erro ao criar o banco (cod 13)");
             };
 
             request.onsuccess = function (event) {
+    alert('ponto 2')        
+
+
                 db = request.result;
 
                 updateManutEventoWinUpAudio(db);
@@ -1740,6 +1746,8 @@
                     var cursor = event.target.result;
                     if (cursor) {
                         var data = cursor.value;
+
+    alert('ponto 3')        
 
                         data.status_audio_upl = "1";
 

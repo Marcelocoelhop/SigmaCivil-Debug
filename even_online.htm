@@ -1135,12 +1135,16 @@
             var db;
             var request = window.indexedDB.open("db_sigmacivil", "1");
 
+alert("win_up");
+
             request.onerror = function (event) {
                 alert("Erro ao criar o banco (cod 05)");
             };
 
             request.onsuccess = function (event) {
                 db = request.result;
+
+alert("ponto 1");
 
                 updateManutEventoWinUp(db);
 
@@ -1163,6 +1167,8 @@
 
                         var request = cursor.update(data);
                         request.onsuccess = function (event) {
+alert("Ponto 2");
+
                             reload_page();
                         }
                     }

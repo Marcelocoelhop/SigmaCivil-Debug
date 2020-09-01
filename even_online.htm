@@ -1415,6 +1415,7 @@ alert("Ponto 2");
         }
 
         var win_up_v = function (r) {
+            alert('ponto 1');
             var db;
             var request = window.indexedDB.open("db_sigmacivil", "1");
 
@@ -1441,6 +1442,7 @@ alert("Ponto 2");
                     var cursor = event.target.result;
                     if (cursor) {
                         var data = cursor.value;
+                        alert('ponto 2')
 
                         data.status_video_upl = "1";
 
@@ -1826,7 +1828,7 @@ alert("Ponto 2");
 
             var data = 'tx=' + encodeURIComponent(textoURL) + '&ipm=' + id_prog_manut + '&d=' + dia_ev + '&m=' + mes_ev + '&a=' + ano_ev + "&econst=" + e_construtora + "&idc=" + id_cliente;
             var ajax = new XMLHttpRequest();
-            ajax.open("POST", "http://www.sigma-civil.com.br/app_sc/rec_texto_uploaded.asp?versao=2.1", true);
+            ajax.open("POST", "https://www.sigma-civil.com.br/app_sc/rec_texto_uploaded.asp?versao=2.1", true);
             // ajax.open("POST", "http://www.newdot.com.br/phonegap/app_sc/rec124_texto_uploaded.asp?versao=2.1", true);
             ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             ajax.onreadystatechange = function () {

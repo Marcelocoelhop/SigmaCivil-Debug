@@ -1409,11 +1409,10 @@ alert("Ponto 2");
             options.chunkedMode = false;
 
             var ft = new FileTransfer();
-            ft.upload(videoURL, "http://www.newdot.com.br/app_sc/apagar_aws1_video.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente, win_up_v, fail_up_v, options);
-            
+          
             alert("http://www.sigma-civil.com.br/app_sc/rec_video_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente)
             
-            // ft.upload(videoURL, "http://www.newdot.com.br/phonegap/app_sc/apagar_aws1_video.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente, win_up_v, fail_up_v, options);
+            ft.upload(videoURL, "http://www.newdot.com.br/phonegap/app_sc/apagar_aws1_video.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente, win_up_v, fail_up_v, options);
             //ft.upload(videoURL, "http://www.sigmacivil.com.br/app_sc/rec_video_uploaded.php?idpm=" +   id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente, win_up_v, fail_up_v, options);
         }
 
@@ -1832,7 +1831,7 @@ alert("Ponto 2");
             var data = 'tx=' + encodeURIComponent(textoURL) + '&ipm=' + id_prog_manut + '&d=' + dia_ev + '&m=' + mes_ev + '&a=' + ano_ev + "&econst=" + e_construtora + "&idc=" + id_cliente;
             alert(data);
             var ajax = new XMLHttpRequest();
-            ajax.open("POST", "https://www.sigma-civil.com.br/app_sc/apagar_aws1_texto.asp?versao=2.0", true);
+            ajax.open("POST", "http://www.newdot.com.br/phonegap/app_sc/apagar_aws1_texto.asp?versao=2.0", true);
             // ajax.open("POST", "http://www.newdot.com.br/phonegap/app_sc/rec124_texto_uploaded.asp?versao=2.1", true);
             ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             ajax.onreadystatechange = function () {

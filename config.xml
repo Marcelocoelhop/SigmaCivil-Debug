@@ -5,7 +5,7 @@
         xmlns:gap = "http://phonegap.com/ns/1.0"
  		xmlns:android   = "http://schemas.android.com/apk/res/android"
         id        = "br.com.sigmacivil.sc"
-        version   = "2.2">
+        version   = "2.1.7">
 
     <name>SigmaCivil</name>
 
@@ -13,7 +13,7 @@
         Sigmacivil
     </description>
 
-    <author href="http://www.sigmacivil.com.br" email="suporte@sigmacivil.com.br">
+    <author href="http://www.sigmacivil.app.br" email="suporte@sigmacivil.com.br">
         Sigmacivil
     </author>
 
@@ -129,9 +129,6 @@
     <plugin name="cordova-plugin-statusbar" source="npm" spec="~2.1.2" />
     <plugin name="cordova-plugin-vibration" source="npm" spec="~2.1.0" />
     <plugin name="cordova-sqlite-storage" spec="~0.8.5" />
-    <plugin name="cordova-plugin-barcodescanner" source="npm" spec="~0.7.4" />  
-    
-    <plugin name="cordova-plugin-image-picker" source="npm" spec="~1.1.3" />  
     
     <!-- <plugin name="cordova-plugin-wkwebview-engine" source="npm" spec="~1.2.1" /> -->
     

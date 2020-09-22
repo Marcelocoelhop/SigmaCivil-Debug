@@ -130,7 +130,7 @@
     <plugin name="cordova-plugin-vibration" source="npm" spec="~2.1.0" />
     <plugin name="cordova-sqlite-storage" spec="~0.8.5" />
     
-    <plugin name="cordova-plugin-signature-fingerprint" spec="~1.0.23" />
+    <plugin name="cordova-plugin-fingerprint-aio" spec="~3.0.1" />
     
     <!-- <plugin name="cordova-plugin-wkwebview-engine" source="npm" spec="~1.2.1" /> -->
     

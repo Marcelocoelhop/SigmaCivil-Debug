@@ -2633,24 +2633,24 @@ alert("Ponto 2");
                     if (continuar == false) { return }
                 }
                 if (prosseguir == true || ((nivel_manut == 1 || nivel_manut == 2) && qt_docs > 0)) {
-                    var ajax3 = new XMLHttpRequest();
-                    ajax3.open("GET", "https://www.sigmacivil.app.br/app_sc/salvar_manut.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&econst=" + e_construtora + "&idpm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&d_data_realiz=" + document.getElementById('in_data_realizacao').value + "&d_forn=" + document.getElementById('valores').value + "&d_custoReal=" + document.getElementById('in_dado_custo_real').value + "&d_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value) + "&tipo=" + tipo + "&versao=2.1&env_em=" + ev_email + "&segur=" + crypt_segur + "&t=" + Math.random(), false);
-                    alert("https://www.sigmacivil.app.br/app_sc/salvar_manut.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&econst=" + e_construtora + "&idpm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&d_data_realiz=" + document.getElementById('in_data_realizacao').value + "&d_forn=" + document.getElementById('valores').value + "&d_custoReal=" + document.getElementById('in_dado_custo_real').value + "&d_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value) + "&tipo=" + tipo + "&versao=2.1&env_em=" + ev_email + "&segur=" + crypt_segur + "&t=" + Math.random())
-                    ajax3.onreadystatechange = function () {
-                        if (ajax3.readyState == 4) {
-                            if (ajax3.status == 200 || ajax3.status == 0) {
-                                var resposta_total = ajax3.responseText;
+                    Fingerprint.isAvailable(isAvailableSuccess, isAvailableError);
 
-                                Fingerprint.isAvailable(isAvailableSuccess, isAvailableError);
+                    function isAvailableSuccess(result) {
+                        Fingerprint.show({
+                            description: "Some biometric description"
+                        }, successCallback, errorCallback);
 
-                                function isAvailableSuccess(result) {
-                                    Fingerprint.show({
-                                        description: "Some biometric description"
-                                    }, successCallback, errorCallback);
+                        function successCallback(){
+                            alert("Authentication successful");
 
-                                    function successCallback(){
-                                        alert("Authentication successful");
+                            var ajax3 = new XMLHttpRequest();
+                            ajax3.open("GET", "https://www.sigmacivil.app.br/app_sc/salvar_manut.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&econst=" + e_construtora + "&idpm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&d_data_realiz=" + document.getElementById('in_data_realizacao').value + "&d_forn=" + document.getElementById('valores').value + "&d_custoReal=" + document.getElementById('in_dado_custo_real').value + "&d_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value) + "&tipo=" + tipo + "&versao=2.1&env_em=" + ev_email + "&segur=" + crypt_segur + "&t=" + Math.random(), false);
+                            alert("https://www.sigmacivil.app.br/app_sc/salvar_manut.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&econst=" + e_construtora + "&idpm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&d_data_realiz=" + document.getElementById('in_data_realizacao').value + "&d_forn=" + document.getElementById('valores').value + "&d_custoReal=" + document.getElementById('in_dado_custo_real').value + "&d_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value) + "&tipo=" + tipo + "&versao=2.1&env_em=" + ev_email + "&segur=" + crypt_segur + "&t=" + Math.random())
+                            ajax3.onreadystatechange = function () {
+                                if (ajax3.readyState == 4) {
+                                    if (ajax3.status == 200 || ajax3.status == 0) {
 
+                                        var resposta_total = ajax3.responseText;
                                         if (tipo == "alt") {
                                             alert("Alteração realizada com sucesso!")
                                         } else {
@@ -2658,25 +2658,25 @@ alert("Ponto 2");
                                         }
 
                                         reload_page_empree();
-                                    }
 
-                                    function errorCallback(error){
-                                        alert("Authentication invalid " + error.message);
-                                        return;
+                                    } else {
+                                        alert("Problemas com sua conexão internet. Cod: 0166");
                                     }
                                 }
-
-                                function isAvailableError(error) {
-                                    // 'error' will be an object with an error code and message
-                                    alert(error.message);
-                                }
-
-                            } else {
-                                alert("Problemas com sua conexão internet. Cod: 0166");
                             }
+                            ajax3.send();
+                        }
+
+                        function errorCallback(error){
+                            alert("Authentication invalid " + error.message);
+                            return;
                         }
                     }
-                    ajax3.send();
+
+                    function isAvailableError(error) {
+                        // 'error' will be an object with an error code and message
+                        alert(error.message);
+                    }
                 }
             }
 

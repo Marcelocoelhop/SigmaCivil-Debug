@@ -97,28 +97,6 @@
         // EXECUTA CASO TENHA INTERNET
         function iniciar() {
 
-            Fingerprint.isAvailable(isAvailableSuccess, isAvailableError);
-
-            function isAvailableSuccess(result) {
-                alert('entrou aqui!')
-                Fingerprint.show({
-                    description: "Some biometric description"
-                }, successCallback, errorCallback);
-            
-                function successCallback(){
-                    alert("Authentication successful");
-                }
-            
-                function errorCallback(error){
-                    alert("Authentication invalid " + error.message);
-                }
-            }
-
-            function isAvailableError(error) {
-                // 'error' will be an object with an error code and message
-                alert(error.message);
-            }
-
             window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
             window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
             window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
@@ -2661,15 +2639,37 @@ alert("Ponto 2");
                     ajax3.onreadystatechange = function () {
                         if (ajax3.readyState == 4) {
                             if (ajax3.status == 200 || ajax3.status == 0) {
-
                                 var resposta_total = ajax3.responseText;
-                                if (tipo == "alt") {
-                                    alert("Alteração realizada com sucesso!")
-                                } else {
-                                    alert("Manutenção realizada com sucesso!")
+
+                                Fingerprint.isAvailable(isAvailableSuccess, isAvailableError);
+
+                                function isAvailableSuccess(result) {
+                                    Fingerprint.show({
+                                        description: "Some biometric description"
+                                    }, successCallback, errorCallback);
+
+                                    function successCallback(){
+                                        alert("Authentication successful");
+
+                                        if (tipo == "alt") {
+                                            alert("Alteração realizada com sucesso!")
+                                        } else {
+                                            alert("Manutenção realizada com sucesso!")
+                                        }
+
+                                        reload_page_empree();
+                                    }
+
+                                    function errorCallback(error){
+                                        alert("Authentication invalid " + error.message);
+                                        return;
+                                    }
                                 }
 
-                                reload_page_empree();
+                                function isAvailableError(error) {
+                                    // 'error' will be an object with an error code and message
+                                    alert(error.message);
+                                }
 
                             } else {
                                 alert("Problemas com sua conexão internet. Cod: 0166");

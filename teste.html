@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="css/custom.css" />
+    <link rel="stylesheet" href="css/custom-mobile.css" />
+    <link rel="stylesheet" href="css/custom-even.css" />
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
+    <title>Teste</title>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" src="js/mc.js"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/jquery.mobile-1.4.5.min.js"></script>
+</head>
+
+<body>
+    <h1>Hello World!</h1>
+
+    <script>
+        // successCallback
+        var onSuccess = function(sha1) {
+            alert("SHA1: " + sha1);
+        }
+    
+        // errorCallback
+        var onError = function(error) {
+            alert("ERROR: " + error);
+        }
+    
+        cordova.getSignatureFingerprint.getSignature(onSuccess, onError);
+    </script>
+</body>
+
+</html>

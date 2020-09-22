@@ -17,7 +17,11 @@
     <h1>Hello World!</h1>
 
     <script>
-        FingerPrint.isAvailable(isAvailableSuccess, isAvailableError);
+        window.onerror = function (message, url, lineNumber) {
+			alert(`Error: ${message} in ${url} at line ${lineNumber}`);
+        }
+        
+        Fingerprint.isAvailable(isAvailableSuccess, isAvailableError);
 
         function isAvailableSuccess(result) {
             /*

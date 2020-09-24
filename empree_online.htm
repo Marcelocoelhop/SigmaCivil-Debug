@@ -255,7 +255,7 @@
 
         document.addEventListener("deviceready", onDeviceReady, false);
         function onDeviceReady() {
-            StatusBar.hide();
+            StatusBar.overlaysWebView(false);
 
             if (tem_conexao()) {
                 iniciar()

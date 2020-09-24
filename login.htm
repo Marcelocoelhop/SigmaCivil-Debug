@@ -41,6 +41,8 @@
     document.addEventListener("deviceready", onDeviceReady, false);
 
     function onDeviceReady() {
+      StatusBar.overlaysWebView(false);
+      
       document.getElementById('menu_opc2').innerHTML = menu_sup;
     }
 

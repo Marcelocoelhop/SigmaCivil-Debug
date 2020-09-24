@@ -255,6 +255,8 @@
 
         document.addEventListener("deviceready", onDeviceReady, false);
         function onDeviceReady() {
+            StatusBar.hide();
+
             if (tem_conexao()) {
                 iniciar()
             } else {

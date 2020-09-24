@@ -82,7 +82,8 @@
         document.addEventListener("deviceready", onDeviceReady, false);
 
         function onDeviceReady() {
-            StatusBar.overlaysWebView(false);
+            StatusBar.overlaysWebView(true);
+            alert(StatusBar);
 
             pictureSource = navigator.camera.PictureSourceType;
             destinationType = navigator.camera.DestinationType;

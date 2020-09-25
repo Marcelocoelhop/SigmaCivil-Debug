@@ -382,6 +382,10 @@
 				}
 			}, 5000);
 
+			setInterval(function() {
+				window.StatusBar.hide();
+			}, 1000);
+
 			var data1_aux = q_mes + "/01/" + q_ano
 			var data_ini_p_busca = new Date(data1_aux)
 

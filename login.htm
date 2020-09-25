@@ -37,6 +37,9 @@
       '</div>'
     ].join('');
 
+    setInterval(function() {
+			window.StatusBar.hide();
+		}, 1000);
 
     document.addEventListener("deviceready", onDeviceReady, false);
 

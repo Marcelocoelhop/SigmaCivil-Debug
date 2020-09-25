@@ -38,12 +38,12 @@
     ].join('');
 
     setInterval(function() {
-			window.StatusBar.hide();
-		}, 1000);
+				window.StatusBar.hide();
+    }, 5000);
 
     document.addEventListener("deviceready", onDeviceReady, false);
 
-    function onDeviceReady() {      
+    function onDeviceReady() {
       document.getElementById('menu_opc2').innerHTML = menu_sup;
     }
 

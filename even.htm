@@ -121,6 +121,8 @@
 			document.getElementById('menu_opc2').innerHTML = menu_sup_offline;
 
 			setInterval(function () {
+				window.StatusBar.hide();
+
 				if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
 					document.getElementById('menu_opc2').innerHTML = menu_sup_offline;
 					return false;
@@ -130,10 +132,6 @@
 					return true;
 				}
 			}, 5000);
-
-			setInterval(function() {
-				window.StatusBar.hide();
-			}, 1000);
 
 			var db;
 			var request = window.indexedDB.open("db_sigmacivil", "1");

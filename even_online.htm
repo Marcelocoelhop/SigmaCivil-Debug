@@ -83,14 +83,6 @@
 
         function onDeviceReady() {
 
-            if (window.StatusBar) {
-                alert('entrou aqui')
-                window.StatusBar.show ();
-                setTimeout (function () {
-                    window.StatusBar.hide ();
-                }, 3000);
-            }
-
             pictureSource = navigator.camera.PictureSourceType;
             destinationType = navigator.camera.DestinationType;
             mediaType = navigator.camera.MediaType;
@@ -161,6 +153,8 @@
 
             // FUNÇÃO QUE VERIFICA SE TEM INTERNET A CADA 5 SEGUNDOS
             setInterval(function () {
+                window.StatusBar.hide();
+
                 if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
                     document.getElementById('menu_opc2').innerHTML = menu_sup_offline;
                     return false;

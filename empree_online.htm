@@ -12,6 +12,7 @@
     <script type="text/javascript" src="js/mc.js"></script>
     <script src="js/jquery.js"></script>
     <script src="js/jquery.mobile-1.4.5.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <style>
         .menu .ui-mini.ui-btn-icon-left:after,
         .ui-mini .ui-btn-icon-left:after,
@@ -874,15 +875,29 @@
         }
 
         function enviar_sync() {
-            decisao = confirm("Deseja efetuar novo login? Será possível se logar novamente em qualquer empreendimento atualizando o Plano de Manutenção!");
+            swal({
+                title: "SigmaCivil",
+                text: "Deseja efetuar novo login? Será possível se logar novamente em qualquer empreendimento atualizando o Plano de Manutenção!",
+                buttons: ["Cancelar", true],
+                icon: "warning",
+            }).then(function(value) {
+                switch (value) {
+                    case true:
+                        document.form_sup.action = "del.htm";
+                        document.form_sup.submit();
+                        break;
+                }
+            });
 
-            if (decisao) {
-                document.form_sup.action = "del.htm";
-                document.form_sup.submit();
+            // decisao = confirm("Deseja efetuar novo login? Será possível se logar novamente em qualquer empreendimento atualizando o Plano de Manutenção!");
 
-            } else {
+            // if (decisao) {
+            //     document.form_sup.action = "del.htm";
+            //     document.form_sup.submit();
 
-            }
+            // } else {
+
+            // }
         }
 
         function dateToEN(date) {

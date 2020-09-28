@@ -2482,7 +2482,7 @@ alert("Ponto 2");
         navigator.notification.confirm(
             'Confirmar efetuação de um novo login? Será necessário se logar novamente em qualquer empreendimento atualizando o plano de manutenção!', 
             function(buttonIndex) {
-                if (buttonIndex === 2) {
+                if (buttonIndex === 1) {
                     return;
                 }
 
@@ -2490,7 +2490,7 @@ alert("Ponto 2");
                 document.form_sup.submit();
             }, 
             'SigmaCivil', 
-            ['Ok', 'Cancelar']
+            ['Cancelar', 'OK']
         );
 
         // decisao = confirm("Confirmar efetuação de um novo login? Será necessário se logar novamente em qualquer empreendimento atualizando o plano de manutenção!");

@@ -2479,12 +2479,26 @@ alert("Ponto 2");
 
     function enviar_sync() {
 
-        decisao = confirm("Confirmar efetuação de um novo login? Será necessário se logar novamente em qualquer empreendimento atualizando o plano de manutenção!");
+        navigator.notification.confirm(
+            'Confirmar efetuação de um novo login? Será necessário se logar novamente em qualquer empreendimento atualizando o plano de manutenção!', 
+            function(buttonIndex) {
+                if (buttonIndex === 2) {
+                    return;
+                }
 
-        if (decisao) {
-            document.form_sup.action = "del.htm";
-            document.form_sup.submit();
-        }
+                document.form_sup.action = "del.htm";
+                document.form_sup.submit();
+            }, 
+            'SigmaCivil', 
+            ['Ok', 'Cancelar']
+        );
+
+        // decisao = confirm("Confirmar efetuação de um novo login? Será necessário se logar novamente em qualquer empreendimento atualizando o plano de manutenção!");
+
+        // if (decisao) {
+        //     document.form_sup.action = "del.htm";
+        //     document.form_sup.submit();
+        // }
 
     }
 

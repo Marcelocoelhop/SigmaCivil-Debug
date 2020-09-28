@@ -133,6 +133,7 @@
     
     <plugin name="cordova-plugin-fingerprint-aio" spec="~3.0.1" />
     <plugin name="cordova-plugin-statusbar" spec="~2.4.3" />
+    <plugin name="cordova-plugin-dialogs" spec="~2.0.2" />
     
     <!-- <plugin name="cordova-plugin-wkwebview-engine" source="npm" spec="~1.2.1" /> -->
     

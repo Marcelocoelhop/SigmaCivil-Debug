@@ -113,7 +113,84 @@
 					document.getElementById('menu_opc2').innerHTML = menu_sup_online;
 					return true;
 				}
-			}, 5000);
+            }, 5000);
+            
+            var db;
+			var request = window.indexedDB.open("db_sigmacivil", "1");
+
+			request.onerror = function (event) {
+				alert("Erro ao criar o banco (cod 01)");
+			};
+
+			request.onsuccess = function (event) {
+				db = request.result;
+
+				consultaCliente(db);
+
+				db.onerror = function (event) {
+					alert("Database error: " + event.target.errorCode);
+				}
+			}
+
+			function consultaCliente(db) {
+				var tx = db.transaction(['mtab_cliente'], 'readwrite');
+				var store = tx.objectStore('mtab_cliente');
+				var objectStoreRequest = store.openCursor();
+				objectStoreRequest.onsuccess = function (event) {
+					var cursor = event.target.result;
+					if (cursor) {
+						var data = cursor.value;
+
+						id_cliente = data['id_cliente'];
+
+						var tx2 = db.transaction(['mtab_checkpoint'], 'readwrite');
+						var store2 = tx2.objectStore('mtab_checkpoint');
+						var objectStoreRequest2 = store2.openCursor();
+						objectStoreRequest2.onsuccess = function (event) {
+							var cursor2 = event.target.result;
+							if (cursor2) {
+								var data2 = cursor2.value;
+
+								id_empree = data2['id_empree'];
+								var id_sistema = data2['id_sistema'];
+								var data_checkpoint = data2['data_checkpoint'];
+								var latitude_checkpoint = data2['latitude_checkpoint'];
+								var longitude_checkpoint = data2['longitude_checkpoint'];
+								var altura_checkpoint = data2['altura_checkpoint'];
+								var atualizado_serv = data2['atualizado_serv'];
+
+								dados_checkpoint = dados_checkpoint + id_empree + "_" + id_sistema + "_" + data_checkpoint + "_" + latitude_checkpoint + "_" + longitude_checkpoint + "_" + altura_checkpoint + "_" + atualizado_serv + "*";
+							}
+
+							if (dados_checkpoint != "") {
+								dados_checkpoint = dados_checkpoint.substring(0, (dados_checkpoint.length - 1))
+							}
+
+							if (!cursor2) {
+								var botao_sincro = [
+									'<div style="margin-top: 16px;">',
+									'<img src="images/check-circle.png" width="25" />',
+									'<div style="margin-top: 8px;" align="center"><span style="text-decoration: none;">CheckPoints Sincronizados</span></div>',
+									'</div>'
+								].join('');
+							} else {
+								var botao_sincro = [
+									'<div style="margin-top: 16px;>',
+									'<img src="images/exclamation-circle.png" width="25" />',
+									'<div style="margin-top: 8px;" align="center"><span style="text-decoration: none;">Sincronizar CheckPoints</span></div>',
+									'</div>'
+								].join('');
+							}
+
+							document.getElementById('bot_sincro').innerHTML = botao_sincro;
+
+							if (tem_conexao()) {
+								sincronizar();
+							}
+						}
+					}
+				}
+			}
 
 		}
 
@@ -302,7 +379,7 @@
     }
     
 	function go_page_qrcode(q_id_sistema, q_num_empree) {
-        window.location.assign("qrcode.htm?l=" + login + "&s=" + senha + "&e=" + q_num_empree + "&id_sis=" + q_id_sistema + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&fil=" + removeAcento(nome_sistema));
+        window.location.assign("qrcode.htm?l=" + login + "&s=" + senha + "&e=" + q_num_empree + "&id_sis=" + q_id_sistema + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano));
 	}
 
 	function go_relat_check() {
@@ -354,7 +431,60 @@
 		} else {
 
 		}
-	}
+    }
+    
+    function sincronizar() {
+
+        var status_sync = "";
+
+        if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
+            alert("Sem conexão com internet! Não é possível sincronizar!");
+        } else {
+            var ajax = new XMLHttpRequest();
+            ajax.open("GET", "http://www.sigmacivil.com.br/app_sc/sincronizar_checkpoint.asp?retor=" + dados_checkpoint + "&l=" + login + "&s=" + senha, true);
+            ajax.onreadystatechange = function () {
+
+                if (ajax.readyState == 4) {//Request complete !!
+                    if (ajax.status == 200 || ajax.status == 0) { // OK response
+                        var resposta_total = ajax.responseText;
+                        if (resposta_total == 'sim') {
+                            var db;
+                            var request = window.indexedDB.open("db_sigmacivil", "1");
+                                request.onerror = function (event) {
+                                    alert("Erro ao criar o banco (cod 04)");
+                                };
+
+                                request.onsuccess = function (event) {
+                                    db = request.result;
+
+                                    executarRemoverDadosCheckpoint(db);
+
+                                    db.onerror = function (event) {
+                                        alert("Database error: " + event.target.error);
+                                    }
+                                };
+
+                                function executarRemoverDadosCheckpoint(db) {
+                                    var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
+                                    var store = tx.objectStore('mtab_checkpoint');
+
+                                    var objectStoreRequest = store.clear();
+                                    objectStoreRequest.onsuccess = function (event) {
+                                        go_page_qrcode(id_sis, num_empree);
+                                    }
+                                }
+                            }
+
+                        }
+                        else {
+                            alert("Problemas com sua conexao internet. Erro: 0145");
+                        }
+                    }
+                }
+                ajax.send();
+
+            } //checa internet
+        }
 
 	function removeAcento(text) {
 		// text = text.toLowerCase();

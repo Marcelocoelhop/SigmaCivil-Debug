@@ -333,7 +333,9 @@
     //////////////////////////////////////
     
     var registrar_manut = document.querySelector('.register');
-    registrar_manut.addEventListener('click', go_to_page(id_sis, num_empree));
+    registrar_manut.addEventListener('click', function() {
+        alert('clicou');
+    });
 
 	function go_to_page(q_id_sistema, q_num_empree) {
 		var nome_sistema = ""

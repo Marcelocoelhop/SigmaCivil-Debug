@@ -5,7 +5,7 @@
         xmlns:gap = "http://phonegap.com/ns/1.0"
  		xmlns:android   = "http://schemas.android.com/apk/res/android"
         id        = "br.com.sigmacivil.sc"
-        version   = "2.1">
+        version   = "2.2">
 
     <name>SigmaCivil</name>
 
@@ -13,7 +13,7 @@
         Sigmacivil
     </description>
 
-    <author href="http://www.sigmacivil.app.br" email="suporte@sigmacivil.com.br">
+    <author href="http://www.sigmacivil.com.br" email="suporte@sigmacivil.com.br">
         Sigmacivil
     </author>
 
@@ -76,11 +76,12 @@
 	<!-- <preference name="phonegap-version" 		  value="cli-7.1.0" />      all: current version of PhoneGap -->
 	<preference name="phonegap-version" 		  value="cli-9.0.0" />      <!-- all: current version of PhoneGap -->
     <preference name="pgb-builder-version"        value="1" />
-    <preference name="StatusBarOverlaysWebView"   value="true" />
 
     <preference name="orientation"                value="default" />        <!-- all: default means both landscape and portrait are enabled -->
     <preference name="target-device"              value="universal" />      <!-- all: possible values handset, tablet, or universal -->
     <preference name="fullscreen"                 value="true" />           <!-- all: hides the status bar at the top of the screen -->
+    <preference name="StatusBarOverlaysWebView"   value="true" />
+    <preference name="StatusBarBackgroundColor"   value="#b10b0b" />
     <preference name="webviewbounce"              value="true" />           <!-- ios: control whether the screen 'bounces' when scrolled beyond the top -->
     <preference name="prerendered-icon"           value="true" />           <!-- ios: if icon is prerendered, iOS will not apply it's gloss to the app's icon on the user's home screen -->
     <preference name="stay-in-webview"            value="false" />          <!-- ios: external links should open in the default browser, 'true' would use the webview the app lives in -->
@@ -130,10 +131,9 @@
     <plugin name="cordova-plugin-statusbar" source="npm" spec="~2.1.2" />
     <plugin name="cordova-plugin-vibration" source="npm" spec="~2.1.0" />
     <plugin name="cordova-sqlite-storage" spec="~0.8.5" />
+    <plugin name="cordova-plugin-barcodescanner" source="npm" spec="~0.7.4" />  
     
-    <plugin name="cordova-plugin-fingerprint-aio" spec="~3.0.1" />
-    <plugin name="cordova-plugin-statusbar" spec="~2.4.3" />
-    <plugin name="cordova-plugin-dialogs" spec="~2.0.2" />
+    <plugin name="cordova-plugin-statusbar" spec="~2.4.3" /> 
     
     <!-- <plugin name="cordova-plugin-wkwebview-engine" source="npm" spec="~1.2.1" /> -->
     

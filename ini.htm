@@ -99,6 +99,16 @@
 				mtab_prog_manut_evento.createIndex("status_audio_upl", "status_audio_upl", { unique: false });
 				mtab_prog_manut_evento.createIndex("status_texto_upl", "status_texto_upl", { unique: false });
 				mtab_prog_manut_evento.createIndex("comparar", ["id_prog_manut", "dia_evento", "mes_evento", "ano_evento"], { unique: false });
+
+				var mtab_checkpoint = db.createObjectStore("mtab_checkpoint", { keyPath: "id_sistema" });
+
+				mtab_checkpoint.createIndex("id_sistema", "id_sistema", { unique: true });
+				mtab_checkpoint.createIndex("id_empree", "id_empree", { unique: false });
+				mtab_checkpoint.createIndex("data_checkpoint", "data_checkpoint", { unique: false });
+				mtab_checkpoint.createIndex("latitude_checkpoint", "latitude_checkpoint", { unique: false });
+				mtab_checkpoint.createIndex("longitude_checkpoint", "longitude_checkpoint", { unique: false });
+				mtab_checkpoint.createIndex("altura_checkpoint", "altura_checkpoint", { unique: false });
+				mtab_checkpoint.createIndex("atualizado_serv", "atualizado_serv", { unique: false });
 			};
 
 			var clientes = [];

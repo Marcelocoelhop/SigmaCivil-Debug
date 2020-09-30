@@ -349,14 +349,15 @@
 	var q_mes = getquerystring("qm")
     var q_ano = getquerystring("qa")
     
-    var id_sis = getquerystring("id_sis");
+	var id_sis = getquerystring("id_sis");
+	alert('id_sis= ' + id_sis);
 
 	//////////////////////////////////////
+	go_to_page(id_sis, num_empree);
 	
 	function clica_aqui() {
 		alert('entrou aqui 0')
 
-        go_to_page(id_sis, num_empree);
 	}
     
     // var registrar_manut = document.querySelector('.register');

@@ -295,7 +295,7 @@
 		<span id="visual_apagar"></span>
 
 		<div class="btn-bars">
-			<div style="top:4; z-index: 1" data-role="collapsible" data-collapsed="true" class="ui-btn-left menu"
+			<div style="top:4; z-index: 50" data-role="collapsible" data-collapsed="true" class="ui-btn-left menu"
 				data-mini="true">
 				<h4 class="btn-bars-bars">
 					<img class="is-bars" src="images/bars.svg" width="14" alt="Menu" />
@@ -308,6 +308,10 @@
 					</li>
 					<li>
 						<a class="click" href="#" onClick="enviar_sync()">Logout</a>
+					</li>
+					<li>
+						<a class="ui-btn ui-icon-power ui-btn-icon-right ui-shadow ui-corner-all" href="#"
+						onClick="closeApp()">Fechar app</a>
 					</li>
 				</ul>
 			</div>
@@ -710,16 +714,41 @@
 	}
 
 	function enviar_sync() {
-		decisao = confirm("Deseja efetuar novo login? Será possível se logar novamente em qualquer empreendimento atualizando o Plano de Manutenção!");
+	    navigator.notification.confirm(
+            'Confirma que deseja se deslogar do SigmaCivil?', 
+            function(buttonIndex) {
+                if (buttonIndex === 2) {
+                    return;
+                }
 
-		if (decisao) {
-			document.form_sup.action = "del.htm";
-			document.form_sup.submit();
+                navigator.notification.confirm(
+                    'Tem certeza que deseja sair do app SigmaCivil? Todos os seus arquivos como fotos e vídeos serão apagados deste dispositivo! Confirmar?', 
+                    function(buttonIndex) {
+                        if (buttonIndex === 2) {
+                            return;
+                        }
 
-		} else {
+                        document.form_sup.action = "del.htm";
+                        document.form_sup.submit();
+                    }, 
+                    'SigmaCivil', 
+                    ['OK', 'Cancelar']
+                );
+            }, 
+            'SigmaCivil', 
+            ['OK', 'Cancelar']
+        );
 
-		}
-	}
+		// decisao = confirm("Deseja efetuar novo login? Será possível se logar novamente em qualquer empreendimento atualizando o Plano de Manutenção!");
+
+		// if (decisao) {
+		// 	document.form_sup.action = "del.htm";
+		// 	document.form_sup.submit();
+
+		// } else {
+
+		// }
+    }
 
 	function removeAcento(text) {
 		// text = text.toLowerCase();
@@ -780,6 +809,21 @@
 
 		return text;
 	}
+
+	function closeApp() {
+        navigator.notification.confirm(
+            'Tem certeza que deseja sair do app SigmaCivil?', 
+            function(buttonIndex) {
+                if (buttonIndex === 2) {
+                    return;
+                }
+                    
+                navigator.app.exitApp();
+            }, 
+            'SigmaCivil', 
+            ['OK', 'Cancelar']
+        );
+    }
 
 </script>
 <script>

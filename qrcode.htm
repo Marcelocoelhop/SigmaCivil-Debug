@@ -207,7 +207,7 @@
 		<span id="visual_apagar"></span>
 
 		<div class="btn-bars">
-			<div style="top:4; z-index: 1" data-role="collapsible" data-collapsed="true" class="ui-btn-left menu"
+			<div style="top:4; z-index: 50" data-role="collapsible" data-collapsed="true" class="ui-btn-left menu"
 				data-mini="true">
 				<h4 class="btn-bars-bars">
 					<img class="is-bars" src="images/bars.svg" width="14" alt="Menu" />
@@ -217,9 +217,17 @@
 					<li>
 						<a class="ui-btn ui-icon-back ui-btn-icon-right ui-shadow ui-corner-all" href="#"
 						onClick="volta_uni()">Manutenções</a>
-					</li>
+                    </li>
+                    <li>
+                        <a class="ui-btn ui-icon-carat-r ui-btn-icon-right ui-shadow ui-corner-all" href="#"
+                        onClick="scan()">Ler QRcode</a>
+                    </li>
 					<li>
 						<a class="click" href="#" onClick="enviar_sync()">Logout</a>
+					</li>
+					<li>
+						<a class="ui-btn ui-icon-power ui-btn-icon-right ui-shadow ui-corner-all" href="#"
+						onClick="closeApp()">Fechar app</a>
 					</li>
 				</ul>
 			</div>
@@ -374,7 +382,154 @@
 			}
 		}
 		xhr.send()
-	}
+    }
+    
+    function scan() {
+            cordova.plugins.barcodeScanner.scan(
+                function (result) {
+                    if (!result.cancelled) {
+                        // In this case we only want to process QR Codes
+                        if (result.format == "QR_CODE") {
+                            var value = result.text;
+
+                            var ponto_ini = value.indexOf("www.sigmacivil.com.br/us/new_qr_hist_mp.asp?c=");
+                            var parte1 = value.substring(ponto_ini + 46);
+
+                            var pedaco = parte1.split("_");
+                            alert(id_empree);
+                            alert(pedaco[0]);
+
+                            if (id_empree == pedaco[0]) {
+
+                                var qid_empree = id_empree;
+                                var qid_sistema = pedaco[1];
+
+                                var d = new Date();
+                                var qdata_checkpoint = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+
+                                var qatualizado_serv = "N";
+
+                                navigator.geolocation.getCurrentPosition(
+                                    function (position) {
+                                        var qlatitude_checkpoint = position.coords.latitude;
+                                        var qlongitude_checkpoint = position.coords.longitude;
+                                        var qaltura_checkpoint = position.coords.altitude;
+
+                                        var db;
+                                        var request = window.indexedDB.open("db_sigmacivil", "1");
+
+                                        request.onerror = function (event) {
+                                            alert("Erro ao criar o banco (cod 02)");
+                                        };
+
+                                        request.onsuccess = function (event) {
+                                            db = request.result;
+
+                                            inserirDadosCheckpoint(db, dadosCheckpoint);
+
+                                            db.onerror = function (event) {
+                                                alert("Database error: " + event.target.errorCode);
+                                            }
+                                        }
+
+                                        var dadosCheckpoint = [
+                                            {
+                                                id_empree: qid_empree,
+                                                id_sistema: qid_sistema,
+                                                data_checkpoint: qdata_checkpoint,
+                                                latitude_checkpoint: qlatitude_checkpoint,
+                                                longitude_checkpoint: qlongitude_checkpoint,
+                                                altura_checkpoint: qaltura_checkpoint,
+                                                atualizado_serv: qatualizado_serv,
+                                            }
+                                        ];
+
+                                        function inserirDadosCheckpoint(db, dadosCheckpoint) {
+                                            var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
+                                            var store = tx.objectStore('mtab_checkpoint');
+
+                                            dadosCheckpoint.map(function (dadoCheckpoint) {
+                                                store.add(dadoCheckpoint);
+                                            });
+
+                                            tx.oncomplete = function () {
+                                                go_to_page(qid_sistema, qid_empree);
+                                            }
+
+                                            tx.onerror = function (event) {
+                                                alert('error storing checkpoint note ' + event.target.error);
+                                            }
+                                        }
+                                    },
+                                    function (error) {
+                                        var db;
+                                        var request = window.indexedDB.open("db_sigmacivil", "1");
+
+                                        request.onerror = function (event) {
+                                            alert("Erro ao criar o banco (cod 03)");
+                                        };
+
+                                        request.onsuccess = function (event) {
+                                            db = request.result;
+
+                                            inserirDadosCheckpointError(db, dadosCheckpointError);
+
+                                            db.onerror = function (event) {
+                                                alert("Database error: " + event.target.errorCode);
+                                            }
+                                        }
+
+                                        var dadosCheckpointError = [
+                                            {
+                                                id_empree: qid_empree,
+                                                id_sistema: qid_sistema,
+                                                data_checkpoint: qdata_checkpoint,
+                                                latitude_checkpoint: "",
+                                                longitude_checkpoint: "",
+                                                altura_checkpoint: "",
+                                                atualizado_serv: qatualizado_serv,
+                                            }
+                                        ];
+
+                                        function inserirDadosCheckpointError(db, dadosCheckpointError) {
+                                            var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
+                                            var store = tx.objectStore('mtab_checkpoint');
+
+                                            dadosCheckpointError.map(function (dadoCheckpointError) {
+                                                store.add(dadoCheckpointError);
+                                            });
+
+                                            tx.oncomplete = function () {
+                                                go_to_page(qid_sistema, qid_empree);
+                                            }
+
+                                            tx.onerror = function (event) {
+                                                alert('error storing checkpointError note ' + event.target.error);
+                                            }
+                                        }
+                                    }
+                                );
+
+                            } else {
+                                alert("Esse QRCode não é válido");
+                            }
+
+                        } else {
+                            alert("Desculpe, só é possível ler QRCODES");
+                        }
+                    } else {
+                        alert("Leitura do QRCODE cancelada");
+                    }
+                },
+                function (error) {
+                    // alert("Erro: " + error);
+                }
+            );
+        }
+
+        function go_to_page(q_id_sistema, q_num_empree) {
+            window.location.assign("qrcode.htm?l=" + login + "&s=" + senha + "&e=" + q_num_empree + "&id_sis=" + q_id_sistema + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano));
+        }
 
 	function go_page_check() {
 		window.location.assign("checkpoint.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano));
@@ -424,15 +579,40 @@
 	}
 
 	function enviar_sync() {
-		decisao = confirm("Deseja efetuar novo login? Será possível se logar novamente em qualquer empreendimento atualizando o Plano de Manutenção!");
+	    navigator.notification.confirm(
+            'Confirma que deseja se deslogar do SigmaCivil?', 
+            function(buttonIndex) {
+                if (buttonIndex === 2) {
+                    return;
+                }
 
-		if (decisao) {
-			document.form_sup.action = "del.htm";
-			document.form_sup.submit();
+                navigator.notification.confirm(
+                    'Tem certeza que deseja sair do app SigmaCivil? Todos os seus arquivos como fotos e vídeos serão apagados deste dispositivo! Confirmar?', 
+                    function(buttonIndex) {
+                        if (buttonIndex === 2) {
+                            return;
+                        }
 
-		} else {
+                        document.form_sup.action = "del.htm";
+                        document.form_sup.submit();
+                    }, 
+                    'SigmaCivil', 
+                    ['OK', 'Cancelar']
+                );
+            }, 
+            'SigmaCivil', 
+            ['OK', 'Cancelar']
+        );
 
-		}
+		// decisao = confirm("Deseja efetuar novo login? Será possível se logar novamente em qualquer empreendimento atualizando o Plano de Manutenção!");
+
+		// if (decisao) {
+		// 	document.form_sup.action = "del.htm";
+		// 	document.form_sup.submit();
+
+		// } else {
+
+		// }
     }
     
     function sincronizar() {
@@ -547,6 +727,21 @@
 
 		return text;
 	}
+
+	function closeApp() {
+        navigator.notification.confirm(
+            'Tem certeza que deseja sair do app SigmaCivil?', 
+            function(buttonIndex) {
+                if (buttonIndex === 2) {
+                    return;
+                }
+                    
+                navigator.app.exitApp();
+            }, 
+            'SigmaCivil', 
+            ['OK', 'Cancelar']
+        );
+    }
 
 </script>
 <script>

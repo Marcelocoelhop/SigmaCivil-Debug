@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>Check Point</title>
+	<title>QRcode</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<link rel="stylesheet" href="css/custom.css" />
@@ -237,9 +237,9 @@
 			<div align="center">
 				<table width="100%" height="27" border="0" cellpadding="0" cellspacing="0">
 					<tr>
-						<td width="20" class="menu_2">
+						<!-- <td width="20" class="menu_2">
 							<div align="center"></div>
-						</td>
+						</td> -->
 						<td width="130" height="27">
 							<div align="center">
 								<strong class="title-check-white">QRcode</strong>
@@ -274,7 +274,7 @@
 			<tr>
 				<td width="85%" height="51">
 
-					<a href="#" class="is-not-decoration register" onClick="clica_aqui()">
+					<a href="#" class="is-not-decoration register">
 						<button class="ui-btn ui-shadow ui-corner-all">
 							<table width="100%" height="51" border="0" cellpadding="0" cellspacing="0">
 								<tr>
@@ -366,7 +366,7 @@
 						alert('Não há manutenções para serem registradas!');
 					} else if (tem_alguma_manut == "1") {
 						navigator.notification.confirm(
-							'Tem certeza que deseja sair do app SigmaCivil?', 
+							'Deseja registrar esta manutenção? Caso não haja manutenções deste sistema neste mês, elas não serão mostradas a seguir.', 
 							function(buttonIndex) {
 								if (buttonIndex == 1) {
 									if (navigator.connection.type == 0 || navigator.connection.type == 'none') {

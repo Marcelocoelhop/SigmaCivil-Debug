@@ -7,7 +7,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<link rel="stylesheet" href="css/custom.css" />
-	<link rel="stylesheet" href="css/custom-mobile.css" />
 	<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
 	<script type="text/javascript" src="js/mc.js"></script>
 	<script type="text/javascript" src="cordova.js"></script>
@@ -305,10 +304,20 @@
 				</a>
 			</div>
 			<div class="ui-block-b">
-				<div class="ui-bar ui-bar-a cogs-button" style="height:60px">
-					<img src="images/check-square.svg" width="25" alt="cogs">
-					<span>Realizar checkpoint</span>
-				</div>
+				<a href="#" class="is-not-decoration" onClick="go_page_check()">
+					<div class="ui-bar ui-bar-a cogs-button" style="height:60px">
+						<img src="images/check-square.svg" width="25" alt="cogs">
+						<span>Realizar checkpoint</span>
+					</div>
+				</a>
+			</div>
+			<div class="ui-block-a">
+				<a href="#" class="is-not-decoration">
+					<div class="ui-bar ui-bar-a cogs-button" style="height:60px;">
+						<img src="images/phone.svg" width="25" alt="cogs">
+						<span>Abrir chamado</span>
+					</div>
+				</a>
 			</div>
 		</div><!-- /grid-a -->
 

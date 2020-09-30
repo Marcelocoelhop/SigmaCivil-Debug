@@ -54,7 +54,6 @@
     justify-content: center; 
     align-items: center; 
     flex-direction: column;
-    flex-grow: grow;
     margin: 8px;
     border-radius: 8px;
     padding: 48px 16px !important;
@@ -63,6 +62,7 @@
 
 .cogs-button:hover {
     border: 1px solid #b10b0b;
+    box-shadow: 0 0 20px 0 rgba(0,0,0,.3);
 }
 
 .cogs-button span {
@@ -240,4 +240,16 @@ hr.line-color {
   -ms-animation: fa-blink .75s linear infinite;
   -o-animation: fa-blink .75s linear infinite;
   animation: fa-blink .75s linear infinite;
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+	.menu-tablet-responsive {
+		width: 300px !important;
+	}
+}
+
+@media (min-width: 481px) and (max-width: 767px) {
+	.menu-tablet-responsive {
+		width: 250px !important;
+	}
 }

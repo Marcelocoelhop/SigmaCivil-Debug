@@ -298,7 +298,7 @@
 			<div class="ui-block-a">
 				<a href="#" class="is-not-decoration register">
 					<div class="ui-bar ui-bar-a cogs-button" style="height:60px;">
-						<img src="images/cogs.svg" width="25" alt="cogs">
+						<img src="images/cogs.svg" width="50" alt="cogs">
 						<span>Registrar manutenção</span>
 					</div>
 				</a>
@@ -306,7 +306,7 @@
 			<div class="ui-block-b">
 				<a href="#" class="is-not-decoration" onClick="go_page_check()">
 					<div class="ui-bar ui-bar-a cogs-button" style="height:60px">
-						<img src="images/check-square.svg" width="25" alt="cogs">
+						<img src="images/check-square.svg" width="50" alt="cogs">
 						<span>Realizar checkpoint</span>
 					</div>
 				</a>
@@ -314,7 +314,7 @@
 			<div class="ui-block-a">
 				<a href="#" class="is-not-decoration">
 					<div class="ui-bar ui-bar-a cogs-button" style="height:60px;">
-						<img src="images/phone.svg" width="25" alt="cogs">
+						<img src="images/phone.svg" width="50" alt="cogs">
 						<span>Abrir chamado</span>
 					</div>
 				</a>
@@ -428,8 +428,8 @@
                             var parte1 = value.substring(ponto_ini + 46);
 
                             var pedaco = parte1.split("_");
-                            alert(id_empree);
-                            alert(pedaco[0]);
+                            // alert(id_empree);
+                            // alert(pedaco[0]);
 
                             if (id_empree == pedaco[0]) {
 
@@ -550,7 +550,7 @@
                             alert("Desculpe, só é possível ler QRCODES");
                         }
                     } else {
-                        alert("Leitura do QRCODE cancelada");
+                        // alert("Leitura do QRCODE cancelada");
                     }
                 },
                 function (error) {

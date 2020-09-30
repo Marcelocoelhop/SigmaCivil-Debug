@@ -233,7 +233,7 @@
 			</div>
 		</div>
 
-		<div style="border-radius: 0; background: #c00c13; border: 0; margin: 0; padding: 5px 0;">
+		<div style="border-radius: 0; background: #555; border: 0; margin: 0; padding: 5px 0;">
 			<div align="center">
 				<table width="100%" height="27" border="0" cellpadding="0" cellspacing="0">
 					<tr>
@@ -245,13 +245,13 @@
 								<strong class="title-check-white">QRcode</strong>
 							</div>
 						</td>
-						<td width="20" class="menu_2">
+						<!-- <td width="20" class="menu_2">
 							<div style="position: relative; right: 12px;" align="right">
 								<a href="#transitionExample" data-transition="pop" data-rel="popup">
 									<img src="images/question-circle2.png" width="15" alt="">
 								</a>
 							</div>
-						</td>
+						</td> -->
 					</tr>
 				</table>
 			</div>
@@ -363,8 +363,10 @@
 					nome_sistema = pedaco[1];
 
 					if (tem_alguma_manut == "0") {
+						alert("entrou aqui 1")
 						alert('Não há manutenções para serem registradas!');
 					} else if (tem_alguma_manut == "1") {
+						alert("entrou aqui 2")
 						navigator.notification.confirm(
 							'Tem certeza que deseja sair do app SigmaCivil?', 
 							function(buttonIndex) {
@@ -375,6 +377,7 @@
 										window.location.assign("empree_online.htm?l=" + login + "&s=" + senha + "&e=" + qual_num_empree + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&fil=" + removeAcento(nome_sistema));
 									}
 								} else {
+									alert("entrou aqui 3")
 									go_page_qrcode(qual_id_sistema, qual_num_empree);
 								}
 							}, 

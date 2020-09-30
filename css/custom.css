@@ -45,6 +45,30 @@
     font-size: 25px;
 }
 
+.actived {
+    background: #d8d8d8 !important;
+}
+
+.cogs-button {
+    display: flex !important; 
+    justify-content: center; 
+    align-items: center; 
+    flex-direction: column;
+    flex-grow: grow;
+    margin: 8px;
+    border-radius: 8px;
+    padding: 48px 16px !important;
+    transition: all 0.25s;
+}
+
+.cogs-button:hover {
+    border: 1px solid #b10b0b;
+}
+
+.cogs-button span {
+    margin-top: 8px;
+}
+
 .is-opacity {
     opacity: .2;
     font-size: 25px;

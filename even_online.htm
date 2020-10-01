@@ -852,7 +852,16 @@
         }
 
         function onFail(message) {
-            // alert('Failed because: ' + message);
+            navigator.notification.alert(
+                'Problemas com a internet. Tente novamente.',  // message
+                function(buttonIndex) {
+                    return;
+                },         // callback
+                'SigmaCivil',            // title
+                'OK'                  // buttonName
+            );
+            document.getElementById("parte_load_content").style.display = "none";
+            document.getElementById("parte_load").style.display = "none";
         }
 
         var qual_id_prog_manut;
@@ -1906,7 +1915,7 @@
     </div>
 
     <div id="parte_load_content"
-        style="width: 100%; display: block; height: 100%; position: absolute; background: rgba(0,0,0,.7); z-index: 50;"></div>
+        style="width: 100%; display: none; height: 100%; position: absolute; background: rgba(0,0,0,.7); z-index: 50;"></div>
 
     <!-- MENU ONLINE/OFFLINE -->
     <span id="menu_opc2"></span>
@@ -1915,7 +1924,7 @@
     <!-- <span id="nome_emp"></span> -->
 
     <!-- TELA DE LOADING AO ENVIAR ALGUM ARQUIVO PARA A GALERIA DE IMAGENS SERVIDOR -->
-    <div id="parte_load" style="z-index: 150; display: flex; position: fixed; width: 100%; height: 80%; justify-content: center; align-items: center;" align="center">
+    <div id="parte_load" style="z-index: 150; display: none; position: fixed; width: 100%; height: 80%; justify-content: center; align-items: center;" align="center">
         <table width="224" border="0" cellpadding="0" cellspacing="0">
             <tr>
                 <td width="42" height="49">

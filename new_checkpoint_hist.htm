@@ -76,8 +76,6 @@
                     <a class="ui-btn ui-icon-carat-r ui-btn-icon-right ui-shadow ui-corner-all" href="#"
                         onClick="scan()">Ler QRcode</a>
                 </li>
-                <li><a class="ui-btn ui-icon-clock ui-btn-icon-right ui-shadow ui-corner-all" href="#"
-                    onClick="go_page_check()">Checkpoint</a></li>
                 <li><a class="click" href="#" onClick="enviar_sync()">Logout</a></li>
                 <li>
                     <a class="ui-btn ui-icon-power ui-btn-icon-right ui-shadow ui-corner-all" href="#"
@@ -357,7 +355,7 @@
                 '<div class="ui-bar ui-bar-a" style="height:38;text-align:center;width:100%;">',
                 '<div class="barra1" align="left"><img src="images/wifi_vermelho.png" style="position: absolute; left: 70px; top: 20px;" width="17" /></div>',
                 '<div align="center">',
-                '<a href="#"><button style="box-shadow: none !important; background: #ebebeb !important; border: none; position: absolute; right: 37px; top: 7px;" onclick="go_page_qrcode("' + q_sist + ', ' + num_empree + '")" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right ui-icon-carat-l">Voltar</button></a>',
+                '<a href="#"><button style="box-shadow: none !important; background: #ebebeb !important; border: none; position: absolute; right: 37px; top: 7px;" onclick="goBack()" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right ui-icon-carat-l">Voltar</button></a>',
                 '<table width="30" border="0" cellpadding="0" cellspacing="0" >',
                 '<tr>',
                 '<td width="30" style="display: flex; align-items: center; justify-content: center;"><img src="images/logo6.png" width="142"> </td>',
@@ -377,7 +375,7 @@
                 '<div class="ui-bar ui-bar-a" style="height:38;text-align:center;width:100%;">',
                 '<div class="barra1" align="left"><img src="images/wifi_verde.png" style="position: absolute; left: 70px; top: 20px;" width="17" /></div>',
                 '<div align="center">',
-                '<a href="#"><button style="box-shadow: none !important; background: #ebebeb !important; border: none; position: absolute; right: 37px; top: 7px;" onclick="go_page_qrcode("' + q_sist + ', ' + num_empree + '")" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right ui-icon-carat-l">Voltar</button></a>',
+                '<a href="#"><button style="box-shadow: none !important; background: #ebebeb !important; border: none; position: absolute; right: 37px; top: 7px;" onclick="goBack()" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right ui-icon-carat-l">Voltar</button></a>',
                 '<table width="30" border="0" cellpadding="0" cellspacing="0" >',
                 '<tr>',
                 '<td width="30" style="position: relative; right: 15px;"><img src="images/logo6.png" width="142"> </td>',
@@ -784,6 +782,10 @@
                 'SigmaCivil', 
                 ['OK', 'Cancelar']
             );
+        }
+
+        function goBack() {
+            return history.back();
         }
 
     </script>

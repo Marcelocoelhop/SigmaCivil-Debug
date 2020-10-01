@@ -232,25 +232,25 @@
 			</div>
 		</div>
 
-		<div style="border-radius: 0; background: #555; border: 0; margin: 0; padding: 5px 0;">
+		<div style="border-radius: 0; background: #c00c13; border: 0; margin: 0; padding: 5px 0;">
 			<div align="center">
 				<table width="100%" height="27" border="0" cellpadding="0" cellspacing="0">
 					<tr>
-						<!-- <td width="20" class="menu_2">
+						<td width="20" class="menu_2">
 							<div align="center"></div>
-						</td> -->
+						</td>
 						<td width="130" height="27">
 							<div align="center">
 								<strong class="title-check-white">QRcode</strong>
 							</div>
 						</td>
-						<!-- <td width="20" class="menu_2">
+						<td width="20" class="menu_2">
 							<div style="position: relative; right: 12px;" align="right">
 								<a href="#transitionExample" data-transition="pop" data-rel="popup">
 									<img src="images/question-circle2.png" width="15" alt="">
 								</a>
 							</div>
-						</td> -->
+						</td>
 					</tr>
 				</table>
 			</div>
@@ -269,80 +269,32 @@
 			</ol>
 		</div>
 
-		<!-- <table width="95%" height="51" border="0" cellpadding="0" cellspacing="0">
-			<tr>
-				<td width="85%" height="51">
-
-					<a href="#" class="is-not-decoration register">
-						<button class="ui-btn ui-shadow ui-corner-all">
-							<table width="100%" height="51" border="0" cellpadding="0" cellspacing="0">
-								<tr>
-									<td height="51">
-										<div align="left"><img style="position: absolute; bottom: 24px;" src="images/cogs.svg" width="25" alt=""></div>
-									</td>
-									<td width="100%">
-										<div align="center">
-											<span>Registrar manutenção</span>
-										</div>
-									</td>
-								</tr>
-							</table>
-						</button>
-					</a>
-
-				</td>
-			</tr>
-		</table> -->
-
 		<div class="ui-grid-a">
 			<div class="ui-block-a">
 				<a href="#" class="is-not-decoration register">
 					<div class="ui-bar ui-bar-a cogs-button" style="height:60px;">
-						<img src="images/cogs.svg" width="50" alt="cogs">
+						<img src="images/cogs.png" width="50" alt="cogs">
 						<span>Registrar manutenção</span>
 					</div>
 				</a>
 			</div>
 			<div class="ui-block-b">
-				<a href="#" class="is-not-decoration" onClick="go_page_check()">
+				<a href="#" class="is-not-decoration" onClick="go_relat_check2()">
 					<div class="ui-bar ui-bar-a cogs-button" style="height:60px">
-						<img src="images/check-square.svg" width="50" alt="cogs">
-						<span>Realizar checkpoint</span>
+						<img src="images/check-square.png" width="50" alt="cogs">
+						<span>Relatório de checkpoints</span>
 					</div>
 				</a>
 			</div>
 			<div class="ui-block-a">
 				<a href="#" class="is-not-decoration">
 					<div class="ui-bar ui-bar-a cogs-button" style="height:60px;">
-						<img src="images/phone.svg" width="50" alt="cogs">
+						<img src="images/phone.png" width="50" alt="cogs">
 						<span>Abrir chamado</span>
 					</div>
 				</a>
 			</div>
 		</div><!-- /grid-a -->
-
-		<!-- <table width="95%" height="51" border="0" cellpadding="0" cellspacing="0">
-			<tr>
-				<td width="100%" height="51">
-					<a href="#" class="is-not-decoration" onClick="go_page_check()">
-						<button style="width: 100%;" class="ui-btn ui-shadow ui-corner-all">
-							<table width="100%" height="51" border="0" cellpadding="0" cellspacing="0">
-								<tr>
-									<td height="51">
-										<div align="left"><img style="position: absolute; bottom: 24px;" src="images/check-square.svg" width="25" alt=""></div>
-									</td>
-									<td width="100%">
-										<div align="center">
-											<span style="text-decoration: none;">Realizar checkPoint</span>
-										</div>
-									</td>
-								</tr>
-							</table>
-						</button>
-					</a>
-				</td>
-			</tr>
-		</table> -->
 
 		<span id="bot_sincro"></span>
 
@@ -587,7 +539,7 @@
 	function go_relat_check2() {
 
 		if (tem_conexao()) {
-			window.location.assign("new_checkpoint_hist.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano))
+			window.location.assign("new_checkpoint_hist.htm?e=" + num_empree + "&id_sist=" + id_sis + "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano))
 		}
 		else {
 			alert('Você está sem conexão com a internet. Para visualizar o relatório online é necessário estar conectado. Favor se conectar.');

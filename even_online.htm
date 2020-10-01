@@ -41,6 +41,7 @@
         #overlay-screen {
             background-color: #000 !important;
             opacity: 0.6;
+            transition: all 0.25s;
         }
     </style>
 
@@ -1905,7 +1906,7 @@
     </div>
 
     <div id="parte_load_content"
-        style="width: 100%; height: 100%; position: absolute; background: rgba(0,0,0,.5); z-index: 20;"></div>
+        style="width: 100%; display: block; height: 100%; position: absolute; background: rgba(0,0,0,.7); z-index: 50;"></div>
 
     <!-- MENU ONLINE/OFFLINE -->
     <span id="menu_opc2"></span>
@@ -1914,13 +1915,13 @@
     <!-- <span id="nome_emp"></span> -->
 
     <!-- TELA DE LOADING AO ENVIAR ALGUM ARQUIVO PARA A GALERIA DE IMAGENS SERVIDOR -->
-    <div id="parte_load" style="z-index: 70;" align="center">
+    <div id="parte_load" style="z-index: 150; display: flex; position: fixed; width: 100%; height: 80%; justify-content: center; align-items: center;" align="center">
         <table width="224" border="0" cellpadding="0" cellspacing="0">
             <tr>
                 <td width="42" height="49">
-                    <div align="center" style="background: rgba(0,0,0,.5); padding: 1rem; border-radius: 5px;">
+                    <div align="center">
                         <img src="images/tail-spin.svg" width="35" height="35">
-                        <span class="quad_text">Aguarde o envio</span>
+                        <!-- <span class="quad_text">Aguarde o envio</span> -->
                     </div>
                 </td>
             </tr>
@@ -1931,7 +1932,7 @@
 
     <!-- MENU BURGER -->
     <div class="btn-bars" style="display: none;">
-        <div style="top:4; z-index: 50;" data-role="collapsible" data-collapsed="true" class="ui-btn-left menu"
+        <div style="top:4; z-index: 30;" data-role="collapsible" data-collapsed="true" class="ui-btn-left menu"
             data-mini="true">
             <h4 class="btn-bars-bars">
                 <!-- <span class="fas fa-bars"></span> -->
@@ -2176,12 +2177,6 @@
             $('.is-times').toggleClass('is-disabled')
         })
 
-        $('#parte_load').click(function () {
-            $('html, body').animate({
-                scrollTop: 1500
-            }, 500)
-        })
-
         $('.abrir_popup_foto').click(function () {
             $('.pop_photo_big').css({
                 display: 'flex'
@@ -2189,12 +2184,6 @@
         })
 
         $(".btn-salvar").click(function () {
-            $('html, body').animate({
-                scrollTop: 0
-            }, 500);
-        });
-
-        $("#parte_load").click(function () {
             $('html, body').animate({
                 scrollTop: 0
             }, 500);

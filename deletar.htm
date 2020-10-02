@@ -17,47 +17,53 @@ document.addEventListener("deviceready", onDeviceReady, false);
 
 
 function onDeviceReady(){
+    
+if(navigator.connection.type==0 || navigator.connection.type=='none')
+ {
+	alert('Sem conexão com internet. Favor se conectar.');
+	window.location.href("login.htm");
+ }
+ else
+ {
 	iniciar() ;
+ }
 }
 
 
 /////////////////////////////
 function iniciar()
 { 
+  del();
+}
+
+function del() {
+
 		var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
- 
+	
 		db.transaction(function (tx) {
-				  tx.executeSql('DROP TABLE if exists mtab_cliente', [], function (tx, results) {
-
-					  tx.executeSql('DROP TABLE if exists mtab_empree', [], function (tx, results) {
-
-					    tx.executeSql('DROP TABLE if exists mtab_prog_manut_evento', [], function (tx, results) {
-						
-						  tx.executeSql('DROP TABLE if exists mtab_prog_manut', [], function (tx, results) {
-						  alert("Os dados do atual empreendimento já foram apagados. Você já pode importar novo empreendimento.")
-								goto();
-						  }, null);					
-								  
-					    }, null);					
-					  }, null);					
-							  
-				  }, null);					
-			  			  
+			tx.executeSql('DROP TABLE if exists mtab_cliente', [], success, error);
+			tx.executeSql('DROP TABLE if exists mtab_empree', [], success, error);
+			tx.executeSql('DROP TABLE if exists mtab_prog_manut', [], success, error);
+			tx.executeSql('DROP TABLE if exists mtab_prog_manut_evento', [], success, error);
+			alert("Tabelas apagadas");
 		});
-
 
 }
 
-
-
-function goto() {	
-	document.form1.action="index.html";
-	document.form1.submit();
+function success(tx, result) {
+      alert("succeeded ");
+}
+function error(tx, err) {
+     alert("ERROR  " + err.message);
 }
 
 </script>
 
-<form name="form1" action="" method="get">
-</form>
+Deletar todas as tabelas: <br>
+<img src="teste" onClick="del()" width="22" height="22" >
+ <span id="sqlite"></span><br>
+
 </body>
 </html>
+
+

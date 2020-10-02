@@ -17,23 +17,18 @@
   <script>
 
     window.onerror = function (message, url, lineNumber) {
-			navigator.notification.alert(
-          `Error: ${message} in ${url} at line ${lineNumber}`,  // message
-          function() {
-            return;
-          },         // callback
-          'SigmaCivil',            // title
-          'OK'                  // buttonName
-      );
+			//alert("Error: " + message + " in " + url + " at line " + lineNumber);
+			alert(`Error: ${message} in ${url} at line ${lineNumber}`);
     }
     
+
     var menu_sup = [
       '<div data-role="header" data-position="fixed" data-theme="a">',
       '<div class="ui-corner-all custom-corners">',
       '<div align="center">',
       '<table width="30"  border="0" cellpadding="0" cellspacing="0" >',
       '<tr>',
-      '<td width="30" ><img src="images/logo6.png" width="220"> </td>',
+      '<td width="30" ><img src="images/logo4.png" width="220"> </td>',
       '</tr>',
       '</table>',
       '</div>',
@@ -42,6 +37,9 @@
       '</div>'
     ].join('');
 
+    setInterval(function() {
+				window.StatusBar.hide();
+    }, 5000);
 
     document.addEventListener("deviceready", onDeviceReady, false);
 

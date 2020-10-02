@@ -1127,8 +1127,8 @@
             options.chunkedMode = false;
 
             var ft = new FileTransfer();
-            // ft.upload(imageURI, "http://www.newdot.com.br/phonegap/app_sc/apagar_aws1.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up, fail_up, options);  //1.2.4           
-            ft.upload(imageURI, "http://www.sigmacivil.app.br/app_sc/rec_foto_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up, fail_up, options);            
+            ft.upload(imageURI, "http://www.newdot.com.br/phonegap/app_sc/AWS_rec_foto_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up, fail_up, options);  //1.2.4           
+            // ft.upload(imageURI, "http://www.sigmacivil.app.br/app_sc/rec_foto_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up, fail_up, options);            
         }
 
         var win_up = function (r) {
@@ -1411,8 +1411,8 @@ alert("Ponto 2");
 
             var ft = new FileTransfer();
                       
-            // ft.upload(videoURL, "http://www.newdot.com.br/phonegap/app_sc/apagar_aws1_video.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente, win_up_v, fail_up_v, options); // 1.2.4
-            ft.upload(videoURL, "http://www.sigmacivil.app.br/app_sc/rec_video_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente, win_up_v, fail_up_v, options);
+            ft.upload(videoURL, "http://www.newdot.com.br/phonegap/app_sc/AWS_rec_video_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente, win_up_v, fail_up_v, options); // 1.2.4
+            // ft.upload(videoURL, "http://www.sigmacivil.app.br/app_sc/rec_video_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente, win_up_v, fail_up_v, options);
         }
 
         var win_up_v = function (r) {
@@ -1718,8 +1718,8 @@ alert("Ponto 2");
             options.chunkedMode = false;
 
             var ft = new FileTransfer();
-            // ft.upload(audioURL, "http://www.newdot.com.br/phonegap/app_sc/apagar_aws1_audio.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente, win_up_a, fail_up_a, options); // 1.2.4
-            ft.upload(audioURL, "http://www.sigmacivil.app.br/app_sc/rec_audio_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente, win_up_a, fail_up_a, options);
+            ft.upload(audioURL, "http://www.newdot.com.br/phonegap/app_sc/AWS_rec_audio_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente, win_up_a, fail_up_a, options); // 1.2.4
+            // ft.upload(audioURL, "http://www.sigmacivil.app.br/app_sc/rec_audio_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente, win_up_a, fail_up_a, options);
 
         }
 
@@ -1830,8 +1830,8 @@ alert("Ponto 2");
             var data = 'tx=' + encodeURIComponent(textoURL) + '&ipm=' + id_prog_manut + '&d=' + dia_ev + '&m=' + mes_ev + '&a=' + ano_ev + "&econst=" + e_construtora + "&idc=" + id_cliente;
             alert(data);
             var ajax = new XMLHttpRequest();
-            // ajax.open("POST", "http://www.newdot.com.br/phonegap/app_sc/apagar_aws1_texto.asp", true); // 1.2.4
-            ajax.open("POST", "https://www.sigmacivil.app.br/app_sc/rec_texto_uploaded.asp", true);
+            ajax.open("POST", "http://www.newdot.com.br/phonegap/app_sc/AWS_rec_texto_uploaded.asp", true); // 1.2.4
+            // ajax.open("POST", "https://www.sigmacivil.app.br/app_sc/rec_texto_uploaded.asp", true);
             ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             ajax.onreadystatechange = function () {
                 if (ajax.readyState == 4) {//Request complete !!

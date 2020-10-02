@@ -47,6 +47,7 @@
 
     <script>
         // VARIÁVEIS ACESSADAS VIA QUERY.PARAMS
+        var num_empree = getquerystring("e");
         var login = getquerystring("l");
         var senha = getquerystring("s");
 
@@ -2454,6 +2455,8 @@
             }
         }
     }
+
+    alert(num_empree);
 
         function scan() {
             cordova.plugins.barcodeScanner.scan(

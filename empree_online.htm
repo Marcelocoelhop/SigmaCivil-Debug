@@ -89,6 +89,7 @@
         }
 
         var num_empree = getquerystring("e");
+        alert(num_empree);
         var login = getquerystring("l");
         var senha = getquerystring("s");
 
@@ -869,11 +870,11 @@
         function ir_para(qlink) {
             if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
                 // alert('Você está offline');
-                window.location.assign('even.htm' + qlink + "&l=" + login + "&s=" + senha)
+                window.location.assign('even.htm' + qlink + "&e=" + num_empree + "&l=" + login + "&s=" + senha)
             }
             else {
                 // alert('Você está onlline');
-                window.location.assign('even_online.htm' + qlink + "&l=" + login + "&s=" + senha);
+                window.location.assign('even_online.htm' + qlink + "&e=" + num_empree + "&l=" + login + "&s=" + senha);
             }
 
         }

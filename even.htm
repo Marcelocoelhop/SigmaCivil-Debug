@@ -34,6 +34,7 @@
 
 	<script type="text/javascript">
 
+		var num_empree = getquerystring("e");
 		var login = getquerystring("l");
 		var senha = getquerystring("s");
 
@@ -1693,6 +1694,8 @@
 	/////// fim upload texto  //////////////////////
 
 	///////////////////////////////////////// FIM para Audio
+
+	alert(num_empree);
 
 	function scan() {
             cordova.plugins.barcodeScanner.scan(

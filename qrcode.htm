@@ -40,9 +40,16 @@
 
 	<script>
 
-		window.onerror = function (errorMsg, url, lineNumber) {
-			alert('Erro: ' + errorMsg + '\nArquivo: ' + url + '\nLinha: ' + lineNumber);
-		}
+		window.onerror = function (message, url, lineNumber) {
+			navigator.notification.alert(
+                `Error: ${message} in ${url} at line ${lineNumber}`,  // message
+                function() {
+                    return;
+                },         // callback
+                'SigmaCivil',            // title
+                'OK'                  // buttonName
+            );
+        }
 
 		var dados_checkpoint = "";
 		var id_cliente;

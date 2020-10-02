@@ -81,7 +81,14 @@
 
         // FUNÇÃO QUE APRESENTA O ERRO NA APLICAÇÃO
         window.onerror = function (message, url, lineNumber) {
-            alert(`Error: ${message} in ${url} at line ${lineNumber}`);
+            navigator.notification.alert(
+                `Error: ${message} in ${url} at line ${lineNumber}`,  // message
+                function() {
+                    return;
+                },         // callback
+                'SigmaCivil',            // title
+                'OK'                  // buttonName
+            );
         }
 
         // INICIALIZA O PROCESSAMENTO DA APLICAÇÃO

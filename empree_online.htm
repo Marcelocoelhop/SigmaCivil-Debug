@@ -95,8 +95,8 @@
         var ipm = getquerystring("ipm");
         var dia_focus = getquerystring("dia_ev");
         
-        var filtro_sis = getquerystring("fil");
-        addAcento(filtro_sis);
+        var filtro_sis = addAcento(getquerystring("fil"));
+        // addAcento(filtro_sis);
         alert(filtro_sis);
         var filtro_bool = false;
 

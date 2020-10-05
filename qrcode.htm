@@ -356,7 +356,14 @@
 							window.location.assign("empree_online.htm?l=" + login + "&s=" + senha + "&e=" + qual_num_empree + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&fil=" + removeAcento(nome_sistema));
 						}
 					} else {
-						go_page_qrcode(qual_id_sistema, qual_num_empree);
+						navigator.notification.alert(
+                            'Problemas com sua conexão. Conecte seu celular com a internet e tente novamente!',  // message
+                            function() {
+                                go_page_qrcode(qual_id_sistema, qual_num_empree);
+                            },         // callback
+                            'SigmaCivil',            // title
+                            'OK'                  // buttonName
+                        );
 					}
 				} else {
 					alert("Problemas com sua conexao internet. Erro: 0146");

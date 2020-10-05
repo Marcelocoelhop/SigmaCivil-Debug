@@ -56,12 +56,12 @@
     flex-direction: column;
     margin: 8px;
     border-radius: 8px;
+    border: 1px solid #b10b0b;
     padding: 48px 16px !important;
     transition: all 0.25s;
 }
 
 .cogs-button:hover {
-    border: 1px solid #b10b0b;
     box-shadow: 0 0 20px 0 rgba(0,0,0,.3);
 }
 

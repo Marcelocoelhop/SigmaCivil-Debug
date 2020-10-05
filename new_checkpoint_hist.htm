@@ -160,7 +160,7 @@
 
         var num_empree = getquerystring("e");
         alert(num_empree);
-
+        
         var login = getquerystring("l");
         var senha = getquerystring("s");
 
@@ -519,11 +519,12 @@
 
                         arr.push(partBusca[0]);
 
-                        partBusca[0] == q_sist ? sl = /*"selected"*/ "" : sl = "";
+                        partBusca[0] == q_sist ? sl = "selected" : sl = "";
 
                         if (encontrou == -1) {
                             dados_select += [
-                                `<option style="color: #fff;" value="${partBusca[0]}" ${sl}>${partBusca[1]}</option>`,
+                                // `<option style="color: #fff;" value="${partBusca[0]}" ${sl}>${partBusca[1]}</option>`,
+                                `<option style="color: #fff;" value="${partBusca[0]}">${partBusca[1]}</option>`,
                             ].join('');
                         }
                     }
@@ -585,9 +586,9 @@
                             // alert(id_empree);
                             // alert(pedaco[0]);
 
-                            if (id_empree == pedaco[0]) {
+                            if (num_empree == pedaco[0]) {
 
-                                var qid_empree = id_empree;
+                                var qid_empree = num_empree;
                                 var qid_sistema = pedaco[1];
 
                                 var d = new Date();

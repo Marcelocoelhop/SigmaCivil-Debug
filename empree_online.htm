@@ -1005,19 +1005,25 @@
         }
 
         function scan() {
+            alert('ponto 0');
             cordova.plugins.barcodeScanner.scan(
                 function (result) {
+                    alert('ponto 1');
                     if (!result.cancelled) {
+                        alert('ponto 2');
                         // In this case we only want to process QR Codes
                         if (result.format == "QR_CODE") {
+                            alert('ponto 3');
                             var value = result.text;
 
                             var ponto_ini = value.indexOf("www.sigmacivil.com.br/us/new_qr_hist_mp.asp?c=");
                             var parte1 = value.substring(ponto_ini + 46);
 
                             var pedaco = parte1.split("_");
+                            alert('ponto 4');
 
                             if (num_empree == pedaco[0]) {
+                                alert('ponto 5');
 
                                 var qid_empree = num_empree;
                                 var qid_sistema = pedaco[1];
@@ -1029,6 +1035,7 @@
 
                                 navigator.geolocation.getCurrentPosition(
                                     function (position) {
+                                        alert('ponto 6')
                                         var qlatitude_checkpoint = position.coords.latitude;
                                         var qlongitude_checkpoint = position.coords.longitude;
                                         var qaltura_checkpoint = position.coords.altitude;

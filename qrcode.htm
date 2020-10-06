@@ -730,7 +730,9 @@
 	}
 	
 	function openBrowser() {
-		cordova.InAppBrowser.open('https://www.google.com.br', '_self', 'location=yes');
+		var options = "location=yes,lefttoright=yes,toolbarcolor=#b10b0b";
+
+		cordova.InAppBrowser.open('https://www.google.com.br', '_self', options);
 	}
 
 </script>

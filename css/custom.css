@@ -56,7 +56,7 @@
     flex-direction: column;
     margin: 8px;
     border-radius: 8px;
-    border: 1px solid #b10b0b;
+    border: 1px solid #b10b0b !important;
     padding: 48px 16px !important;
     transition: all 0.25s;
 }

@@ -21,7 +21,14 @@
 
 	<script type="text/javascript">
 		window.onerror = function (message, url, lineNumber) {
-			alert(`Error: ${message} in ${url} at line ${lineNumber}`);
+			navigator.notification.alert(
+				`Error: ${message} in ${url} at line ${lineNumber}`,  // message
+				function() {
+					return;
+				},         // callback
+				'SigmaCivil',            // title
+				'OK'                  // buttonName
+			);
 		}
 
 		var login = getquerystring("l");
@@ -249,7 +256,7 @@
 
 				var resposta_total;
 				var ajax = new XMLHttpRequest();
-				ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_status_sync.asp?e=" + num_empree + "&versao=2.1&t=" + Math.random(), true);
+				ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_status_sync.asp?e=" + num_empree + "&versao=2.2&t=" + Math.random(), true);
 				ajax.onreadystatechange = function () {
 					if (ajax.readyState == 4) {//Request complete !!
 						if (ajax.status == 200 || ajax.status == 0) { // OK response
@@ -330,6 +337,9 @@
 
 		/////////////////////////////
 		function iniciar() {
+			window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+			window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
+			window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
 
 			var menu_sup_offline = [
 				'<form name="form_sup" action="" method="get">',
@@ -340,7 +350,7 @@
 				'<div align="center">',
 				'<table width="30" border="0" cellpadding="0" cellspacing="0" >',
 				'<tr>',
-				'<td width="30" ><img src="images/logo4.png" width="142"> </td>',
+				'<td width="30" ><img src="images/logo6.png" width="142"> </td>',
 				'</tr>',
 				'</table>',
 				'</div>',
@@ -359,7 +369,7 @@
 				'<div align="center">',
 				'<table width="30" border="0" cellpadding="0" cellspacing="0" >',
 				'<tr>',
-				'<td width="30" ><img src="images/logo4.png" width="142"> </td>',
+				'<td width="30" ><img src="images/logo6.png" width="142"> </td>',
 				'</tr>',
 				'</table>',
 				'</div>',
@@ -373,7 +383,7 @@
 
 			setInterval(function () {
 				window.StatusBar.hide();
-				
+
 				if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
 					document.getElementById('menu_opc2').innerHTML = menu_sup_offline;
 					return false;
@@ -683,10 +693,22 @@
 	<span id="lista_empree"></span><br>
 
 
-	<div style="top:4" data-role="collapsible" data-collapsed="true" class="ui-btn-left" data-mini="true">
+	<div style="top:4; z-index: 50" data-role="collapsible" data-collapsed="true" class="ui-btn-left" data-mini="true">
 		<h4>Menu</h4>
 		<ul data-role="listview" data-mini="true">
-			<li><a href="#" onClick="enviar_sync()">Novo Login</a></li>
+			<li>
+				<a class="ui-btn ui-icon-back ui-btn-icon-right ui-shadow ui-corner-all actived" href="#"
+				onClick="volta_uni()">Manutenções</a>
+			</li>
+			<li>
+				<a class="ui-btn ui-icon-carat-r ui-btn-icon-right ui-shadow ui-corner-all" href="#"
+				onClick="scan()">Ler QRcode</a>
+			</li>
+			<li><a href="#" onClick="enviar_sync()">Logout</a></li>
+			<li>
+				<a class="ui-btn ui-icon-power ui-btn-icon-right ui-shadow ui-corner-all" href="#"
+				onClick="closeApp()">Fechar app</a>
+			</li>
 		</ul>
 	</div>
 
@@ -702,7 +724,7 @@
 	function ir_para(qlink) {
 
 		if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
-			window.location.assign("even.htm" + qlink + "&l=" + login + "&s=" + senha)
+			window.location.assign("even.htm" + qlink + "&e=" + num_empree + "&l=" + login + "&s=" + senha)
 		}
 		else {
 			window.location.assign("empree_online.htm?l=" + login + "&s=" + senha + "&e=" + num_empree + "&qm=" + document.getElementById('idmes').value + "&qa=" + document.getElementById('idano').value);
@@ -719,17 +741,274 @@
 	}
 
 	function enviar_sync() {
+	    navigator.notification.confirm(
+            'Confirma que deseja se deslogar do SigmaCivil?', 
+            function(buttonIndex) {
+                if (buttonIndex === 2) {
+                    return;
+                }
 
-		decisao = confirm("Confirma efetuar novo LOGIN ? Será possível se logar novamente em qualquer empreendimento atualizando o Plano de Manutenção");
+                navigator.notification.confirm(
+                    'Tem certeza que deseja sair do app SigmaCivil? Todos os seus arquivos como fotos e vídeos serão apagados deste dispositivo! Confirmar?', 
+                    function(buttonIndex) {
+                        if (buttonIndex === 2) {
+                            return;
+                        }
 
-		if (decisao) {
-			document.form_sup.action = "del.htm";
-			document.form_sup.submit();
+                        document.form_sup.action = "del.htm";
+                        document.form_sup.submit();
+                    }, 
+                    'SigmaCivil', 
+                    ['OK', 'Cancelar']
+                );
+            }, 
+            'SigmaCivil', 
+            ['OK', 'Cancelar']
+        );
 
-		} else {
+		// decisao = confirm("Deseja efetuar novo login? Será possível se logar novamente em qualquer empreendimento atualizando o Plano de Manutenção!");
+
+		// if (decisao) {
+		// 	document.form_sup.action = "del.htm";
+		// 	document.form_sup.submit();
+
+		// } else {
+
+		// }
+    }
+
+	function volta_uni() {
+		if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
+			// alert('Está offline');
+			window.location.assign("empree.htm?l=" + login + "&s=" + senha + "&e=" + num_empree + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano));
 		}
-
+		else {
+			// alert('Está onlline');
+			window.location.assign("empree_online.htm?l=" + login + "&s=" + senha + "&e=" + num_empree + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano));
+		}
 	}
 
+	function scan() {
+		cordova.plugins.barcodeScanner.scan(
+			function (result) {
+				if (!result.cancelled) {
+					// In this case we only want to process QR Codes
+					if (result.format == "QR_CODE") {
+						var value = result.text;
+
+						var ponto_ini = value.indexOf("www.sigmacivil.com.br/us/new_qr_hist_mp.asp?c=");
+						var parte1 = value.substring(ponto_ini + 46);
+
+						var pedaco = parte1.split("_");
+
+						// alert(num_empree);
+						// alert(pedaco[0]);
+
+						if (num_empree == pedaco[0]) {
+
+							var qid_empree = num_empree;
+							var qid_sistema = pedaco[1];
+
+							var d = new Date();
+							var qdata_checkpoint = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+
+							var qatualizado_serv = "N";
+
+							navigator.geolocation.getCurrentPosition(
+								function (position) {
+									var qlatitude_checkpoint = position.coords.latitude;
+									var qlongitude_checkpoint = position.coords.longitude;
+									var qaltura_checkpoint = position.coords.altitude;
+
+									var db;
+									var request = window.indexedDB.open("db_sigmacivil", "1");
+
+									request.onerror = function (event) {
+										alert("Erro ao criar o banco (cod 02)");
+									};
+
+									request.onsuccess = function (event) {
+										db = request.result;
+
+										inserirDadosCheckpoint(db, dadosCheckpoint);
+
+										db.onerror = function (event) {
+											alert("Database error: " + event.target.errorCode);
+										}
+									}
+
+									var dadosCheckpoint = [
+										{
+											id_empree: qid_empree,
+											id_sistema: qid_sistema,
+											data_checkpoint: qdata_checkpoint,
+											latitude_checkpoint: qlatitude_checkpoint,
+											longitude_checkpoint: qlongitude_checkpoint,
+											altura_checkpoint: qaltura_checkpoint,
+											atualizado_serv: qatualizado_serv,
+										}
+									];
+
+									function inserirDadosCheckpoint(db, dadosCheckpoint) {
+										var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
+										var store = tx.objectStore('mtab_checkpoint');
+
+										dadosCheckpoint.map(function (dadoCheckpoint) {
+											store.add(dadoCheckpoint);
+										});
+
+										tx.oncomplete = function () {
+											go_to_page(qid_sistema, qid_empree);
+										}
+
+										tx.onerror = function (event) {
+											alert('error storing checkpoint note ' + event.target.error);
+										}
+									}
+								},
+								function (error) {
+									var db;
+									var request = window.indexedDB.open("db_sigmacivil", "1");
+
+									request.onerror = function (event) {
+										alert("Erro ao criar o banco (cod 03)");
+									};
+
+									request.onsuccess = function (event) {
+										db = request.result;
+
+										inserirDadosCheckpointError(db, dadosCheckpointError);
+
+										db.onerror = function (event) {
+											alert("Database error: " + event.target.errorCode);
+										}
+									}
+
+									var dadosCheckpointError = [
+										{
+											id_empree: qid_empree,
+											id_sistema: qid_sistema,
+											data_checkpoint: qdata_checkpoint,
+											latitude_checkpoint: "",
+											longitude_checkpoint: "",
+											altura_checkpoint: "",
+											atualizado_serv: qatualizado_serv,
+										}
+									];
+
+									function inserirDadosCheckpointError(db, dadosCheckpointError) {
+										var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
+										var store = tx.objectStore('mtab_checkpoint');
+
+										dadosCheckpointError.map(function (dadoCheckpointError) {
+											store.add(dadoCheckpointError);
+										});
+
+										tx.oncomplete = function () {
+											go_to_page(qid_sistema, qid_empree);
+										}
+
+										tx.onerror = function (event) {
+											alert('error storing checkpointError note ' + event.target.error);
+										}
+									}
+								}
+							);
+
+						} else {
+							alert("Esse QRCode não é válido");
+						}
+
+					} else {
+						alert("Desculpe, só é possível ler QRCODES");
+					}
+				} else {
+					// alert("Leitura do QRCODE cancelada");
+				}
+			},
+			function (error) {
+				// alert("Erro: " + error);
+			}
+		);
+	}
+
+	function go_to_page(q_id_sistema, q_num_empree) {
+		window.location.assign("qrcode.htm?l=" + login + "&s=" + senha + "&e=" + q_num_empree + "&id_sis=" + q_id_sistema + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano));
+	}
+
+	function removeAcento(text) {
+		// text = text.toLowerCase();
+
+		// a
+		text = text.replace(/Á/g, 'xcL1A')
+		text = text.replace(/À/g, 'xcL2A')
+		text = text.replace(/Ã/g, 'xcL3A')
+		text = text.replace(/Â/g, 'xcL4A')
+
+		text = text.replace(/á/g, 'xcL1a')
+		text = text.replace(/à/g, 'xcL2a')
+		text = text.replace(/ã/g, 'xcL3a')
+		text = text.replace(/â/g, 'xcL4a')
+
+		// e
+		text = text.replace(/É/g, 'xcL1E')
+		text = text.replace(/È/g, 'xcL2E')
+		text = text.replace(/Ê/g, 'xcL4E')
+
+		text = text.replace(/é/g, 'xcL1e')
+		text = text.replace(/è/g, 'xcL2e')
+		text = text.replace(/ê/g, 'xcL4e')
+
+		// i
+		text = text.replace(/Í/g, 'xcL1I')
+		text = text.replace(/Ì/g, 'xcL2I')
+		text = text.replace(/Î/g, 'xcL4I')
+
+		text = text.replace(/í/g, 'xcL1i')
+		text = text.replace(/ì/g, 'xcL2i')
+		text = text.replace(/î/g, 'xcL4i')
+
+		// o
+		text = text.replace(/Ó/g, 'xcL1O')
+		text = text.replace(/Ò/g, 'xcL2O')
+		text = text.replace(/Õ/g, 'xcL3O')
+		text = text.replace(/Ô/g, 'xcL4O')
+
+		text = text.replace(/ó/g, 'xcL1o')
+		text = text.replace(/ò/g, 'xcL2o')
+		text = text.replace(/õ/g, 'xcL3o')
+		text = text.replace(/ô/g, 'xcL4o')
+
+		// u
+		text = text.replace(/Ú/g, 'xcL1U')
+		text = text.replace(/Ù/g, 'xcL2U')
+		text = text.replace(/Û/g, 'xcL4U')
+
+		text = text.replace(/ú/g, 'xcL1u')
+		text = text.replace(/ù/g, 'xcL2u')
+		text = text.replace(/û/g, 'xcL4u')
+
+		// ç
+		text = text.replace(/Ç/g, 'xcL0C')
+
+		text = text.replace(/ç/g, 'xcL0c')
+
+		return text;
+	}
+
+	function closeApp() {
+        navigator.notification.confirm(
+            'Tem certeza que deseja sair do app SigmaCivil?', 
+            function(buttonIndex) {
+                if (buttonIndex === 2) {
+                    return;
+                }
+                    
+                navigator.app.exitApp();
+            }, 
+            'SigmaCivil', 
+            ['OK', 'Cancelar']
+        );
+    }
 
 </script>

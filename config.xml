@@ -5,7 +5,7 @@
         xmlns:gap = "http://phonegap.com/ns/1.0"
  		xmlns:android   = "http://schemas.android.com/apk/res/android"
         id        = "br.com.sigmacivil.sc"
-        version   = "2.1.8">
+        version   = "2.2">
 
     <name>SigmaCivil</name>
 
@@ -92,7 +92,7 @@
     <preference name="auto-hide-splash-screen"    value="true" />           <!-- ios: if set to false, the splash screen must be hidden using a JavaScript API -->
     <preference name="disable-cursor"             value="false" />          <!-- blackberry: prevents a mouse-icon/cursor from being displayed on the app -->
     <preference name="android-minSdkVersion"      value="7" />             <!-- android: MIN SDK version supported on the target device. MAX version is blank by default. -->
-    <preference name="android-targetSdkVersion"   value="29" />
+    <preference name="android-targetSdkVersion"   value="28" />
     <preference name="android-installLocation"    value="auto" />           <!-- android: app install location. 'auto' will choose. 'internalOnly' is device memory. 'preferExternal' is SDCard. -->
 
     <!-- <preference name="WKWebViewOnly" value="true" /> -->
@@ -131,7 +131,10 @@
     <plugin name="cordova-plugin-statusbar" source="npm" spec="~2.1.2" />
     <plugin name="cordova-plugin-vibration" source="npm" spec="~2.1.0" />
     <plugin name="cordova-sqlite-storage" spec="~0.8.5" />
+    <plugin name="cordova-plugin-barcodescanner" source="npm" spec="~0.7.4" />  
+    
     <plugin name="cordova-plugin-statusbar" spec="~2.4.3" /> 
+    <plugin name="cordova-plugin-inappbrowser" spec="~4.0.0" /> 
     
     <!-- <plugin name="cordova-plugin-wkwebview-engine" source="npm" spec="~1.2.1" /> -->
     

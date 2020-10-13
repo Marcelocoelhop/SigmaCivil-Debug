@@ -37,10 +37,17 @@
         .ui-collapsible-inset .ui-collapsible-heading .ui-btn {
             box-shadow: none !important;
         }
+
+        #overlay-screen {
+            background-color: #000 !important;
+            opacity: 0.6;
+            transition: all 0.25s;
+        }
     </style>
 
     <script>
         // VARIÁVEIS ACESSADAS VIA QUERY.PARAMS
+        var num_empree = getquerystring("e");
         var login = getquerystring("l");
         var senha = getquerystring("s");
 
@@ -73,9 +80,19 @@
 
         var apagar1;
 
+        var editPictures = null;
+        var uploadAutomatic = false;
+
         // FUNÇÃO QUE APRESENTA O ERRO NA APLICAÇÃO
         window.onerror = function (message, url, lineNumber) {
-            alert(`Error: ${message} in ${url} at line ${lineNumber}`);
+            navigator.notification.alert(
+                `Error: ${message} in ${url} at line ${lineNumber}`,  // message
+                function() {
+                    return;
+                },         // callback
+                'SigmaCivil',            // title
+                'OK'                  // buttonName
+            );
         }
 
         // INICIALIZA O PROCESSAMENTO DA APLICAÇÃO
@@ -96,6 +113,7 @@
 
         // EXECUTA CASO TENHA INTERNET
         function iniciar() {
+
             window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
             window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
             window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
@@ -117,7 +135,7 @@
                 '<a href="#"><button style="box-shadow: none !important; background: #ebebeb !important; border: none;" onclick="atualizar_texto_empree(' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right ui-icon-carat-l">Voltar</button></a>',
                 '<table width="30" border="0" cellpadding="0" cellspacing="0" >',
                 '<tr>',
-                '<td width="30" ><img src="images/logo4.png" width="142"> </td>',
+                '<td width="30" ><img src="images/logo6.png" width="142"> </td>',
                 '</tr>',
                 '</table>',
                 '</div>',
@@ -138,7 +156,7 @@
                 '<a href="#"><button style="box-shadow: none !important; background: #ebebeb !important; border: none;" onclick="atualizar_texto_empree(' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right ui-icon-carat-l">Voltar</button></a>',
                 '<table width="30" border="0" cellpadding="0" cellspacing="0" >',
                 '<tr>',
-                '<td width="30" ><img src="images/logo4.png" width="142"> </td>',
+                '<td width="30" ><img src="images/logo6.png" width="142"> </td>',
                 '</tr>',
                 '</table>',
                 '</div>',
@@ -147,13 +165,13 @@
                 '</div>',
                 '</form>'
             ].join('');
-                                  
+
             document.getElementById('menu_opc2').innerHTML = menu_sup_online;
 
             // FUNÇÃO QUE VERIFICA SE TEM INTERNET A CADA 5 SEGUNDOS
             setInterval(function () {
                 // window.StatusBar.hide();
-                
+
                 if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
                     document.getElementById('menu_opc2').innerHTML = menu_sup_offline;
                     return false;
@@ -165,7 +183,7 @@
 
             // CAPTURANDO DADOS DO EVENTO
             var ajax2 = new XMLHttpRequest();
-            ajax2.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_dados_evento_online.asp?l=" + login + "&s=" + senha + "&ipm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&versao=2.1&t=" + Math.random(), false);
+            ajax2.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_dados_evento_online.asp?l=" + login + "&s=" + senha + "&ipm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&versao=2.2&t=" + Math.random(), false);
             ajax2.onreadystatechange = function () {
                 if (ajax2.readyState == 4) { //Request complete !!
                     if (ajax2.status == 200 || ajax2.status == 0) { // OK response
@@ -495,8 +513,10 @@
                                     '<textarea rows="3" style="width: 100%; border-color: #dddddd; font-size: 13px; outline: none; border-radius: 4px; padding: 5px; resize: none" class="size-14 condominio condominio_obs" name="textarea-1" id="txt_dado_condominio" data-placeholder="true" placeholder="Condomínio..." autocomplete="off" onclick="RestricaoData_obs();" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)">' + observacao_evento + '</textarea>',
                                     '<fieldset data-role="controlgroup">',
                                     '<div id="form_email" style="background: #f5f5f5; position: relative; top: 3px; padding: 3px; border-radius: 4px; border: 1px solid #dddddd;">',
-                                    '<input style="position: relative; top: 1px; padding-right: 100%;" type="checkbox" name="email_condominio" id="email_condominio">',
-                                    '<span style="font-size: 12px; position: relative; bottom: 1.8px;"><span style="color: rgb(153, 0, 0);">Marque para enviar um alerta</span> por email a construtora.</span>',
+                                    '<div style="display: flex; align-items: center;">',
+                                    '<input style="height: 20px; width: 20px; margin-right: 4px;" type="checkbox" name="email_condominio" id="email_condominio">',
+                                    '<span style="font-size: 12px;"><span style="color: rgb(153, 0, 0);">Marque e clique em salvar abaixo para enviar um alerta</span> por email a construtora.</span>',
+                                    '</div>',
                                     '</div>',
                                     '</fieldset>',
                                     '</tbody>',
@@ -527,8 +547,10 @@
                                     '<textarea rows="3" style="width: 100%; border-color: #dddddd; font-size: 13px; outline: none; border-radius: 4px; padding: 5px; resize: none" class="size-14 construtora construtora_obs" name="textarea-1" id="txt_dado_construtora" data-placeholder="true" placeholder="Construtora..." autocomplete="off" onclick="RestricaoData_obs_constr();" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)">' + observacao_evento_construtora + '</textarea>',
                                     '<fieldset data-role="controlgroup">',
                                     '<div style="background: #f5f5f5; position: relative; top: 3px; padding: 3px; border-radius: 4px; border: 1px solid #dddddd;">',
-                                    '<input style="position: relative; top: 1px; padding-right: 100%;" type="checkbox" name="email_construtora" id="email_construtora">',
-                                    '<span style="font-size: 12px; position: relative; bottom: 1.8px;"><span style="color: rgb(153, 0, 0);">Marque para enviar um alerta</span> por email ao condomínio.</span>',
+                                    '<div style="display: flex; align-items: center;">',
+                                    '<input style="height: 20px; width: 20px; margin-right: 4px;" type="checkbox" name="email_construtora" id="email_construtora">',
+                                    '<span style="font-size: 12px;"><span style="color: rgb(153, 0, 0);">Marque e clique em salvar abaixo para enviar um alerta</span> por email ao condomínio.</span>',
+                                    '</div>',
                                     '</div>',
                                     '</fieldset>',
                                     '</tbody>',
@@ -620,6 +642,11 @@
                     var tam_ti;
                     var aux_image_upload;
 
+                    var qtd_tam_ti = 0;
+                    var qtd_tam_ti_audio = 0;
+                    var qtd_tam_ti_video = 0;
+                    var qtd_tam_ti_texto = 0;
+
                     if (cursor) {
                         var rrr_caminho_imagens = cursor.value.caminho_imagens;
                         var rrr_caminho_texto = cursor.value.caminho_texto;
@@ -661,13 +688,17 @@
                     var selec_imagens = ""
 
                     for (k = 0; k < tam_ti; k++) {
-
                         if (todas_status_imagens[k] == '0') {
                             aux_image_upload = 'upload.png';
                             qtdDocs_Device += 1
                         }
                         else {
                             aux_image_upload = 'upload_verde.png';
+                        }
+
+                        // automatic upload
+                        if (aux_image_upload == 'upload.png') {
+                            qtd_tam_ti = k + 1;
                         }
 
                         //imagens da seta, preta ou verde
@@ -679,6 +710,7 @@
                     }
 
                     if (rrr_status_caminho_audio == '0') {
+                        qtd_tam_ti_audio += 1;
                         aux_image_upload = "upload.png";
                     }
                     else {
@@ -692,7 +724,7 @@
                         // selec_audio = "<div style='position: relative; left: 15px; top: 17px;'><table cellpadding='0' cellspacing='0'><div id='latesq_" + rrr_id_prog_manut + "'width='40' height='30' style='display:none'></div><img src='images/play.svg' width='15' class='button-play top-9px' id='player_" + rrr_id_prog_manut + "'onclick='abrir_audio(" + String.fromCharCode(34) + rrr_caminho_audio + String.fromCharCode(34) + ")'  style='display:none'><img src='images/pause.svg' width='15' class='button-pause top-9px position-icons' id='pause_" + rrr_id_prog_manut + "'onclick='pause_audio()' style='display:none'><img src='images/stop.svg' width='15' class='button-stop top-9px position-icons' id='stop_" + rrr_id_prog_manut + "'onclick='stop_audio()' style='display:none'><img src='images/microphone.svg' width='15' class='button-microfone top-9px position-icons' id='rec_" + rrr_id_prog_manut + "'onclick='captureAudio(" + String.fromCharCode(34) + rrr_id_prog_manut + String.fromCharCode(34) + ")' style='display:none'><div id='latdir_" + rrr_id_prog_manut + "'width='40' height='30' style='display:none'></div><div align='center'><img src='images/trash.svg' class='icon-size' width='15' onclick='deletar_audio()' style='display:none'></div><div align='center'><img src='images/" + aux_image_upload + "' class='icon-size' width='16' onclick='upload_audio()' style='display:none'></div></table></div>       <audio style='margin-bottom: 10px; width: 100%;' controls><source src='" + rrr_caminho_audio + "'></audio>"
                     }
                     else {
-                        selec_audio = "<table cellpadding='0' cellspacing='0'><audio style='margin-left: 10px; width: 80%; display: inline;' controls><source src='" + rrr_caminho_audio + "'></audio><div align='center'><img src='images/trash.svg' style='position: relative; top: 8px; right: 50px; text-align: center; text-shadow: none;' class='icon-size' width='15' onclick='deletar_audio()'></div><div align='center'><img src='images/" + aux_image_upload + "' style='position: relative; bottom: 10px; left: 50px; text-align: center; text-shadow: none;' class='icon-size' width='17' onclick='upload_audio()'></div></table>"
+                        selec_audio = "<table cellpadding='0' cellspacing='0'><audio class='audio' style='margin-left: 10px; width: 80%; display: inline;' controls><source src='" + rrr_caminho_audio + "'></audio><div align='center'><img src='images/trash.svg' style='position: relative; top: 8px; right: 50px; text-align: center; text-shadow: none;' class='icon-size' width='15' onclick='deletar_audio()'></div><div align='center'><img src='images/" + aux_image_upload + "' style='position: relative; bottom: 10px; left: 50px; text-align: center; text-shadow: none;' class='icon-size' width='17' onclick='upload_audio()'></div></table>"
                         // selec_audio = "<div class='icon-size' style='position: relative; text-align: center; top: 10px;'><table cellpadding='0' cellspacing='0'><div id='latesq_" + rrr_id_prog_manut + "'width='40' height='30'></div><div style='border: 1px solid black; width: 60%; border-radius: 3px; margin: 0 auto; padding: 4px;'><img src='images/play.svg' width='15' style='margin-right: 5px;' class='top-9px' id='player_" + rrr_id_prog_manut + "'onclick='abrir_audio(" + String.fromCharCode(34) + rrr_caminho_audio + String.fromCharCode(34) + ")' ><img src='images/pause.svg' width='15' style='margin-right: 5px;' class='top-9px position-icons' id='pause_" + rrr_id_prog_manut + "' onclick='pause_audio()'><img src='images/stop.svg' width='15' style='margin-right: 5px;' class='top-9px position-icons' id='stop_" + rrr_id_prog_manut + "'onclick='stop_audio()'><img src='images/microphone.svg' width='15' style='margin-right: 5px;' class='top-9px position-icons' id='rec_" + rrr_id_prog_manut + "'onclick='captureAudio(" + String.fromCharCode(34) + rrr_id_prog_manut + String.fromCharCode(34) + ")'></div><div id='latdir_" + rrr_id_prog_manut + "'width='40' height='30'></div><div align='center'><img src='images/trash.svg' style='position: relative; top: 8px; right: 55px; text-align: center; text-shadow: none;' class='icon-size' width='15' onclick='deletar_audio()'></div><div align='center'><img src='images/" + aux_image_upload + "' style='position: relative; bottom: 10px; left: 45px; text-align: center; text-shadow: none;' class='icon-size' width='17' onclick='upload_audio()'></div></table></div>            <audio style='margin-bottom: 10px; width: 100%;' controls><source src='" + rrr_caminho_audio + "'></audio>"
                         if (aux_image_upload === "upload.png") {
                             qtdDocs_Device += 1
@@ -701,6 +733,7 @@
                     //barra do áudio
 
                     if (rrr_status_caminho_video == '0') {
+                        qtd_tam_ti_video += 1;
                         aux_image_upload = 'upload.png';
                     }
                     else {
@@ -739,6 +772,7 @@
                         bot_up = "<img src='images/" + aux_image_upload + "' style='float: right; position: relative; right: 110px; top: 3px; text-shadow: none;' class='icon-size' width='17' onclick='upload_texto()'></i>"
                         if (aux_image_upload === "upload.png") {
                             qtdDocs_Device += 1
+                            qtd_tam_ti_texto += 1;
                         }
                     }
 
@@ -755,7 +789,7 @@
                     ];
 
                     var item_texto = [
-                        '<div style="display: flex"><img src="images/file-alt.svg" style="margin-top: 10px; float: left; display: inline; text-shadow: none;" width="40" height="30"><textarea style="display: flex; border-color: #e4e4e4; border-radius: 3px; width: 100%; padding: 5px; outline: none; resize: none" class="size-14 text_hover textarea_obs" rows="3" cols="32" name="textarea-1" id="textarea_' + rrr_id_prog_manut + '" data-placeholder="true" placeholder="Digite suas observações aqui..." onclick="RestricaoData();" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)" maxlength="700">' + selec_texto + '</textarea></div><img src="images/save.svg" style="position: relative; float: left; left: 110px; top: 3px; text-shadow: none;" class="icon-size" width="15" onclick="atualizar_texto(' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')" style="cursor:pointer"><div align="center">' + bot_up + '</div>'
+                        '<div style="display: flex"><img src="images/file-alt.svg" style="margin-top: 10px; float: left; display: inline; text-shadow: none;" width="40" height="30"><textarea style="display: flex; border-color: #e4e4e4; border-radius: 3px; width: 100%; padding: 5px; outline: none; resize: none" autocomplete="off" class="size-14 text_hover textarea_obs" rows="3" cols="32" name="textarea-1" id="textarea_' + rrr_id_prog_manut + '" data-placeholder="true" placeholder="Digite suas observações aqui..." onclick="RestricaoData();" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)" maxlength="700">' + selec_texto + '</textarea></div><img src="images/save.svg" style="position: relative; float: left; left: 110px; top: 3px; text-shadow: none;" class="icon-size" width="15" onclick="atualizar_texto(' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')" style="cursor:pointer"><div align="center">' + bot_up + '</div>'
                     ];
 
                     var item_voltar = [
@@ -800,8 +834,64 @@
                     }
 
                     $("#idpopup_new_" + rrr2_id_prog_manut).popup();
+
+                    // alert(qtd_tam_ti);
+
+                    var db;
+                    var request = window.indexedDB.open("db_sigmacivil", "1");
+
+                    request.onerror = function (event) {
+                        alert("Erro ao criar o banco (cod 01)");
+                    };
+
+                    request.onsuccess = function (event) {
+                        db = request.result;
+
+                        consultaConfig(db);
+
+                        db.onerror = function (event) {
+                            alert("Database error: " + event.target.errorCode);
+                        }
+                    }
+
+                    function consultaConfig(db) {
+                        var tx = db.transaction(['mtab_config'], 'readwrite');
+                        var store = tx.objectStore('mtab_config');
+                        var objectStoreRequest = store.openCursor();
+                        objectStoreRequest.onsuccess = function (event) {
+                            var cursor = event.target.result;
+                            if (cursor) {
+                                var data = cursor.value;
+
+                                editPictures = data['editar_fotos'];
+                                uploadAutomatic = data['upload_automatico'];
+
+                                if (uploadAutomatic && qtd_tam_ti > 0) {
+                                    upload_imagem(qtd_tam_ti - 1);
+                                }
+
+                                // alert(qtd_tam_ti_audio);
+
+                                if (uploadAutomatic && qtd_tam_ti_audio > 0) {
+                                    upload_audio();
+                                }
+
+                                // alert(qtd_tam_ti_video);
+
+                                if (uploadAutomatic && qtd_tam_ti_video > 0) {
+                                    upload_video();
+                                }
+
+                                // alert(qtd_tam_ti_texto);
+
+                                if (uploadAutomatic && qtd_tam_ti_texto > 0) {
+                                    upload_texto();
+                                }
+                            }
+                        }
+                    }
                 }
-            }
+            }    
         }
 
         var aux_caminho_imagens = ""
@@ -820,6 +910,8 @@
                 return
             }
 
+            // window.imagePicker.getPictures(onPhotoURISuccess, onFail);
+
             var r = confirm("Para tirar uma foto com a câmera selecione OK. Para acessar sua galeria de imagens clique em CANCELAR");
             if (r == true) {
                 source = pictureSource.CAMERA;
@@ -833,13 +925,23 @@
                 encodingType: Camera.EncodingType.JPEG,
                 popoverOptions: CameraPopoverOptions,
                 saveToPhotoAlbum: true,
+                allowEdit: editPictures ? true : false,
                 sourceType: source
             });
 
         }
 
         function onFail(message) {
-            // alert('Failed because: ' + message);
+            navigator.notification.alert(
+                'Problemas com a internet. Tente novamente.',  // message
+                function(buttonIndex) {
+                    return;
+                },         // callback
+                'SigmaCivil',            // title
+                'OK'                  // buttonName
+            );
+            document.getElementById("parte_load_content").style.display = "none";
+            document.getElementById("parte_load").style.display = "none";
         }
 
         var qual_id_prog_manut;
@@ -1108,9 +1210,11 @@
 
         function up_loadPhoto(imageURI, q_k) {
 
-            document.getElementById("parte_load_content").style.display = "block";
-            document.getElementById("parte_load").style.display = "flex";
-            window.location.href = "#ancora123"
+            if (!uploadAutomatic) {
+                document.getElementById("parte_load_content").style.display = "block";
+                document.getElementById("parte_load").style.display = "flex";
+                window.location.href = "#ancora123"
+            }
 
             var q_k;
             var options = new FileUploadOptions();
@@ -1126,7 +1230,7 @@
             options.chunkedMode = false;
 
             var ft = new FileTransfer();
-            ft.upload(imageURI, "http://www.sigmacivil.com.br/app_sc/rec_foto_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up, fail_up, options);
+            ft.upload(imageURI, "http://www.sigmacivil.com.br/app_sc/rec_foto_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up, fail_up, options);
 
         }
 
@@ -1162,8 +1266,15 @@
                         data.status_imagens_upl = aux_1_status;
 
                         var request = cursor.update(data);
-                        request.onsuccess = function (event) {
-                            reload_page();
+
+                        if (uploadAutomatic) {
+                            request.onsuccess = function (event) {
+                                alert('subiu a imagem!!!');
+                            }
+                        } else {
+                            request.onsuccess = function (event) {
+                                reload_page();
+                            }
                         }
                     }
                 }
@@ -1392,9 +1503,11 @@
         // UPLOAD VIDEO
         function up_loadVideo(videoURL) {
 
-            document.getElementById("parte_load_content").style.display = "block";
-            document.getElementById("parte_load").style.display = "flex";
-            window.location.href = "#ancora123"
+            if (!uploadAutomatic) {
+                document.getElementById("parte_load_content").style.display = "block";
+                document.getElementById("parte_load").style.display = "flex";
+                window.location.href = "#ancora123"
+            }
 
             var options = new FileUploadOptions();
             options.fileKey = "file";
@@ -1403,7 +1516,7 @@
             options.chunkedMode = false;
 
             var ft = new FileTransfer();
-            ft.upload(videoURL, "http://www.sigmacivil.com.br/app_sc/rec_video_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente, win_up_v, fail_up_v, options);
+            ft.upload(videoURL, "http://www.sigmacivil.com.br/app_sc/rec_video_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente, win_up_v, fail_up_v, options);
 
         }
 
@@ -1438,8 +1551,14 @@
                         data.status_video_upl = "1";
 
                         var request = cursor.update(data);
-                        request.onsuccess = function (event) {
-                            reload_page();
+                        if (uploadAutomatic) {
+                            request.onsuccess = function (event) {
+                                alert('subiu o vídeo!!!');
+                            }
+                        } else {
+                            request.onsuccess = function (event) {
+                                reload_page();
+                            }
                         }
                     }
                 }
@@ -1449,7 +1568,7 @@
         var fail_up_v = function (error) {
             document.getElementById("parte_load_content").style.display = "none";
             document.getElementById("parte_load").style.display = "none";
-            alert("Não foi feito o upload da vídeo!");
+            alert("Não foi feito o upload do vídeo!");
         }
         // FIM UPLOAD VIDEO
 
@@ -1697,9 +1816,11 @@
 
         function up_loadAudio(audioURL) {
 
-            document.getElementById("parte_load_content").style.display = "block";
-            document.getElementById("parte_load").style.display = "flex";
-            window.location.href = "#ancora123"
+            if (!uploadAutomatic) {
+                document.getElementById("parte_load_content").style.display = "block";
+                document.getElementById("parte_load").style.display = "flex";
+                window.location.href = "#ancora123"
+            }
 
             var options = new FileUploadOptions();
             options.fileKey = "file";
@@ -1708,7 +1829,7 @@
             options.chunkedMode = false;
 
             var ft = new FileTransfer();
-            ft.upload(audioURL, "http://www.sigmacivil.com.br/app_sc/rec_audio_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente, win_up_a, fail_up_a, options);
+            ft.upload(audioURL, "http://www.sigmacivil.com.br/app_sc/rec_audio_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente, win_up_a, fail_up_a, options);
 
         }
 
@@ -1743,8 +1864,15 @@
                         data.status_audio_upl = "1";
 
                         var request = cursor.update(data);
-                        request.onsuccess = function (event) {
-                            reload_page();
+                        
+                        if (uploadAutomatic) {
+                            request.onsuccess = function (event) {
+                                alert('subiu o audio!!!');
+                            }
+                        } else {
+                            request.onsuccess = function (event) {
+                                reload_page();
+                            }
                         }
                     }
                 }
@@ -1754,7 +1882,7 @@
         var fail_up_a = function (error) {
             document.getElementById("parte_load_content").style.display = "none";
             document.getElementById("parte_load").style.display = "none";
-            alert("Não foi feito o upload da áudio!");
+            alert("Não foi feito o upload do áudio!");
         }
         // FIM UPLOAD AUDIO
 
@@ -1805,13 +1933,15 @@
 
         function up_loadTexto(textoURL) {
 
-            document.getElementById("parte_load_content").style.display = "block";
-            document.getElementById("parte_load").style.display = "flex";
-            window.location.href = "#ancora123"
+            if (!uploadAutomatic) {
+                document.getElementById("parte_load_content").style.display = "block";
+                document.getElementById("parte_load").style.display = "flex";
+                window.location.href = "#ancora123"
+            }
 
             var data = 'tx=' + encodeURIComponent(textoURL) + '&ipm=' + id_prog_manut + '&d=' + dia_ev + '&m=' + mes_ev + '&a=' + ano_ev + "&econst=" + e_construtora + "&idc=" + id_cliente;
             var ajax = new XMLHttpRequest();
-            ajax.open("POST", "https://www.sigmacivil.com.br/app_sc/rec_texto_uploaded.asp?versao=2.1", true);
+            ajax.open("POST", "https://www.sigmacivil.com.br/app_sc/rec_texto_uploaded.asp?versao=2.2", true);
             ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             ajax.onreadystatechange = function () {
                 if (ajax.readyState == 4) {//Request complete !!
@@ -1849,8 +1979,15 @@
                                         data.status_texto_upl = "1";
 
                                         var request = cursor.update(data);
-                                        request.onsuccess = function (event) {
-                                            reload_page();
+
+                                        if (uploadAutomatic) {
+                                            request.onsuccess = function (event) {
+                                                alert('subiu o texto!!!');
+                                            }
+                                        } else {
+                                            request.onsuccess = function (event) {
+                                                reload_page();
+                                            }
                                         }
                                     }
                                 }
@@ -1893,7 +2030,7 @@
     </div>
 
     <div id="parte_load_content"
-        style="width: 100%; height: 100%; position: absolute; background: rgba(0,0,0,.5); z-index: 10;"></div>
+        style="width: 100%; display: none; height: 100%; position: absolute; background: rgba(0,0,0,.7); z-index: 50;"></div>
 
     <!-- MENU ONLINE/OFFLINE -->
     <span id="menu_opc2"></span>
@@ -1902,13 +2039,13 @@
     <!-- <span id="nome_emp"></span> -->
 
     <!-- TELA DE LOADING AO ENVIAR ALGUM ARQUIVO PARA A GALERIA DE IMAGENS SERVIDOR -->
-    <div id="parte_load" align="center">
+    <div id="parte_load" style="z-index: 150; display: none; position: fixed; width: 100%; height: 80%; justify-content: center; align-items: center;" align="center">
         <table width="224" border="0" cellpadding="0" cellspacing="0">
             <tr>
                 <td width="42" height="49">
-                    <div align="center" style="background: rgba(0,0,0,.5); padding: 1rem; border-radius: 5px;">
+                    <div align="center">
                         <img src="images/tail-spin.svg" width="35" height="35">
-                        <span class="quad_text">Aguarde o envio</span>
+                        <!-- <span class="quad_text">Aguarde o envio</span> -->
                     </div>
                 </td>
             </tr>
@@ -1919,14 +2056,29 @@
 
     <!-- MENU BURGER -->
     <div class="btn-bars" style="display: none;">
-        <div style="top:4;" data-role="collapsible" data-collapsed="true" class="ui-btn-left menu" data-mini="true">
+        <div style="top:4; z-index: 30;" data-role="collapsible" data-collapsed="true" class="ui-btn-left menu"
+            data-mini="true">
             <h4 class="btn-bars-bars">
                 <!-- <span class="fas fa-bars"></span> -->
                 <img class="is-bars" src="images/bars.svg" width="14" alt="Menu" />
                 <img class="is-times is-disabled" src="images/times.svg" width="13" alt="Menu" />
             </h4>
-            <ul style="border: 1px solid #e0e0e0;" data-role="listview" data-mini="true">
-                <li><a style="z-index: 10" class="click" href="#" onClick="enviar_sync()">Novo Login</a></li>
+            <ul class="menu-tablet-responsive" style="border: 1px solid #e0e0e0;" data-role="listview" data-mini="true">
+                <li>
+                    <a class="ui-btn ui-icon-back ui-btn-icon-right ui-shadow ui-corner-all" href="#"
+                    onClick="reload_page_empree()">Manutenções</a>
+                </li>
+                <li>
+                    <a class="ui-btn ui-icon-carat-r ui-btn-icon-right ui-shadow ui-corner-all" href="#"
+                    onClick="scan()">Ler QRcode</a>
+                </li>
+                <li>
+                    <a class="ui-btn ui-icon-power ui-btn-icon-right ui-shadow ui-corner-all" href="#"
+                    onClick="closeApp()">Fechar app</a>
+                </li>
+                <li>
+                    <a style="z-index: 10" class="click" href="#" onClick="enviar_sync()">Logout</a>
+                </li>
             </ul>
         </div>
     </div>
@@ -2013,7 +2165,7 @@
         <div id="dados_obs"></div>
 
         <!-- BLOCO DE CÓDIGO DA GALERIA DE IMAGENS SERVIDOR E BOTÕES SALVAR E VOLTAR -->
-        <li class="shadow_box" style="border-radius: 0; padding-left: 1em; display: none;">
+        <li class="shadow_box gallery_open" style="border-radius: 0; padding-left: 1em; display: none;">
             <table>
                 <div style="text-align: center;" class="ui-grid-a">
                     <a href="#overlay" data-transition="slideup"
@@ -2149,12 +2301,6 @@
             $('.is-times').toggleClass('is-disabled')
         })
 
-        $('#parte_load').click(function () {
-            $('html, body').animate({
-                scrollTop: 1500
-            }, 500)
-        })
-
         $('.abrir_popup_foto').click(function () {
             $('.pop_photo_big').css({
                 display: 'flex'
@@ -2166,13 +2312,6 @@
                 scrollTop: 0
             }, 500);
         });
-
-        $("#parte_load").click(function () {
-            $('html, body').animate({
-                scrollTop: 0
-            }, 500);
-        });
-
     })
 
     function FocusInput(element) {
@@ -2424,6 +2563,153 @@
         }
     }
 
+    function scan() {
+        cordova.plugins.barcodeScanner.scan(
+            function (result) {
+                if (!result.cancelled) {
+                    // In this case we only want to process QR Codes
+                    if (result.format == "QR_CODE") {
+                        var value = result.text;
+
+                        var ponto_ini = value.indexOf("www.sigmacivil.com.br/us/new_qr_hist_mp.asp?c=");
+                        var parte1 = value.substring(ponto_ini + 46);
+
+                        var pedaco = parte1.split("_");
+                        // alert(id_empree);
+                        // alert(pedaco[0]);
+
+                        if (num_empree == pedaco[0]) {
+
+                            var qid_empree = num_empree;
+                            var qid_sistema = pedaco[1];
+
+                            var d = new Date();
+                            var qdata_checkpoint = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+
+                            var qatualizado_serv = "N";
+
+                            navigator.geolocation.getCurrentPosition(
+                                function (position) {
+                                    var qlatitude_checkpoint = position.coords.latitude;
+                                    var qlongitude_checkpoint = position.coords.longitude;
+                                    var qaltura_checkpoint = position.coords.altitude;
+
+                                    var db;
+                                    var request = window.indexedDB.open("db_sigmacivil", "1");
+
+                                    request.onerror = function (event) {
+                                        alert("Erro ao criar o banco (cod 02)");
+                                    };
+
+                                    request.onsuccess = function (event) {
+                                        db = request.result;
+
+                                        inserirDadosCheckpoint(db, dadosCheckpoint);
+
+                                        db.onerror = function (event) {
+                                            alert("Database error: " + event.target.errorCode);
+                                        }
+                                    }
+
+                                    var dadosCheckpoint = [
+                                        {
+                                            id_empree: qid_empree,
+                                            id_sistema: qid_sistema,
+                                            data_checkpoint: qdata_checkpoint,
+                                            latitude_checkpoint: qlatitude_checkpoint,
+                                            longitude_checkpoint: qlongitude_checkpoint,
+                                            altura_checkpoint: qaltura_checkpoint,
+                                            atualizado_serv: qatualizado_serv,
+                                        }
+                                    ];
+
+                                    function inserirDadosCheckpoint(db, dadosCheckpoint) {
+                                        var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
+                                        var store = tx.objectStore('mtab_checkpoint');
+
+                                        dadosCheckpoint.map(function (dadoCheckpoint) {
+                                            store.add(dadoCheckpoint);
+                                        });
+
+                                        tx.oncomplete = function () {
+                                            go_to_page(qid_sistema, qid_empree);
+                                        }
+
+                                            tx.onerror = function (event) {
+                                                alert('error storing checkpoint note ' + event.target.error);
+                                            }
+                                        }
+                                    },
+                                function (error) {
+                                    var db;
+                                    var request = window.indexedDB.open("db_sigmacivil", "1");
+
+                                    request.onerror = function (event) {
+                                        alert("Erro ao criar o banco (cod 03)");
+                                    };
+
+                                    request.onsuccess = function (event) {
+                                        db = request.result;
+
+                                        inserirDadosCheckpointError(db, dadosCheckpointError);
+
+                                        db.onerror = function (event) {
+                                            alert("Database error: " + event.target.errorCode);
+                                        }
+                                    }
+
+                                    var dadosCheckpointError = [
+                                        {
+                                            id_empree: qid_empree,
+                                            id_sistema: qid_sistema,
+                                            data_checkpoint: qdata_checkpoint,
+                                            latitude_checkpoint: "",
+                                            longitude_checkpoint: "",
+                                            altura_checkpoint: "",
+                                            atualizado_serv: qatualizado_serv,
+                                        }
+                                    ];
+
+                                    function inserirDadosCheckpointError(db, dadosCheckpointError) {
+                                        var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
+                                        var store = tx.objectStore('mtab_checkpoint');
+
+                                        dadosCheckpointError.map(function (dadoCheckpointError) {
+                                            store.add(dadoCheckpointError);
+                                        });
+
+                                        tx.oncomplete = function () {
+                                            go_to_page(qid_sistema, qid_empree);
+                                        }
+
+                                        tx.onerror = function (event) {
+                                            alert('error storing checkpointError note ' + event.target.error);
+                                        }
+                                    }
+                                }
+                            );
+
+                        } else {
+                            alert("Esse QRCode não é válido");
+                        }
+
+                    } else {
+                        alert("Desculpe, só é possível ler QRCODES");
+                    }
+                } else {
+                    // alert("Leitura do QRCODE cancelada");
+                }
+            },
+            function (error) {
+                // alert("Erro: " + error);
+            }
+        );
+    }
+
+    function go_to_page(q_id_sistema, q_num_empree) {
+        window.location.assign("qrcode.htm?l=" + login + "&s=" + senha + "&e=" + q_num_empree + "&id_sis=" + q_id_sistema + "&qm=" + parseInt(mes_ev) + "&qa=" + parseInt(ano_ev));
+    }
+
     function reload_page() {
         window.location.assign("even_online.htm?l=" + login + "&s=" + senha + "&ipm=" + id_prog_manut + "&dia_ev=" + dia_ev + "&mes_ev=" + mes_ev + "&ano_ev=" + ano_ev + '&d_min=' + d_min + '&d_max=' + d_max + "&tipo=" + tipo + "&input_data_realiz=" + document.getElementById('in_data_realizacao').value + "&input_forn=" + document.getElementById('valores').value + "&input_custoReal=" + document.getElementById('in_dado_custo_real').value + "&input_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value))
     }
@@ -2455,15 +2741,41 @@
         }
     }
 
-    function enviar_sync() {
+	function enviar_sync() {
+	    navigator.notification.confirm(
+            'Confirma que deseja se deslogar do SigmaCivil?', 
+            function(buttonIndex) {
+                if (buttonIndex === 2) {
+                    return;
+                }
 
-        decisao = confirm("Confirmar efetuação de um novo login? Será necessário se logar novamente em qualquer empreendimento atualizando o plano de manutenção!");
+                navigator.notification.confirm(
+                    'Tem certeza que deseja sair do app SigmaCivil? Todos os seus arquivos como fotos e vídeos serão apagados deste dispositivo! Confirmar?', 
+                    function(buttonIndex) {
+                        if (buttonIndex === 2) {
+                            return;
+                        }
 
-        if (decisao) {
-            document.form_sup.action = "del.htm";
-            document.form_sup.submit();
-        }
+                        document.form_sup.action = "del.htm";
+                        document.form_sup.submit();
+                    }, 
+                    'SigmaCivil', 
+                    ['OK', 'Cancelar']
+                );
+            }, 
+            'SigmaCivil', 
+            ['OK', 'Cancelar']
+        );
 
+		// decisao = confirm("Deseja efetuar novo login? Será possível se logar novamente em qualquer empreendimento atualizando o Plano de Manutenção!");
+
+		// if (decisao) {
+		// 	document.form_sup.action = "del.htm";
+		// 	document.form_sup.submit();
+
+		// } else {
+
+		// }
     }
 
     //////////////////////
@@ -2606,15 +2918,15 @@
                 }
                 if (qtdDocs_Device > 0) {
                     if (qtdDocs_Device > 1) {
-                        continuar = confirm(`Você ainda tem ${qtdDocs_Device} documentos neste aparelho que não estão anexados no servidor! Deseja prosseguir?`)
+                        continuar = confirm(`Você ainda tem ${qtdDocs_Device} documentos neste aparelho que não estão anexados no servidor (Verifique as setas vermelhas). Deseja prosseguir?`)
                     } else {
-                        continuar = confirm(`Você ainda tem ${qtdDocs_Device} documento neste aparelho que não está anexado no servidor! Deseja prosseguir?`)
+                        continuar = confirm(`Você ainda tem ${qtdDocs_Device} documento neste aparelho que não está anexado no servidor (Verifique as setas vermelhas). Deseja prosseguir?`)
                     }
                     if (continuar == false) { return }
                 }
                 if (prosseguir == true || ((nivel_manut == 1 || nivel_manut == 2) && qt_docs > 0)) {
                     var ajax3 = new XMLHttpRequest();
-                    ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/salvar_manut.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&econst=" + e_construtora + "&idpm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&d_data_realiz=" + document.getElementById('in_data_realizacao').value + "&d_forn=" + document.getElementById('valores').value + "&d_custoReal=" + document.getElementById('in_dado_custo_real').value + "&d_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value) + "&tipo=" + tipo + "&versao=2.1&env_em=" + ev_email + "&segur=" + crypt_segur + "&t=" + Math.random(), false);
+                    ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/salvar_manut.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&econst=" + e_construtora + "&idpm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&d_data_realiz=" + document.getElementById('in_data_realizacao').value + "&d_forn=" + document.getElementById('valores').value + "&d_custoReal=" + document.getElementById('in_dado_custo_real').value + "&d_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value) + "&tipo=" + tipo + "&versao=2.2&env_em=" + ev_email + "&segur=" + crypt_segur + "&t=" + Math.random(), false);
                     ajax3.onreadystatechange = function () {
                         if (ajax3.readyState == 4) {
                             if (ajax3.status == 200 || ajax3.status == 0) {
@@ -2626,7 +2938,8 @@
                                     alert("Manutenção realizada com sucesso!")
                                 }
 
-                                reload_page_empree();
+                                atualizar_texto_empree(id_prog_manut);
+                                // reload_page_empree();
 
                             } else {
                                 alert("Problemas com sua conexão internet. Cod: 0166");
@@ -2652,14 +2965,14 @@
             } else {
                 if (qtdDocs_Device > 0) {
                     if (qtdDocs_Device > 1) {
-                        continuar = confirm(`Você ainda tem ${qtdDocs_Device} documentos neste aparelho que não estão anexados no servidor! Deseja prosseguir?`)
+                        continuar = confirm(`Você ainda tem ${qtdDocs_Device} documentos neste aparelho que não estão anexados no servidor (Verifique as setas vermelhas). Deseja prosseguir?`)
                     } else {
-                        continuar = confirm(`Você ainda tem ${qtdDocs_Device} documento neste aparelho que não está anexado no servidor! Deseja prosseguir?`)
+                        continuar = confirm(`Você ainda tem ${qtdDocs_Device} documento neste aparelho que não está anexado no servidor (Verifique as setas vermelhas). Deseja prosseguir?`)
                     }
                     if (continuar == false) { return }
                 }
                 var ajax3 = new XMLHttpRequest();
-                ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/salvar_manut.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&econst=" + e_construtora + "&idpm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&d_data_realiz=" + document.getElementById('in_data_realizacao').value + "&d_forn=" + document.getElementById('valores').value + "&d_custoReal=" + document.getElementById('in_dado_custo_real').value + "&d_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value) + "&tipo=" + tipo + "&versao=2.1&env_em=" + ev_email + "&segur=" + crypt_segur + "&t=" + Math.random(), false);
+                ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/salvar_manut.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&econst=" + e_construtora + "&idpm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&d_data_realiz=" + document.getElementById('in_data_realizacao').value + "&d_forn=" + document.getElementById('valores').value + "&d_custoReal=" + document.getElementById('in_dado_custo_real').value + "&d_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value) + "&tipo=" + tipo + "&versao=2.2&env_em=" + ev_email + "&segur=" + crypt_segur + "&t=" + Math.random(), false);
                 ajax3.onreadystatechange = function () {
                     if (ajax3.readyState == 4) {
                         if (ajax3.status == 200 || ajax3.status == 0) {
@@ -2667,7 +2980,8 @@
                             var resposta_total = ajax3.responseText;
                             alert("Alterações realizadas com sucesso!")
 
-                            reload_page_empree();
+                            atualizar_texto_empree(id_prog_manut);
+                            // reload_page_empree();
 
                         } else {
                             alert("Problemas com sua conexão internet. Cod: 0137");
@@ -2707,7 +3021,7 @@
                         var verif_fim = verific1 + "S" + verific2 + "C" + verific3
 
                         var ajax3 = new XMLHttpRequest();
-                        ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_excluir_arq.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&e_const=" + e_construtora + "&seg=" + verif_fim + "&cam=" + q_cam + "&versao=2.1")
+                        ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_excluir_arq.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&e_const=" + e_construtora + "&seg=" + verif_fim + "&cam=" + q_cam + "&versao=2.2")
                         ajax3.onreadystatechange = function () {
                             if (ajax3.readyState == 4) {
                                 if (ajax3.status == 200 || ajax3.status == 0) {
@@ -2739,7 +3053,7 @@
                     var verif_fim = verific1 + "S" + verific2 + "C" + verific3
 
                     var ajax3 = new XMLHttpRequest();
-                    ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_excluir_arq.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&e_const=" + e_construtora + "&seg=" + verif_fim + "&cam=" + q_cam + "&versao=2.1")
+                    ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_excluir_arq.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&e_const=" + e_construtora + "&seg=" + verif_fim + "&cam=" + q_cam + "&versao=2.2")
                     ajax3.onreadystatechange = function () {
                         if (ajax3.readyState == 4) {
                             if (ajax3.status == 200 || ajax3.status == 0) {
@@ -2877,6 +3191,23 @@
         }
     }
 
+    function go_page_check() {
+        window.location.assign("checkpoint.htm?e=" + id_empree + "&l=" + login + "&s=" + senha + "&qm=" + mes_ev + "&qa=" + ano_ev);
+    }
 
+    function closeApp() {
+        navigator.notification.confirm(
+            'Tem certeza que deseja sair do app SigmaCivil?', 
+            function(buttonIndex) {
+                if (buttonIndex === 2) {
+                    return;
+                }
+                    
+                navigator.app.exitApp();
+            }, 
+            'SigmaCivil', 
+            ['OK', 'Cancelar']
+        );
+    }
 
 </script>

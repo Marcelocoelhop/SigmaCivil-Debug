@@ -255,6 +255,17 @@
 
         document.addEventListener("deviceready", onDeviceReady, false);
         function onDeviceReady() {
+
+            navigator.camera.cleanup(onSuccess, onFail);
+
+            function onSuccess() {
+                alert("Camera cleanup success.")
+            }
+
+            function onFail(message) {
+                alert('Failed because: ' + message);
+            }
+
             if (tem_conexao()) {
                 iniciar()
             } else {

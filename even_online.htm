@@ -83,30 +83,24 @@
 
         function onDeviceReady() {
 
-            var permissions = cordova.plugins.permissions;
-            
-            var list = [
-                permissions.CAMERA,
-                permissions.GET_ACCOUNTS
-            ];
-                
-            permissions.hasPermission(list, success, error);
-                
-            function error() {
-                alert('Camera or Accounts permission is not turned on');
-            }
-                
-            function success(status) {
-                if(!status.hasPermission) {
-                    permissions.requestPermissions(
-                    list,
-                    function(status) {
-                        alert(status);
-                        if(!status.hasPermission) error();
-                    },
-                    error);
+            cordova.plugins.diagnostic.getPermissionAuthorizationStatus(function(status){
+                switch(status){
+                    case cordova.plugins.diagnostic.permissionStatus.GRANTED:
+                        console.log("Permission granted to use the camera");
+                        break;
+                    case cordova.plugins.diagnostic.permissionStatus.NOT_REQUESTED:
+                        console.log("Permission to use the camera has not been requested yet");
+                        break;
+                    case cordova.plugins.diagnostic.permissionStatus.DENIED_ONCE:
+                        console.log("Permission denied to use the camera - ask again?");
+                        break;
+                    case cordova.plugins.diagnostic.permissionStatus.DENIED_ALWAYS:
+                        console.log("Permission permanently denied to use the camera - guess we won't be using it then!");
+                        break;
                 }
-            }
+            }, function(error){
+                console.error("The following error occurred: "+error);
+            }, cordova.plugins.diagnostic.permission.CAMERA);
 
             pictureSource = navigator.camera.PictureSourceType;
             destinationType = navigator.camera.DestinationType;

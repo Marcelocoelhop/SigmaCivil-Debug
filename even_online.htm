@@ -90,7 +90,7 @@
                 permissions.GET_ACCOUNTS
             ];
                 
-            permissions.hasPermission(list, callback, null);
+            permissions.hasPermission(list, success, error);
                 
             function error() {
                 alert('Camera or Accounts permission is not turned on');

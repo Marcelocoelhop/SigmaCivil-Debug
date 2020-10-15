@@ -346,9 +346,13 @@
                             var aux_obsConstr_preench;
 
                             if (input_data_realiz == "") {
-                                alert('date to en');
-                                alert(data_manut_realizada)
-                                aux_data_preench = data_manut_realizada
+                                if (getMobileOperatingSystem() == "iOS") {
+                                    alert('date to en');
+                                    alert(data_manut_realizada)
+                                    aux_data_preench = data_manut_realizada
+                                } else {
+                                    aux_data_preench = dateToEN2(data_manut_realizada)
+                                }
                             } else {
                                 alert('input data realiz');
                                 alert(input_data_realiz)
@@ -390,118 +394,235 @@
                             }
 
                             if (e_construtora == '0') {
-                                dados_manutencao = [
-                                    '<li class="shadow_box">',
-                                    '<div class="text-center-title">',
-                                    '<font style="font-weight: bold; text-shadow: none;" id="atividade_title" size="4" face="Arial">' + nome_sistema + '</font>',
-                                    '</div>',
-                                    '<div class="text-center-paragraph">',
-                                    '<p id="atividade_content" class="text-size-content" size="2" face="Arial" color="#0000FF">' + nome_atividade + '</p>',
-                                    '</div>',
-                                    '<div class="mensalmente-paragraph">',
-                                    '<strong class="mensalmente">' + periodicidade + '</strong> - <span>' + nome_emp_resp + '</span>',
-                                    '</div>',
-                                    '<div class="data_periodicidade_paragraph">',
-                                    '<font class="atividade_title" size="3" face="Arial">' + dateToEN(aux_data) + '</font>',
-                                    '</div>',
-                                    '</li>',
+                                if (getMobileOperatingSystem() == "iOS") {
+                                    dados_manutencao = [
+                                        '<li class="shadow_box">',
+                                        '<div class="text-center-title">',
+                                        '<font style="font-weight: bold; text-shadow: none;" id="atividade_title" size="4" face="Arial">' + nome_sistema + '</font>',
+                                        '</div>',
+                                        '<div class="text-center-paragraph">',
+                                        '<p id="atividade_content" class="text-size-content" size="2" face="Arial" color="#0000FF">' + nome_atividade + '</p>',
+                                        '</div>',
+                                        '<div class="mensalmente-paragraph">',
+                                        '<strong class="mensalmente">' + periodicidade + '</strong> - <span>' + nome_emp_resp + '</span>',
+                                        '</div>',
+                                        '<div class="data_periodicidade_paragraph">',
+                                        '<font class="atividade_title" size="3" face="Arial">' + dateToEN(aux_data) + '</font>',
+                                        '</div>',
+                                        '</li>',
 
-                                    '<li class="shadow_box box__content__funcoes" style="border-radius: 0;">',
-                                    '<div class="ui-grid-a">',
-                                    '<div class="ui-block-a">',
-                                    '<tbody>',
-                                    '<tr>',
-                                    '<th style="padding: 0">',
-                                    '<div class="input-responsive">',
-                                    '<label for="">Data realização:</label>',
-                                    '<input maxlength="10" style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao" type="tel" onkeypress="mascara(this, sonumeros_data)" id="in_data_realizacao" required="" value="' + aux_data_preench + '" />',
-                                    '</div>',
-                                    '</th>',
-                                    '</tr>',
-                                    '</tbody>',
-                                    '</div>',
-                                    '<div style="position: relative;" class="ui-block-b">',
-                                    '<label for="">Empresa:</label>',
-                                    '<select style="height: 35px; background: #f6f6f6; border-color: #dddddd; font-size: 13px; outline: none; width: 100%; border-radius: 4px; padding-left: 5px;" id="valores" name="select-native-2" data-mini="true" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)">',
-                                    '<option class="size_option" value="1" ' + seleciona1 + '>Equipe Local</option>',
-                                    '<option class="size_option" value="2" ' + seleciona2 + '>Empresa Capacitada</option>',
-                                    '<option class="size_option" value="3" ' + seleciona3 + '>Empresa Especializada</option>',
-                                    '</select>',
-                                    '</div>',
-                                    '</div>',
-                                    '<table>',
-                                    '<div class="ui-grid-a">',
-                                    '<div class="ui-block-a custo-estimado">',
-                                    '<label for="">Custo estimado:</label>',
-                                    '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-estimado-input" type="tel" name="text-basic" id="in_dado_custo_estimado" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo estimado" value="' + aux_custoEstim_preench + '" />',
-                                    '<img src="images/money-bill-alt-verde.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
-                                    '</div>',
-                                    '<div class="ui-block-b custo-real">',
-                                    '<label for="">Custo real:</label>',
-                                    '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-real-input" type="tel" name="text-basic" id="in_dado_custo_real" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo real" value="' + aux_custoReal_preench + '" />',
-                                    '<img src="images/money-bill-alt-verde.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
-                                    '</div>',
-                                    '</div>',
-                                    '</table>',
-                                    '</li>'
-                                ].join('');
+                                        '<li class="shadow_box box__content__funcoes" style="border-radius: 0;">',
+                                        '<div class="ui-grid-a">',
+                                        '<div class="ui-block-a">',
+                                        '<tbody>',
+                                        '<tr>',
+                                        '<th style="padding: 0">',
+                                        '<div class="input-responsive">',
+                                        '<label for="">Data realização:</label>',
+                                        '<input maxlength="10" style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao" type="tel" onkeypress="mascara(this, sonumeros_data)" id="in_data_realizacao" required="" value="' + aux_data_preench + '" />',
+                                        '<img src="images/calendar-alt.png" width="16" style="position: relative; float: right; bottom: 35px; right: 10px;" />',
+                                        '</div>',
+                                        '</th>',
+                                        '</tr>',
+                                        '</tbody>',
+                                        '</div>',
+                                        '<div style="position: relative;" class="ui-block-b">',
+                                        '<label for="">Empresa:</label>',
+                                        '<select style="height: 35px; background: #f6f6f6; border-color: #dddddd; font-size: 13px; outline: none; width: 100%; border-radius: 4px; padding-left: 5px;" id="valores" name="select-native-2" data-mini="true" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)">',
+                                        '<option class="size_option" value="1" ' + seleciona1 + '>Equipe Local</option>',
+                                        '<option class="size_option" value="2" ' + seleciona2 + '>Empresa Capacitada</option>',
+                                        '<option class="size_option" value="3" ' + seleciona3 + '>Empresa Especializada</option>',
+                                        '</select>',
+                                        '</div>',
+                                        '</div>',
+                                        '<table>',
+                                        '<div class="ui-grid-a">',
+                                        '<div class="ui-block-a custo-estimado">',
+                                        '<label for="">Custo estimado:</label>',
+                                        '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-estimado-input" type="tel" name="text-basic" id="in_dado_custo_estimado" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo estimado" value="' + aux_custoEstim_preench + '" />',
+                                        '<img src="images/money-bill-alt-verde.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
+                                        '</div>',
+                                        '<div class="ui-block-b custo-real">',
+                                        '<label for="">Custo real:</label>',
+                                        '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-real-input" type="tel" name="text-basic" id="in_dado_custo_real" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo real" value="' + aux_custoReal_preench + '" />',
+                                        '<img src="images/money-bill-alt-verde.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
+                                        '</div>',
+                                        '</div>',
+                                        '</table>',
+                                        '</li>'
+                                    ].join('');
+                                } else {
+                                    dados_manutencao = [
+                                        '<li class="shadow_box">',
+                                        '<div class="text-center-title">',
+                                        '<font style="font-weight: bold; text-shadow: none;" id="atividade_title" size="4" face="Arial">' + nome_sistema + '</font>',
+                                        '</div>',
+                                        '<div class="text-center-paragraph">',
+                                        '<p id="atividade_content" class="text-size-content" size="2" face="Arial" color="#0000FF">' + nome_atividade + '</p>',
+                                        '</div>',
+                                        '<div class="mensalmente-paragraph">',
+                                        '<strong class="mensalmente">' + periodicidade + '</strong> - <span>' + nome_emp_resp + '</span>',
+                                        '</div>',
+                                        '<div class="data_periodicidade_paragraph">',
+                                        '<font class="atividade_title" size="3" face="Arial">' + dateToEN(aux_data) + '</font>',
+                                        '</div>',
+                                        '</li>',
+
+                                        '<li class="shadow_box box__content__funcoes" style="border-radius: 0;">',
+                                        '<div class="ui-grid-a">',
+                                        '<div class="ui-block-a">',
+                                        '<tbody>',
+                                        '<tr>',
+                                        '<th style="padding: 0">',
+                                        '<div class="input-responsive">',
+                                        '<label for="">Data realização:</label>',
+                                        '<input style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao" type="date" onkeypress="mascara(this, sonumeros_data)" id="in_data_realizacao" required="" value="' + aux_data_preench + '" />',
+                                        '</div>',
+                                        '</th>',
+                                        '</tr>',
+                                        '</tbody>',
+                                        '</div>',
+                                        '<div style="position: relative;" class="ui-block-b">',
+                                        '<label for="">Empresa:</label>',
+                                        '<select style="height: 35px; background: #f6f6f6; border-color: #dddddd; font-size: 13px; outline: none; width: 100%; border-radius: 4px; padding-left: 5px;" id="valores" name="select-native-2" data-mini="true" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)">',
+                                        '<option class="size_option" value="1" ' + seleciona1 + '>Equipe Local</option>',
+                                        '<option class="size_option" value="2" ' + seleciona2 + '>Empresa Capacitada</option>',
+                                        '<option class="size_option" value="3" ' + seleciona3 + '>Empresa Especializada</option>',
+                                        '</select>',
+                                        '</div>',
+                                        '</div>',
+                                        '<table>',
+                                        '<div class="ui-grid-a">',
+                                        '<div class="ui-block-a custo-estimado">',
+                                        '<label for="">Custo estimado:</label>',
+                                        '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-estimado-input" type="tel" name="text-basic" id="in_dado_custo_estimado" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo estimado" value="' + aux_custoEstim_preench + '" />',
+                                        '<img src="images/money-bill-alt-verde.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
+                                        '</div>',
+                                        '<div class="ui-block-b custo-real">',
+                                        '<label for="">Custo real:</label>',
+                                        '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-real-input" type="tel" name="text-basic" id="in_dado_custo_real" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo real" value="' + aux_custoReal_preench + '" />',
+                                        '<img src="images/money-bill-alt-verde.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
+                                        '</div>',
+                                        '</div>',
+                                        '</table>',
+                                        '</li>'
+                                    ].join('');
+                                }
                             } else {
+                                if (getMobileOperatingSystem() == "iOS") {
+                                    dados_manutencao = [
+                                        '<li class="shadow_box">',
+                                        '<div class="text-center-title">',
+                                        '<font style="font-weight: bold; text-shadow: none;" id="atividade_title" size="4" face="Arial">' + nome_sistema + '</font>',
+                                        '</div>',
+                                        '<div class="text-center-paragraph">',
+                                        '<p id="atividade_content" class="text-size-content" size="2" face="Arial" color="#0000FF">' + nome_atividade + '</p>',
+                                        '</div>',
+                                        '<div class="mensalmente-paragraph">',
+                                        '<strong class="mensalmente">' + periodicidade + '</strong> - <span>' + nome_emp_resp + '</span>',
+                                        '</div>',
+                                        '<div class="data_periodicidade_paragraph">',
+                                        '<font class="atividade_title" size="3" face="Arial">' + dateToEN(aux_data) + '</font>',
+                                        '</div>',
+                                        '</li>',
 
-                                dados_manutencao = [
-                                    '<li class="shadow_box">',
-                                    '<div class="text-center-title">',
-                                    '<font style="font-weight: bold; text-shadow: none;" id="atividade_title" size="4" face="Arial">' + nome_sistema + '</font>',
-                                    '</div>',
-                                    '<div class="text-center-paragraph">',
-                                    '<p id="atividade_content" class="text-size-content" size="2" face="Arial" color="#0000FF">' + nome_atividade + '</p>',
-                                    '</div>',
-                                    '<div class="mensalmente-paragraph">',
-                                    '<strong class="mensalmente">' + periodicidade + '</strong> - <span>' + nome_emp_resp + '</span>',
-                                    '</div>',
-                                    '<div class="data_periodicidade_paragraph">',
-                                    '<font class="atividade_title" size="3" face="Arial">' + dateToEN(aux_data) + '</font>',
-                                    '</div>',
-                                    '</li>',
+                                        '<li class="shadow_box box__content__funcoes" style="border-radius: 0;">',
+                                        '<div class="ui-grid-a">',
+                                        '<div class="ui-block-a">',
+                                        '<tbody>',
+                                        '<tr>',
+                                        '<th style="padding: 0">',
+                                        '<div class="input-responsive">',
+                                        '<label for="">Data realização:</label>',
+                                        '<input style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao" type="tel" onkeypress="mascara(this, sonumeros_data)" id="in_data_realizacao" disabled="" required="" value="' + aux_data_preench + '" />',
+                                        '<img src="images/calendar-alt.png" width="16" style="position: relative; float: right; bottom: 35px; right: 10px;" />',
+                                        '</div>',
+                                        '</th>',
+                                        '</tr>',
+                                        '</tbody>',
+                                        '</div>',
+                                        '<div style="position: relative;" class="ui-block-b">',
+                                        '<label for="">Empresa:</label>',
+                                        '<select style="height: 35px; background: #f6f6f6; border-color: #dddddd; font-size: 13px; outline: none; width: 100%; border-radius: 4px; padding-left: 5px;" id="valores" name="select-native-2" data-mini="true" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)" disabled="">',
+                                        '<option class="size_option" value="1" ' + seleciona1 + '>Equipe Local</option>',
+                                        '<option class="size_option" value="2" ' + seleciona2 + '>Empresa Capacitada</option>',
+                                        '<option class="size_option" value="3" ' + seleciona3 + '>Empresa Especializada</option>',
+                                        '</select>',
+                                        '</div>',
+                                        '</div>',
+                                        '<table>',
+                                        '<div class="ui-grid-a">',
+                                        '<div class="ui-block-a custo-estimado">',
+                                        '<label for="">Custo estimado:</label>',
+                                        '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-estimado-input" type="tel" name="text-basic" id="in_dado_custo_estimado" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo estimado" disabled="" value="' + aux_custoEstim_preench + '" />',
+                                        '<img src="images/money-bill-alt.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
+                                        '</div>',
+                                        '<div class="ui-block-b custo-real">',
+                                        '<label for="">Custo real:</label>',
+                                        '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-real-input" type="tel" name="text-basic" id="in_dado_custo_real" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo real" disabled="" value="' + aux_custoReal_preench + '" />',
+                                        '<img src="images/money-bill-alt.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
+                                        '</div>',
+                                        '</div>',
+                                        '</table>',
+                                        '</li>'
+                                    ].join('');
+                                } else {
+                                    dados_manutencao = [
+                                        '<li class="shadow_box">',
+                                        '<div class="text-center-title">',
+                                        '<font style="font-weight: bold; text-shadow: none;" id="atividade_title" size="4" face="Arial">' + nome_sistema + '</font>',
+                                        '</div>',
+                                        '<div class="text-center-paragraph">',
+                                        '<p id="atividade_content" class="text-size-content" size="2" face="Arial" color="#0000FF">' + nome_atividade + '</p>',
+                                        '</div>',
+                                        '<div class="mensalmente-paragraph">',
+                                        '<strong class="mensalmente">' + periodicidade + '</strong> - <span>' + nome_emp_resp + '</span>',
+                                        '</div>',
+                                        '<div class="data_periodicidade_paragraph">',
+                                        '<font class="atividade_title" size="3" face="Arial">' + dateToEN(aux_data) + '</font>',
+                                        '</div>',
+                                        '</li>',
 
-                                    '<li class="shadow_box box__content__funcoes" style="border-radius: 0;">',
-                                    '<div class="ui-grid-a">',
-                                    '<div class="ui-block-a">',
-                                    '<tbody>',
-                                    '<tr>',
-                                    '<th style="padding: 0">',
-                                    '<div class="input-responsive">',
-                                    '<label for="">Data realização:</label>',
-                                    '<input style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao" type="tel" onkeypress="mascara(this, sonumeros_data)" id="in_data_realizacao" disabled="" required="" value="' + aux_data_preench + '" />',
-                                    '</div>',
-                                    '</th>',
-                                    '</tr>',
-                                    '</tbody>',
-                                    '</div>',
-                                    '<div style="position: relative;" class="ui-block-b">',
-                                    '<label for="">Empresa:</label>',
-                                    '<select style="height: 35px; background: #f6f6f6; border-color: #dddddd; font-size: 13px; outline: none; width: 100%; border-radius: 4px; padding-left: 5px;" id="valores" name="select-native-2" data-mini="true" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)" disabled="">',
-                                    '<option class="size_option" value="1" ' + seleciona1 + '>Equipe Local</option>',
-                                    '<option class="size_option" value="2" ' + seleciona2 + '>Empresa Capacitada</option>',
-                                    '<option class="size_option" value="3" ' + seleciona3 + '>Empresa Especializada</option>',
-                                    '</select>',
-                                    '</div>',
-                                    '</div>',
-                                    '<table>',
-                                    '<div class="ui-grid-a">',
-                                    '<div class="ui-block-a custo-estimado">',
-                                    '<label for="">Custo estimado:</label>',
-                                    '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-estimado-input" type="tel" name="text-basic" id="in_dado_custo_estimado" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo estimado" disabled="" value="' + aux_custoEstim_preench + '" />',
-                                    '<img src="images/money-bill-alt.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
-                                    '</div>',
-                                    '<div class="ui-block-b custo-real">',
-                                    '<label for="">Custo real:</label>',
-                                    '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-real-input" type="tel" name="text-basic" id="in_dado_custo_real" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo real" disabled="" value="' + aux_custoReal_preench + '" />',
-                                    '<img src="images/money-bill-alt.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
-                                    '</div>',
-                                    '</div>',
-                                    '</table>',
-                                    '</li>'
-                                ].join('');
+                                        '<li class="shadow_box box__content__funcoes" style="border-radius: 0;">',
+                                        '<div class="ui-grid-a">',
+                                        '<div class="ui-block-a">',
+                                        '<tbody>',
+                                        '<tr>',
+                                        '<th style="padding: 0">',
+                                        '<div class="input-responsive">',
+                                        '<label for="">Data realização:</label>',
+                                        '<input style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao" type="date" onkeypress="mascara(this, sonumeros_data)" id="in_data_realizacao" required="" value="' + aux_data_preench + '" />',
+                                        '</div>',
+                                        '</th>',
+                                        '</tr>',
+                                        '</tbody>',
+                                        '</div>',
+                                        '<div style="position: relative;" class="ui-block-b">',
+                                        '<label for="">Empresa:</label>',
+                                        '<select style="height: 35px; background: #f6f6f6; border-color: #dddddd; font-size: 13px; outline: none; width: 100%; border-radius: 4px; padding-left: 5px;" id="valores" name="select-native-2" data-mini="true" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)">',
+                                        '<option class="size_option" value="1" ' + seleciona1 + '>Equipe Local</option>',
+                                        '<option class="size_option" value="2" ' + seleciona2 + '>Empresa Capacitada</option>',
+                                        '<option class="size_option" value="3" ' + seleciona3 + '>Empresa Especializada</option>',
+                                        '</select>',
+                                        '</div>',
+                                        '</div>',
+                                        '<table>',
+                                        '<div class="ui-grid-a">',
+                                        '<div class="ui-block-a custo-estimado">',
+                                        '<label for="">Custo estimado:</label>',
+                                        '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-estimado-input" type="tel" name="text-basic" id="in_dado_custo_estimado" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo estimado" value="' + aux_custoEstim_preench + '" />',
+                                        '<img src="images/money-bill-alt-verde.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
+                                        '</div>',
+                                        '<div class="ui-block-b custo-real">',
+                                        '<label for="">Custo real:</label>',
+                                        '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-real-input" type="tel" name="text-basic" id="in_dado_custo_real" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo real" value="' + aux_custoReal_preench + '" />',
+                                        '<img src="images/money-bill-alt-verde.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
+                                        '</div>',
+                                        '</div>',
+                                        '</table>',
+                                        '</li>'
+                                    ].join('');
+                                }
                             }
 
                             if (e_construtora == '0') {
@@ -3198,6 +3319,26 @@
     function go_page_check() {
         window.location.assign("checkpoint.htm?e=" + id_empree + "&l=" + login + "&s=" + senha + "&qm=" + mes_ev + "&qa=" + ano_ev);
     }
+    
+    function getMobileOperatingSystem() {
+		var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+		// Windows Phone must come first because its UA also contains "Android"
+		if (/windows phone/i.test(userAgent)) {
+			return "Windows Phone";
+		}
+
+		if (/android/i.test(userAgent)) {
+			return "Android";
+		}
+
+		// iOS detection from: http://stackoverflow.com/a/9039885/177710
+		if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+			return "iOS";
+		}
+
+		return "unknown";
+	}
 
     function closeApp() {
         navigator.notification.confirm(

@@ -414,7 +414,7 @@
                                     '<th style="padding: 0">',
                                     '<div class="input-responsive">',
                                     '<label for="">Data realização:</label>',
-                                    '<input style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao" type="text" id="in_data_realizacao" required="" value="' + aux_data_preench + '" />',
+                                    '<input maxlength="10" style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao" type="tel" onkeypress="mascara(this, sonumeros_data)" id="in_data_realizacao" required="" value="' + aux_data_preench + '" />',
                                     '</div>',
                                     '</th>',
                                     '</tr>',
@@ -471,7 +471,7 @@
                                     '<th style="padding: 0">',
                                     '<div class="input-responsive">',
                                     '<label for="">Data realização:</label>',
-                                    '<input style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao" type="date" onkeypress="mascara(this, sonumeros_data)" id="in_data_realizacao" disabled="" required="" value="' + aux_data_preench + '" />',
+                                    '<input style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao" type="tel" onkeypress="mascara(this, sonumeros_data)" id="in_data_realizacao" disabled="" required="" value="' + aux_data_preench + '" />',
                                     '</div>',
                                     '</th>',
                                     '</tr>',
@@ -2907,11 +2907,11 @@
                 alert("Essa manutenção só pode ser informada a partir do dia " + dateToEN(d_min) + "!")
             } else if (datadiff(Date.now(), d_max) < 0) {
                 alert("Essa manutenção não pode ser informada após o dia " + dateToEN(d_max) + "!")
-            } else if (datadiff2(transf_data_num(document.getElementById('in_data_realizacao').value), d_min) > 0) {
+            } else if (datadiff2(transf_data_num(dateToEN2(document.getElementById('in_data_realizacao').value)), d_min) > 0) {
                 alert("Essa manutenção só pode ser realizada a partir do dia " + dateToEN(d_min) + "!")
-            } else if (datadiff(transf_data_num(document.getElementById('in_data_realizacao').value), d_max) < 0) {
+            } else if (datadiff(transf_data_num(dateToEN2(document.getElementById('in_data_realizacao').value)), d_max) < 0) {
                 alert("Essa manutenção não pode ser realizada após o dia " + dateToEN(d_max) + "!")
-            } else if (datadiff(transf_data_num(document.getElementById('in_data_realizacao').value), data_hoje_formatada) < 0) {
+            } else if (datadiff(transf_data_num(dateToEN2(document.getElementById('in_data_realizacao').value)), data_hoje_formatada) < 0) {
                 alert("Essa manutenção não pode ser realizada após o dia de hoje!")
             } else if (nivel_manut == 2 && qt_docs == 0) {
                 alert('Esta manutenção precisa de pelo menos 1 documento comprovatório anexado!')
@@ -2930,7 +2930,7 @@
                 }
                 if (prosseguir == true || ((nivel_manut == 1 || nivel_manut == 2) && qt_docs > 0)) {
                     var ajax3 = new XMLHttpRequest();
-                    ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/salvar_manut.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&econst=" + e_construtora + "&idpm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&d_data_realiz=" + document.getElementById('in_data_realizacao').value + "&d_forn=" + document.getElementById('valores').value + "&d_custoReal=" + document.getElementById('in_dado_custo_real').value + "&d_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value) + "&tipo=" + tipo + "&versao=2.2&env_em=" + ev_email + "&segur=" + crypt_segur + "&t=" + Math.random(), false);
+                    ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/salvar_manut.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&econst=" + e_construtora + "&idpm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&d_data_realiz=" + dateToEN2(document.getElementById('in_data_realizacao').value) + "&d_forn=" + document.getElementById('valores').value + "&d_custoReal=" + document.getElementById('in_dado_custo_real').value + "&d_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value) + "&tipo=" + tipo + "&versao=2.2&env_em=" + ev_email + "&segur=" + crypt_segur + "&t=" + Math.random(), false);
                     ajax3.onreadystatechange = function () {
                         if (ajax3.readyState == 4) {
                             if (ajax3.status == 200 || ajax3.status == 0) {

@@ -397,7 +397,7 @@
                                         '<th style="padding: 0">',
                                         '<div class="input-responsive">',
                                         '<label for="">Data realização:</label>',
-                                        '<input style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao" type="tel" onkeypress="mascara(this, sonumeros_data)" id="in_data_realizacao" required="" value="' + aux_data_preench + '" />',
+                                        '<input style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao date_ios" id="in_data_realizacao" required="" value="' + aux_data_preench + '" />',
                                         '<img src="images/calendar-alt.png" width="16" style="position: relative; float: right; bottom: 35px; right: 10px;" />',
                                         '</div>',
                                         '</th>',
@@ -406,7 +406,7 @@
                                         '</div>',
                                         '<div style="position: relative;" class="ui-block-b">',
                                         '<label for="">Empresa:</label>',
-                                        '<select style="height: 35px; background: #f6f6f6; border-color: #dddddd; font-size: 13px; outline: none; width: 100%; border-radius: 4px; padding-left: 5px;" id="valores" name="select-native-2" data-mini="true" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)" disabled="">',
+                                        '<select style="height: 35px; background: #f6f6f6; border-color: #dddddd; font-size: 13px; outline: none; width: 100%; border-radius: 4px; padding-left: 5px;" id="valores" name="select-native-2" data-mini="true" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)">',
                                         '<option class="size_option" value="1" ' + seleciona1 + '>Equipe Local</option>',
                                         '<option class="size_option" value="2" ' + seleciona2 + '>Empresa Capacitada</option>',
                                         '<option class="size_option" value="3" ' + seleciona3 + '>Empresa Especializada</option>',
@@ -417,12 +417,12 @@
                                         '<div class="ui-grid-a">',
                                         '<div class="ui-block-a custo-estimado">',
                                         '<label for="">Custo estimado:</label>',
-                                        '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-estimado-input" type="tel" name="text-basic" id="in_dado_custo_estimado" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo estimado" disabled="" value="' + aux_custoEstim_preench + '" />',
+                                        '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-estimado-input" type="tel" name="text-basic" id="in_dado_custo_estimado" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo estimado" value="' + aux_custoEstim_preench + '" />',
                                         '<img src="images/money-bill-alt-verde.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
                                         '</div>',
                                         '<div class="ui-block-b custo-real">',
                                         '<label for="">Custo real:</label>',
-                                        '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-real-input" type="tel" name="text-basic" id="in_dado_custo_real" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo real" disabled="" value="' + aux_custoReal_preench + '" />',
+                                        '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-real-input" type="tel" name="text-basic" id="in_dado_custo_real" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo real" value="' + aux_custoReal_preench + '" />',
                                         '<img src="images/money-bill-alt-verde.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
                                         '</div>',
                                         '</div>',
@@ -454,7 +454,7 @@
                                         '<th style="padding: 0">',
                                         '<div class="input-responsive">',
                                         '<label for="">Data realização:</label>',
-                                        '<input style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao" type="date" onkeypress="mascara(this, sonumeros_data)" id="in_data_realizacao" required="" value="' + aux_data_preench + '" />',
+                                        '<input style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao" id="in_data_realizacao" type="date" onkeypress="mascara(this, sonumeros_data)" required="" value="' + aux_data_preench + '" />',
                                         '</div>',
                                         '</th>',
                                         '</tr>',
@@ -512,7 +512,7 @@
                                         '<th style="padding: 0">',
                                         '<div class="input-responsive">',
                                         '<label for="">Data realização:</label>',
-                                        '<input style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao" type="tel" onkeypress="mascara(this, sonumeros_data)" id="in_data_realizacao" disabled="" required="" value="' + aux_data_preench + '" />',
+                                        '<input style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao date_ios" id="in_data_realizacao" disabled="" required="" value="' + aux_data_preench + '" />',
                                         '<img src="images/calendar-alt.png" width="16" style="position: relative; float: right; bottom: 35px; right: 10px;" />',
                                         '</div>',
                                         '</th>',
@@ -708,6 +708,28 @@
             }
             ajax2.send();
             ////  capturando dados do evento
+
+            if (getMobileOperatingSystem() == "iOS") {
+                document.querySelector('.date_ios').addEventListener('click', function() {
+                    var options = {
+                        date: new Date(),
+                        mode: 'date'
+                    };
+
+                    function onSuccess(date) {
+                        // alert('Selected date: ' + date.toLocaleDateString());
+                        var mes_atual = date.getMonth() + 1;
+                        document.querySelector('.date_ios').value = date.getDate() + '/' + mes_atual + '/' + date.getFullYear();
+                        // alert(document.getElementById('in_data_realizacao').value);
+                    }
+
+                    function onError(error) { // Android only
+                        // alert('Error: ' + error);
+                    }
+
+                    datePicker.show(options, onSuccess, onError);
+                });
+            }
 
             var db;
             var request = window.indexedDB.open("db_sigmacivil", "1");

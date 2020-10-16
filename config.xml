@@ -133,6 +133,7 @@
     <plugin name="cordova-plugin-vibration" source="npm" spec="~2.1.0" />
     <plugin name="cordova-sqlite-storage" spec="~0.8.5" />
     <plugin name="cordova-plugin-statusbar" spec="~2.4.3" />
+    <plugin name="cordova-plugin-datepicker" spec="~0.9.3" />
 
     <edit-config target="NSCameraUsageDescription" file="*-Info.plist" mode="merge">
         <string>need camera access to take pictures</string>

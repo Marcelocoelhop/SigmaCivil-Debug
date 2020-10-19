@@ -851,7 +851,6 @@
                     }
 
                     if (rrr_status_caminho_audio == '0') {
-                        qtd_tam_ti_audio += 1;
                         aux_image_upload = "upload.png";
                     }
                     else {
@@ -869,12 +868,12 @@
                         // selec_audio = "<div class='icon-size' style='position: relative; text-align: center; top: 10px;'><table cellpadding='0' cellspacing='0'><div id='latesq_" + rrr_id_prog_manut + "'width='40' height='30'></div><div style='border: 1px solid black; width: 60%; border-radius: 3px; margin: 0 auto; padding: 4px;'><img src='images/play.svg' width='15' style='margin-right: 5px;' class='top-9px' id='player_" + rrr_id_prog_manut + "'onclick='abrir_audio(" + String.fromCharCode(34) + rrr_caminho_audio + String.fromCharCode(34) + ")' ><img src='images/pause.svg' width='15' style='margin-right: 5px;' class='top-9px position-icons' id='pause_" + rrr_id_prog_manut + "' onclick='pause_audio()'><img src='images/stop.svg' width='15' style='margin-right: 5px;' class='top-9px position-icons' id='stop_" + rrr_id_prog_manut + "'onclick='stop_audio()'><img src='images/microphone.svg' width='15' style='margin-right: 5px;' class='top-9px position-icons' id='rec_" + rrr_id_prog_manut + "'onclick='captureAudio(" + String.fromCharCode(34) + rrr_id_prog_manut + String.fromCharCode(34) + ")'></div><div id='latdir_" + rrr_id_prog_manut + "'width='40' height='30'></div><div align='center'><img src='images/trash.svg' style='position: relative; top: 8px; right: 55px; text-align: center; text-shadow: none;' class='icon-size' width='15' onclick='deletar_audio()'></div><div align='center'><img src='images/" + aux_image_upload + "' style='position: relative; bottom: 10px; left: 45px; text-align: center; text-shadow: none;' class='icon-size' width='17' onclick='upload_audio()'></div></table></div>            <audio style='margin-bottom: 10px; width: 100%;' controls><source src='" + rrr_caminho_audio + "'></audio>"
                         if (aux_image_upload === "upload.png") {
                             qtdDocs_Device += 1
+                            qtd_tam_ti_audio += 1;
                         }
                     }
                     //barra do áudio
 
                     if (rrr_status_caminho_video == '0') {
-                        qtd_tam_ti_video += 1;
                         aux_image_upload = 'upload.png';
                     }
                     else {
@@ -890,6 +889,7 @@
                         selec_video = "<div id='video_invis_" + rrr_id_prog_manut + "' style='display:inline; margin-left: 5px;'><table cellpadding='0' cellspacing='0'><video id='qvideo_" + rrr_id_prog_manut + "' controls poster='images/video.png' width='150' height='150'>   <source id='qsource_" + rrr_id_prog_manut + "' src='" + rrr_caminho_video + "' type='video/mp4'></video><div align='center'><img src='images/trash.svg' style='float: left; padding: 0.5rem; position: relative; left: 55px; text-shadow: none;' class='icon-size' width='15' onclick='deletar_video()'></div><div align='center'><img src='images/" + aux_image_upload + "' style='padding: 0.5rem; float: left; position: relative; left: 120px; text-shadow: none;' class='icon-size' width='17' onclick='upload_video()'/></div></table></div>"
                         if (aux_image_upload === "upload.png") {
                             qtdDocs_Device += 1
+                            qtd_tam_ti_video += 1;
                         }
                     }
                     //barrinha do vídeo

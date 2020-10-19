@@ -397,7 +397,7 @@
                                         '<th style="padding: 0">',
                                         '<div class="input-responsive">',
                                         '<label for="">Data realização:</label>',
-                                        '<input style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao date_ios" id="in_data_realizacao" required="" value="' + aux_data_preench + '" />',
+                                        '<input maxlength="10" style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao date_ios" id="in_data_realizacao" readonly="readonly" required="" value="' + aux_data_preench + '" />',
                                         '<img src="images/calendar-alt.png" width="16" style="position: relative; float: right; bottom: 35px; right: 10px;" />',
                                         '</div>',
                                         '</th>',
@@ -512,7 +512,7 @@
                                         '<th style="padding: 0">',
                                         '<div class="input-responsive">',
                                         '<label for="">Data realização:</label>',
-                                        '<input style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao date_ios" id="in_data_realizacao" disabled="" required="" value="' + aux_data_preench + '" />',
+                                        '<input maxlength="10" style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao date_ios" id="in_data_realizacao" disabled="" readonly="readonly" required="" value="' + aux_data_preench + '" />',
                                         '<img src="images/calendar-alt.png" width="16" style="position: relative; float: right; bottom: 35px; right: 10px;" />',
                                         '</div>',
                                         '</th>',
@@ -717,10 +717,8 @@
                     };
 
                     function onSuccess(date) {
-                        // alert('Selected date: ' + date.toLocaleDateString());
                         var mes_atual = date.getMonth() + 1;
                         document.querySelector('.date_ios').value = date.getDate() + '/' + mes_atual + '/' + date.getFullYear();
-                        // alert(document.getElementById('in_data_realizacao').value);
                     }
 
                     function onError(error) { // Android only

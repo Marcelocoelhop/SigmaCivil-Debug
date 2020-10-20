@@ -957,8 +957,6 @@
 
         function getPhoto(source, qual) {
 
-            alert('entrou aqui')
-
             qual_id_prog_manut = qual;
 
             // RESTRIÇÕES DE DATAS
@@ -969,6 +967,8 @@
                 alert("Essa ação não pode ser realizada após o dia " + dateToEN(d_max) + "!")
                 return
             }
+
+            // window.imagePicker.getPictures(onPhotoURISuccess, onFail);
 
             var r = confirm("Para tirar uma foto com a câmera selecione OK. Para acessar sua galeria de imagens clique em CANCELAR");
             if (r == true) {
@@ -982,20 +982,29 @@
                 destinationType: destinationType.FILE_URI,
                 encodingType: Camera.EncodingType.JPEG,
                 popoverOptions: CameraPopoverOptions,
-                // saveToPhotoAlbum: true,
+                saveToPhotoAlbum: true,
+                allowEdit: false,
                 sourceType: source
             });
 
         }
 
         function onFail(message) {
-            alert('Failed because: ' + message);
+            navigator.notification.alert(
+                'Problemas com a internet. Tente novamente.',  // message
+                function(buttonIndex) {
+                    return;
+                },         // callback
+                'SigmaCivil',            // title
+                'OK'                  // buttonName
+            );
+            document.getElementById("parte_load_content").style.display = "none";
+            document.getElementById("parte_load").style.display = "none";
         }
 
         var qual_id_prog_manut;
 
         function onPhotoURISuccess(imageURI) {
-            alert(imageURI);
             document.getElementById('foto_' + qual_id_prog_manut).src = imageURI;
             document.getElementById('foto_' + qual_id_prog_manut).style.display = "inline";
 
@@ -1044,8 +1053,6 @@
                     if (cursor) {
                         var data = cursor.value;
 
-                        alert('ponto 0');
-
                         aux_caminho_imagens = data.caminho_imagens;
 
                         if (aux_caminho_imagens != "") {
@@ -1067,8 +1074,6 @@
                         }
 
                     } else {
-
-                        alert('ponto 1');
                         aux_caminho_imagens = "";
                         var tx2 = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
                         var store2 = tx2.objectStore('mtab_prog_manut_evento');
@@ -1078,7 +1083,6 @@
                         });
 
                         tx2.oncomplete = function () {
-                            alert('ponto 2');
                             reload_page();
                         }
 
@@ -1252,11 +1256,9 @@
 
                             if (ja_fez_upload != '1') {
                                 up_loadPhoto(aux_2, q_id, aux_1_status);
-                                alert('aux2: ' + aux_2);
                             }
                             else {
                                 up_loadPhoto(aux_2, q_id, aux_status_imagens_upl);
-                                alert('aux2: ' + aux_2);
                             }
                         }
                     }
@@ -1283,10 +1285,8 @@
             options.params = params;
             options.chunkedMode = false;
 
-            alert('ponto substring: ' + imageURI)
-
             var ft = new FileTransfer();
-            ft.upload(imageURI, "http://www.sigmacivil.com.br/app_sc/rec_foto_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up, fail_up, options);
+            ft.upload(imageURI, "http://www.sigmacivil.com.br/app_sc/rec_foto_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up, fail_up, options);
 
         }
 

@@ -12,7 +12,7 @@
     <script type="text/javascript" src="js/mc.js"></script>
     <script src="js/jquery.js"></script>
     <script src="js/jquery.mobile-1.4.5.min.js"></script>
-    <script src="js/rolldate.js"></script>
+    <!-- <script src="js/rolldate.js"></script> -->
     <style>
         .menu .ui-mini.ui-btn-icon-left:after,
         .ui-mini .ui-btn-icon-left:after,
@@ -712,27 +712,27 @@
 
             if (getMobileOperatingSystem() == "iOS") {
                 document.querySelector('.date_ios').addEventListener('click', function() {
-                    // var options = {
-                    //     date: new Date(),
-                    //     mode: 'date'
-                    // };
+                    var options = {
+                        date: new Date(),
+                        mode: 'date'
+                    };
 
-                    // function onSuccess(date) {
-                    //     var mes_atual = date.getMonth() + 1;
-                    //     document.querySelector('.date_ios').value = date.getDate() + '/' + mes_atual + '/' + date.getFullYear();
-                    // }
+                    function onSuccess(date) {
+                        var mes_atual = date.getMonth() + 1;
+                        document.querySelector('.date_ios').value = date.getDate() + '/' + mes_atual + '/' + date.getFullYear();
+                    }
 
-                    // function onError(error) { // Android only
-                    //     // alert('Error: ' + error);
-                    // }
+                    function onError(error) { // Android only
+                        // alert('Error: ' + error);
+                    }
 
-                    // datePicker.show(options, onSuccess, onError);
-                    new Rolldate({
-                        el: '.date_ios',
-                        format: 'DD/MM/YYYY',
-                        beginYear: 2016,
-                        endYear: 2040
-                    })
+                    datePicker.show(options, onSuccess, onError);
+                    // new Rolldate({
+                    //     el: '.date_ios',
+                    //     format: 'DD/MM/YYYY',
+                    //     beginYear: 2016,
+                    //     endYear: 2040
+                    // })
                 });
             }
 
@@ -982,7 +982,7 @@
                 destinationType: destinationType.FILE_URI,
                 encodingType: Camera.EncodingType.JPEG,
                 popoverOptions: CameraPopoverOptions,
-                saveToPhotoAlbum: true,
+                // saveToPhotoAlbum: true,
                 sourceType: source
             });
 

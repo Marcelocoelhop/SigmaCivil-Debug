@@ -5,6 +5,18 @@
 	}
 }
 
+@media (min-width: 768px) and (max-width: 1024px) {
+	.menu-tablet-responsive {
+		width: 300px !important;
+	}
+}
+
+@media (min-width: 481px) and (max-width: 767px) {
+	.menu-tablet-responsive {
+		width: 250px !important;
+	}
+}
+
 /* SMARTHPHONES */
 @media only screen and (max-width: 480px) {
     .images-center {
@@ -23,7 +35,7 @@
 	.input-responsive {
 		width: 100% !important;
 		float: left;
-	}	
+	}
 }
 
 @media only screen and (max-width: 300px) {

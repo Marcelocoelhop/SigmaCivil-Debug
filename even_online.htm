@@ -1243,11 +1243,9 @@
 
                             if (ja_fez_upload != '1') {
                                 up_loadPhoto(aux_2, q_id, aux_1_status);
-                                alert('aux2: ' + aux_2);
                             }
                             else {
                                 up_loadPhoto(aux_2, q_id, aux_status_imagens_upl);
-                                alert('aux2: ' + aux_2);
                             }
                         }
                     }
@@ -1273,8 +1271,6 @@
 
             options.params = params;
             options.chunkedMode = false;
-
-            alert('ponto substring: ' + imageURI)
 
             var ft = new FileTransfer();
             ft.upload(imageURI, "http://www.sigmacivil.com.br/app_sc/rec_foto_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up, fail_up, options);
@@ -1449,7 +1445,6 @@
 
         function videocaptureError(error) {
             var msg = 'Ocorreu um erro durante a captura do vídeo: ' + error.code;
-            alert(msg);
         }
 
         // DELETAR VIDEO
@@ -1530,12 +1525,10 @@
                             if (cursor.value.status_video_upl != '1') {
                                 var aux_caminho_video = data.caminho_video;
                                 up_loadVideo(aux_caminho_video);
-                                alert(aux_caminho_video);
                             }
                             else {
                                 var aux_caminho_video = data.caminho_video;
                                 up_loadVideo(aux_caminho_video);
-                                alert(aux_caminho_video);
                             }
                         }
                     }
@@ -1555,8 +1548,6 @@
             options.fileName = videoURL.substr(videoURL.lastIndexOf('/') + 1);
             options.mimeType = "video/mp4";
             options.chunkedMode = false;
-
-            alert("ponto substring: " + videoURL);
 
             var ft = new FileTransfer();
             ft.upload(videoURL, "http://www.sigmacivil.com.br/app_sc/rec_video_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente, win_up_v, fail_up_v, options);
@@ -1605,7 +1596,7 @@
         var fail_up_v = function (error) {
             document.getElementById("parte_load_content").style.display = "none";
             document.getElementById("parte_load").style.display = "none";
-            alert("Não foi feito o upload do vídeo! cod 08");
+            alert("Não foi feito o upload do vídeo!");
         }
         // FIM UPLOAD VIDEO
 
@@ -1840,12 +1831,10 @@
                             if (cursor.value.status_audio_upl != '1') {
                                 var aux_caminho_audio = data.caminho_audio;
                                 up_loadAudio(aux_caminho_audio);
-                                alert(aux_caminho_audio);
                             }
                             else {
                                 var aux_caminho_audio = data.caminho_audio;
                                 up_loadAudio(aux_caminho_audio);
-                                alert(aux_caminho_audio);
                             }
                         }
                     }
@@ -1865,8 +1854,6 @@
             options.mimeType = "audio/amr";
             options.chunkedMode = false;
 
-
-            alert("ponto substring: " + audioURL);
             var ft = new FileTransfer();
             ft.upload(audioURL, "http://www.sigmacivil.com.br/app_sc/rec_audio_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente, win_up_a, fail_up_a, options);
 
@@ -1914,7 +1901,7 @@
         var fail_up_a = function (error) {
             document.getElementById("parte_load_content").style.display = "none";
             document.getElementById("parte_load").style.display = "none";
-            alert("Não foi feito o upload da áudio!");
+            alert("Não foi feito o upload do áudio!");
         }
         // FIM UPLOAD AUDIO
 

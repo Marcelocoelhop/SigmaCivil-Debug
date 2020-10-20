@@ -957,6 +957,8 @@
 
         function getPhoto(source, qual) {
 
+            alert('entrou aqui')
+
             qual_id_prog_manut = qual;
 
             // RESTRIÇÕES DE DATAS
@@ -993,6 +995,7 @@
         var qual_id_prog_manut;
 
         function onPhotoURISuccess(imageURI) {
+            alert(imageURI);
             document.getElementById('foto_' + qual_id_prog_manut).src = imageURI;
             document.getElementById('foto_' + qual_id_prog_manut).style.display = "inline";
 
@@ -1041,6 +1044,8 @@
                     if (cursor) {
                         var data = cursor.value;
 
+                        alert('ponto 0');
+
                         aux_caminho_imagens = data.caminho_imagens;
 
                         if (aux_caminho_imagens != "") {
@@ -1062,6 +1067,8 @@
                         }
 
                     } else {
+
+                        alert('ponto 1');
                         aux_caminho_imagens = "";
                         var tx2 = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
                         var store2 = tx2.objectStore('mtab_prog_manut_evento');
@@ -1071,6 +1078,7 @@
                         });
 
                         tx2.oncomplete = function () {
+                            alert('ponto 2');
                             reload_page();
                         }
 

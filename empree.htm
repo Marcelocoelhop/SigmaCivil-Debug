@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, `user-scalable=no">
 	<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
 	<link rel="stylesheet" href="css/custom.css" />
 	<script src="https://kit.fontawesome.com/c202879e33.js" crossorigin="anonymous"></script>
@@ -249,6 +249,76 @@
 
 				var resposta_total;
 				var ajax = new XMLHttpRequest();
+				ajax.addEventListener("loadend", function(evt) {
+					var resultado_consulta = this.responseText;
+							var parte_resultado = resultado_consulta.split('_')
+							var status_sync_serv = parte_resultado[0]
+							var bloqueio = parte_resultado[1]
+							var q_mensagem = parte_resultado[2]
+
+							if (bloqueio == "2") {
+								alert(q_mensagem)
+								window.location.href = "login.htm"
+							}
+
+							if (bloqueio == "1" || bloqueio == "0") {
+								if (bloqueio == "1") {
+									alert(q_mensagem)
+								}
+								if (status_sync_serv != "nada") {
+
+									var db;
+									var request = window.indexedDB.open("db_sigmacivil", "1");
+
+									request.onerror = function (event) {
+										alert("Erro ao criar o banco (cod 02)");
+									};
+
+									request.onsuccess = function (event) {
+										db = request.result;
+										consultaEmpree(db, emprees);
+										db.onerror = function (event) {
+											alert("Database error: " + event.target.error);
+										}
+									};
+
+									function consultaEmpree(db, emprees) {
+										var tx = db.transaction(['mtab_empree'], 'readwrite');
+										var store = tx.objectStore('mtab_empree');
+										var objectStoreRequest = store.openCursor();
+										objectStoreRequest.onsuccess = function (event) {
+											var cursor = event.target.result;
+											if (cursor) {
+												status_sync = cursor.value.status_sync;
+												if (status_sync_serv == status_sync) {
+													iniciar();
+												} else {
+													var r = confirm("Houve uma atualização no seu Programa de Manutenção e é necessário sincronizá-lo com este aplicativo. Somente serão apagadas imagens/videos deste app que ainda não foram enviados para o servidor. Confirma a atualização ?");
+													if (r == true) {
+														window.location.assign("login.htm");
+													} else {
+														iniciar();
+													}
+												}
+											}
+										}
+									}
+
+								} else {
+									iniciar();
+								}
+							}
+				});
+
+				ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_status_sync.asp?e=" + num_empree + "&versao=2.1&t=" + Math.random(), true);
+				ajax.send();
+
+
+
+
+
+
+				/*var ajax = new XMLHttpRequest();
 				ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_status_sync.asp?e=" + num_empree + "&versao=2.1&t=" + Math.random(), true);
 				ajax.onreadystatechange = function () {
 					if (ajax.readyState == 4) {//Request complete !!
@@ -322,7 +392,7 @@
 
 					}
 				}
-				ajax.send();
+				ajax.send();*/
 			} //checa internet
 
 		}

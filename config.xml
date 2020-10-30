@@ -5,7 +5,7 @@
         xmlns:gap = "http://phonegap.com/ns/1.0"
  		xmlns:android   = "http://schemas.android.com/apk/res/android"
         id        = "br.com.sigmacivil.sc"
-        version   = "2.1.9">
+        version   = "2.1.9.1">
 
     <name>SigmaCivil</name>
 
@@ -133,6 +133,7 @@
     <plugin name="cordova-sqlite-storage" spec="~0.8.5" />
     <plugin name="cordova-plugin-statusbar" spec="~2.4.3" />
     <plugin name="cordova-plugin-datepicker" spec="~0.9.3" /> 
+    <plugin name="cordova-plugin-wkwebview-file-xhr" spec="~3.0.0" /> 
     
     <!-- <plugin name="cordova-plugin-wkwebview-engine" source="npm" spec="~1.2.1" /> -->
     

@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, `user-scalable=no">
 	<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
 	<script type="text/javascript" src="cordova.js"></script>
 	<script type="text/javascript" src="js/mc.js" />
@@ -20,18 +20,16 @@
 		window.onerror = function (message, url, lineNumber) {
 			alert(`Error: ${message} in ${url} at line ${lineNumber}`);
 		}
-
+    
 		var login = getquerystring("login");
 		var senha = getquerystring("senha");
 
 		var num_empree;
 		var logou;
 
-
 		document.addEventListener("deviceready", onDeviceReady, false);
 
 		function onDeviceReady() {
-
 			if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
 				alert('Sem conexão com internet. Favor se conectar.');
 				window.location.assign("ini.htm");
@@ -39,7 +37,6 @@
 			else {
 				iniciar();
 			}
-
 		}
 
 		/////////////////////////////
@@ -53,15 +50,167 @@
 			}
 
 			var ajax = new XMLHttpRequest();
+			ajax.addEventListener("loadend", function(evt) {
+				var resposta_total = this.responseText;
+				var jsontext = resposta_total.split("*")
+                        
+				var getLogin = JSON.parse(jsontext[0]);
+                                                
+				logou = getLogin.logou;
+				qual_id_cliente = getLogin.id_cliente;
+				num_empree = getLogin.id_empree;
+				nome_empree = getLogin.nome_empree;
+				q_e_construtora = getLogin.e_construtora;
+				data_implantacao_sc = getLogin.data_implantacao_sc;
+				status_sync = getLogin.status_sync;
+
+				if (logou == "S") {
+
+					var getEmpree = jsontext[1];
+					var objEmpree = JSON.parse(getEmpree);
+
+					var db;
+					var request = window.indexedDB.open("db_sigmacivil", "1");
+
+					request.onerror = function (event) {
+						alert("Erro ao criar o banco (cod 01)");
+					};
+
+					var clientes = [
+						{
+							id_cliente: qual_id_cliente,
+							e_construtora: q_e_construtora,
+							text1: login,
+							text2: senha
+						}
+					];
+
+					var emprees = [
+						{
+							id_empree: num_empree,
+							nome_empree: nome_empree,
+							status_sync: status_sync,
+							data_implantacao_sc: data_implantacao_sc
+						},
+					];
+
+					var manuts = [];
+
+					for (i = 0; i < objEmpree.dados_empreendimento.length; i++) {
+						manuts.push(objEmpree.dados_empreendimento[i]);
+					}
+
+					request.onsuccess = function (event) {
+						db = request.result;
+
+						executarRemoverAdicionarDados(db, clientes, emprees, manuts);
+
+						db.onerror = function (event) {
+							alert("Database error: " + event.target.error);
+						}
+					};
+
+					var num = 0;
+
+					function executarRemoverAdicionarDados(db, clientes, emprees, manuts) {
+						var tx = db.transaction(['mtab_cliente'], 'readwrite');
+						var store = tx.objectStore('mtab_cliente');
+
+						var objectStoreRequest = store.clear();
+						objectStoreRequest.onsuccess = function (event) {
+							num += 1;
+						}
+
+						clientes.map(function (cliente) {
+							store.add(cliente);
+						});
+
+						tx.oncomplete = function () {
+							removerAdicionarDadosEmpree(db, emprees, manuts);
+						}
+
+						tx.onerror = function (event) {
+							alert('error storing note ' + event.target.error);
+						}
+					}
+
+					function removerAdicionarDadosEmpree(db, emprees, manuts) {
+						var tx = db.transaction(['mtab_empree'], 'readwrite');
+						var store = tx.objectStore('mtab_empree');
+
+						var objectStoreRequest = store.clear();
+						objectStoreRequest.onsuccess = function (event) {
+							num += 1;
+						}
+
+						emprees.map(function (empree) {
+							store.add(empree);
+						});
+
+						tx.oncomplete = function () {
+							removerAdicionarDadosManuts(db, manuts);
+						}
+
+						tx.onerror = function (event) {
+							alert('error storing empree note ' + event.target.error);
+						}
+					}
+
+					function removerAdicionarDadosManuts(db, manuts) {
+						var tx = db.transaction(['mtab_prog_manut'], 'readwrite');
+						var store = tx.objectStore('mtab_prog_manut');
+
+						var objectStoreRequest = store.clear();
+						objectStoreRequest.onsuccess = function (event) {
+							num += 1;
+						}
+
+						manuts.map(function (manut) {
+							store.add(manut);
+						});
+
+						tx.oncomplete = function () {
+							removerDadosProgManutEvento(db);
+							console.log(num);
+						}
+
+						tx.onerror = function (event) {
+							alert('error storing manut note ' + event.target.error);
+						}
+					}
+
+					function removerDadosProgManutEvento(db) {
+						var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+						var store = tx.objectStore('mtab_prog_manut_evento');
+
+						var objectStoreRequest = store.clear();
+						objectStoreRequest.onsuccess = function (event) {
+							go_to();
+						}
+					}
+
+					///////////////  FIM tabela programa_manutenção //////////////	  
+
+				} else {  //nao logou
+					window.location.assign("login.htm");
+				}
+			});
+			
 			ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_emp.asp?l=" + login + "&s=" + senha + "&versao=2.1&t=" + Math.random(), true);
+			ajax.send();
+            
+			/*var ajax = new XMLHttpRequest();            
+			ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_emp.asp?l=" + login + "&s=" + senha + "&versao=2.1&t=" + Math.random(), true);            
 			ajax.onreadystatechange = function () {
 				if (ajax.readyState == 4) {//Request complete !!
 					if (ajax.status == 200 || ajax.status == 0) { // OK response
-
+                        
 						var resposta_total = ajax.responseText;
+                        alert(resposta_total);
 						var jsontext = resposta_total.split("*")
-
+                        
 						var getLogin = JSON.parse(jsontext[0]);
+                                                
 						logou = getLogin.logou;
 						qual_id_cliente = getLogin.id_cliente;
 						num_empree = getLogin.id_empree;
@@ -69,7 +218,6 @@
 						q_e_construtora = getLogin.e_construtora;
 						data_implantacao_sc = getLogin.data_implantacao_sc;
 						status_sync = getLogin.status_sync;
-
 
 						if (logou == "S") {
 
@@ -83,7 +231,8 @@
 								alert("Erro ao criar o banco (cod 01)");
 							};
 
-
+                            alert('ponto 11');
+                            
 							var clientes = [
 								{
 									id_cliente: qual_id_cliente,
@@ -199,19 +348,15 @@
 
 							///////////////  FIM tabela programa_manutenção //////////////	  
 
-						}
-
-						else {  //nao logou
+						} else {  //nao logou
 							window.location.assign("login.htm");
 						}
-
-					}
-					else {
+					} else {
 						alert("Problemas com sua conexao internet. Erro: 0145");
 					}
 				}
 			}
-			ajax.send();
+			ajax.send();*/
 		}
 
 		function tem_conexao() {
@@ -226,8 +371,8 @@
 
 		}
 
-		function go_to() {
-			if (tem_conexao()) {
+		function go_to() {            
+            if (tem_conexao()) {
 				window.location.assign("empree_online.htm?e=" + num_empree + "&l=" + login + "&s=" + senha)
 			} else {
 				window.location.assign("empree.htm?e=" + num_empree + "&l=" + login + "&s=" + senha);

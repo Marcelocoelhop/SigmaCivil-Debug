@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, `user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="css/custom.css" />
     <link rel="stylesheet" href="css/custom-mobile.css" />
@@ -369,8 +370,754 @@
             var ini_lista = "<ul id='q_empree' class='list-content' data-mini='true' data-role='listview' data-filter='true' data-filter-placeholder='Buscar...' data-inset='true'>"
             var fim_lista = "</ul>"
 
-            // carregar dados das manutenções do servidor 
             var ajax = new XMLHttpRequest();
+			ajax.addEventListener("loadend", function(evt) {
+                var resposta_total = this.responseText;
+                var jsontext = resposta_total.split("*")
+
+                var getLogin = JSON.parse(jsontext[0]);
+                var logou = getLogin.logou;
+                var qual_id_cliente = getLogin.id_cliente;
+                var num_empree = getLogin.id_empree;
+                var nome_empree = getLogin.nome_empree;
+                var q_e_construtora = getLogin.e_construtora;
+                var data_implantacao_sc = new Date(getLogin.data_implantacao_sc)
+
+                var resultado_consulta = getLogin.status_sync;
+                var parte_resultado = resultado_consulta.split('_')
+                var status_sync_serv = parte_resultado[0]
+                var bloqueio = parte_resultado[1]
+                var q_mensagem = parte_resultado[2]
+
+                if (bloqueio == "2") {
+                    alert(q_mensagem)
+                    window.location.href = "login.htm"
+                }
+
+                if (bloqueio == "1" || bloqueio == "0") {
+                    if (bloqueio == "1") {
+                        alert(q_mensagem)
+                    }
+
+                    if (logou == "S") {
+
+                        var getEmpree = jsontext[1];
+                        var objEmpree = JSON.parse(getEmpree);
+                        var dados_0 = ""
+                        var dados_1 = ""
+                        var str = ""
+                        var str2 = ""
+                        var qtde_eventos = 0;
+                        var compl2 = ""
+                        var temp1 = ""
+                        var data_maxima_alteracao;
+                        var data_minima_alteracao;
+
+                        for (i = 0; i < objEmpree.dados_empreendimento.length; i++) {
+                            //calculo da data do evento
+                            qtde_eventos = parseInt(objEmpree.dados_empreendimento[i].dias_garant / (objEmpree.dados_empreendimento[i].qdp * objEmpree.dados_empreendimento[i].qtae))
+                            str = objEmpree.dados_empreendimento[i].formato_periodicidade
+
+                            var data_inicial_garantia = new Date(objEmpree.dados_empreendimento[i].dig)
+                            str2 = str.split("_")
+
+                            ////////////////////////////////// calculo dos eventos \\\\\\\\\\
+                            var meio_empree = "";
+
+                            for (j = 1; j <= qtde_eventos; j++) {
+                                compl2 = j * str2[0] * objEmpree.dados_empreendimento[i].qtae
+
+                                var new_data_evento = new Date(data_inicial_garantia)
+
+                                if (str2[1] == "d") {
+                                    new_data_evento.setDate(new_data_evento.getDate() + compl2);
+                                }
+                                if (str2[1] == "m") {
+
+                                    /////para soma em MESES
+                                    var inteiro_ano = compl2 / 12;
+                                    inteiro_ano = Math.floor(inteiro_ano);
+                                    var aux_mes = compl2 - (12 * inteiro_ano);
+                                    aux_mes = (new_data_evento.getMonth() + aux_mes)
+
+                                    var soma_ano
+                                    var aux_dia
+
+                                    if (aux_mes >= 12) {
+                                        aux_mes = aux_mes - 12;
+                                        soma_ano = 1;
+                                    }
+                                            else {
+                                                aux_mes = aux_mes;
+                                                soma_ano = 0;
+                                            }
+
+                                            var aux_ano = inteiro_ano + soma_ano
+                                            aux_ano = (new_data_evento.getFullYear() + aux_ano)
+
+                                            if (new_data_evento.getDate() == 31) {
+
+                                                if (aux_mes == 03 || aux_mes == 05 || aux_mes == 08 || aux_mes == 10) {
+                                                    aux_dia = 30;
+                                                } else if ((aux_mes == 01) && (aux_ano % 4 == 0)) {
+                                                    aux_dia = 29;
+                                                } else if ((aux_mes == 01) && (aux_ano % 4 != 0)) {
+                                                    aux_dia = 28;
+                                                } else {
+                                                    aux_dia = 31;
+                                                }
+
+                                            } else if (new_data_evento.getDate() == 30) {
+
+                                                if ((aux_mes == 01) && (aux_ano % 4 == 0)) {
+                                                    aux_dia = 29;
+                                                } else if ((aux_mes == 01) && (aux_ano % 4 != 0)) {
+                                                    aux_dia = 28;
+                                                } else {
+                                                    aux_dia = 30;
+                                                }
+
+                                            } else if (new_data_evento.getDate() == 29) {
+
+                                                if ((aux_mes == 01) && (aux_ano % 4 != 0)) {
+                                                    aux_dia = 28;
+                                                } else {
+                                                    aux_dia = 29;
+                                                }
+
+                                            } else {
+                                                aux_dia = new_data_evento.getDate();
+                                            }
+
+                                            new_data_evento = new Date(aux_ano, aux_mes, aux_dia)
+                                        } // for para gerar eventos
+
+                                        if (str2[1] == "yyyy") {
+                                            new_data_evento.setFullYear(new_data_evento.getFullYear() + compl2);
+                                        }
+
+                                        if (new_data_evento >= data_implantacao_sc) {
+
+                                            if (new_data_evento >= data_ini_p_busca && new_data_evento <= data_final_p_busca) {
+
+                                                temp1 = new_data_evento.getDate() + "/" + (new_data_evento.getMonth() + 1) + "/" + new_data_evento.getFullYear() + "<br>"
+                                                var aux_mes_novo = new_data_evento.getMonth() + 1;
+                                                aux_mes_novo = '0' + aux_mes_novo
+                                                aux_mes_novo = aux_mes_novo.substring(aux_mes_novo.length - 2, aux_mes_novo.length);
+
+                                                var aux_dia_novo = new_data_evento.getDate();
+                                                aux_dia_novo = '0' + aux_dia_novo
+                                                aux_dia_novo = aux_dia_novo.substring(aux_dia_novo.length - 2, aux_dia_novo.length);
+
+                                                vetor_consulta_evento += objEmpree.dados_empreendimento[i].id_prog_manut + '*' + new_data_evento.getFullYear() + '*' + aux_mes_novo + '*' + aux_dia_novo + ';'
+                                                vetor_dados_manutencao += objEmpree.dados_empreendimento[i].id_prog_manut + '*' + objEmpree.dados_empreendimento[i].nome_sistema + '*' + objEmpree.dados_empreendimento[i].nome_atividade + '*' + objEmpree.dados_empreendimento[i].nome_periodicidade + '*' + objEmpree.dados_empreendimento[i].resp + '*' + temp1 + '*' + objEmpree.dados_empreendimento[i].qdp + '*' + objEmpree.dados_empreendimento[i].qtae + '*' + objEmpree.dados_empreendimento[i].gap + '*' + new_data_evento + ';'
+                                            }
+                                        }
+
+                                        if (new_data_evento > data_final_p_busca) { break; }
+                                    } //for next 1
+
+                                } //for next 2
+
+                                string_auxiliar += "inico do innerhtml:" + Date(Date.now()) + "<br>"
+
+                                string_auxiliar += " <br><br><br>-------INI  vetor_consulta_evento------------------ " + vetor_consulta_evento + "---------FIM------------<br>"
+
+                                string_auxiliar += "inico do resposta_total:" + Date(Date.now()) + "<br>"
+                                vetor_consulta_evento = vetor_consulta_evento.substring(0, vetor_consulta_evento.length - 1);
+                                vetor_dados_manutencao = vetor_dados_manutencao.substring(0, vetor_dados_manutencao.length - 1);
+
+                                var ajax2 = new XMLHttpRequest();
+			                    ajax2.addEventListener("loadend", function(evt) {
+                                    var resposta_total = this.responseText;
+                                    var jsontext = resposta_total.split("#")
+
+                                            var getLogin = JSON.parse(jsontext[0]);
+                                            logou = getLogin.logou;
+
+                                            if (logou == "S") {
+
+                                                var getEvento = jsontext[1];
+                                                var objEvento = JSON.parse(getEvento);
+
+                                                var cada_vet_manut = vetor_dados_manutencao.split(";")
+                                                var cada_vet_evento = vetor_consulta_evento.split(';')
+
+                                                var qtdEv = 0
+
+                                                for (i = 0; i < objEvento.dados_emp.length; i++) {
+                                                    string_auxiliar += " <br>-------CADA evento-----%%%%%%%%%%%%%%-------------  ev=" + objEvento.dados_emp[i].ev + "- up=" + objEvento.dados_emp[i].up + "---------FIM evento------------<br>"
+
+                                                    var ev = objEvento.dados_emp[i].ev
+                                                    var up = objEvento.dados_emp[i].up
+
+                                                    string_auxiliar += " <br>-------CADA manut-------%%%%%%%%%%%%%-----------  " + cada_vet_manut[i] + "---------FIM manut------------<br>"
+
+                                                    var cada_parte_vet_manut = cada_vet_manut[i].split("*")
+                                                    var cada_parte_vet_evento = cada_vet_evento[i].split("*")
+
+                                                    string_auxiliar += " <br>-------CADA PARTE -------%%%%%%%%%%%%%-----------  " + cada_parte_vet_manut[0] + "---------FIM manut------------<br>"
+
+                                                    var camera = ""
+                                                    if (up == "S") {
+                                                        camera = '<img src="images/camera.png" width="25" />'
+                                                    } else {
+                                                        camera = '<img src="images/camera.png" style="display: none;" width="25" />'
+                                                    }
+
+                                                    /////////////////////////////////////////////////
+                                                    var dias_gap = 0;
+                                                    var fator_freq;
+                                                    var dias_gap_temporario;
+                                                    var aux_dias1;
+                                                    var aux_dias_ev;
+                                                    var aux_dias2;
+                                                    var imagem1 = ""
+                                                    var barra = ""
+                                                    var faixa_dias;
+                                                    var aux_dist;
+                                                    var aux_mes;
+                                                    var aux_ano;
+                                                    var aux_new_event;
+
+                                                    fator_freq = cada_parte_vet_manut[6] * cada_parte_vet_manut[7]
+
+                                                    if (fator_freq < 180) {
+                                                        dias_gap = 16
+                                                    } else if (fator_freq >= 180) {
+                                                        dias_gap = 31
+                                                    }
+
+                                                    if (cada_parte_vet_manut[8] != 0) {
+                                                        dias_gap = cada_parte_vet_manut[8]
+                                                    }
+
+                                                    aux_new_event = new Date(cada_parte_vet_manut[9])
+
+                                                    data_minima_alteracao = new Date(cada_parte_vet_manut[9])
+                                                    data_minima_alteracao.setDate(data_minima_alteracao.getDate() - dias_gap);
+                                                    if (data_minima_alteracao.getMonth() == aux_new_event.getMonth()) {
+                                                        var mes_auxiliar = data_minima_alteracao.getMonth() + 1
+                                                        data_minima_alteracao = ('1' + '/' + mes_auxiliar + '/' + data_minima_alteracao.getFullYear());
+                                                    } else {
+                                                        var mes_auxiliar = data_minima_alteracao.getMonth() + 1
+                                                        data_minima_alteracao = (data_minima_alteracao.getDate() + '/' + mes_auxiliar + '/' + data_minima_alteracao.getFullYear());
+                                                    }
+                                                    string_auxiliar += " <br><br><br>------- INI data_minima_alteracao------------------ " + fator_freq + "--" + dias_gap + "--" + data_minima_alteracao + "---------FIM data_minima_alteracao------------<br>"
+
+
+                                                    data_maxima_alteracao = new Date(cada_parte_vet_manut[9])
+                                                    data_maxima_alteracao.setDate(data_maxima_alteracao.getDate() + parseInt(dias_gap))
+
+                                                    if (data_maxima_alteracao.getMonth() == aux_new_event.getMonth()) {
+                                                        if (data_maxima_alteracao.getMonth() <= 10) {
+                                                            aux_mes = data_maxima_alteracao.getMonth() + 1;
+                                                            aux_mes = aux_mes + 1;
+                                                            aux_ano = data_maxima_alteracao.getFullYear();
+                                                        } else if (data_maxima_alteracao.getMonth() == 11) {
+                                                            aux_mes = 1;
+                                                            aux_ano = data_maxima_alteracao.getFullYear() + 1;
+                                                        }
+
+                                                        data_maxima_alteracao = (aux_mes + '/' + '1' + '/' + aux_ano);
+                                                        data_maxima_alteracao = new Date(data_maxima_alteracao)
+                                                        //alert('data_maxima_alteracao: ' + data_maxima_alteracao)
+
+                                                        data_maxima_alteracao.setDate(data_maxima_alteracao.getDate() - 1);
+                                                        var mes_auxiliar = data_maxima_alteracao.getMonth() + 1
+                                                        data_maxima_alteracao = (data_maxima_alteracao.getDate() + '/' + mes_auxiliar + '/' + data_maxima_alteracao.getFullYear());
+                                                    }
+                                                    else {
+                                                        var mes_auxiliar = data_maxima_alteracao.getMonth() + 1
+                                                        data_maxima_alteracao = (data_maxima_alteracao.getDate() + '/' + mes_auxiliar + '/' + data_maxima_alteracao.getFullYear());
+                                                    }
+                                                    string_auxiliar += " <br><br><br>------- INI data_maxima_alteracao------------------ " + fator_freq + "--" + dias_gap + "--" + data_maxima_alteracao + "---------FIM data_maxima_alteracao------------<br>"
+
+                                                    data_minima_alteracao = dateToEN(data_minima_alteracao)
+                                                    aux_dias1 = datadiff2(Date.now(), data_minima_alteracao)
+
+                                                    var data_format_1 = new Date(cada_parte_vet_manut[9]);
+                                                    var mes_format_1 = data_format_1.getMonth() + 1
+                                                    var format_1 = dateToEN(data_format_1.getDate() + '/' + mes_format_1 + '/' + data_format_1.getFullYear())
+                                                    aux_dias_ev = datadiff(Date.now(), format_1)
+
+                                                    data_maxima_alteracao = dateToEN(data_maxima_alteracao)
+                                                    aux_dias2 = datadiff(Date.now(), data_maxima_alteracao)
+
+                                                    if (aux_dias1 > 0) {
+                                                        imagem1 = '<img src="images/hand-paper.svg" width="24" class="is-opacity">'
+                                                        color1 = "#cccccc"
+                                                    } else if (aux_dias1 <= 0 && aux_dias_ev > 0) {
+                                                        imagem1 = '<img src="images/danger.svg" width="25" />'
+                                                        color1 = "#2974f1"
+                                                    } else if (aux_dias_ev <= 0 && aux_dias2 >= 0) {
+                                                        imagem1 = '<img src="images/danger.svg" width="25" />'
+                                                        color1 = "#FF0000"
+                                                    } else if (aux_dias2 < 0) {
+                                                        imagem1 = '<img src="images/exclamation-triangle.png" width="26">'
+                                                        color1 = "#FF0000"
+                                                    }
+
+                                                    if (ev == 0 && imagem1 == '<img src="images/danger.svg" width="25" />') {
+                                                        qtdEv += 1
+                                                    }
+
+                                                    if (qtdEv > 0) {
+                                                        document.getElementById('qtd_manut_pendentes').style.display = 'flex'
+                                                        document.getElementById('qtd_manut_pendentes').innerHTML = qtdEv
+                                                    }
+
+                                                    var format_faixa_dias = data_minima_alteracao.replace(/[-]/g, '/') + " 23:59:59"
+                                                    var format_faixa_dias_B = new Date(format_faixa_dias).getTime();
+
+                                                    faixa_dias = datadiff(format_faixa_dias_B, data_maxima_alteracao) + 1
+
+                                                    aux_dist = (-1) * datadiff2(Date.now(), data_minima_alteracao)
+
+                                                    if (aux_dias1 > 0) {
+                                                        barra = '<img src="images/Barra_1.png" width="120" height="23">'
+                                                    } else if (aux_dist >= 0 && aux_dist < Math.round(1 / 7 * faixa_dias)) {
+                                                        barra = '<img src="images/Barra_2.png" width="120" height="23">'
+                                                    } else if (aux_dist >= Math.round(1 / 7 * faixa_dias) && aux_dist < Math.round(2 / 7 * faixa_dias)) {
+                                                        barra = '<img src="images/Barra_3.png" width="120" height="23">'
+                                                    } else if (aux_dist >= Math.round(2 / 7 * faixa_dias) && aux_dist < Math.round(3 / 7 * faixa_dias)) {
+                                                        barra = '<img src="images/Barra_4.png" width="120" height="23">'
+                                                    } else if (aux_dist >= Math.round(3 / 7 * faixa_dias) && aux_dist < Math.round(4 / 7 * faixa_dias)) {
+                                                        barra = '<img src="images/Barra_5.png" width="120" height="23">'
+                                                    } else if (aux_dist >= Math.round(4 / 7 * faixa_dias) && aux_dist < Math.round(5 / 7 * faixa_dias)) {
+                                                        barra = '<img src="images/Barra_6.png" width="120" height="23">'
+                                                    } else if (aux_dist >= Math.round(5 / 7 * faixa_dias) && aux_dist < Math.round(6 / 7 * faixa_dias)) {
+                                                        barra = '<div class="barra1"><img src="images/Barra_7.png" width="120" height="23"></div>'
+                                                    } else if (aux_dist >= Math.round(6 / 7 * faixa_dias) && aux_dist < Math.round(7 / 7 * faixa_dias)) {
+                                                        barra = '<div class="barra1"><img src="images/Barra_8.png" width="120" height="23"></div>'
+                                                    } else if (aux_dias2 < 0) {
+                                                        barra = '<img src="images/Barra_9.png" width="120" height="23">'
+                                                    }
+
+                                                    /////////////////////////////////////////////////
+
+                                                    var focus = "";
+                                                    if (ipm == cada_parte_vet_manut[0] && dia_focus == cada_parte_vet_evento[3]) {
+                                                        focus = "ui-focus";
+                                                    }
+
+                                                    if (ev == "1") {
+
+                                                        dados_1 += [
+                                                            '<li class="shadow-box ' + focus + '">',
+                                                            '<a href="#" onclick="ir_para(' + String.fromCharCode(39) + '?ipm=' + cada_parte_vet_manut[0] + '&dia_ev=' + cada_parte_vet_evento[3] + '&mes_ev=' + cada_parte_vet_evento[2] + '&ano_ev=' + cada_parte_vet_evento[1] + '&d_min=' + data_minima_alteracao + '&d_max=' + data_maxima_alteracao + '&tipo=alt&x=' + Math.random() + String.fromCharCode(39) + ')">',
+                                                            '<font size="4" face="Arial">' + cada_parte_vet_manut[1] + '</font>',
+                                                            '<p class="text-size-content" size="2" face="Arial" color="#0000FF">' + cada_parte_vet_manut[2] + '</p>',
+                                                            '<p class="text-purple" size="2" face="Arial" color="#333"><strong class="text-blue-content" style="color: #cc4200; font-weight: bold;">' + cada_parte_vet_manut[3] + '</strong> - ' + cada_parte_vet_manut[4] + '</p>',
+                                                            '<table class="date-spacing" border="0" cellpadding="0" cellspacing="0">',
+                                                            '<tr>',
+                                                            '<td>',
+                                                            '<div align="center">',
+                                                            '<font size="3" face="Arial">' + cada_parte_vet_manut[5] + '</font>',
+                                                            '</div>',
+                                                            '</td>',
+                                                            '<td>',
+                                                            '<p class="text-green" size="2" face="Arial"></p>',
+                                                            '</td>',
+                                                            '</tr>',
+                                                            '</table>',
+                                                            '<table border="0" cellspacing="0" cellpadding="0">',
+                                                            '<hr class="line-color">',
+                                                            '</table>',
+                                                            '<table class="images-center" width="50%" border="0" cellpadding="0" cellspacing="0">',
+                                                            '<tr>',
+                                                            '<td width="25%">',
+                                                            '<div class="tickt1"><img src="images/check.png" width="25"></div>',
+                                                            '</td>',
+                                                            '<td>',
+                                                            '<table class="date-center" border="0">',
+                                                            '</table>',
+                                                            '</td>',
+                                                            '<td width="25%">',
+                                                            '<div class="camera1">' + camera + '</div>',
+                                                            '</td>',
+                                                            '</tr>',
+                                                            '</table>',
+                                                            '</a>',
+                                                            '</li>'
+                                                        ].join('');
+
+                                                    } else if (ev == 0) {
+
+                                                        dados_0 += [
+                                                            '<li class="shadow-box ' + focus + '">',
+                                                            '<a href="#" onclick="ir_para(' + String.fromCharCode(39) + '?ipm=' + cada_parte_vet_manut[0] + '&dia_ev=' + cada_parte_vet_evento[3] + '&mes_ev=' + cada_parte_vet_evento[2] + '&ano_ev=' + cada_parte_vet_evento[1] + '&d_min=' + data_minima_alteracao + '&d_max=' + data_maxima_alteracao + '&tipo=ins&x=' + Math.random() + String.fromCharCode(39) + ')">',
+                                                            '<font size="4" face="Arial">' + cada_parte_vet_manut[1] + '</font>',
+                                                            '<p class="text-size-content" size="2" face="Arial" color="#0000FF">' + cada_parte_vet_manut[2] + '</p>',
+                                                            '<p class="text-purple" size="2" face="Arial" color="#333"><strong class="text-blue-content" style="color: #cc4200; font-weight: bold;">' + cada_parte_vet_manut[3] + '</strong> - ' + cada_parte_vet_manut[4] + '</p>',
+                                                            '<table class="date-spacing" border="0" cellpadding="0" cellspacing="0">',
+                                                            '<tr>',
+                                                            '<td>',
+                                                            '<div align="center">',
+                                                            '<font size="3" face="Arial">' + cada_parte_vet_manut[5] + '</font>',
+                                                            '</div>',
+                                                            '</td>',
+                                                            '<td>',
+                                                            '<p class="text-green" size="2" face="Arial"></p>',
+                                                            '</td>',
+                                                            '</tr>',
+                                                            '</table>',
+                                                            '<table border="0" cellspacing="0" cellpadding="0">',
+                                                            '<hr class="line-color">',
+                                                            '</table>',
+                                                            '<table class="images-center" width="50%" border="0" cellpadding="0" cellspacing="0">',
+                                                            '<tr>',
+                                                            '<td width="25%">',
+                                                            '<div class="tickt1">' + imagem1 + '</div>',
+                                                            '</td>',
+                                                            '<td>',
+                                                            '<table class="date-center" border="0">',
+                                                            '<tr><div style="float: right; position: relative; left: 30px">' + barra + '</div></tr>',
+                                                            '<tr>',
+                                                            '<td width="60%" style="position: relative; left: 35px;">',
+                                                            '<font size="2" face="Arial">' + data_minima_alteracao.split('-').reverse().join('/') + '</font>',
+                                                            '<td width="5%">',
+                                                            '</td>',
+                                                            '<td width="60%" style="position: relative; left: 75px;">',
+                                                            '<font size="2" face="Arial">' + data_maxima_alteracao.split('-').reverse().join('/') + '</font>',
+                                                            '</td>',
+                                                            '</tr>',
+                                                            '</table>',
+                                                            '</td>',
+                                                            '<td width="25%">',
+                                                            '</td>',
+                                                            '</tr>',
+                                                            '</table>',
+                                                            '</a>',
+                                                            '</li>'
+                                                        ].join('');
+
+                                                    }
+
+                                                }
+
+                                                    // Define a ordem que irá aparecer cada manutenção
+                                                    if (datadiff(Date.now(), data_maxima_alteracao) < 0 || datadiff2(Date.now(), data_minima_alteracao) > 0) {
+                                                        document.getElementById('box-content').innerHTML = ini_lista + dados_1 + dados_0 + fim_lista
+                                                    } else {
+                                                        document.getElementById('box-content').innerHTML = ini_lista + dados_0 + dados_1 + fim_lista
+                                                    }
+                                                    $(".loading_page").hide();
+                                                    $('#q_empree').listview();
+                                                    document.getElementById('nome_empree_').innerHTML = nome_empree
+
+                                            }
+                                });
+
+                                ajax2.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_evento_onlineB.asp?l=" + login + "&s=" + senha + "&d=" + vetor_consulta_evento + "&versao=2.1&t=" + Math.random(), false);
+			                    ajax2.send();
+
+
+
+
+
+
+                                /*var ajax2 = new XMLHttpRequest();
+                                ajax2.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_evento_onlineB.asp?l=" + login + "&s=" + senha + "&d=" + vetor_consulta_evento + "&versao=2.1&t=" + Math.random(), false);
+                                ajax2.onreadystatechange = function () {
+                                    if (ajax2.readyState == 4) { //Request complete !!
+                                        if (ajax2.status == 200 || ajax2.status == 0) { // OK response
+
+                                            var resposta_total = ajax2.responseText;
+                                            var jsontext = resposta_total.split("#")
+
+                                            var getLogin = JSON.parse(jsontext[0]);
+                                            logou = getLogin.logou;
+
+                                            if (logou == "S") {
+
+                                                var getEvento = jsontext[1];
+                                                var objEvento = JSON.parse(getEvento);
+
+                                                var cada_vet_manut = vetor_dados_manutencao.split(";")
+                                                var cada_vet_evento = vetor_consulta_evento.split(';')
+
+                                                var qtdEv = 0
+
+                                                for (i = 0; i < objEvento.dados_emp.length; i++) {
+                                                    string_auxiliar += " <br>-------CADA evento-----%%%%%%%%%%%%%%-------------  ev=" + objEvento.dados_emp[i].ev + "- up=" + objEvento.dados_emp[i].up + "---------FIM evento------------<br>"
+
+                                                    var ev = objEvento.dados_emp[i].ev
+                                                    var up = objEvento.dados_emp[i].up
+
+                                                    string_auxiliar += " <br>-------CADA manut-------%%%%%%%%%%%%%-----------  " + cada_vet_manut[i] + "---------FIM manut------------<br>"
+
+                                                    var cada_parte_vet_manut = cada_vet_manut[i].split("*")
+                                                    var cada_parte_vet_evento = cada_vet_evento[i].split("*")
+
+                                                    string_auxiliar += " <br>-------CADA PARTE -------%%%%%%%%%%%%%-----------  " + cada_parte_vet_manut[0] + "---------FIM manut------------<br>"
+
+                                                    var camera = ""
+                                                    if (up == "S") {
+                                                        camera = '<img src="images/camera.png" width="25" />'
+                                                    } else {
+                                                        camera = '<img src="images/camera.png" style="display: none;" width="25" />'
+                                                    }
+
+                                                    /////////////////////////////////////////////////
+                                                    var dias_gap = 0;
+                                                    var fator_freq;
+                                                    var dias_gap_temporario;
+                                                    var aux_dias1;
+                                                    var aux_dias_ev;
+                                                    var aux_dias2;
+                                                    var imagem1 = ""
+                                                    var barra = ""
+                                                    var faixa_dias;
+                                                    var aux_dist;
+                                                    var aux_mes;
+                                                    var aux_ano;
+                                                    var aux_new_event;
+
+                                                    fator_freq = cada_parte_vet_manut[6] * cada_parte_vet_manut[7]
+
+                                                    if (fator_freq < 180) {
+                                                        dias_gap = 16
+                                                    } else if (fator_freq >= 180) {
+                                                        dias_gap = 31
+                                                    }
+
+                                                    if (cada_parte_vet_manut[8] != 0) {
+                                                        dias_gap = cada_parte_vet_manut[8]
+                                                    }
+
+                                                    aux_new_event = new Date(cada_parte_vet_manut[9])
+
+                                                    data_minima_alteracao = new Date(cada_parte_vet_manut[9])
+                                                    data_minima_alteracao.setDate(data_minima_alteracao.getDate() - dias_gap);
+                                                    if (data_minima_alteracao.getMonth() == aux_new_event.getMonth()) {
+                                                        var mes_auxiliar = data_minima_alteracao.getMonth() + 1
+                                                        data_minima_alteracao = ('1' + '/' + mes_auxiliar + '/' + data_minima_alteracao.getFullYear());
+                                                    } else {
+                                                        var mes_auxiliar = data_minima_alteracao.getMonth() + 1
+                                                        data_minima_alteracao = (data_minima_alteracao.getDate() + '/' + mes_auxiliar + '/' + data_minima_alteracao.getFullYear());
+                                                    }
+                                                    string_auxiliar += " <br><br><br>------- INI data_minima_alteracao------------------ " + fator_freq + "--" + dias_gap + "--" + data_minima_alteracao + "---------FIM data_minima_alteracao------------<br>"
+
+
+                                                    data_maxima_alteracao = new Date(cada_parte_vet_manut[9])
+                                                    data_maxima_alteracao.setDate(data_maxima_alteracao.getDate() + parseInt(dias_gap))
+
+                                                    if (data_maxima_alteracao.getMonth() == aux_new_event.getMonth()) {
+                                                        if (data_maxima_alteracao.getMonth() <= 10) {
+                                                            aux_mes = data_maxima_alteracao.getMonth() + 1;
+                                                            aux_mes = aux_mes + 1;
+                                                            aux_ano = data_maxima_alteracao.getFullYear();
+                                                        } else if (data_maxima_alteracao.getMonth() == 11) {
+                                                            aux_mes = 1;
+                                                            aux_ano = data_maxima_alteracao.getFullYear() + 1;
+                                                        }
+
+                                                        data_maxima_alteracao = (aux_mes + '/' + '1' + '/' + aux_ano);
+                                                        data_maxima_alteracao = new Date(data_maxima_alteracao)
+                                                        //alert('data_maxima_alteracao: ' + data_maxima_alteracao)
+
+                                                        data_maxima_alteracao.setDate(data_maxima_alteracao.getDate() - 1);
+                                                        var mes_auxiliar = data_maxima_alteracao.getMonth() + 1
+                                                        data_maxima_alteracao = (data_maxima_alteracao.getDate() + '/' + mes_auxiliar + '/' + data_maxima_alteracao.getFullYear());
+                                                    }
+                                                    else {
+                                                        var mes_auxiliar = data_maxima_alteracao.getMonth() + 1
+                                                        data_maxima_alteracao = (data_maxima_alteracao.getDate() + '/' + mes_auxiliar + '/' + data_maxima_alteracao.getFullYear());
+                                                    }
+                                                    string_auxiliar += " <br><br><br>------- INI data_maxima_alteracao------------------ " + fator_freq + "--" + dias_gap + "--" + data_maxima_alteracao + "---------FIM data_maxima_alteracao------------<br>"
+
+                                                    data_minima_alteracao = dateToEN(data_minima_alteracao)
+                                                    aux_dias1 = datadiff2(Date.now(), data_minima_alteracao)
+
+                                                    var data_format_1 = new Date(cada_parte_vet_manut[9]);
+                                                    var mes_format_1 = data_format_1.getMonth() + 1
+                                                    var format_1 = dateToEN(data_format_1.getDate() + '/' + mes_format_1 + '/' + data_format_1.getFullYear())
+                                                    aux_dias_ev = datadiff(Date.now(), format_1)
+
+                                                    data_maxima_alteracao = dateToEN(data_maxima_alteracao)
+                                                    aux_dias2 = datadiff(Date.now(), data_maxima_alteracao)
+
+                                                    if (aux_dias1 > 0) {
+                                                        imagem1 = '<img src="images/hand-paper.svg" width="24" class="is-opacity">'
+                                                        color1 = "#cccccc"
+                                                    } else if (aux_dias1 <= 0 && aux_dias_ev > 0) {
+                                                        imagem1 = '<img src="images/danger.svg" width="25" />'
+                                                        color1 = "#2974f1"
+                                                    } else if (aux_dias_ev <= 0 && aux_dias2 >= 0) {
+                                                        imagem1 = '<img src="images/danger.svg" width="25" />'
+                                                        color1 = "#FF0000"
+                                                    } else if (aux_dias2 < 0) {
+                                                        imagem1 = '<img src="images/exclamation-triangle.png" width="26">'
+                                                        color1 = "#FF0000"
+                                                    }
+
+                                                    if (ev == 0 && imagem1 == '<img src="images/danger.svg" width="25" />') {
+                                                        qtdEv += 1
+                                                    }
+
+                                                    if (qtdEv > 0) {
+                                                        document.getElementById('qtd_manut_pendentes').style.display = 'flex'
+                                                        document.getElementById('qtd_manut_pendentes').innerHTML = qtdEv
+                                                    }
+
+                                                    var format_faixa_dias = data_minima_alteracao.replace(/[-]/g, '/') + " 23:59:59"
+                                                    var format_faixa_dias_B = new Date(format_faixa_dias).getTime();
+
+                                                    faixa_dias = datadiff(format_faixa_dias_B, data_maxima_alteracao) + 1
+
+                                                    aux_dist = (-1) * datadiff2(Date.now(), data_minima_alteracao)
+
+                                                    if (aux_dias1 > 0) {
+                                                        barra = '<img src="images/Barra_1.png" width="120" height="23">'
+                                                    } else if (aux_dist >= 0 && aux_dist < Math.round(1 / 7 * faixa_dias)) {
+                                                        barra = '<img src="images/Barra_2.png" width="120" height="23">'
+                                                    } else if (aux_dist >= Math.round(1 / 7 * faixa_dias) && aux_dist < Math.round(2 / 7 * faixa_dias)) {
+                                                        barra = '<img src="images/Barra_3.png" width="120" height="23">'
+                                                    } else if (aux_dist >= Math.round(2 / 7 * faixa_dias) && aux_dist < Math.round(3 / 7 * faixa_dias)) {
+                                                        barra = '<img src="images/Barra_4.png" width="120" height="23">'
+                                                    } else if (aux_dist >= Math.round(3 / 7 * faixa_dias) && aux_dist < Math.round(4 / 7 * faixa_dias)) {
+                                                        barra = '<img src="images/Barra_5.png" width="120" height="23">'
+                                                    } else if (aux_dist >= Math.round(4 / 7 * faixa_dias) && aux_dist < Math.round(5 / 7 * faixa_dias)) {
+                                                        barra = '<img src="images/Barra_6.png" width="120" height="23">'
+                                                    } else if (aux_dist >= Math.round(5 / 7 * faixa_dias) && aux_dist < Math.round(6 / 7 * faixa_dias)) {
+                                                        barra = '<div class="barra1"><img src="images/Barra_7.png" width="120" height="23"></div>'
+                                                    } else if (aux_dist >= Math.round(6 / 7 * faixa_dias) && aux_dist < Math.round(7 / 7 * faixa_dias)) {
+                                                        barra = '<div class="barra1"><img src="images/Barra_8.png" width="120" height="23"></div>'
+                                                    } else if (aux_dias2 < 0) {
+                                                        barra = '<img src="images/Barra_9.png" width="120" height="23">'
+                                                    }
+
+                                                    /////////////////////////////////////////////////
+
+                                                    var focus = "";
+                                                    if (ipm == cada_parte_vet_manut[0] && dia_focus == cada_parte_vet_evento[3]) {
+                                                        focus = "ui-focus";
+                                                    }
+
+                                                    if (ev == "1") {
+
+                                                        dados_1 += [
+                                                            '<li class="shadow-box ' + focus + '">',
+                                                            '<a href="#" onclick="ir_para(' + String.fromCharCode(39) + '?ipm=' + cada_parte_vet_manut[0] + '&dia_ev=' + cada_parte_vet_evento[3] + '&mes_ev=' + cada_parte_vet_evento[2] + '&ano_ev=' + cada_parte_vet_evento[1] + '&d_min=' + data_minima_alteracao + '&d_max=' + data_maxima_alteracao + '&tipo=alt&x=' + Math.random() + String.fromCharCode(39) + ')">',
+                                                            '<font size="4" face="Arial">' + cada_parte_vet_manut[1] + '</font>',
+                                                            '<p class="text-size-content" size="2" face="Arial" color="#0000FF">' + cada_parte_vet_manut[2] + '</p>',
+                                                            '<p class="text-purple" size="2" face="Arial" color="#333"><strong class="text-blue-content" style="color: #cc4200; font-weight: bold;">' + cada_parte_vet_manut[3] + '</strong> - ' + cada_parte_vet_manut[4] + '</p>',
+                                                            '<table class="date-spacing" border="0" cellpadding="0" cellspacing="0">',
+                                                            '<tr>',
+                                                            '<td>',
+                                                            '<div align="center">',
+                                                            '<font size="3" face="Arial">' + cada_parte_vet_manut[5] + '</font>',
+                                                            '</div>',
+                                                            '</td>',
+                                                            '<td>',
+                                                            '<p class="text-green" size="2" face="Arial"></p>',
+                                                            '</td>',
+                                                            '</tr>',
+                                                            '</table>',
+                                                            '<table border="0" cellspacing="0" cellpadding="0">',
+                                                            '<hr class="line-color">',
+                                                            '</table>',
+                                                            '<table class="images-center" width="50%" border="0" cellpadding="0" cellspacing="0">',
+                                                            '<tr>',
+                                                            '<td width="25%">',
+                                                            '<div class="tickt1"><img src="images/check.png" width="25"></div>',
+                                                            '</td>',
+                                                            '<td>',
+                                                            '<table class="date-center" border="0">',
+                                                            '</table>',
+                                                            '</td>',
+                                                            '<td width="25%">',
+                                                            '<div class="camera1">' + camera + '</div>',
+                                                            '</td>',
+                                                            '</tr>',
+                                                            '</table>',
+                                                            '</a>',
+                                                            '</li>'
+                                                        ].join('');
+
+                                                    } else if (ev == 0) {
+
+                                                        dados_0 += [
+                                                            '<li class="shadow-box ' + focus + '">',
+                                                            '<a href="#" onclick="ir_para(' + String.fromCharCode(39) + '?ipm=' + cada_parte_vet_manut[0] + '&dia_ev=' + cada_parte_vet_evento[3] + '&mes_ev=' + cada_parte_vet_evento[2] + '&ano_ev=' + cada_parte_vet_evento[1] + '&d_min=' + data_minima_alteracao + '&d_max=' + data_maxima_alteracao + '&tipo=ins&x=' + Math.random() + String.fromCharCode(39) + ')">',
+                                                            '<font size="4" face="Arial">' + cada_parte_vet_manut[1] + '</font>',
+                                                            '<p class="text-size-content" size="2" face="Arial" color="#0000FF">' + cada_parte_vet_manut[2] + '</p>',
+                                                            '<p class="text-purple" size="2" face="Arial" color="#333"><strong class="text-blue-content" style="color: #cc4200; font-weight: bold;">' + cada_parte_vet_manut[3] + '</strong> - ' + cada_parte_vet_manut[4] + '</p>',
+                                                            '<table class="date-spacing" border="0" cellpadding="0" cellspacing="0">',
+                                                            '<tr>',
+                                                            '<td>',
+                                                            '<div align="center">',
+                                                            '<font size="3" face="Arial">' + cada_parte_vet_manut[5] + '</font>',
+                                                            '</div>',
+                                                            '</td>',
+                                                            '<td>',
+                                                            '<p class="text-green" size="2" face="Arial"></p>',
+                                                            '</td>',
+                                                            '</tr>',
+                                                            '</table>',
+                                                            '<table border="0" cellspacing="0" cellpadding="0">',
+                                                            '<hr class="line-color">',
+                                                            '</table>',
+                                                            '<table class="images-center" width="50%" border="0" cellpadding="0" cellspacing="0">',
+                                                            '<tr>',
+                                                            '<td width="25%">',
+                                                            '<div class="tickt1">' + imagem1 + '</div>',
+                                                            '</td>',
+                                                            '<td>',
+                                                            '<table class="date-center" border="0">',
+                                                            '<tr><div style="float: right; position: relative; left: 30px">' + barra + '</div></tr>',
+                                                            '<tr>',
+                                                            '<td width="60%" style="position: relative; left: 35px;">',
+                                                            '<font size="2" face="Arial">' + data_minima_alteracao.split('-').reverse().join('/') + '</font>',
+                                                            '<td width="5%">',
+                                                            '</td>',
+                                                            '<td width="60%" style="position: relative; left: 75px;">',
+                                                            '<font size="2" face="Arial">' + data_maxima_alteracao.split('-').reverse().join('/') + '</font>',
+                                                            '</td>',
+                                                            '</tr>',
+                                                            '</table>',
+                                                            '</td>',
+                                                            '<td width="25%">',
+                                                            '</td>',
+                                                            '</tr>',
+                                                            '</table>',
+                                                            '</a>',
+                                                            '</li>'
+                                                        ].join('');
+
+                                                    }
+
+                                                }
+
+                                            }
+
+                                        } else {
+                                            alert("Problemas com sua conexao internet. Cod: 0167");
+                                        }
+                                    }
+                                }
+                                ajax2.send();*/
+
+
+                            } else { //nao logou
+                                window.location.assign("login.htm");
+                            }
+
+                        }
+            });
+
+            ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_emp_online.asp?l=" + login + "&s=" + senha + "&versao=2.1&t=" + Math.random(), true);
+			ajax.send();
+
+
+
+
+
+
+
+            // carregar dados das manutenções do servidor 
+            /*var ajax = new XMLHttpRequest();
             ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_emp_online.asp?l=" + login + "&s=" + senha + "&versao=2.1&t=" + Math.random(), true);
             ajax.onreadystatechange = function () {
                 if (ajax.readyState == 4) { //Request complete !!
@@ -835,7 +1582,7 @@
                     }
                 }
             }
-            ajax.send();
+            ajax.send();*/
         } // fim iniciar()
 
 

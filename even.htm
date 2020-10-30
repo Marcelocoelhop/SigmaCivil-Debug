@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, `user-scalable=no">
 	<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
 	<link rel="stylesheet" href="css/custom.css" />
 	<script src="https://kit.fontawesome.com/c202879e33.js" crossorigin="anonymous"></script>
@@ -1604,6 +1604,70 @@
 
 		var data = 'tx=' + encodeURIComponent(textoURL) + '&ipm=' + id_prog_manut + '&d=' + dia_ev + '&m=' + mes_ev + '&a=' + ano_ev + "&econst=" + e_construtora + "&idc=" + id_cliente;
 		var ajax = new XMLHttpRequest();
+		ajax.addEventListener("loadend", function(evt) {
+			var resposta_total = ajax.responseText;
+					if (resposta_total == "grav_ok") {
+						var db;
+						var request = window.indexedDB.open("db_sigmacivil", "1");
+
+						request.onerror = function (event) {
+							alert("Erro ao criar o banco (cod 16)");
+						};
+
+						request.onsuccess = function (event) {
+							db = request.result;
+
+							uploadManutEventoWinUpTexto(db);
+
+							db.onerror = function (event) {
+								alert("Database error: " + event.target.errorCode);
+							}
+						}
+
+						function uploadManutEventoWinUpTexto(db) {
+							var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+							var store = tx.objectStore('mtab_prog_manut_evento');
+							var index = store.index('comparar');
+							var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+							index.openCursor(whereEquals).onsuccess = function (event) {
+								var cursor = event.target.result;
+								if (cursor) {
+									var data = cursor.value;
+
+									data.status_texto_upl = "1";
+
+									var request = cursor.update(data);
+									request.onsuccess = function (event) {
+										reload_page();
+									}
+								}
+							}
+						}
+
+					} else {
+						alert("Problemas com a gravação do texto. Tentar novamente.");
+					}
+		});
+
+		ajax.open("POST", "https://www.sigmacivil.com.br/app_sc/rec_texto_uploaded.asp?versao=2.1", true);
+		ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+		data = data.split(":").join("%3A")
+		data = data.split("{").join("%7B")
+		data = data.split("}").join("%7D")
+		data = data.split(",").join("%2C")
+		data = data.split("[").join("%5B")
+		data = data.split("]").join("%5D")
+		data = data.split(String.fromCharCode(34)).join("%22")
+
+		ajax.send(data);
+
+
+
+
+
+
+		/*var ajax = new XMLHttpRequest();
 		ajax.open("POST", "https://www.sigmacivil.com.br/app_sc/rec_texto_uploaded.asp?versao=2.1", true);
 		ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 		ajax.onreadystatechange = function () {
@@ -1660,15 +1724,7 @@
 
 		}
 
-		data = data.split(":").join("%3A")
-		data = data.split("{").join("%7B")
-		data = data.split("}").join("%7D")
-		data = data.split(",").join("%2C")
-		data = data.split("[").join("%5B")
-		data = data.split("]").join("%5D")
-		data = data.split(String.fromCharCode(34)).join("%22")
-
-		ajax.send(data);
+		ajax.send(data);*/
 
 	}
 

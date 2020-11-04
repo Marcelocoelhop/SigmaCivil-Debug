@@ -3,7 +3,6 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, `user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="css/custom.css" />
     <link rel="stylesheet" href="css/custom-mobile.css" />
@@ -33,26 +32,49 @@
 </head>
 
 <body>
+    <div id="tutorial-video"></div>
+
     <div class="loading_page"
         style="width: 100%; height: 100vh; display: flex; position: fixed; justify-content: center; align-items: center; z-index: 14;">
         <img src="images/loading.gif" width="40" alt="loading" />
     </div>
+
     <span id="menu_opc2"></span>
 
     <div id="qtd_manut_pendentes"></div>
 
     <div class="btn-bars">
-        <div style="top:4;" data-role="collapsible" data-collapsed="true" class="ui-btn-left menu" data-mini="true">
+        <div style="top:4; z-index: 50;" data-role="collapsible" data-collapsed="true" class="ui-btn-left menu"
+            data-mini="true">
             <h4 class="btn-bars-bars">
                 <!-- <span class="fas fa-bars"></span> -->
                 <img class="is-bars" src="images/bars.svg" width="14" alt="Menu" />
                 <img class="is-times is-disabled" src="images/times.svg" width="13" alt="Menu" />
             </h4>
-            <ul style="border: 1px solid #e0e0e0;" data-role="listview" data-mini="true">
-                <li><a class="click" href="#" onClick="enviar_sync()">Novo Login</a></li>
+            <ul class="menu-tablet-responsive" style="border: 1px solid #e0e0e0;" data-role="listview" data-mini="true">
+                <li>
+                    <a class="ui-btn ui-icon-back ui-btn-icon-right ui-shadow ui-corner-all actived" href="#"
+                        onClick="enviar()">Manutenções</a>
+                </li>
+                <li>
+                    <a class="ui-btn ui-icon-carat-r ui-btn-icon-right ui-shadow ui-corner-all" href="#"
+                        onClick="scan()">Ler QRcode</a>
+                </li>
+                <li>
+                    <a class="ui-btn ui-icon-gear ui-btn-icon-right ui-shadow ui-corner-all" href="#"
+                        onClick="go_to_page_config()">Configurações</a>
+                </li>
+                <li>
+                    <a class="ui-btn ui-icon-power ui-btn-icon-right ui-shadow ui-corner-all" href="#"
+                        onClick="closeApp()">Fechar app</a>
+                </li>
+                <li>
+                    <a class="click" href="#" onClick="enviar_sync()">Logout</a>
+                </li>
             </ul>
         </div>
     </div>
+
     <div class="title" style="padding-top: 0px !important; padding-bottom: 10px;">
         <h4 id="nome_empree_" style="display: inline;"></h4>
     </div>
@@ -65,7 +87,14 @@
     <script type="text/javascript">
 
         window.onerror = function (message, url, lineNumber) {
-            alert("Error: " + message + " in " + url + " at line " + lineNumber);
+            navigator.notification.alert(
+                `Error: ${message} in ${url} at line ${lineNumber}`,  // message
+                function () {
+                    return;
+                },         // callback
+                'SigmaCivil',            // title
+                'OK'                  // buttonName
+            );
         }
 
         var num_empree = getquerystring("e");
@@ -74,6 +103,9 @@
 
         var ipm = getquerystring("ipm");
         var dia_focus = getquerystring("dia_ev");
+
+        var filtro_sis = addAcento(getquerystring("fil"));
+        var filtro_bool = false;
 
         /////////////////////////
         var q_mes = getquerystring("qm");
@@ -297,7 +329,7 @@
                 '<div align="center">',
                 '<table width="30" border="0" cellpadding="0" cellspacing="0" >',
                 '<tr>',
-                '<td width="30" ><img src="images/logo4.png" width="142"> </td>',
+                '<td width="30" ><img src="images/logo6.png" width="142"> </td>',
                 '</tr>',
                 '</table>',
                 '</div>',
@@ -316,7 +348,7 @@
                 '<div align="center">',
                 '<table width="30" border="0" cellpadding="0" cellspacing="0" >',
                 '<tr>',
-                '<td width="30" ><img src="images/logo4.png" width="142"> </td>',
+                '<td width="30" ><img src="images/logo6.png" width="142"> </td>',
                 '</tr>',
                 '</table>',
                 '</div>',
@@ -330,7 +362,7 @@
 
             setInterval(function () {
                 // window.StatusBar.hide();
-                
+
                 if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
                     document.getElementById('menu_opc2').innerHTML = menu_sup_offline;
                     return false;
@@ -340,7 +372,6 @@
                     return true;
                 }
             }, 5000);
-
 
             var statusRelacionamento;
             var statusDocumentacao;
@@ -367,758 +398,12 @@
             var data_final_p_busca = new Date(data2_aux)
             /////////////////////////////////////////////
 
-            var ini_lista = "<ul id='q_empree' class='list-content' data-mini='true' data-role='listview' data-filter='true' data-filter-placeholder='Buscar...' data-inset='true'>"
+            var ini_lista = "<form class='ui-filterable'><div class='ui-input-search ui-body-inherit ui-corner-all ui-shadow-inset ui-input-has-clear'><input data-role='listview' value='" + filtro_sis + "' placeholder='Buscar...' id='filterBasic-input' data-type='search'><a href='#' tabindex='-1' aria-hidden='true' class='ui-input-clear ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all ui-input-clear-hidden' title='Clear text'>Clear text</a></div></form><ul data-input='#filterBasic-input' id='q_empree' class='list-content' data-mini='true' data-role='listview' data-filter='true' data-filter-placeholder='Buscar...' data-inset='true'>"
             var fim_lista = "</ul>"
 
-            var ajax = new XMLHttpRequest();
-			ajax.addEventListener("loadend", function(evt) {
-                var resposta_total = this.responseText;
-                var jsontext = resposta_total.split("*")
-
-                var getLogin = JSON.parse(jsontext[0]);
-                var logou = getLogin.logou;
-                var qual_id_cliente = getLogin.id_cliente;
-                var num_empree = getLogin.id_empree;
-                var nome_empree = getLogin.nome_empree;
-                var q_e_construtora = getLogin.e_construtora;
-                var data_implantacao_sc = new Date(getLogin.data_implantacao_sc)
-
-                var resultado_consulta = getLogin.status_sync;
-                var parte_resultado = resultado_consulta.split('_')
-                var status_sync_serv = parte_resultado[0]
-                var bloqueio = parte_resultado[1]
-                var q_mensagem = parte_resultado[2]
-
-                if (bloqueio == "2") {
-                    alert(q_mensagem)
-                    window.location.href = "login.htm"
-                }
-
-                if (bloqueio == "1" || bloqueio == "0") {
-                    if (bloqueio == "1") {
-                        alert(q_mensagem)
-                    }
-
-                    if (logou == "S") {
-
-                        var getEmpree = jsontext[1];
-                        var objEmpree = JSON.parse(getEmpree);
-                        var dados_0 = ""
-                        var dados_1 = ""
-                        var str = ""
-                        var str2 = ""
-                        var qtde_eventos = 0;
-                        var compl2 = ""
-                        var temp1 = ""
-                        var data_maxima_alteracao;
-                        var data_minima_alteracao;
-
-                        for (i = 0; i < objEmpree.dados_empreendimento.length; i++) {
-                            //calculo da data do evento
-                            qtde_eventos = parseInt(objEmpree.dados_empreendimento[i].dias_garant / (objEmpree.dados_empreendimento[i].qdp * objEmpree.dados_empreendimento[i].qtae))
-                            str = objEmpree.dados_empreendimento[i].formato_periodicidade
-
-                            var data_inicial_garantia = new Date(objEmpree.dados_empreendimento[i].dig)
-                            str2 = str.split("_")
-
-                            ////////////////////////////////// calculo dos eventos \\\\\\\\\\
-                            var meio_empree = "";
-
-                            for (j = 1; j <= qtde_eventos; j++) {
-                                compl2 = j * str2[0] * objEmpree.dados_empreendimento[i].qtae
-
-                                var new_data_evento = new Date(data_inicial_garantia)
-
-                                if (str2[1] == "d") {
-                                    new_data_evento.setDate(new_data_evento.getDate() + compl2);
-                                }
-                                if (str2[1] == "m") {
-
-                                    /////para soma em MESES
-                                    var inteiro_ano = compl2 / 12;
-                                    inteiro_ano = Math.floor(inteiro_ano);
-                                    var aux_mes = compl2 - (12 * inteiro_ano);
-                                    aux_mes = (new_data_evento.getMonth() + aux_mes)
-
-                                    var soma_ano
-                                    var aux_dia
-
-                                    if (aux_mes >= 12) {
-                                        aux_mes = aux_mes - 12;
-                                        soma_ano = 1;
-                                    }
-                                            else {
-                                                aux_mes = aux_mes;
-                                                soma_ano = 0;
-                                            }
-
-                                            var aux_ano = inteiro_ano + soma_ano
-                                            aux_ano = (new_data_evento.getFullYear() + aux_ano)
-
-                                            if (new_data_evento.getDate() == 31) {
-
-                                                if (aux_mes == 03 || aux_mes == 05 || aux_mes == 08 || aux_mes == 10) {
-                                                    aux_dia = 30;
-                                                } else if ((aux_mes == 01) && (aux_ano % 4 == 0)) {
-                                                    aux_dia = 29;
-                                                } else if ((aux_mes == 01) && (aux_ano % 4 != 0)) {
-                                                    aux_dia = 28;
-                                                } else {
-                                                    aux_dia = 31;
-                                                }
-
-                                            } else if (new_data_evento.getDate() == 30) {
-
-                                                if ((aux_mes == 01) && (aux_ano % 4 == 0)) {
-                                                    aux_dia = 29;
-                                                } else if ((aux_mes == 01) && (aux_ano % 4 != 0)) {
-                                                    aux_dia = 28;
-                                                } else {
-                                                    aux_dia = 30;
-                                                }
-
-                                            } else if (new_data_evento.getDate() == 29) {
-
-                                                if ((aux_mes == 01) && (aux_ano % 4 != 0)) {
-                                                    aux_dia = 28;
-                                                } else {
-                                                    aux_dia = 29;
-                                                }
-
-                                            } else {
-                                                aux_dia = new_data_evento.getDate();
-                                            }
-
-                                            new_data_evento = new Date(aux_ano, aux_mes, aux_dia)
-                                        } // for para gerar eventos
-
-                                        if (str2[1] == "yyyy") {
-                                            new_data_evento.setFullYear(new_data_evento.getFullYear() + compl2);
-                                        }
-
-                                        if (new_data_evento >= data_implantacao_sc) {
-
-                                            if (new_data_evento >= data_ini_p_busca && new_data_evento <= data_final_p_busca) {
-
-                                                temp1 = new_data_evento.getDate() + "/" + (new_data_evento.getMonth() + 1) + "/" + new_data_evento.getFullYear() + "<br>"
-                                                var aux_mes_novo = new_data_evento.getMonth() + 1;
-                                                aux_mes_novo = '0' + aux_mes_novo
-                                                aux_mes_novo = aux_mes_novo.substring(aux_mes_novo.length - 2, aux_mes_novo.length);
-
-                                                var aux_dia_novo = new_data_evento.getDate();
-                                                aux_dia_novo = '0' + aux_dia_novo
-                                                aux_dia_novo = aux_dia_novo.substring(aux_dia_novo.length - 2, aux_dia_novo.length);
-
-                                                vetor_consulta_evento += objEmpree.dados_empreendimento[i].id_prog_manut + '*' + new_data_evento.getFullYear() + '*' + aux_mes_novo + '*' + aux_dia_novo + ';'
-                                                vetor_dados_manutencao += objEmpree.dados_empreendimento[i].id_prog_manut + '*' + objEmpree.dados_empreendimento[i].nome_sistema + '*' + objEmpree.dados_empreendimento[i].nome_atividade + '*' + objEmpree.dados_empreendimento[i].nome_periodicidade + '*' + objEmpree.dados_empreendimento[i].resp + '*' + temp1 + '*' + objEmpree.dados_empreendimento[i].qdp + '*' + objEmpree.dados_empreendimento[i].qtae + '*' + objEmpree.dados_empreendimento[i].gap + '*' + new_data_evento + ';'
-                                            }
-                                        }
-
-                                        if (new_data_evento > data_final_p_busca) { break; }
-                                    } //for next 1
-
-                                } //for next 2
-
-                                string_auxiliar += "inico do innerhtml:" + Date(Date.now()) + "<br>"
-
-                                string_auxiliar += " <br><br><br>-------INI  vetor_consulta_evento------------------ " + vetor_consulta_evento + "---------FIM------------<br>"
-
-                                string_auxiliar += "inico do resposta_total:" + Date(Date.now()) + "<br>"
-                                vetor_consulta_evento = vetor_consulta_evento.substring(0, vetor_consulta_evento.length - 1);
-                                vetor_dados_manutencao = vetor_dados_manutencao.substring(0, vetor_dados_manutencao.length - 1);
-
-                                var ajax2 = new XMLHttpRequest();
-			                    ajax2.addEventListener("loadend", function(evt) {
-                                    var resposta_total = this.responseText;
-                                    var jsontext = resposta_total.split("#")
-
-                                            var getLogin = JSON.parse(jsontext[0]);
-                                            logou = getLogin.logou;
-
-                                            if (logou == "S") {
-
-                                                var getEvento = jsontext[1];
-                                                var objEvento = JSON.parse(getEvento);
-
-                                                var cada_vet_manut = vetor_dados_manutencao.split(";")
-                                                var cada_vet_evento = vetor_consulta_evento.split(';')
-
-                                                var qtdEv = 0
-
-                                                for (i = 0; i < objEvento.dados_emp.length; i++) {
-                                                    string_auxiliar += " <br>-------CADA evento-----%%%%%%%%%%%%%%-------------  ev=" + objEvento.dados_emp[i].ev + "- up=" + objEvento.dados_emp[i].up + "---------FIM evento------------<br>"
-
-                                                    var ev = objEvento.dados_emp[i].ev
-                                                    var up = objEvento.dados_emp[i].up
-
-                                                    string_auxiliar += " <br>-------CADA manut-------%%%%%%%%%%%%%-----------  " + cada_vet_manut[i] + "---------FIM manut------------<br>"
-
-                                                    var cada_parte_vet_manut = cada_vet_manut[i].split("*")
-                                                    var cada_parte_vet_evento = cada_vet_evento[i].split("*")
-
-                                                    string_auxiliar += " <br>-------CADA PARTE -------%%%%%%%%%%%%%-----------  " + cada_parte_vet_manut[0] + "---------FIM manut------------<br>"
-
-                                                    var camera = ""
-                                                    if (up == "S") {
-                                                        camera = '<img src="images/camera.png" width="25" />'
-                                                    } else {
-                                                        camera = '<img src="images/camera.png" style="display: none;" width="25" />'
-                                                    }
-
-                                                    /////////////////////////////////////////////////
-                                                    var dias_gap = 0;
-                                                    var fator_freq;
-                                                    var dias_gap_temporario;
-                                                    var aux_dias1;
-                                                    var aux_dias_ev;
-                                                    var aux_dias2;
-                                                    var imagem1 = ""
-                                                    var barra = ""
-                                                    var faixa_dias;
-                                                    var aux_dist;
-                                                    var aux_mes;
-                                                    var aux_ano;
-                                                    var aux_new_event;
-
-                                                    fator_freq = cada_parte_vet_manut[6] * cada_parte_vet_manut[7]
-
-                                                    if (fator_freq < 180) {
-                                                        dias_gap = 16
-                                                    } else if (fator_freq >= 180) {
-                                                        dias_gap = 31
-                                                    }
-
-                                                    if (cada_parte_vet_manut[8] != 0) {
-                                                        dias_gap = cada_parte_vet_manut[8]
-                                                    }
-
-                                                    aux_new_event = new Date(cada_parte_vet_manut[9])
-
-                                                    data_minima_alteracao = new Date(cada_parte_vet_manut[9])
-                                                    data_minima_alteracao.setDate(data_minima_alteracao.getDate() - dias_gap);
-                                                    if (data_minima_alteracao.getMonth() == aux_new_event.getMonth()) {
-                                                        var mes_auxiliar = data_minima_alteracao.getMonth() + 1
-                                                        data_minima_alteracao = ('1' + '/' + mes_auxiliar + '/' + data_minima_alteracao.getFullYear());
-                                                    } else {
-                                                        var mes_auxiliar = data_minima_alteracao.getMonth() + 1
-                                                        data_minima_alteracao = (data_minima_alteracao.getDate() + '/' + mes_auxiliar + '/' + data_minima_alteracao.getFullYear());
-                                                    }
-                                                    string_auxiliar += " <br><br><br>------- INI data_minima_alteracao------------------ " + fator_freq + "--" + dias_gap + "--" + data_minima_alteracao + "---------FIM data_minima_alteracao------------<br>"
-
-
-                                                    data_maxima_alteracao = new Date(cada_parte_vet_manut[9])
-                                                    data_maxima_alteracao.setDate(data_maxima_alteracao.getDate() + parseInt(dias_gap))
-
-                                                    if (data_maxima_alteracao.getMonth() == aux_new_event.getMonth()) {
-                                                        if (data_maxima_alteracao.getMonth() <= 10) {
-                                                            aux_mes = data_maxima_alteracao.getMonth() + 1;
-                                                            aux_mes = aux_mes + 1;
-                                                            aux_ano = data_maxima_alteracao.getFullYear();
-                                                        } else if (data_maxima_alteracao.getMonth() == 11) {
-                                                            aux_mes = 1;
-                                                            aux_ano = data_maxima_alteracao.getFullYear() + 1;
-                                                        }
-
-                                                        data_maxima_alteracao = (aux_mes + '/' + '1' + '/' + aux_ano);
-                                                        data_maxima_alteracao = new Date(data_maxima_alteracao)
-                                                        //alert('data_maxima_alteracao: ' + data_maxima_alteracao)
-
-                                                        data_maxima_alteracao.setDate(data_maxima_alteracao.getDate() - 1);
-                                                        var mes_auxiliar = data_maxima_alteracao.getMonth() + 1
-                                                        data_maxima_alteracao = (data_maxima_alteracao.getDate() + '/' + mes_auxiliar + '/' + data_maxima_alteracao.getFullYear());
-                                                    }
-                                                    else {
-                                                        var mes_auxiliar = data_maxima_alteracao.getMonth() + 1
-                                                        data_maxima_alteracao = (data_maxima_alteracao.getDate() + '/' + mes_auxiliar + '/' + data_maxima_alteracao.getFullYear());
-                                                    }
-                                                    string_auxiliar += " <br><br><br>------- INI data_maxima_alteracao------------------ " + fator_freq + "--" + dias_gap + "--" + data_maxima_alteracao + "---------FIM data_maxima_alteracao------------<br>"
-
-                                                    data_minima_alteracao = dateToEN(data_minima_alteracao)
-                                                    aux_dias1 = datadiff2(Date.now(), data_minima_alteracao)
-
-                                                    var data_format_1 = new Date(cada_parte_vet_manut[9]);
-                                                    var mes_format_1 = data_format_1.getMonth() + 1
-                                                    var format_1 = dateToEN(data_format_1.getDate() + '/' + mes_format_1 + '/' + data_format_1.getFullYear())
-                                                    aux_dias_ev = datadiff(Date.now(), format_1)
-
-                                                    data_maxima_alteracao = dateToEN(data_maxima_alteracao)
-                                                    aux_dias2 = datadiff(Date.now(), data_maxima_alteracao)
-
-                                                    if (aux_dias1 > 0) {
-                                                        imagem1 = '<img src="images/hand-paper.svg" width="24" class="is-opacity">'
-                                                        color1 = "#cccccc"
-                                                    } else if (aux_dias1 <= 0 && aux_dias_ev > 0) {
-                                                        imagem1 = '<img src="images/danger.svg" width="25" />'
-                                                        color1 = "#2974f1"
-                                                    } else if (aux_dias_ev <= 0 && aux_dias2 >= 0) {
-                                                        imagem1 = '<img src="images/danger.svg" width="25" />'
-                                                        color1 = "#FF0000"
-                                                    } else if (aux_dias2 < 0) {
-                                                        imagem1 = '<img src="images/exclamation-triangle.png" width="26">'
-                                                        color1 = "#FF0000"
-                                                    }
-
-                                                    if (ev == 0 && imagem1 == '<img src="images/danger.svg" width="25" />') {
-                                                        qtdEv += 1
-                                                    }
-
-                                                    if (qtdEv > 0) {
-                                                        document.getElementById('qtd_manut_pendentes').style.display = 'flex'
-                                                        document.getElementById('qtd_manut_pendentes').innerHTML = qtdEv
-                                                    }
-
-                                                    var format_faixa_dias = data_minima_alteracao.replace(/[-]/g, '/') + " 23:59:59"
-                                                    var format_faixa_dias_B = new Date(format_faixa_dias).getTime();
-
-                                                    faixa_dias = datadiff(format_faixa_dias_B, data_maxima_alteracao) + 1
-
-                                                    aux_dist = (-1) * datadiff2(Date.now(), data_minima_alteracao)
-
-                                                    if (aux_dias1 > 0) {
-                                                        barra = '<img src="images/Barra_1.png" width="120" height="23">'
-                                                    } else if (aux_dist >= 0 && aux_dist < Math.round(1 / 7 * faixa_dias)) {
-                                                        barra = '<img src="images/Barra_2.png" width="120" height="23">'
-                                                    } else if (aux_dist >= Math.round(1 / 7 * faixa_dias) && aux_dist < Math.round(2 / 7 * faixa_dias)) {
-                                                        barra = '<img src="images/Barra_3.png" width="120" height="23">'
-                                                    } else if (aux_dist >= Math.round(2 / 7 * faixa_dias) && aux_dist < Math.round(3 / 7 * faixa_dias)) {
-                                                        barra = '<img src="images/Barra_4.png" width="120" height="23">'
-                                                    } else if (aux_dist >= Math.round(3 / 7 * faixa_dias) && aux_dist < Math.round(4 / 7 * faixa_dias)) {
-                                                        barra = '<img src="images/Barra_5.png" width="120" height="23">'
-                                                    } else if (aux_dist >= Math.round(4 / 7 * faixa_dias) && aux_dist < Math.round(5 / 7 * faixa_dias)) {
-                                                        barra = '<img src="images/Barra_6.png" width="120" height="23">'
-                                                    } else if (aux_dist >= Math.round(5 / 7 * faixa_dias) && aux_dist < Math.round(6 / 7 * faixa_dias)) {
-                                                        barra = '<div class="barra1"><img src="images/Barra_7.png" width="120" height="23"></div>'
-                                                    } else if (aux_dist >= Math.round(6 / 7 * faixa_dias) && aux_dist < Math.round(7 / 7 * faixa_dias)) {
-                                                        barra = '<div class="barra1"><img src="images/Barra_8.png" width="120" height="23"></div>'
-                                                    } else if (aux_dias2 < 0) {
-                                                        barra = '<img src="images/Barra_9.png" width="120" height="23">'
-                                                    }
-
-                                                    /////////////////////////////////////////////////
-
-                                                    var focus = "";
-                                                    if (ipm == cada_parte_vet_manut[0] && dia_focus == cada_parte_vet_evento[3]) {
-                                                        focus = "ui-focus";
-                                                    }
-
-                                                    if (ev == "1") {
-
-                                                        dados_1 += [
-                                                            '<li class="shadow-box ' + focus + '">',
-                                                            '<a href="#" onclick="ir_para(' + String.fromCharCode(39) + '?ipm=' + cada_parte_vet_manut[0] + '&dia_ev=' + cada_parte_vet_evento[3] + '&mes_ev=' + cada_parte_vet_evento[2] + '&ano_ev=' + cada_parte_vet_evento[1] + '&d_min=' + data_minima_alteracao + '&d_max=' + data_maxima_alteracao + '&tipo=alt&x=' + Math.random() + String.fromCharCode(39) + ')">',
-                                                            '<font size="4" face="Arial">' + cada_parte_vet_manut[1] + '</font>',
-                                                            '<p class="text-size-content" size="2" face="Arial" color="#0000FF">' + cada_parte_vet_manut[2] + '</p>',
-                                                            '<p class="text-purple" size="2" face="Arial" color="#333"><strong class="text-blue-content" style="color: #cc4200; font-weight: bold;">' + cada_parte_vet_manut[3] + '</strong> - ' + cada_parte_vet_manut[4] + '</p>',
-                                                            '<table class="date-spacing" border="0" cellpadding="0" cellspacing="0">',
-                                                            '<tr>',
-                                                            '<td>',
-                                                            '<div align="center">',
-                                                            '<font size="3" face="Arial">' + cada_parte_vet_manut[5] + '</font>',
-                                                            '</div>',
-                                                            '</td>',
-                                                            '<td>',
-                                                            '<p class="text-green" size="2" face="Arial"></p>',
-                                                            '</td>',
-                                                            '</tr>',
-                                                            '</table>',
-                                                            '<table border="0" cellspacing="0" cellpadding="0">',
-                                                            '<hr class="line-color">',
-                                                            '</table>',
-                                                            '<table class="images-center" width="50%" border="0" cellpadding="0" cellspacing="0">',
-                                                            '<tr>',
-                                                            '<td width="25%">',
-                                                            '<div class="tickt1"><img src="images/check.png" width="25"></div>',
-                                                            '</td>',
-                                                            '<td>',
-                                                            '<table class="date-center" border="0">',
-                                                            '</table>',
-                                                            '</td>',
-                                                            '<td width="25%">',
-                                                            '<div class="camera1">' + camera + '</div>',
-                                                            '</td>',
-                                                            '</tr>',
-                                                            '</table>',
-                                                            '</a>',
-                                                            '</li>'
-                                                        ].join('');
-
-                                                    } else if (ev == 0) {
-
-                                                        dados_0 += [
-                                                            '<li class="shadow-box ' + focus + '">',
-                                                            '<a href="#" onclick="ir_para(' + String.fromCharCode(39) + '?ipm=' + cada_parte_vet_manut[0] + '&dia_ev=' + cada_parte_vet_evento[3] + '&mes_ev=' + cada_parte_vet_evento[2] + '&ano_ev=' + cada_parte_vet_evento[1] + '&d_min=' + data_minima_alteracao + '&d_max=' + data_maxima_alteracao + '&tipo=ins&x=' + Math.random() + String.fromCharCode(39) + ')">',
-                                                            '<font size="4" face="Arial">' + cada_parte_vet_manut[1] + '</font>',
-                                                            '<p class="text-size-content" size="2" face="Arial" color="#0000FF">' + cada_parte_vet_manut[2] + '</p>',
-                                                            '<p class="text-purple" size="2" face="Arial" color="#333"><strong class="text-blue-content" style="color: #cc4200; font-weight: bold;">' + cada_parte_vet_manut[3] + '</strong> - ' + cada_parte_vet_manut[4] + '</p>',
-                                                            '<table class="date-spacing" border="0" cellpadding="0" cellspacing="0">',
-                                                            '<tr>',
-                                                            '<td>',
-                                                            '<div align="center">',
-                                                            '<font size="3" face="Arial">' + cada_parte_vet_manut[5] + '</font>',
-                                                            '</div>',
-                                                            '</td>',
-                                                            '<td>',
-                                                            '<p class="text-green" size="2" face="Arial"></p>',
-                                                            '</td>',
-                                                            '</tr>',
-                                                            '</table>',
-                                                            '<table border="0" cellspacing="0" cellpadding="0">',
-                                                            '<hr class="line-color">',
-                                                            '</table>',
-                                                            '<table class="images-center" width="50%" border="0" cellpadding="0" cellspacing="0">',
-                                                            '<tr>',
-                                                            '<td width="25%">',
-                                                            '<div class="tickt1">' + imagem1 + '</div>',
-                                                            '</td>',
-                                                            '<td>',
-                                                            '<table class="date-center" border="0">',
-                                                            '<tr><div style="float: right; position: relative; left: 30px">' + barra + '</div></tr>',
-                                                            '<tr>',
-                                                            '<td width="60%" style="position: relative; left: 35px;">',
-                                                            '<font size="2" face="Arial">' + data_minima_alteracao.split('-').reverse().join('/') + '</font>',
-                                                            '<td width="5%">',
-                                                            '</td>',
-                                                            '<td width="60%" style="position: relative; left: 75px;">',
-                                                            '<font size="2" face="Arial">' + data_maxima_alteracao.split('-').reverse().join('/') + '</font>',
-                                                            '</td>',
-                                                            '</tr>',
-                                                            '</table>',
-                                                            '</td>',
-                                                            '<td width="25%">',
-                                                            '</td>',
-                                                            '</tr>',
-                                                            '</table>',
-                                                            '</a>',
-                                                            '</li>'
-                                                        ].join('');
-
-                                                    }
-
-                                                }
-
-                                                    // Define a ordem que irá aparecer cada manutenção
-                                                    if (datadiff(Date.now(), data_maxima_alteracao) < 0 || datadiff2(Date.now(), data_minima_alteracao) > 0) {
-                                                        document.getElementById('box-content').innerHTML = ini_lista + dados_1 + dados_0 + fim_lista
-                                                    } else {
-                                                        document.getElementById('box-content').innerHTML = ini_lista + dados_0 + dados_1 + fim_lista
-                                                    }
-                                                    $(".loading_page").hide();
-                                                    $('#q_empree').listview();
-                                                    document.getElementById('nome_empree_').innerHTML = nome_empree
-
-                                            }
-                                });
-
-                                ajax2.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_evento_onlineB.asp?l=" + login + "&s=" + senha + "&d=" + vetor_consulta_evento + "&versao=2.1&t=" + Math.random(), false);
-			                    ajax2.send();
-
-
-
-
-
-
-                                /*var ajax2 = new XMLHttpRequest();
-                                ajax2.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_evento_onlineB.asp?l=" + login + "&s=" + senha + "&d=" + vetor_consulta_evento + "&versao=2.1&t=" + Math.random(), false);
-                                ajax2.onreadystatechange = function () {
-                                    if (ajax2.readyState == 4) { //Request complete !!
-                                        if (ajax2.status == 200 || ajax2.status == 0) { // OK response
-
-                                            var resposta_total = ajax2.responseText;
-                                            var jsontext = resposta_total.split("#")
-
-                                            var getLogin = JSON.parse(jsontext[0]);
-                                            logou = getLogin.logou;
-
-                                            if (logou == "S") {
-
-                                                var getEvento = jsontext[1];
-                                                var objEvento = JSON.parse(getEvento);
-
-                                                var cada_vet_manut = vetor_dados_manutencao.split(";")
-                                                var cada_vet_evento = vetor_consulta_evento.split(';')
-
-                                                var qtdEv = 0
-
-                                                for (i = 0; i < objEvento.dados_emp.length; i++) {
-                                                    string_auxiliar += " <br>-------CADA evento-----%%%%%%%%%%%%%%-------------  ev=" + objEvento.dados_emp[i].ev + "- up=" + objEvento.dados_emp[i].up + "---------FIM evento------------<br>"
-
-                                                    var ev = objEvento.dados_emp[i].ev
-                                                    var up = objEvento.dados_emp[i].up
-
-                                                    string_auxiliar += " <br>-------CADA manut-------%%%%%%%%%%%%%-----------  " + cada_vet_manut[i] + "---------FIM manut------------<br>"
-
-                                                    var cada_parte_vet_manut = cada_vet_manut[i].split("*")
-                                                    var cada_parte_vet_evento = cada_vet_evento[i].split("*")
-
-                                                    string_auxiliar += " <br>-------CADA PARTE -------%%%%%%%%%%%%%-----------  " + cada_parte_vet_manut[0] + "---------FIM manut------------<br>"
-
-                                                    var camera = ""
-                                                    if (up == "S") {
-                                                        camera = '<img src="images/camera.png" width="25" />'
-                                                    } else {
-                                                        camera = '<img src="images/camera.png" style="display: none;" width="25" />'
-                                                    }
-
-                                                    /////////////////////////////////////////////////
-                                                    var dias_gap = 0;
-                                                    var fator_freq;
-                                                    var dias_gap_temporario;
-                                                    var aux_dias1;
-                                                    var aux_dias_ev;
-                                                    var aux_dias2;
-                                                    var imagem1 = ""
-                                                    var barra = ""
-                                                    var faixa_dias;
-                                                    var aux_dist;
-                                                    var aux_mes;
-                                                    var aux_ano;
-                                                    var aux_new_event;
-
-                                                    fator_freq = cada_parte_vet_manut[6] * cada_parte_vet_manut[7]
-
-                                                    if (fator_freq < 180) {
-                                                        dias_gap = 16
-                                                    } else if (fator_freq >= 180) {
-                                                        dias_gap = 31
-                                                    }
-
-                                                    if (cada_parte_vet_manut[8] != 0) {
-                                                        dias_gap = cada_parte_vet_manut[8]
-                                                    }
-
-                                                    aux_new_event = new Date(cada_parte_vet_manut[9])
-
-                                                    data_minima_alteracao = new Date(cada_parte_vet_manut[9])
-                                                    data_minima_alteracao.setDate(data_minima_alteracao.getDate() - dias_gap);
-                                                    if (data_minima_alteracao.getMonth() == aux_new_event.getMonth()) {
-                                                        var mes_auxiliar = data_minima_alteracao.getMonth() + 1
-                                                        data_minima_alteracao = ('1' + '/' + mes_auxiliar + '/' + data_minima_alteracao.getFullYear());
-                                                    } else {
-                                                        var mes_auxiliar = data_minima_alteracao.getMonth() + 1
-                                                        data_minima_alteracao = (data_minima_alteracao.getDate() + '/' + mes_auxiliar + '/' + data_minima_alteracao.getFullYear());
-                                                    }
-                                                    string_auxiliar += " <br><br><br>------- INI data_minima_alteracao------------------ " + fator_freq + "--" + dias_gap + "--" + data_minima_alteracao + "---------FIM data_minima_alteracao------------<br>"
-
-
-                                                    data_maxima_alteracao = new Date(cada_parte_vet_manut[9])
-                                                    data_maxima_alteracao.setDate(data_maxima_alteracao.getDate() + parseInt(dias_gap))
-
-                                                    if (data_maxima_alteracao.getMonth() == aux_new_event.getMonth()) {
-                                                        if (data_maxima_alteracao.getMonth() <= 10) {
-                                                            aux_mes = data_maxima_alteracao.getMonth() + 1;
-                                                            aux_mes = aux_mes + 1;
-                                                            aux_ano = data_maxima_alteracao.getFullYear();
-                                                        } else if (data_maxima_alteracao.getMonth() == 11) {
-                                                            aux_mes = 1;
-                                                            aux_ano = data_maxima_alteracao.getFullYear() + 1;
-                                                        }
-
-                                                        data_maxima_alteracao = (aux_mes + '/' + '1' + '/' + aux_ano);
-                                                        data_maxima_alteracao = new Date(data_maxima_alteracao)
-                                                        //alert('data_maxima_alteracao: ' + data_maxima_alteracao)
-
-                                                        data_maxima_alteracao.setDate(data_maxima_alteracao.getDate() - 1);
-                                                        var mes_auxiliar = data_maxima_alteracao.getMonth() + 1
-                                                        data_maxima_alteracao = (data_maxima_alteracao.getDate() + '/' + mes_auxiliar + '/' + data_maxima_alteracao.getFullYear());
-                                                    }
-                                                    else {
-                                                        var mes_auxiliar = data_maxima_alteracao.getMonth() + 1
-                                                        data_maxima_alteracao = (data_maxima_alteracao.getDate() + '/' + mes_auxiliar + '/' + data_maxima_alteracao.getFullYear());
-                                                    }
-                                                    string_auxiliar += " <br><br><br>------- INI data_maxima_alteracao------------------ " + fator_freq + "--" + dias_gap + "--" + data_maxima_alteracao + "---------FIM data_maxima_alteracao------------<br>"
-
-                                                    data_minima_alteracao = dateToEN(data_minima_alteracao)
-                                                    aux_dias1 = datadiff2(Date.now(), data_minima_alteracao)
-
-                                                    var data_format_1 = new Date(cada_parte_vet_manut[9]);
-                                                    var mes_format_1 = data_format_1.getMonth() + 1
-                                                    var format_1 = dateToEN(data_format_1.getDate() + '/' + mes_format_1 + '/' + data_format_1.getFullYear())
-                                                    aux_dias_ev = datadiff(Date.now(), format_1)
-
-                                                    data_maxima_alteracao = dateToEN(data_maxima_alteracao)
-                                                    aux_dias2 = datadiff(Date.now(), data_maxima_alteracao)
-
-                                                    if (aux_dias1 > 0) {
-                                                        imagem1 = '<img src="images/hand-paper.svg" width="24" class="is-opacity">'
-                                                        color1 = "#cccccc"
-                                                    } else if (aux_dias1 <= 0 && aux_dias_ev > 0) {
-                                                        imagem1 = '<img src="images/danger.svg" width="25" />'
-                                                        color1 = "#2974f1"
-                                                    } else if (aux_dias_ev <= 0 && aux_dias2 >= 0) {
-                                                        imagem1 = '<img src="images/danger.svg" width="25" />'
-                                                        color1 = "#FF0000"
-                                                    } else if (aux_dias2 < 0) {
-                                                        imagem1 = '<img src="images/exclamation-triangle.png" width="26">'
-                                                        color1 = "#FF0000"
-                                                    }
-
-                                                    if (ev == 0 && imagem1 == '<img src="images/danger.svg" width="25" />') {
-                                                        qtdEv += 1
-                                                    }
-
-                                                    if (qtdEv > 0) {
-                                                        document.getElementById('qtd_manut_pendentes').style.display = 'flex'
-                                                        document.getElementById('qtd_manut_pendentes').innerHTML = qtdEv
-                                                    }
-
-                                                    var format_faixa_dias = data_minima_alteracao.replace(/[-]/g, '/') + " 23:59:59"
-                                                    var format_faixa_dias_B = new Date(format_faixa_dias).getTime();
-
-                                                    faixa_dias = datadiff(format_faixa_dias_B, data_maxima_alteracao) + 1
-
-                                                    aux_dist = (-1) * datadiff2(Date.now(), data_minima_alteracao)
-
-                                                    if (aux_dias1 > 0) {
-                                                        barra = '<img src="images/Barra_1.png" width="120" height="23">'
-                                                    } else if (aux_dist >= 0 && aux_dist < Math.round(1 / 7 * faixa_dias)) {
-                                                        barra = '<img src="images/Barra_2.png" width="120" height="23">'
-                                                    } else if (aux_dist >= Math.round(1 / 7 * faixa_dias) && aux_dist < Math.round(2 / 7 * faixa_dias)) {
-                                                        barra = '<img src="images/Barra_3.png" width="120" height="23">'
-                                                    } else if (aux_dist >= Math.round(2 / 7 * faixa_dias) && aux_dist < Math.round(3 / 7 * faixa_dias)) {
-                                                        barra = '<img src="images/Barra_4.png" width="120" height="23">'
-                                                    } else if (aux_dist >= Math.round(3 / 7 * faixa_dias) && aux_dist < Math.round(4 / 7 * faixa_dias)) {
-                                                        barra = '<img src="images/Barra_5.png" width="120" height="23">'
-                                                    } else if (aux_dist >= Math.round(4 / 7 * faixa_dias) && aux_dist < Math.round(5 / 7 * faixa_dias)) {
-                                                        barra = '<img src="images/Barra_6.png" width="120" height="23">'
-                                                    } else if (aux_dist >= Math.round(5 / 7 * faixa_dias) && aux_dist < Math.round(6 / 7 * faixa_dias)) {
-                                                        barra = '<div class="barra1"><img src="images/Barra_7.png" width="120" height="23"></div>'
-                                                    } else if (aux_dist >= Math.round(6 / 7 * faixa_dias) && aux_dist < Math.round(7 / 7 * faixa_dias)) {
-                                                        barra = '<div class="barra1"><img src="images/Barra_8.png" width="120" height="23"></div>'
-                                                    } else if (aux_dias2 < 0) {
-                                                        barra = '<img src="images/Barra_9.png" width="120" height="23">'
-                                                    }
-
-                                                    /////////////////////////////////////////////////
-
-                                                    var focus = "";
-                                                    if (ipm == cada_parte_vet_manut[0] && dia_focus == cada_parte_vet_evento[3]) {
-                                                        focus = "ui-focus";
-                                                    }
-
-                                                    if (ev == "1") {
-
-                                                        dados_1 += [
-                                                            '<li class="shadow-box ' + focus + '">',
-                                                            '<a href="#" onclick="ir_para(' + String.fromCharCode(39) + '?ipm=' + cada_parte_vet_manut[0] + '&dia_ev=' + cada_parte_vet_evento[3] + '&mes_ev=' + cada_parte_vet_evento[2] + '&ano_ev=' + cada_parte_vet_evento[1] + '&d_min=' + data_minima_alteracao + '&d_max=' + data_maxima_alteracao + '&tipo=alt&x=' + Math.random() + String.fromCharCode(39) + ')">',
-                                                            '<font size="4" face="Arial">' + cada_parte_vet_manut[1] + '</font>',
-                                                            '<p class="text-size-content" size="2" face="Arial" color="#0000FF">' + cada_parte_vet_manut[2] + '</p>',
-                                                            '<p class="text-purple" size="2" face="Arial" color="#333"><strong class="text-blue-content" style="color: #cc4200; font-weight: bold;">' + cada_parte_vet_manut[3] + '</strong> - ' + cada_parte_vet_manut[4] + '</p>',
-                                                            '<table class="date-spacing" border="0" cellpadding="0" cellspacing="0">',
-                                                            '<tr>',
-                                                            '<td>',
-                                                            '<div align="center">',
-                                                            '<font size="3" face="Arial">' + cada_parte_vet_manut[5] + '</font>',
-                                                            '</div>',
-                                                            '</td>',
-                                                            '<td>',
-                                                            '<p class="text-green" size="2" face="Arial"></p>',
-                                                            '</td>',
-                                                            '</tr>',
-                                                            '</table>',
-                                                            '<table border="0" cellspacing="0" cellpadding="0">',
-                                                            '<hr class="line-color">',
-                                                            '</table>',
-                                                            '<table class="images-center" width="50%" border="0" cellpadding="0" cellspacing="0">',
-                                                            '<tr>',
-                                                            '<td width="25%">',
-                                                            '<div class="tickt1"><img src="images/check.png" width="25"></div>',
-                                                            '</td>',
-                                                            '<td>',
-                                                            '<table class="date-center" border="0">',
-                                                            '</table>',
-                                                            '</td>',
-                                                            '<td width="25%">',
-                                                            '<div class="camera1">' + camera + '</div>',
-                                                            '</td>',
-                                                            '</tr>',
-                                                            '</table>',
-                                                            '</a>',
-                                                            '</li>'
-                                                        ].join('');
-
-                                                    } else if (ev == 0) {
-
-                                                        dados_0 += [
-                                                            '<li class="shadow-box ' + focus + '">',
-                                                            '<a href="#" onclick="ir_para(' + String.fromCharCode(39) + '?ipm=' + cada_parte_vet_manut[0] + '&dia_ev=' + cada_parte_vet_evento[3] + '&mes_ev=' + cada_parte_vet_evento[2] + '&ano_ev=' + cada_parte_vet_evento[1] + '&d_min=' + data_minima_alteracao + '&d_max=' + data_maxima_alteracao + '&tipo=ins&x=' + Math.random() + String.fromCharCode(39) + ')">',
-                                                            '<font size="4" face="Arial">' + cada_parte_vet_manut[1] + '</font>',
-                                                            '<p class="text-size-content" size="2" face="Arial" color="#0000FF">' + cada_parte_vet_manut[2] + '</p>',
-                                                            '<p class="text-purple" size="2" face="Arial" color="#333"><strong class="text-blue-content" style="color: #cc4200; font-weight: bold;">' + cada_parte_vet_manut[3] + '</strong> - ' + cada_parte_vet_manut[4] + '</p>',
-                                                            '<table class="date-spacing" border="0" cellpadding="0" cellspacing="0">',
-                                                            '<tr>',
-                                                            '<td>',
-                                                            '<div align="center">',
-                                                            '<font size="3" face="Arial">' + cada_parte_vet_manut[5] + '</font>',
-                                                            '</div>',
-                                                            '</td>',
-                                                            '<td>',
-                                                            '<p class="text-green" size="2" face="Arial"></p>',
-                                                            '</td>',
-                                                            '</tr>',
-                                                            '</table>',
-                                                            '<table border="0" cellspacing="0" cellpadding="0">',
-                                                            '<hr class="line-color">',
-                                                            '</table>',
-                                                            '<table class="images-center" width="50%" border="0" cellpadding="0" cellspacing="0">',
-                                                            '<tr>',
-                                                            '<td width="25%">',
-                                                            '<div class="tickt1">' + imagem1 + '</div>',
-                                                            '</td>',
-                                                            '<td>',
-                                                            '<table class="date-center" border="0">',
-                                                            '<tr><div style="float: right; position: relative; left: 30px">' + barra + '</div></tr>',
-                                                            '<tr>',
-                                                            '<td width="60%" style="position: relative; left: 35px;">',
-                                                            '<font size="2" face="Arial">' + data_minima_alteracao.split('-').reverse().join('/') + '</font>',
-                                                            '<td width="5%">',
-                                                            '</td>',
-                                                            '<td width="60%" style="position: relative; left: 75px;">',
-                                                            '<font size="2" face="Arial">' + data_maxima_alteracao.split('-').reverse().join('/') + '</font>',
-                                                            '</td>',
-                                                            '</tr>',
-                                                            '</table>',
-                                                            '</td>',
-                                                            '<td width="25%">',
-                                                            '</td>',
-                                                            '</tr>',
-                                                            '</table>',
-                                                            '</a>',
-                                                            '</li>'
-                                                        ].join('');
-
-                                                    }
-
-                                                }
-
-                                            }
-
-                                        } else {
-                                            alert("Problemas com sua conexao internet. Cod: 0167");
-                                        }
-                                    }
-                                }
-                                ajax2.send();*/
-
-
-                            } else { //nao logou
-                                window.location.assign("login.htm");
-                            }
-
-                        }
-            });
-
-            ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_emp_online.asp?l=" + login + "&s=" + senha + "&versao=2.1&t=" + Math.random(), true);
-			ajax.send();
-
-
-
-
-
-
-
             // carregar dados das manutenções do servidor 
-            /*var ajax = new XMLHttpRequest();
-            ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_emp_online.asp?l=" + login + "&s=" + senha + "&versao=2.1&t=" + Math.random(), true);
+            var ajax = new XMLHttpRequest();
+            ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_emp_online.asp?l=" + login + "&s=" + senha + "&versao=2.2&t=" + Math.random(), true);
             ajax.onreadystatechange = function () {
                 if (ajax.readyState == 4) { //Request complete !!
                     if (ajax.status == 200 || ajax.status == 0) { // OK response
@@ -1279,7 +564,7 @@
                                 vetor_dados_manutencao = vetor_dados_manutencao.substring(0, vetor_dados_manutencao.length - 1);
 
                                 var ajax2 = new XMLHttpRequest();
-                                ajax2.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_evento_onlineB.asp?l=" + login + "&s=" + senha + "&d=" + vetor_consulta_evento + "&versao=2.1&t=" + Math.random(), false);
+                                ajax2.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_evento_onlineB.asp?l=" + login + "&s=" + senha + "&d=" + vetor_consulta_evento + "&versao=2.2&t=" + Math.random(), false);
                                 ajax2.onreadystatechange = function () {
                                     if (ajax2.readyState == 4) { //Request complete !!
                                         if (ajax2.status == 200 || ajax2.status == 0) { // OK response
@@ -1451,6 +736,12 @@
 
                                                     /////////////////////////////////////////////////
 
+                                                    if (filtro_sis === cada_parte_vet_manut[1]) {
+                                                        filtro_bool = true;
+                                                        var ini_lista = "<form class='ui-filterable'><div class='ui-input-search ui-body-inherit ui-corner-all ui-shadow-inset ui-input-has-clear'><input data-role='listview' value='" + filtro_sis + "' placeholder='Buscar...' id='filterBasic-input' data-type='search'><a href='#' tabindex='-1' aria-hidden='true' class='ui-input-clear ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all ui-input-clear-hidden' title='Clear text'>Clear text</a></div></form><ul data-input='#filterBasic-input' id='q_empree' class='list-content' data-mini='true' data-role='listview' data-filter='true' data-filter-placeholder='Buscar...' data-inset='true'>"
+                                                        var fim_lista = "</ul>"
+                                                    }
+
                                                     var focus = "";
                                                     if (ipm == cada_parte_vet_manut[0] && dia_focus == cada_parte_vet_evento[3]) {
                                                         focus = "ui-focus";
@@ -1560,6 +851,20 @@
                                 }
                                 ajax2.send();
 
+                                if (filtro_sis !== '' && filtro_bool === false) {
+                                    navigator.notification.alert(
+                                        'Não há manutenções deste sistema neste mês!',  // message
+                                        function () {
+                                            return;
+                                        },         // callback
+                                        'SigmaCivil',            // title
+                                        'OK'                  // buttonName
+                                    );
+                                    filtro_sis = '';
+                                    ini_lista = "<form class='ui-filterable'><div class='ui-input-search ui-body-inherit ui-corner-all ui-shadow-inset ui-input-has-clear'><input data-role='listview' value='" + filtro_sis + "' placeholder='Buscar...' id='filterBasic-input' data-type='search'><a href='#' tabindex='-1' aria-hidden='true' class='ui-input-clear ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all ui-input-clear-hidden' title='Clear text'>Clear text</a></div></form><ul data-input='#filterBasic-input' id='q_empree' class='list-content' data-mini='true' data-role='listview' data-filter='true' data-filter-placeholder='Buscar...' data-inset='true'>"
+                                    fim_lista = "</ul>"
+                                }
+
                                 // Define a ordem que irá aparecer cada manutenção
                                 if (datadiff(Date.now(), data_maxima_alteracao) < 0 || datadiff2(Date.now(), data_minima_alteracao) > 0) {
                                     document.getElementById('box-content').innerHTML = ini_lista + dados_1 + dados_0 + fim_lista
@@ -1567,6 +872,7 @@
                                     document.getElementById('box-content').innerHTML = ini_lista + dados_0 + dados_1 + fim_lista
                                 }
                                 $(".loading_page").hide();
+
                                 $('#q_empree').listview();
                                 document.getElementById('nome_empree_').innerHTML = nome_empree
 
@@ -1582,7 +888,7 @@
                     }
                 }
             }
-            ajax.send();*/
+            ajax.send();
         } // fim iniciar()
 
 
@@ -1592,11 +898,11 @@
         function ir_para(qlink) {
             if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
                 // alert('Você está offline');
-                window.location.assign('even.htm' + qlink + "&l=" + login + "&s=" + senha)
+                window.location.assign('even.htm' + qlink + "&e=" + num_empree + "&l=" + login + "&s=" + senha)
             }
             else {
                 // alert('Você está onlline');
-                window.location.assign('even_online.htm' + qlink + "&l=" + login + "&s=" + senha);
+                window.location.assign('even_online.htm' + qlink + "&e=" + num_empree + "&l=" + login + "&s=" + senha);
             }
 
         }
@@ -1622,19 +928,407 @@
         }
 
         function enviar_sync() {
-            decisao = confirm("Deseja efetuar novo login? Será possível se logar novamente em qualquer empreendimento atualizando o Plano de Manutenção!");
+            navigator.notification.confirm(
+                'Confirma que deseja se deslogar do SigmaCivil?',
+                function (buttonIndex) {
+                    if (buttonIndex === 2) {
+                        return;
+                    }
 
-            if (decisao) {
-                document.form_sup.action = "del.htm";
-                document.form_sup.submit();
+                    navigator.notification.confirm(
+                        'Tem certeza que deseja sair do app SigmaCivil? Todos os seus arquivos como fotos e vídeos serão apagados deste dispositivo! Confirmar?',
+                        function (buttonIndex) {
+                            if (buttonIndex === 2) {
+                                return;
+                            }
 
-            } else {
+                            document.form_sup.action = "del.htm";
+                            document.form_sup.submit();
+                        },
+                        'SigmaCivil',
+                        ['OK', 'Cancelar']
+                    );
+                },
+                'SigmaCivil',
+                ['OK', 'Cancelar']
+            );
 
-            }
+            // decisao = confirm("Deseja efetuar novo login? Será possível se logar novamente em qualquer empreendimento atualizando o Plano de Manutenção!");
+
+            // if (decisao) {
+            //     document.form_sup.action = "del.htm";
+            //     document.form_sup.submit();
+
+            // } else {
+
+            // }
         }
 
         function dateToEN(date) {
             return date.split('/').reverse().join('-');
+        }
+
+        function go_page_check() {
+            window.location.assign("checkpoint.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano));
+        }
+
+        function addAcento(text) {
+            // text = text.toLowerCase();
+
+            // a
+            text = text.replace(/xcL1A/g, 'Á')
+            text = text.replace(/xcL2A/g, 'À')
+            text = text.replace(/xcL3A/g, 'Ã')
+            text = text.replace(/xcL4A/g, 'Â')
+
+            text = text.replace(/xcL1a/g, 'á')
+            text = text.replace(/xcL2a/g, 'à')
+            text = text.replace(/xcL3a/g, 'ã')
+            text = text.replace(/xcL4a/g, 'â')
+
+            // e
+            text = text.replace(/xcL1E/g, 'É')
+            text = text.replace(/xcL2E/g, 'È')
+            text = text.replace(/xcL4E/g, 'Ê')
+
+            text = text.replace(/xcL1e/g, 'é')
+            text = text.replace(/xcL2e/g, 'è')
+            text = text.replace(/xcL4e/g, 'ê')
+
+            // i
+            text = text.replace(/xcL1I/g, 'Í')
+            text = text.replace(/xcL2I/g, 'Ì')
+            text = text.replace(/xcL4I/g, 'Î')
+
+            text = text.replace(/xcL1i/g, 'í')
+            text = text.replace(/xcL2i/g, 'ì')
+            text = text.replace(/xcL4i/g, 'î')
+
+            // o
+            text = text.replace(/xcL1O/g, 'Ó')
+            text = text.replace(/xcL2O/g, 'Ò')
+            text = text.replace(/xcL3O/g, 'Õ')
+            text = text.replace(/xcL4O/g, 'Ô')
+
+            text = text.replace(/xcL1o/g, 'ó')
+            text = text.replace(/xcL2o/g, 'ò')
+            text = text.replace(/xcL3o/g, 'õ')
+            text = text.replace(/xcL4o/g, 'ô')
+
+            // u
+            text = text.replace(/xcL1U/g, 'Ú')
+            text = text.replace(/xcL2U/g, 'Ù')
+            text = text.replace(/xcL4U/g, 'Û')
+
+            text = text.replace(/xcL1u/g, 'ú')
+            text = text.replace(/xcL2u/g, 'ù')
+            text = text.replace(/xcL4u/g, 'û')
+
+            // ç
+            text = text.replace(/xcL0C/g, 'Ç')
+
+            text = text.replace(/xcL0c/g, 'ç')
+
+            return text;
+        }
+
+        var db;
+        var request = window.indexedDB.open("db_sigmacivil", "1");
+
+        request.onerror = function (event) {
+            alert("Erro ao criar o banco (cod 03)");
+        };
+
+        request.onsuccess = function (event) {
+            db = request.result;
+
+            updateMtabConfigTutorial(db);
+
+            db.onerror = function (event) {
+                alert("Database error: " + event.target.errorCode);
+            }
+        }
+
+        function updateMtabConfigTutorial(db) {
+            var tx = db.transaction(['mtab_config'], 'readwrite');
+            var store = tx.objectStore('mtab_config');
+            var objectStoreRequest = store.openCursor();
+            objectStoreRequest.onsuccess = function (event) {
+                var cursor = event.target.result;
+                if (cursor) {
+                    var data = cursor.value;
+
+                    if (!data['tutorial']) {
+                        var tutorial_video = [
+                            '<div id="tutorial_div" style="width: 100%; height: 100vh; position: fixed; display: flex; flex-direction: column; background: rgba(0,0,0,0.8); z-index: 100; transition: 2s; color: #FFF; text-shadow: none;">',
+                            '<div style="padding: 20px; margin-top: 10px; display: flex; justify-content: flex-end;">',
+                            '<button id="close_tutorial" onclick="closeTutorial()" style="width: 50px; background: none; border: 0;" type="button">',
+                            '<img src="images/times-branco.png" width="16" alt="Fechar"/>',
+                            '</button>',
+                            '</div>',
+                            '<div style="display: flex; height: 100vh; align-items: center; flex-direction: column; justify-content: center; padding: 20px;">',
+                            '<h1 style="text-align: center;">Bem vindo ao aplicativo SigmaCivil!</h1>',
+                            '<p style="font-size: 18px; line-height: 22px">Este aplicativo lista as manutenções preventivas mensais personalizadas de determinado empreendimento e permite que seja realizada a gestão das manutenções, possibilitando ao usuário que faça upload de fotos, videos, áudios e textos que mostrem e comprovem sua realização.</p>',
+                            '<div style="width: 100%; display: flex; flex-direction: row; justify-content: space-between;">',
+                            '<button id="assistir_tutorial" style="width: 100%; background: #c00c13; padding: 8px; border: 0; border-radius: 4px; color: #FFF; font-weight: bold; transition: background 0.2s;" type="button">Assistir tutorial</button>',
+                            '<button class="closeTutorial" onclick="closeTutorial()" style="width: 100%; background: #666; padding: 8px; border: 0; border-radius: 4px; color: #FFF; font-weight: bold; transition: background 0.2s;" type="button">Pular</button>',
+                            '</div>',
+                            '</div>',
+                            '</div>'
+                        ].join('');
+
+                        document.getElementById('tutorial-video').innerHTML = tutorial_video;
+
+                        document.getElementById('assistir_tutorial').addEventListener('click', function () {
+                            tutorial_video = [
+                                '<div id="tutorial_div" style="width: 100%; height: 100vh; position: fixed; display: flex; justify-content: center; flex-direction: column; align-items: center; background: rgba(0,0,0,0.8); z-index: 100; transition: 2s; color: #FFF; text-shadow: none;">',
+                                '<div style="padding: 20px; margin-right: 40px; width: 100%; display: flex; justify-content: flex-end;">',
+                                '<button id="close_tutorial" onclick="closeTutorial()" style="width: 50px; background: none; border: 0;" type="button">',
+                                '<img src="images/times-branco.png" width="16" alt="Fechar"/>',
+                                '</button>',
+                                '</div>',
+                                '<video poster="images/background.jpg" style="border-radius: 20px;" width="100%" height="600" controls>',
+                                '<source style="border-radius: 20px;" src="images/tutorial.mp4" type="video/mp4">',
+                                '</video>',
+                                '</div>'
+                            ].join('');
+
+                            document.getElementById('tutorial-video').innerHTML = tutorial_video;
+                        });
+                    }
+
+                    data['tutorial'] = true;
+                    var request = cursor.update(data);
+                }
+            }
+        }
+
+        function scan() {
+            cordova.plugins.barcodeScanner.scan(
+                function (result) {
+                    if (!result.cancelled) {
+                        // In this case we only want to process QR Codes
+                        if (result.format == "QR_CODE") {
+                            var value = result.text;
+
+                            var ponto_ini = value.indexOf("www.sigmacivil.com.br/us/new_qr_hist_mp.asp?c=");
+                            var parte1 = value.substring(ponto_ini + 46);
+
+                            var pedaco = parte1.split("_");
+
+                            if (num_empree == pedaco[0]) {
+
+                                var qid_empree = num_empree;
+                                var qid_sistema = pedaco[1];
+
+                                var d = new Date();
+                                var qdata_checkpoint = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+
+                                var qatualizado_serv = "N";
+
+                                navigator.geolocation.getCurrentPosition(
+                                    function (position) {
+                                        var qlatitude_checkpoint = position.coords.latitude;
+                                        var qlongitude_checkpoint = position.coords.longitude;
+                                        var qaltura_checkpoint = position.coords.altitude;
+
+                                        var db;
+                                        var request = window.indexedDB.open("db_sigmacivil", "1");
+
+                                        request.onerror = function (event) {
+                                            alert("Erro ao criar o banco (cod 02)");
+                                        };
+
+                                        request.onsuccess = function (event) {
+                                            db = request.result;
+
+                                            inserirDadosCheckpoint(db, dadosCheckpoint);
+
+                                            db.onerror = function (event) {
+                                                alert("Database error: " + event.target.errorCode);
+                                            }
+                                        }
+
+                                        var dadosCheckpoint = [
+                                            {
+                                                id_empree: qid_empree,
+                                                id_sistema: qid_sistema,
+                                                data_checkpoint: qdata_checkpoint,
+                                                latitude_checkpoint: qlatitude_checkpoint,
+                                                longitude_checkpoint: qlongitude_checkpoint,
+                                                altura_checkpoint: qaltura_checkpoint,
+                                                atualizado_serv: qatualizado_serv,
+                                            }
+                                        ];
+
+                                        function inserirDadosCheckpoint(db, dadosCheckpoint) {
+                                            var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
+                                            var store = tx.objectStore('mtab_checkpoint');
+
+                                            dadosCheckpoint.map(function (dadoCheckpoint) {
+                                                store.add(dadoCheckpoint);
+                                            });
+
+                                            tx.oncomplete = function () {
+                                                go_to_page(qid_sistema, qid_empree);
+                                            }
+
+                                            tx.onerror = function (event) {
+                                                alert('error storing checkpoint note ' + event.target.error);
+                                            }
+                                        }
+                                    },
+                                    function (error) {
+                                        var db;
+                                        var request = window.indexedDB.open("db_sigmacivil", "1");
+
+                                        request.onerror = function (event) {
+                                            alert("Erro ao criar o banco (cod 03)");
+                                        };
+
+                                        request.onsuccess = function (event) {
+                                            db = request.result;
+
+                                            inserirDadosCheckpointError(db, dadosCheckpointError);
+
+                                            db.onerror = function (event) {
+                                                alert("Database error: " + event.target.errorCode);
+                                            }
+                                        }
+
+                                        var dadosCheckpointError = [
+                                            {
+                                                id_empree: qid_empree,
+                                                id_sistema: qid_sistema,
+                                                data_checkpoint: qdata_checkpoint,
+                                                latitude_checkpoint: "",
+                                                longitude_checkpoint: "",
+                                                altura_checkpoint: "",
+                                                atualizado_serv: qatualizado_serv,
+                                            }
+                                        ];
+
+                                        function inserirDadosCheckpointError(db, dadosCheckpointError) {
+                                            var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
+                                            var store = tx.objectStore('mtab_checkpoint');
+
+                                            dadosCheckpointError.map(function (dadoCheckpointError) {
+                                                store.add(dadoCheckpointError);
+                                            });
+
+                                            tx.oncomplete = function () {
+                                                go_to_page(qid_sistema, qid_empree);
+                                            }
+
+                                            tx.onerror = function (event) {
+                                                alert('error storing checkpointError note ' + event.target.error);
+                                            }
+                                        }
+                                    }
+                                );
+
+                            } else {
+                                alert("Esse QRCode não é válido");
+                            }
+
+                        } else {
+                            alert("Desculpe, só é possível ler QRCODES");
+                        }
+                    } else {
+                        // alert("Leitura do QRCODE cancelada");
+                    }
+                },
+                function (error) {
+                    // alert("Erro: " + error);
+                }
+            );
+        }
+
+        function go_to_page(q_id_sistema, q_num_empree) {
+            window.location.assign("qrcode.htm?l=" + login + "&s=" + senha + "&e=" + q_num_empree + "&id_sis=" + q_id_sistema + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano));
+        }
+
+        function go_to_page_config() {
+            window.location.assign("configuracoes.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano));
+        }
+
+        function removeAcento(text) {
+            // text = text.toLowerCase();
+
+            // a
+            text = text.replace(/Á/g, 'xcL1A')
+            text = text.replace(/À/g, 'xcL2A')
+            text = text.replace(/Ã/g, 'xcL3A')
+            text = text.replace(/Â/g, 'xcL4A')
+
+            text = text.replace(/á/g, 'xcL1a')
+            text = text.replace(/à/g, 'xcL2a')
+            text = text.replace(/ã/g, 'xcL3a')
+            text = text.replace(/â/g, 'xcL4a')
+
+            // e
+            text = text.replace(/É/g, 'xcL1E')
+            text = text.replace(/È/g, 'xcL2E')
+            text = text.replace(/Ê/g, 'xcL4E')
+
+            text = text.replace(/é/g, 'xcL1e')
+            text = text.replace(/è/g, 'xcL2e')
+            text = text.replace(/ê/g, 'xcL4e')
+
+            // i
+            text = text.replace(/Í/g, 'xcL1I')
+            text = text.replace(/Ì/g, 'xcL2I')
+            text = text.replace(/Î/g, 'xcL4I')
+
+            text = text.replace(/í/g, 'xcL1i')
+            text = text.replace(/ì/g, 'xcL2i')
+            text = text.replace(/î/g, 'xcL4i')
+
+            // o
+            text = text.replace(/Ó/g, 'xcL1O')
+            text = text.replace(/Ò/g, 'xcL2O')
+            text = text.replace(/Õ/g, 'xcL3O')
+            text = text.replace(/Ô/g, 'xcL4O')
+
+            text = text.replace(/ó/g, 'xcL1o')
+            text = text.replace(/ò/g, 'xcL2o')
+            text = text.replace(/õ/g, 'xcL3o')
+            text = text.replace(/ô/g, 'xcL4o')
+
+            // u
+            text = text.replace(/Ú/g, 'xcL1U')
+            text = text.replace(/Ù/g, 'xcL2U')
+            text = text.replace(/Û/g, 'xcL4U')
+
+            text = text.replace(/ú/g, 'xcL1u')
+            text = text.replace(/ù/g, 'xcL2u')
+            text = text.replace(/û/g, 'xcL4u')
+
+            // ç
+            text = text.replace(/Ç/g, 'xcL0C')
+
+            text = text.replace(/ç/g, 'xcL0c')
+
+            return text;
+        }
+
+        function closeApp() {
+            navigator.notification.confirm(
+                'Tem certeza que deseja sair do app SigmaCivil?',
+                function (buttonIndex) {
+                    if (buttonIndex === 2) {
+                        return;
+                    }
+
+                    navigator.app.exitApp();
+                },
+                'SigmaCivil',
+                ['OK', 'Cancelar']
+            );
+        }
+
+        function closeTutorial() {
+            document.getElementById('tutorial-video').innerHTML = '';
         }
 
     </script>

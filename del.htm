@@ -83,6 +83,26 @@
 
 				var objectStoreRequest = store.clear();
 				objectStoreRequest.onsuccess = function (event) {
+					removerDadosMtabCheckpoint(db);
+				}
+			}
+
+			function removerDadosMtabCheckpoint(db) {
+				var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
+				var store = tx.objectStore('mtab_checkpoint');
+
+				var objectStoreRequest = store.clear();
+				objectStoreRequest.onsuccess = function (event) {
+					removerDadosMtabConfig(db);
+				}
+			}
+
+			function removerDadosMtabConfig(db) {
+				var tx = db.transaction(['mtab_config'], 'readwrite');
+				var store = tx.objectStore('mtab_config');
+
+				var objectStoreRequest = store.clear();
+				objectStoreRequest.onsuccess = function (event) {
 					alert("Os dados do atual empreendimento já foram apagados. Você já pode importar um novo empreendimento!")
 					goto();
 				}

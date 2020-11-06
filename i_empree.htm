@@ -18,14 +18,7 @@
 
 	<script type="text/javascript">
 		window.onerror = function (message, url, lineNumber) {
-			navigator.notification.alert(
-				`Error: ${message} in ${url} at line ${lineNumber}`,  // message
-				function() {
-					return;
-				},         // callback
-				'SigmaCivil',            // title
-				'OK'                  // buttonName
-			);
+			alert(`Error: ${message} in ${url} at line ${lineNumber}`);
 		}
 
 		var login = getquerystring("login");
@@ -60,7 +53,7 @@
 			}
 
 			var ajax = new XMLHttpRequest();
-			ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_emp.asp?l=" + login + "&s=" + senha + "&versao=2.2&t=" + Math.random(), true);
+			ajax.open("GET", "https://www.sigmacivil.app.br/app_sc/consult_emp.asp?l=" + login + "&s=" + senha + "&versao=2.1&t=" + Math.random(), true);
 			ajax.onreadystatechange = function () {
 				if (ajax.readyState == 4) {//Request complete !!
 					if (ajax.status == 200 || ajax.status == 0) { // OK response
@@ -109,15 +102,6 @@
 								},
 							];
 
-							var configs = [
-								{
-									id_config: qual_id_cliente,
-									editar_fotos: false,
-									upload_automatico: false,
-									tutorial: false
-								}
-							];
-
 							var manuts = [];
 
 							for (i = 0; i < objEmpree.dados_empreendimento.length; i++) {
@@ -127,7 +111,7 @@
 							request.onsuccess = function (event) {
 								db = request.result;
 
-								executarRemoverAdicionarDados(db, clientes, emprees, manuts, configs);
+								executarRemoverAdicionarDados(db, clientes, emprees, manuts);
 
 								db.onerror = function (event) {
 									alert("Database error: " + event.target.error);
@@ -136,7 +120,7 @@
 
 							var num = 0;
 
-							function executarRemoverAdicionarDados(db, clientes, emprees, manuts, configs) {
+							function executarRemoverAdicionarDados(db, clientes, emprees, manuts) {
 								var tx = db.transaction(['mtab_cliente'], 'readwrite');
 								var store = tx.objectStore('mtab_cliente');
 
@@ -150,7 +134,7 @@
 								});
 
 								tx.oncomplete = function () {
-									removerAdicionarDadosEmpree(db, emprees, manuts, configs);
+									removerAdicionarDadosEmpree(db, emprees, manuts);
 								}
 
 								tx.onerror = function (event) {
@@ -158,7 +142,7 @@
 								}
 							}
 
-							function removerAdicionarDadosEmpree(db, emprees, manuts, configs) {
+							function removerAdicionarDadosEmpree(db, emprees, manuts) {
 								var tx = db.transaction(['mtab_empree'], 'readwrite');
 								var store = tx.objectStore('mtab_empree');
 
@@ -172,7 +156,7 @@
 								});
 
 								tx.oncomplete = function () {
-									removerAdicionarDadosManuts(db, manuts, configs);
+									removerAdicionarDadosManuts(db, manuts);
 								}
 
 								tx.onerror = function (event) {
@@ -180,7 +164,7 @@
 								}
 							}
 
-							function removerAdicionarDadosManuts(db, manuts, configs) {
+							function removerAdicionarDadosManuts(db, manuts) {
 								var tx = db.transaction(['mtab_prog_manut'], 'readwrite');
 								var store = tx.objectStore('mtab_prog_manut');
 
@@ -191,29 +175,6 @@
 
 								manuts.map(function (manut) {
 									store.add(manut);
-								});
-
-								tx.oncomplete = function () {
-									removerAdicionarDadosConfigs(db, configs);
-									console.log(num);
-								}
-
-								tx.onerror = function (event) {
-									alert('error storing manut note ' + event.target.error);
-								}
-							}
-
-							function removerAdicionarDadosConfigs(db, configs) {
-								var tx = db.transaction(['mtab_config'], 'readwrite');
-								var store = tx.objectStore('mtab_config');
-
-								var objectStoreRequest = store.clear();
-								objectStoreRequest.onsuccess = function (event) {
-									num += 1;
-								}
-
-								configs.map(function (config) {
-									store.add(config);
 								});
 
 								tx.oncomplete = function () {
@@ -229,16 +190,6 @@
 							function removerDadosProgManutEvento(db) {
 								var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
 								var store = tx.objectStore('mtab_prog_manut_evento');
-
-								var objectStoreRequest = store.clear();
-								objectStoreRequest.onsuccess = function (event) {
-									removerDadosMtabCheckpoint(db);
-								}
-							}
-
-							function removerDadosMtabCheckpoint(db) {
-								var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
-								var store = tx.objectStore('mtab_checkpoint');
 
 								var objectStoreRequest = store.clear();
 								objectStoreRequest.onsuccess = function (event) {

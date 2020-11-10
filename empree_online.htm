@@ -371,7 +371,7 @@
 
             // carregar dados das manutenções do servidor 
             var ajax = new XMLHttpRequest();
-            ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_emp_online.asp?l=" + login + "&s=" + senha + "&versao=3.0&t=" + Math.random(), true);
+            ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_emp_online.asp?l=" + login + "&s=" + senha + "&versao=2.1&t=" + Math.random(), true);
             ajax.onreadystatechange = function () {
                 if (ajax.readyState == 4) { //Request complete !!
                     if (ajax.status == 200 || ajax.status == 0) { // OK response
@@ -403,7 +403,6 @@
                                 alert(q_mensagem)
                             }
 
-
                             if (status_sync_serv != "nada") {
 
                                 var db;
@@ -412,8 +411,6 @@
                                 request.onerror = function (event) {
                                     alert("Erro ao criar o banco (cod 02)");
                                 };
-
-                                
 
                                 request.onsuccess = function (event) {
                                     db = request.result;
@@ -444,8 +441,6 @@
                                 }
 
                             }
-
-
 
                             if (logou == "S") {
 

@@ -3,7 +3,8 @@
 
 <head>
 	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport"
+		content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, `user-scalable=no">
 	<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
 	<link rel="stylesheet" href="css/custom.css" />
 	<script src="https://kit.fontawesome.com/c202879e33.js" crossorigin="anonymous"></script>
@@ -122,7 +123,7 @@
 
 			setInterval(function () {
 				// window.StatusBar.hide();
-				
+
 				if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
 					document.getElementById('menu_opc2').innerHTML = menu_sup_offline;
 					return false;
@@ -637,7 +638,7 @@
 			destinationType: destinationType.FILE_URI,
 			encodingType: Camera.EncodingType.JPEG,
 			popoverOptions: CameraPopoverOptions,
-			// saveToPhotoAlbum: true,
+			saveToPhotoAlbum: true,
 			sourceType: source
 		});
 
@@ -1606,59 +1607,50 @@
 		var ajax = new XMLHttpRequest();
 		ajax.open("POST", "https://www.sigmacivil.com.br/app_sc/rec_texto_uploaded.asp?versao=2.1", true);
 		ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-		ajax.onreadystatechange = function () {
-			if (ajax.readyState == 4) {//Request complete !!
-				if (ajax.status == 200 || ajax.status == 0) { // OK response
+		ajax.addEventListener("loadend", function (evt) {
+			var resposta_total = ajax.responseText;
+			if (resposta_total == "grav_ok") {
+				var db;
+				var request = window.indexedDB.open("db_sigmacivil", "1");
 
-					var resposta_total = ajax.responseText;
-					if (resposta_total == "grav_ok") {
-						var db;
-						var request = window.indexedDB.open("db_sigmacivil", "1");
+				request.onerror = function (event) {
+					alert("Erro ao criar o banco (cod 16)");
+				};
 
-						request.onerror = function (event) {
-							alert("Erro ao criar o banco (cod 16)");
-						};
+				request.onsuccess = function (event) {
+					db = request.result;
 
-						request.onsuccess = function (event) {
-							db = request.result;
+					uploadManutEventoWinUpTexto(db);
 
-							uploadManutEventoWinUpTexto(db);
-
-							db.onerror = function (event) {
-								alert("Database error: " + event.target.errorCode);
-							}
-						}
-
-						function uploadManutEventoWinUpTexto(db) {
-							var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
-							var store = tx.objectStore('mtab_prog_manut_evento');
-							var index = store.index('comparar');
-							var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
-							index.openCursor(whereEquals).onsuccess = function (event) {
-								var cursor = event.target.result;
-								if (cursor) {
-									var data = cursor.value;
-
-									data.status_texto_upl = "1";
-
-									var request = cursor.update(data);
-									request.onsuccess = function (event) {
-										reload_page();
-									}
-								}
-							}
-						}
-
-					} else {
-						alert("Problemas com a gravação do texto. Tentar novamente.");
+					db.onerror = function (event) {
+						alert("Database error: " + event.target.errorCode);
 					}
-
-				} else {
-					alert("Problemas com sua conexao internet. Erro: 0148");
 				}
-			}
 
-		}
+				function uploadManutEventoWinUpTexto(db) {
+					var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+					var store = tx.objectStore('mtab_prog_manut_evento');
+					var index = store.index('comparar');
+					var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+					index.openCursor(whereEquals).onsuccess = function (event) {
+						var cursor = event.target.result;
+						if (cursor) {
+							var data = cursor.value;
+
+							data.status_texto_upl = "1";
+
+							var request = cursor.update(data);
+							request.onsuccess = function (event) {
+								reload_page();
+							}
+						}
+					}
+				}
+
+			} else {
+				alert("Problemas com a gravação do texto. Tentar novamente.");
+			}
+		});
 
 		data = data.split(":").join("%3A")
 		data = data.split("{").join("%7B")

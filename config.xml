@@ -26,14 +26,6 @@
          <application android:usesCleartextTraffic="true"/>
 	</gap:config-file>
 
-    <system.webServer>
-        <security>
-            <requestFiltering>
-                <requestLimits maxQueryString="32768"/>
-            </requestFiltering>
-        </security>
-    </system.webServer>
-
     <!--
         Enable individual API permissions by defining each here.
         The 'device' permission is required for the 'deviceready' event.
@@ -141,6 +133,7 @@
     <plugin name="cordova-sqlite-storage" spec="~0.8.5" />
     <plugin name="cordova-plugin-statusbar" spec="~2.4.3" />
     <plugin name="cordova-plugin-datepicker" spec="~0.9.3" /> 
+    <plugin name="cordova-plugin-wkwebview-file-xhr" spec="~3.0.0" /> 
     
     <!-- <plugin name="cordova-plugin-wkwebview-engine" source="npm" spec="~1.2.1" /> -->
     

@@ -24,6 +24,8 @@
 	<gap:config-file platform="android" parent="/manifest" mode="merge">
 		 <application android:debuggable="false"/>
          <application android:usesCleartextTraffic="true"/>
+         
+         <application android:requestLegacyExternalStorage="true" />
 	</gap:config-file>
 
     <!--
@@ -239,7 +241,7 @@
 	<gap:splash src="res/screen/ios/screen-iphone-landscape.jpg"         gap:platform="ios"     width="480" height="320" />
 	<gap:splash src="res/screen/ios/screen-iphone-landscape-2x.jpg"      gap:platform="ios"     width="960" height="640" />
 	<gap:splash src="res/screen/ios/screen-iphone-portrait-568h-2x.jpg"  gap:platform="ios"     width="640"  height="1136" />	
-	
+
     <edit-config target="NSCameraUsageDescription" file="*-Info.plist" mode="merge">
     <string>need camera access to take pictures</string>
 	</edit-config>

@@ -547,7 +547,7 @@
 	function go_relat_check2() {
 
 		if (tem_conexao()) {
-			window.location.assign("new_checkpoint_hist.htm?e=" + num_empree + "&id_sist=" + id_sis + "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano))
+			window.location.assign("new_checkpoint_hist.htm?e=" + num_empree + /*"&id_sist=" + id_sis +*/ "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano))
 		}
 		else {
 			alert('Você está sem conexão com a internet. Para visualizar o relatório online é necessário estar conectado. Favor se conectar.');

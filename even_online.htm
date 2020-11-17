@@ -2131,7 +2131,8 @@
 
     <!-- MENU BURGER -->
     <div class="btn-bars" style="display: none;">
-        <div style="top:4; z-index: 30;" data-role="collapsible" data-collapsed="true" class="ui-btn-left menu" data-mini="true">
+        <div style="top:4; z-index: 30;" data-role="collapsible" data-collapsed="true" class="ui-btn-left menu"
+            data-mini="true">
             <h4 class="btn-bars-bars">
                 <!-- <span class="fas fa-bars"></span> -->
                 <img class="is-bars" src="images/bars.svg" width="14" alt="Menu" />
@@ -2145,6 +2146,10 @@
                 <li>
                     <a class="ui-btn ui-icon-carat-r ui-btn-icon-right ui-shadow ui-corner-all" href="#"
                         onClick="scan()">Ler QRcode</a>
+                </li>
+                <li>
+                    <a class="ui-btn ui-icon-gear ui-btn-icon-right ui-shadow ui-corner-all" href="#"
+                        onClick="go_to_page_config()">Configurações</a>
                 </li>
                 <li>
                     <a class="ui-btn ui-icon-power ui-btn-icon-right ui-shadow ui-corner-all" href="#"
@@ -2795,6 +2800,10 @@
 
     function go_to_page(q_id_sistema, q_num_empree) {
         window.location.assign("qrcode.htm?l=" + login + "&s=" + senha + "&e=" + q_num_empree + "&id_sis=" + q_id_sistema + "&qm=" + parseInt(mes_ev) + "&qa=" + parseInt(ano_ev));
+    }
+
+    function go_to_page_config() {
+        window.location.assign("configuracoes.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + parseInt(mes_ev) + "&qa=" + parseInt(ano_ev));
     }
 
     function reload_page() {

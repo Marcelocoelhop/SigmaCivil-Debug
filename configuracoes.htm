@@ -4,8 +4,8 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Configurações</title>
-    <meta name="viewport"
-        content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, `user-scalable=no">
+	<meta name="viewport"
+		content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, `user-scalable=no">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<link rel="stylesheet" href="css/custom.css" />
 	<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
@@ -43,14 +43,14 @@
 
 		window.onerror = function (message, url, lineNumber) {
 			navigator.notification.alert(
-                `Error: ${message} in ${url} at line ${lineNumber}`,  // message
-                function() {
-                    return;
-                },         // callback
-                'SigmaCivil',            // title
-                'OK'                  // buttonName
-            );
-        }
+				`Error: ${message} in ${url} at line ${lineNumber}`,  // message
+				function () {
+					return;
+				},         // callback
+				'SigmaCivil',            // title
+				'OK'                  // buttonName
+			);
+		}
 
 		var dados_checkpoint = "";
 		var id_cliente;
@@ -120,7 +120,7 @@
 					document.getElementById('menu_opc2').innerHTML = menu_sup_online;
 					return true;
 				}
-            }, 5000);
+			}, 5000);
 		}
 
 	</script>
@@ -142,24 +142,25 @@
 					<img class="is-bars" src="images/bars.svg" width="14" alt="Menu" />
 					<img class="is-times is-disabled" src="images/times.svg" width="13" alt="Menu" />
 				</h4>
-				<ul class="menu-tablet-responsive" style="border: 1px solid #e0e0e0;" data-role="listview" data-mini="true">
+				<ul class="menu-tablet-responsive" style="border: 1px solid #e0e0e0;" data-role="listview"
+					data-mini="true">
 					<li>
 						<a class="ui-btn ui-icon-back ui-btn-icon-right ui-shadow ui-corner-all" href="#"
-						onClick="volta_uni()">Manutenções</a>
-                    </li>
-                    <li>
-                        <a class="ui-btn ui-icon-carat-r ui-btn-icon-right ui-shadow ui-corner-all" href="#"
-                        onClick="scan()">Ler QRcode</a>
+							onClick="volta_uni()">Manutenções</a>
+					</li>
+					<li>
+						<a class="ui-btn ui-icon-carat-r ui-btn-icon-right ui-shadow ui-corner-all" href="#"
+							onClick="scan()">Ler QRcode</a>
 					</li>
 					<li>
 						<a class="ui-btn ui-icon-gear ui-btn-icon-right ui-shadow ui-corner-all actived" href="#"
-						onClick="go_to_page_config()">Configurações</a>
+							onClick="go_to_page_config()">Configurações</a>
 					</li>
 					<li>
 						<a class="ui-btn ui-icon-power ui-btn-icon-right ui-shadow ui-corner-all" href="#"
-						onClick="closeApp()">Fechar app</a>
-                    </li>
-                    <li>
+							onClick="closeApp()">Fechar app</a>
+					</li>
+					<li>
 						<a class="click" href="#" onClick="enviar_sync()">Logout</a>
 					</li>
 				</ul>
@@ -218,15 +219,15 @@
 	var senha = getquerystring("s");
 
 	var q_mes = getquerystring("qm")
-    var q_ano = getquerystring("qa")
-    
+	var q_ano = getquerystring("qa")
+
 	var id_sis = getquerystring("id_sis");
 
 	var sl1 = '';
 	var sl2 = '';
 
 	//////////////////////////////////////
-	
+
 	function editaImagem() {
 		var db;
 		var request = window.indexedDB.open("db_sigmacivil", "1");
@@ -244,7 +245,7 @@
 				alert("Database error: " + event.target.errorCode);
 			}
 		}
-		
+
 		function consultaMtabConfig(db) {
 			var tx = db.transaction(['mtab_config'], 'readwrite');
 			var store = tx.objectStore('mtab_config');
@@ -301,11 +302,11 @@
 	].join('');
 
 	document.getElementById('forms-configs').innerHTML = formConfig;
-    
-    var registrar_manut = document.querySelector('.register');
-    registrar_manut.addEventListener('click', function() {
+
+	var registrar_manut = document.querySelector('.register');
+	registrar_manut.addEventListener('click', function () {
 		go_to_page(id_sis, num_empree);
-    });
+	});
 
 	function go_to_page(q_id_sistema, q_num_empree) {
 		var nome_sistema = ""
@@ -334,168 +335,168 @@
 						}
 					} else {
 						navigator.notification.alert(
-                            'Problemas com sua conexão. Conecte seu celular com a internet e tente novamente!',  // message
-                            function() {
-                                go_page_qrcode(qual_id_sistema, qual_num_empree);
-                            },         // callback
-                            'SigmaCivil',            // title
-                            'OK'                  // buttonName
-                        );
+							'Problemas com sua conexão. Conecte seu celular com a internet e tente novamente!',  // message
+							function () {
+								go_page_qrcode(qual_id_sistema, qual_num_empree);
+							},         // callback
+							'SigmaCivil',            // title
+							'OK'                  // buttonName
+						);
 					}
 				} else {
 					alert("Problemas com sua conexao internet. Erro: 0146");
 				}
 			}
 		}
-		
+
 		xhr.send()
-    }
-    
-    function scan() {
-        cordova.plugins.barcodeScanner.scan(
-            function (result) {
-                if (!result.cancelled) {
-                    // In this case we only want to process QR Codes
-                    if (result.format == "QR_CODE") {
-                        var value = result.text;
+	}
 
-                        var ponto_ini = value.indexOf("www.sigmacivil.com.br/us/new_qr_hist_mp.asp?c=");
-                        var parte1 = value.substring(ponto_ini + 46);
+	function scan() {
+		cordova.plugins.barcodeScanner.scan(
+			function (result) {
+				if (!result.cancelled) {
+					// In this case we only want to process QR Codes
+					if (result.format == "QR_CODE") {
+						var value = result.text;
 
-                        var pedaco = parte1.split("_");
-                        // alert(id_empree);
-                        // alert(pedaco[0]);
+						var ponto_ini = value.indexOf("www.sigmacivil.com.br/us/new_qr_hist_mp.asp?c=");
+						var parte1 = value.substring(ponto_ini + 46);
 
-                        if (num_empree == pedaco[0]) {
+						var pedaco = parte1.split("_");
+						// alert(id_empree);
+						// alert(pedaco[0]);
 
-                            var qid_empree = num_empree;
-                            var qid_sistema = pedaco[1];
+						if (num_empree == pedaco[0]) {
 
-                            var d = new Date();
-                            var qdata_checkpoint = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+							var qid_empree = num_empree;
+							var qid_sistema = pedaco[1];
 
-                            var qatualizado_serv = "N";
+							var d = new Date();
+							var qdata_checkpoint = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
 
-                            navigator.geolocation.getCurrentPosition(
-                                function (position) {
-                                    var qlatitude_checkpoint = position.coords.latitude;
-                                    var qlongitude_checkpoint = position.coords.longitude;
-                                    var qaltura_checkpoint = position.coords.altitude;
+							var qatualizado_serv = "N";
 
-                                    var db;
-                                    var request = window.indexedDB.open("db_sigmacivil", "1");
+							navigator.geolocation.getCurrentPosition(
+								function (position) {
+									var qlatitude_checkpoint = position.coords.latitude;
+									var qlongitude_checkpoint = position.coords.longitude;
+									var qaltura_checkpoint = position.coords.altitude;
 
-                                    request.onerror = function (event) {
-                                        alert("Erro ao criar o banco (cod 02)");
-                                    };
+									var db;
+									var request = window.indexedDB.open("db_sigmacivil", "1");
 
-                                    request.onsuccess = function (event) {
-                                        db = request.result;
+									request.onerror = function (event) {
+										alert("Erro ao criar o banco (cod 02)");
+									};
 
-                                        inserirDadosCheckpoint(db, dadosCheckpoint);
+									request.onsuccess = function (event) {
+										db = request.result;
 
-                                        db.onerror = function (event) {
-                                            alert("Database error: " + event.target.errorCode);
-                                        }
-                                    }
+										inserirDadosCheckpoint(db, dadosCheckpoint);
 
-                                    var dadosCheckpoint = [
-                                        {
-                                            id_empree: qid_empree,
-                                            id_sistema: qid_sistema,
-                                            data_checkpoint: qdata_checkpoint,
-                                            latitude_checkpoint: qlatitude_checkpoint,
-                                            longitude_checkpoint: qlongitude_checkpoint,
-                                            altura_checkpoint: qaltura_checkpoint,
-                                            atualizado_serv: qatualizado_serv,
-                                        }
-                                    ];
+										db.onerror = function (event) {
+											alert("Database error: " + event.target.errorCode);
+										}
+									}
 
-                                    function inserirDadosCheckpoint(db, dadosCheckpoint) {
-                                        var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
-                                        var store = tx.objectStore('mtab_checkpoint');
+									var dadosCheckpoint = [
+										{
+											id_empree: qid_empree,
+											id_sistema: qid_sistema,
+											data_checkpoint: qdata_checkpoint,
+											latitude_checkpoint: qlatitude_checkpoint,
+											longitude_checkpoint: qlongitude_checkpoint,
+											altura_checkpoint: qaltura_checkpoint,
+											atualizado_serv: qatualizado_serv,
+										}
+									];
 
-                                        dadosCheckpoint.map(function (dadoCheckpoint) {
-                                            store.add(dadoCheckpoint);
-                                        });
+									function inserirDadosCheckpoint(db, dadosCheckpoint) {
+										var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
+										var store = tx.objectStore('mtab_checkpoint');
 
-                                        tx.oncomplete = function () {
-                                            go_to_page(qid_sistema, qid_empree);
-                                        }
+										dadosCheckpoint.map(function (dadoCheckpoint) {
+											store.add(dadoCheckpoint);
+										});
 
-                                        tx.onerror = function (event) {
-                                            alert('error storing checkpoint note ' + event.target.error);
-                                        }
-                                    }
-                                },
-                                function (error) {
-                                    var db;
-                                    var request = window.indexedDB.open("db_sigmacivil", "1");
+										tx.oncomplete = function () {
+											go_to_page(qid_sistema, qid_empree);
+										}
 
-                                    request.onerror = function (event) {
-                                        alert("Erro ao criar o banco (cod 03)");
-                                    };
+										tx.onerror = function (event) {
+											alert('error storing checkpoint note ' + event.target.error);
+										}
+									}
+								},
+								function (error) {
+									var db;
+									var request = window.indexedDB.open("db_sigmacivil", "1");
 
-                                    request.onsuccess = function (event) {
-                                        db = request.result;
+									request.onerror = function (event) {
+										alert("Erro ao criar o banco (cod 03)");
+									};
 
-                                        inserirDadosCheckpointError(db, dadosCheckpointError);
+									request.onsuccess = function (event) {
+										db = request.result;
 
-                                        db.onerror = function (event) {
-                                            alert("Database error: " + event.target.errorCode);
-                                        }
-                                    }
+										inserirDadosCheckpointError(db, dadosCheckpointError);
 
-                                    var dadosCheckpointError = [
-                                        {
-                                            id_empree: qid_empree,
-                                            id_sistema: qid_sistema,
-                                            data_checkpoint: qdata_checkpoint,
-                                            latitude_checkpoint: "",
-                                            longitude_checkpoint: "",
-                                            altura_checkpoint: "",
-                                            atualizado_serv: qatualizado_serv,
-                                        }
-                                    ];
+										db.onerror = function (event) {
+											alert("Database error: " + event.target.errorCode);
+										}
+									}
 
-                                    function inserirDadosCheckpointError(db, dadosCheckpointError) {
-                                        var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
-                                        var store = tx.objectStore('mtab_checkpoint');
+									var dadosCheckpointError = [
+										{
+											id_empree: qid_empree,
+											id_sistema: qid_sistema,
+											data_checkpoint: qdata_checkpoint,
+											latitude_checkpoint: "",
+											longitude_checkpoint: "",
+											altura_checkpoint: "",
+											atualizado_serv: qatualizado_serv,
+										}
+									];
 
-                                        dadosCheckpointError.map(function (dadoCheckpointError) {
-                                            store.add(dadoCheckpointError);
-                                        });
+									function inserirDadosCheckpointError(db, dadosCheckpointError) {
+										var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
+										var store = tx.objectStore('mtab_checkpoint');
 
-                                        tx.oncomplete = function () {
-                                            go_to_page(qid_sistema, qid_empree);
-                                        }
+										dadosCheckpointError.map(function (dadoCheckpointError) {
+											store.add(dadoCheckpointError);
+										});
 
-                                        tx.onerror = function (event) {
-                                            alert('error storing checkpointError note ' + event.target.error);
-                                        }
-                                    }
-                                }
-                            );
+										tx.oncomplete = function () {
+											go_to_page(qid_sistema, qid_empree);
+										}
 
-                        } else {
-                            alert("Esse QRCode não é válido");
-                        }
+										tx.onerror = function (event) {
+											alert('error storing checkpointError note ' + event.target.error);
+										}
+									}
+								}
+							);
 
-                    } else {
-                    	alert("Desculpe, só é possível ler QRCODES");
-                    }
-                } else {
-                    // alert("Leitura do QRCODE cancelada");
-                }
-            },
-            function (error) {
-                // alert("Erro: " + error);
-            }
-        );
-    }
-    
+						} else {
+							alert("Esse QRCode não é válido");
+						}
+
+					} else {
+						alert("Desculpe, só é possível ler QRCODES");
+					}
+				} else {
+					// alert("Leitura do QRCODE cancelada");
+				}
+			},
+			function (error) {
+				// alert("Erro: " + error);
+			}
+		);
+	}
+
 	function go_page_qrcode(q_id_sistema, q_num_empree) {
-        window.location.assign("qrcode.htm?l=" + login + "&s=" + senha + "&e=" + q_num_empree + "&id_sis=" + q_id_sistema + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano));
+		window.location.assign("qrcode.htm?l=" + login + "&s=" + senha + "&e=" + q_num_empree + "&id_sis=" + q_id_sistema + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano));
 	}
 
 	function volta_uni() {
@@ -510,8 +511,8 @@
 	}
 
 	function go_to_page_config() {
-        window.location.assign("configuracoes.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano));
-    }
+		window.location.assign("configuracoes.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano));
+	}
 
 	function tem_conexao() {
 
@@ -524,31 +525,91 @@
 
 	}
 
+	function removeAcento(text) {
+		// text = text.toLowerCase();
+
+		// a
+		text = text.replace(/Á/g, 'xcL1A')
+		text = text.replace(/À/g, 'xcL2A')
+		text = text.replace(/Ã/g, 'xcL3A')
+		text = text.replace(/Â/g, 'xcL4A')
+
+		text = text.replace(/á/g, 'xcL1a')
+		text = text.replace(/à/g, 'xcL2a')
+		text = text.replace(/ã/g, 'xcL3a')
+		text = text.replace(/â/g, 'xcL4a')
+
+		// e
+		text = text.replace(/É/g, 'xcL1E')
+		text = text.replace(/È/g, 'xcL2E')
+		text = text.replace(/Ê/g, 'xcL4E')
+
+		text = text.replace(/é/g, 'xcL1e')
+		text = text.replace(/è/g, 'xcL2e')
+		text = text.replace(/ê/g, 'xcL4e')
+
+		// i
+		text = text.replace(/Í/g, 'xcL1I')
+		text = text.replace(/Ì/g, 'xcL2I')
+		text = text.replace(/Î/g, 'xcL4I')
+
+		text = text.replace(/í/g, 'xcL1i')
+		text = text.replace(/ì/g, 'xcL2i')
+		text = text.replace(/î/g, 'xcL4i')
+
+		// o
+		text = text.replace(/Ó/g, 'xcL1O')
+		text = text.replace(/Ò/g, 'xcL2O')
+		text = text.replace(/Õ/g, 'xcL3O')
+		text = text.replace(/Ô/g, 'xcL4O')
+
+		text = text.replace(/ó/g, 'xcL1o')
+		text = text.replace(/ò/g, 'xcL2o')
+		text = text.replace(/õ/g, 'xcL3o')
+		text = text.replace(/ô/g, 'xcL4o')
+
+		// u
+		text = text.replace(/Ú/g, 'xcL1U')
+		text = text.replace(/Ù/g, 'xcL2U')
+		text = text.replace(/Û/g, 'xcL4U')
+
+		text = text.replace(/ú/g, 'xcL1u')
+		text = text.replace(/ù/g, 'xcL2u')
+		text = text.replace(/û/g, 'xcL4u')
+
+		// ç
+		text = text.replace(/Ç/g, 'xcL0C')
+
+		text = text.replace(/ç/g, 'xcL0c')
+
+		return text;
+	}
+
 	function enviar_sync() {
-	    navigator.notification.confirm(
-            'Confirma que deseja se deslogar do SigmaCivil?', 
-            function(buttonIndex) {
-                if (buttonIndex === 2) {
-                    return;
-                }
+		navigator.notification.confirm(
+			'Confirma que deseja se deslogar do SigmaCivil?',
+			function (buttonIndex) {
+				if (buttonIndex === 2) {
+					return;
+				}
 
-                navigator.notification.confirm(
-                    'Tem certeza que deseja sair do app SigmaCivil? Todos os seus arquivos como fotos e vídeos serão apagados deste dispositivo! Confirmar?', 
-                    function(buttonIndex) {
-                        if (buttonIndex === 2) {
-                            return;
-                        }
+				navigator.notification.confirm(
+					'Tem certeza que deseja sair do app SigmaCivil? Todos os seus arquivos como fotos e vídeos serão apagados deste dispositivo! Confirmar?',
+					function (buttonIndex) {
+						if (buttonIndex === 2) {
+							return;
+						}
 
-                        document.form_sup.action = "del.htm";
-                        document.form_sup.submit();
-                    }, 
-                    'SigmaCivil', 
-                    ['OK', 'Cancelar']
-                );
-            }, 
-            'SigmaCivil', 
-            ['OK', 'Cancelar']
-        );
+						document.form_sup.action = "del.htm";
+						document.form_sup.submit();
+					},
+					'SigmaCivil',
+					['OK', 'Cancelar']
+				);
+			},
+			'SigmaCivil',
+			['OK', 'Cancelar']
+		);
 
 		// decisao = confirm("Deseja efetuar novo login? Será possível se logar novamente em qualquer empreendimento atualizando o Plano de Manutenção!");
 
@@ -559,21 +620,21 @@
 		// } else {
 
 		// }
-    }
+	}
 
 	function closeApp() {
-        navigator.notification.confirm(
-            'Tem certeza que deseja sair do app SigmaCivil?', 
-            function(buttonIndex) {
-                if (buttonIndex === 2) {
-                    return;
-                }
-                    
-                navigator.app.exitApp();
-            }, 
-            'SigmaCivil', 
-            ['OK', 'Cancelar']
-        );
+		navigator.notification.confirm(
+			'Tem certeza que deseja sair do app SigmaCivil?',
+			function (buttonIndex) {
+				if (buttonIndex === 2) {
+					return;
+				}
+
+				navigator.app.exitApp();
+			},
+			'SigmaCivil',
+			['OK', 'Cancelar']
+		);
 	}
 
 </script>

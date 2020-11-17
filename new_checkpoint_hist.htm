@@ -484,7 +484,7 @@
                         '<form style="margin: 0; padding: 0; font-weight: normal;">',
                         '<div style="margin: 0 0.5rem; padding: 0; font-weight: normal;" class="ui-field-contain">',
                         '<select style="width: 100%; padding: 6px; padding-left: 25px; box-shadow: none; position: relative; bottom: 8px;" class="ui-btn ui-icon-carat-d ui-btn-icon-right ui-corner-all ui-shadow select_manut" onchange="enviar_select()" name="select-native-2" id="q_manut" data-mini="true">',
-                        '<option value="" selected>Buscar...</option>',
+                        '<option value="">Buscar...</option>',
                     ].join('');
 
                     var fim_select = [
@@ -520,7 +520,7 @@
 
                         arr.push(partBusca[0]);
 
-                        // partBusca[0] == q_sist ? sl = "selected" : sl = "";
+                        partBusca[0] == q_sist ? sl = "selected" : sl = "";
 
                         if (encontrou == -1) {
                             dados_select += [

@@ -44,6 +44,7 @@
 
     <script>
         // VARIÁVEIS ACESSADAS VIA QUERY.PARAMS
+        var num_empree = getquerystring("e");
         var login = getquerystring("l");
         var senha = getquerystring("s");
 
@@ -75,6 +76,9 @@
         var ev_email = 0
 
         var apagar1;
+
+        var editPictures = null;
+        var uploadAutomatic = false;
 
         // FUNÇÃO QUE APRESENTA O ERRO NA APLICAÇÃO
         window.onerror = function (message, url, lineNumber) {
@@ -168,7 +172,7 @@
             }, 5000);
 
             var ajax2 = new XMLHttpRequest();
-            ajax2.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_dados_evento_online.asp?l=" + login + "&s=" + senha + "&ipm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&versao=2.1&t=" + Math.random(), false);
+            ajax2.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_dados_evento_online.asp?l=" + login + "&s=" + senha + "&ipm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&versao=2.2&t=" + Math.random(), false);
             ajax2.addEventListener("loadend", function (evt) {
                 var resposta_total = this.responseText;
                 var jsontext = resposta_total.split("#")
@@ -616,8 +620,10 @@
                             '<textarea rows="3" style="width: 100%; border-color: #dddddd; font-size: 13px; outline: none; border-radius: 4px; padding: 5px; resize: none" class="size-14 condominio condominio_obs" name="textarea-1" id="txt_dado_condominio" data-placeholder="true" placeholder="Condomínio..." autocomplete="off" onclick="RestricaoData_obs();" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)">' + observacao_evento + '</textarea>',
                             '<fieldset data-role="controlgroup">',
                             '<div id="form_email" style="background: #f5f5f5; position: relative; top: 3px; padding: 3px; border-radius: 4px; border: 1px solid #dddddd;">',
-                            '<input style="position: relative; top: 1px; padding-right: 100%;" type="checkbox" name="email_condominio" id="email_condominio">',
-                            '<span style="font-size: 12px; position: relative; bottom: 1.8px;"><span style="color: rgb(153, 0, 0);">Marque para enviar um alerta</span> por email a construtora.</span>',
+                            '<div style="display: flex; align-items: center;">',
+                            '<input style="height: 20px; width: 20px; margin-right: 4px;" type="checkbox" name="email_condominio" id="email_condominio">',
+                            '<span style="font-size: 12px;"><span style="color: rgb(153, 0, 0);">Marque e clique em salvar abaixo para enviar um alerta</span> por email a construtora.</span>',
+                            '</div>',
                             '</div>',
                             '</fieldset>',
                             '</tbody>',
@@ -648,8 +654,10 @@
                             '<textarea rows="3" style="width: 100%; border-color: #dddddd; font-size: 13px; outline: none; border-radius: 4px; padding: 5px; resize: none" class="size-14 construtora construtora_obs" name="textarea-1" id="txt_dado_construtora" data-placeholder="true" placeholder="Construtora..." autocomplete="off" onclick="RestricaoData_obs_constr();" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)">' + observacao_evento_construtora + '</textarea>',
                             '<fieldset data-role="controlgroup">',
                             '<div style="background: #f5f5f5; position: relative; top: 3px; padding: 3px; border-radius: 4px; border: 1px solid #dddddd;">',
-                            '<input style="position: relative; top: 1px; padding-right: 100%;" type="checkbox" name="email_construtora" id="email_construtora">',
-                            '<span style="font-size: 12px; position: relative; bottom: 1.8px;"><span style="color: rgb(153, 0, 0);">Marque para enviar um alerta</span> por email ao condomínio.</span>',
+                            '<div style="display: flex; align-items: center;">',
+                            '<input style="height: 20px; width: 20px; margin-right: 4px;" type="checkbox" name="email_construtora" id="email_construtora">',
+                            '<span style="font-size: 12px;"><span style="color: rgb(153, 0, 0);">Marque e clique em salvar abaixo para enviar um alerta</span> por email ao condomínio.</span>',
+                            '</div>',
                             '</div>',
                             '</fieldset>',
                             '</tbody>',
@@ -737,6 +745,11 @@
                     var tam_ti;
                     var aux_image_upload;
 
+                    var qtd_tam_ti = 0;
+                    var qtd_tam_ti_audio = 0;
+                    var qtd_tam_ti_video = 0;
+                    var qtd_tam_ti_texto = 0;
+
                     if (cursor) {
                         var rrr_caminho_imagens = cursor.value.caminho_imagens;
                         var rrr_caminho_texto = cursor.value.caminho_texto;
@@ -787,6 +800,12 @@
                             aux_image_upload = 'upload_verde.png';
                         }
 
+                        // automatic upload
+                        if (aux_image_upload == 'upload.png') {
+                            qtd_tam_ti = k + 1;
+                        }
+
+
                         //imagens da seta, preta ou verde
 
                         selec_imagens_thumb = selec_imagens_thumb + "<div style='float:left; position: relative; left: 1.5px;'><div style='border: 1px solid #5d5d5d'><table cellpadding='0' cellspacing='0'><img src='" + todas_imagens[k] + "'  onclick='abrir_popup(" + String.fromCharCode(34) + rrr_id_prog_manut + String.fromCharCode(34) + "," + String.fromCharCode(34) + k + String.fromCharCode(34) + " )'  width='106' height='70' hspace='2' vspace='2'/><div align='center'><img src='images/trash.svg' style='float: left; padding: 0.5rem; position: relative; left: 5px; text-shadow: none;' class='icon-size' width='15' onclick='deletar_imagem(" + String.fromCharCode(34) + k + String.fromCharCode(34) + ")'></div><div align='center'><img src='images/" + aux_image_upload + "' style='float: right; padding: 0.5rem; position: relative; right: 5px; text-shadow: none;' class='icon-size' width='17' onclick='upload_imagem(" + String.fromCharCode(34) + k + String.fromCharCode(34) + ")' s></div></table></div></div></div>"
@@ -813,6 +832,7 @@
                         // selec_audio = "<div class='icon-size' style='position: relative; text-align: center; top: 10px;'><table cellpadding='0' cellspacing='0'><div id='latesq_" + rrr_id_prog_manut + "'width='40' height='30'></div><div style='border: 1px solid black; width: 60%; border-radius: 3px; margin: 0 auto; padding: 4px;'><img src='images/play.svg' width='15' style='margin-right: 5px;' class='top-9px' id='player_" + rrr_id_prog_manut + "'onclick='abrir_audio(" + String.fromCharCode(34) + rrr_caminho_audio + String.fromCharCode(34) + ")' ><img src='images/pause.svg' width='15' style='margin-right: 5px;' class='top-9px position-icons' id='pause_" + rrr_id_prog_manut + "' onclick='pause_audio()'><img src='images/stop.svg' width='15' style='margin-right: 5px;' class='top-9px position-icons' id='stop_" + rrr_id_prog_manut + "'onclick='stop_audio()'><img src='images/microphone.svg' width='15' style='margin-right: 5px;' class='top-9px position-icons' id='rec_" + rrr_id_prog_manut + "'onclick='captureAudio(" + String.fromCharCode(34) + rrr_id_prog_manut + String.fromCharCode(34) + ")'></div><div id='latdir_" + rrr_id_prog_manut + "'width='40' height='30'></div><div align='center'><img src='images/trash.svg' style='position: relative; top: 8px; right: 55px; text-align: center; text-shadow: none;' class='icon-size' width='15' onclick='deletar_audio()'></div><div align='center'><img src='images/" + aux_image_upload + "' style='position: relative; bottom: 10px; left: 45px; text-align: center; text-shadow: none;' class='icon-size' width='17' onclick='upload_audio()'></div></table></div>            <audio style='margin-bottom: 10px; width: 100%;' controls><source src='" + rrr_caminho_audio + "'></audio>"
                         if (aux_image_upload === "upload.png") {
                             qtdDocs_Device += 1
+                            qtd_tam_ti_audio += 1;
                         }
                     }
                     //barra do áudio
@@ -833,6 +853,7 @@
                         selec_video = "<div id='video_invis_" + rrr_id_prog_manut + "' style='display:inline; margin-left: 5px;'><table cellpadding='0' cellspacing='0'><video id='qvideo_" + rrr_id_prog_manut + "' controls poster='images/video.png' width='150' height='150'>   <source id='qsource_" + rrr_id_prog_manut + "' src='" + rrr_caminho_video + "' type='video/mp4'></video><div align='center'><img src='images/trash.svg' style='float: left; padding: 0.5rem; position: relative; left: 55px; text-shadow: none;' class='icon-size' width='15' onclick='deletar_video()'></div><div align='center'><img src='images/" + aux_image_upload + "' style='padding: 0.5rem; float: left; position: relative; left: 120px; text-shadow: none;' class='icon-size' width='17' onclick='upload_video()'/></div></table></div>"
                         if (aux_image_upload === "upload.png") {
                             qtdDocs_Device += 1
+                            qtd_tam_ti_video += 1;
                         }
                     }
                     //barrinha do vídeo
@@ -856,6 +877,7 @@
                         bot_up = "<img src='images/" + aux_image_upload + "' style='float: right; position: relative; right: 110px; top: 3px; text-shadow: none;' class='icon-size' width='17' onclick='upload_texto()'></i>"
                         if (aux_image_upload === "upload.png") {
                             qtdDocs_Device += 1
+                            qtd_tam_ti_texto += 1;
                         }
                     }
 
@@ -917,6 +939,60 @@
                     }
 
                     $("#idpopup_new_" + rrr2_id_prog_manut).popup();
+
+                    var db;
+                    var request = window.indexedDB.open("db_sigmacivil", "1");
+
+                    request.onerror = function (event) {
+                        alert("Erro ao criar o banco (cod 01)");
+                    };
+
+                    request.onsuccess = function (event) {
+                        db = request.result;
+
+                        consultaConfig(db);
+
+                        db.onerror = function (event) {
+                            alert("Database error: " + event.target.errorCode);
+                        }
+                    }
+
+                    function consultaConfig(db) {
+                        var tx = db.transaction(['mtab_config'], 'readwrite');
+                        var store = tx.objectStore('mtab_config');
+                        var objectStoreRequest = store.openCursor();
+                        objectStoreRequest.onsuccess = function (event) {
+                            var cursor = event.target.result;
+                            if (cursor) {
+                                var data = cursor.value;
+
+                                editPictures = data['editar_fotos'];
+                                uploadAutomatic = data['upload_automatico'];
+
+                                if (uploadAutomatic && qtd_tam_ti > 0) {
+                                    upload_imagem(qtd_tam_ti - 1);
+                                }
+
+                                // alert(qtd_tam_ti_audio);
+
+                                if (uploadAutomatic && qtd_tam_ti_audio > 0) {
+                                    upload_audio();
+                                }
+
+                                // alert(qtd_tam_ti_video);
+
+                                if (uploadAutomatic && qtd_tam_ti_video > 0) {
+                                    upload_video();
+                                }
+
+                                // alert(qtd_tam_ti_texto);
+
+                                if (uploadAutomatic && qtd_tam_ti_texto > 0) {
+                                    upload_texto();
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -950,6 +1026,7 @@
                 encodingType: Camera.EncodingType.JPEG,
                 popoverOptions: CameraPopoverOptions,
                 saveToPhotoAlbum: true,
+                allowEdit: editPictures ? true : false,
                 sourceType: source
             });
 
@@ -1148,86 +1225,88 @@
 
         function upload_imagem(q_id) {
 
-            //if (tem_conexao()) {
+            if (tem_conexao()) {
 
-            var q_id;
-            var all_images;
-            var all_status_images;
-            var taman;
-            var aux_1 = "";
+                var q_id;
+                var all_images;
+                var all_status_images;
+                var taman;
+                var aux_1 = "";
 
-            var db;
-            var request = window.indexedDB.open("db_sigmacivil", "1");
+                var db;
+                var request = window.indexedDB.open("db_sigmacivil", "1");
 
-            request.onerror = function (event) {
-                alert("Erro ao criar o banco (cod 04)");
-            };
+                request.onerror = function (event) {
+                    alert("Erro ao criar o banco (cod 04)");
+                };
 
-            request.onsuccess = function (event) {
-                db = request.result;
+                request.onsuccess = function (event) {
+                    db = request.result;
 
-                uploadManutEvento(db);
+                    uploadManutEvento(db);
 
-                db.onerror = function (event) {
-                    alert("Database error: " + event.target.errorCode);
+                    db.onerror = function (event) {
+                        alert("Database error: " + event.target.errorCode);
+                    }
                 }
-            }
 
-            function uploadManutEvento(db) {
-                var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
-                var store = tx.objectStore('mtab_prog_manut_evento');
-                var index = store.index('comparar');
-                var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
-                index.openCursor(whereEquals).onsuccess = function (event) {
-                    var cursor = event.target.result;
-                    if (cursor) {
-                        var data = cursor.value;
+                function uploadManutEvento(db) {
+                    var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+                    var store = tx.objectStore('mtab_prog_manut_evento');
+                    var index = store.index('comparar');
+                    var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+                    index.openCursor(whereEquals).onsuccess = function (event) {
+                        var cursor = event.target.result;
+                        if (cursor) {
+                            var data = cursor.value;
 
-                        var k;
-                        aux_caminho_imagens = data.caminho_imagens;
+                            var k;
+                            aux_caminho_imagens = data.caminho_imagens;
 
-                        all_images = aux_caminho_imagens.split("**");
+                            all_images = aux_caminho_imagens.split("**");
 
-                        aux_1 = aux_1 + all_images[q_id] + "**";
-                        var aux_2 = aux_1.substring(0, aux_1.length - 2);
+                            aux_1 = aux_1 + all_images[q_id] + "**";
+                            var aux_2 = aux_1.substring(0, aux_1.length - 2);
 
-                        // marcar que foi feito upload para esta imagem
+                            // marcar que foi feito upload para esta imagem
 
-                        aux_status_imagens_upl = data.status_imagens_upl;
+                            aux_status_imagens_upl = data.status_imagens_upl;
 
-                        all_status_images = aux_status_imagens_upl.split("**");
-                        taman = all_status_images.length;
+                            all_status_images = aux_status_imagens_upl.split("**");
+                            taman = all_status_images.length;
 
-                        for (k = 0; k < taman; k++) {
-                            if (q_id != k) {
-                                aux_1_status = aux_1_status + all_status_images[k] + "**"
+                            for (k = 0; k < taman; k++) {
+                                if (q_id != k) {
+                                    aux_1_status = aux_1_status + all_status_images[k] + "**"
+                                }
+                                else {
+                                    aux_1_status = aux_1_status + "1" + "**"
+                                    var ja_fez_upload = all_status_images[k]
+                                }
+                            }
+
+                            aux_1_status = aux_1_status.substring(0, aux_1_status.length - 2)
+                            // fim  marcar que foi feito upload para esta imagem
+
+                            if (ja_fez_upload != '1') {
+                                up_loadPhoto(aux_2, q_id, aux_1_status);
                             }
                             else {
-                                aux_1_status = aux_1_status + "1" + "**"
-                                var ja_fez_upload = all_status_images[k]
+                                up_loadPhoto(aux_2, q_id, aux_status_imagens_upl);
                             }
-                        }
-
-                        aux_1_status = aux_1_status.substring(0, aux_1_status.length - 2)
-                        // fim  marcar que foi feito upload para esta imagem
-
-                        if (ja_fez_upload != '1') {
-                            up_loadPhoto(aux_2, q_id, aux_1_status);
-                        }
-                        else {
-                            up_loadPhoto(aux_2, q_id, aux_status_imagens_upl);
                         }
                     }
                 }
             }
-            // }
         }
 
         function up_loadPhoto(imageURI, q_k) {
 
-            document.getElementById("parte_load_content").style.display = "block";
-            document.getElementById("parte_load").style.display = "flex";
-            window.location.href = "#ancora123"
+            if (!uploadAutomatic) {
+                document.getElementById("parte_load_content").style.display = "block";
+                document.getElementById("parte_load").style.display = "flex";
+                window.location.href = "#ancora123"
+            }
 
             var q_k;
             var options = new FileUploadOptions();
@@ -1243,7 +1322,7 @@
             options.chunkedMode = false;
 
             var ft = new FileTransfer();
-            ft.upload(imageURI, "http://www.sigmacivil.com.br/app_sc/rec_foto_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up, fail_up, options);
+            ft.upload(imageURI, "http://www.sigmacivil.com.br/app_sc/rec_foto_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up, fail_up, options);
 
         }
 
@@ -1280,7 +1359,11 @@
 
                         var request = cursor.update(data);
                         request.onsuccess = function (event) {
-                            reload_page();
+                            if (uploadAutomatic) {
+                                alert('subiu a imagem!!');
+                            } else {
+                                reload_page();
+                            }
                         }
                     }
                 }
@@ -1509,9 +1592,11 @@
         // UPLOAD VIDEO
         function up_loadVideo(videoURL) {
 
-            document.getElementById("parte_load_content").style.display = "block";
-            document.getElementById("parte_load").style.display = "flex";
-            window.location.href = "#ancora123"
+            if (!uploadAutomatic) {
+                document.getElementById("parte_load_content").style.display = "block";
+                document.getElementById("parte_load").style.display = "flex";
+                window.location.href = "#ancora123"
+            }
 
             var options = new FileUploadOptions();
             options.fileKey = "file";
@@ -1520,7 +1605,7 @@
             options.chunkedMode = false;
 
             var ft = new FileTransfer();
-            ft.upload(videoURL, "http://www.sigmacivil.com.br/app_sc/rec_video_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente, win_up_v, fail_up_v, options);
+            ft.upload(videoURL, "http://www.sigmacivil.com.br/app_sc/rec_video_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente, win_up_v, fail_up_v, options);
 
         }
 
@@ -1556,7 +1641,11 @@
 
                         var request = cursor.update(data);
                         request.onsuccess = function (event) {
-                            reload_page();
+                            if (uploadAutomatic) {
+                                alert('subiu o vídeo!!');
+                            } else {
+                                reload_page();
+                            }
                         }
                     }
                 }
@@ -1566,7 +1655,7 @@
         var fail_up_v = function (error) {
             document.getElementById("parte_load_content").style.display = "none";
             document.getElementById("parte_load").style.display = "none";
-            alert("Não foi feito o upload da vídeo!");
+            alert("Não foi feito o upload do vídeo!");
         }
         // FIM UPLOAD VIDEO
 
@@ -1814,9 +1903,11 @@
 
         function up_loadAudio(audioURL) {
 
-            document.getElementById("parte_load_content").style.display = "block";
-            document.getElementById("parte_load").style.display = "flex";
-            window.location.href = "#ancora123"
+            if (!uploadAutomatic) {
+                document.getElementById("parte_load_content").style.display = "block";
+                document.getElementById("parte_load").style.display = "flex";
+                window.location.href = "#ancora123"
+            }
 
             var options = new FileUploadOptions();
             options.fileKey = "file";
@@ -1825,7 +1916,7 @@
             options.chunkedMode = false;
 
             var ft = new FileTransfer();
-            ft.upload(audioURL, "http://www.sigmacivil.com.br/app_sc/rec_audio_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente, win_up_a, fail_up_a, options);
+            ft.upload(audioURL, "http://www.sigmacivil.com.br/app_sc/rec_audio_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente, win_up_a, fail_up_a, options);
 
         }
 
@@ -1861,7 +1952,11 @@
 
                         var request = cursor.update(data);
                         request.onsuccess = function (event) {
-                            reload_page();
+                            if (uploadAutomatic) {
+                                alert('subiu o áudio!!');
+                            } else {
+                                reload_page();
+                            }
                         }
                     }
                 }
@@ -1871,7 +1966,7 @@
         var fail_up_a = function (error) {
             document.getElementById("parte_load_content").style.display = "none";
             document.getElementById("parte_load").style.display = "none";
-            alert("Não foi feito o upload da áudio!");
+            alert("Não foi feito o upload do áudio!");
         }
         // FIM UPLOAD AUDIO
 
@@ -1922,13 +2017,15 @@
 
         function up_loadTexto(textoURL) {
 
-            document.getElementById("parte_load_content").style.display = "block";
-            document.getElementById("parte_load").style.display = "flex";
-            window.location.href = "#ancora123"
+            if (!uploadAutomatic) {
+                document.getElementById("parte_load_content").style.display = "block";
+                document.getElementById("parte_load").style.display = "flex";
+                window.location.href = "#ancora123"
+            }
 
             var data = 'tx=' + encodeURIComponent(textoURL) + '&ipm=' + id_prog_manut + '&d=' + dia_ev + '&m=' + mes_ev + '&a=' + ano_ev + "&econst=" + e_construtora + "&idc=" + id_cliente;
             var ajax = new XMLHttpRequest();
-            ajax.open("POST", "https://www.sigmacivil.com.br/app_sc/rec_texto_uploaded.asp?versao=2.1", true);
+            ajax.open("POST", "https://www.sigmacivil.com.br/app_sc/rec_texto_uploaded.asp?versao=2.2", true);
             ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             ajax.addEventListener("loadend", function (evt) {
                 var resposta_total = this.responseText;
@@ -1964,7 +2061,11 @@
 
                                 var request = cursor.update(data);
                                 request.onsuccess = function (event) {
-                                    reload_page();
+                                    if (uploadAutomatic) {
+                                        alert('subiu o texto!!');
+                                    } else {
+                                        reload_page();
+                                    }
                                 }
                             }
                         }
@@ -2001,7 +2102,8 @@
     </div>
 
     <div id="parte_load_content"
-        style="width: 100%; height: 100%; position: absolute; background: rgba(0,0,0,.5); z-index: 10;"></div>
+        style="width: 100%; display: none; height: 100%; position: absolute; background: rgba(0,0,0,.7); z-index: 50;">
+    </div>
 
     <!-- MENU ONLINE/OFFLINE -->
     <span id="menu_opc2"></span>
@@ -2010,11 +2112,13 @@
     <!-- <span id="nome_emp"></span> -->
 
     <!-- TELA DE LOADING AO ENVIAR ALGUM ARQUIVO PARA A GALERIA DE IMAGENS SERVIDOR -->
-    <div id="parte_load" align="center">
+    <div id="parte_load"
+        style="z-index: 150; display: none; position: fixed; width: 100%; height: 80%; justify-content: center; align-items: center;"
+        align="center">
         <table width="224" border="0" cellpadding="0" cellspacing="0">
             <tr>
                 <td width="42" height="49">
-                    <div align="center" style="background: rgba(0,0,0,.5); padding: 1rem; border-radius: 5px;">
+                    <div align="center">
                         <img src="images/tail-spin.svg" width="35" height="35">
                         <span class="quad_text">Aguarde o envio</span>
                     </div>
@@ -2027,14 +2131,28 @@
 
     <!-- MENU BURGER -->
     <div class="btn-bars" style="display: none;">
-        <div style="top:4;" data-role="collapsible" data-collapsed="true" class="ui-btn-left menu" data-mini="true">
+        <div style="top:4; z-index: 30;" data-role="collapsible" data-collapsed="true" class="ui-btn-left menu" data-mini="true">
             <h4 class="btn-bars-bars">
                 <!-- <span class="fas fa-bars"></span> -->
                 <img class="is-bars" src="images/bars.svg" width="14" alt="Menu" />
                 <img class="is-times is-disabled" src="images/times.svg" width="13" alt="Menu" />
             </h4>
             <ul style="border: 1px solid #e0e0e0;" data-role="listview" data-mini="true">
-                <li><a style="z-index: 10" class="click" href="#" onClick="enviar_sync()">Novo Login</a></li>
+                <li>
+                    <a class="ui-btn ui-icon-back ui-btn-icon-right ui-shadow ui-corner-all" href="#"
+                        onClick="reload_page_empree()">Manutenções</a>
+                </li>
+                <li>
+                    <a class="ui-btn ui-icon-carat-r ui-btn-icon-right ui-shadow ui-corner-all" href="#"
+                        onClick="scan()">Ler QRcode</a>
+                </li>
+                <li>
+                    <a class="ui-btn ui-icon-power ui-btn-icon-right ui-shadow ui-corner-all" href="#"
+                        onClick="closeApp()">Fechar app</a>
+                </li>
+                <li>
+                    <a style="z-index: 10" class="click" href="#" onClick="enviar_sync()">Logout</a>
+                </li>
             </ul>
         </div>
     </div>
@@ -2532,6 +2650,153 @@
         }
     }
 
+    function scan() {
+        cordova.plugins.barcodeScanner.scan(
+            function (result) {
+                if (!result.cancelled) {
+                    // In this case we only want to process QR Codes
+                    if (result.format == "QR_CODE") {
+                        var value = result.text;
+
+                        var ponto_ini = value.indexOf("www.sigmacivil.com.br/us/new_qr_hist_mp.asp?c=");
+                        var parte1 = value.substring(ponto_ini + 46);
+
+                        var pedaco = parte1.split("_");
+                        // alert(id_empree);
+                        // alert(pedaco[0]);
+
+                        if (num_empree == pedaco[0]) {
+
+                            var qid_empree = num_empree;
+                            var qid_sistema = pedaco[1];
+
+                            var d = new Date();
+                            var qdata_checkpoint = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+
+                            var qatualizado_serv = "N";
+
+                            navigator.geolocation.getCurrentPosition(
+                                function (position) {
+                                    var qlatitude_checkpoint = position.coords.latitude;
+                                    var qlongitude_checkpoint = position.coords.longitude;
+                                    var qaltura_checkpoint = position.coords.altitude;
+
+                                    var db;
+                                    var request = window.indexedDB.open("db_sigmacivil", "1");
+
+                                    request.onerror = function (event) {
+                                        alert("Erro ao criar o banco (cod 02)");
+                                    };
+
+                                    request.onsuccess = function (event) {
+                                        db = request.result;
+
+                                        inserirDadosCheckpoint(db, dadosCheckpoint);
+
+                                        db.onerror = function (event) {
+                                            alert("Database error: " + event.target.errorCode);
+                                        }
+                                    }
+
+                                    var dadosCheckpoint = [
+                                        {
+                                            id_empree: qid_empree,
+                                            id_sistema: qid_sistema,
+                                            data_checkpoint: qdata_checkpoint,
+                                            latitude_checkpoint: qlatitude_checkpoint,
+                                            longitude_checkpoint: qlongitude_checkpoint,
+                                            altura_checkpoint: qaltura_checkpoint,
+                                            atualizado_serv: qatualizado_serv,
+                                        }
+                                    ];
+
+                                    function inserirDadosCheckpoint(db, dadosCheckpoint) {
+                                        var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
+                                        var store = tx.objectStore('mtab_checkpoint');
+
+                                        dadosCheckpoint.map(function (dadoCheckpoint) {
+                                            store.add(dadoCheckpoint);
+                                        });
+
+                                        tx.oncomplete = function () {
+                                            go_to_page(qid_sistema, qid_empree);
+                                        }
+
+                                        tx.onerror = function (event) {
+                                            alert('error storing checkpoint note ' + event.target.error);
+                                        }
+                                    }
+                                },
+                                function (error) {
+                                    var db;
+                                    var request = window.indexedDB.open("db_sigmacivil", "1");
+
+                                    request.onerror = function (event) {
+                                        alert("Erro ao criar o banco (cod 03)");
+                                    };
+
+                                    request.onsuccess = function (event) {
+                                        db = request.result;
+
+                                        inserirDadosCheckpointError(db, dadosCheckpointError);
+
+                                        db.onerror = function (event) {
+                                            alert("Database error: " + event.target.errorCode);
+                                        }
+                                    }
+
+                                    var dadosCheckpointError = [
+                                        {
+                                            id_empree: qid_empree,
+                                            id_sistema: qid_sistema,
+                                            data_checkpoint: qdata_checkpoint,
+                                            latitude_checkpoint: "",
+                                            longitude_checkpoint: "",
+                                            altura_checkpoint: "",
+                                            atualizado_serv: qatualizado_serv,
+                                        }
+                                    ];
+
+                                    function inserirDadosCheckpointError(db, dadosCheckpointError) {
+                                        var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
+                                        var store = tx.objectStore('mtab_checkpoint');
+
+                                        dadosCheckpointError.map(function (dadoCheckpointError) {
+                                            store.add(dadoCheckpointError);
+                                        });
+
+                                        tx.oncomplete = function () {
+                                            go_to_page(qid_sistema, qid_empree);
+                                        }
+
+                                        tx.onerror = function (event) {
+                                            alert('error storing checkpointError note ' + event.target.error);
+                                        }
+                                    }
+                                }
+                            );
+
+                        } else {
+                            alert("Esse QRCode não é válido");
+                        }
+
+                    } else {
+                        alert("Desculpe, só é possível ler QRCODES");
+                    }
+                } else {
+                    // alert("Leitura do QRCODE cancelada");
+                }
+            },
+            function (error) {
+                // alert("Erro: " + error);
+            }
+        );
+    }
+
+    function go_to_page(q_id_sistema, q_num_empree) {
+        window.location.assign("qrcode.htm?l=" + login + "&s=" + senha + "&e=" + q_num_empree + "&id_sis=" + q_id_sistema + "&qm=" + parseInt(mes_ev) + "&qa=" + parseInt(ano_ev));
+    }
+
     function reload_page() {
         window.location.assign("even_online.htm?l=" + login + "&s=" + senha + "&ipm=" + id_prog_manut + "&dia_ev=" + dia_ev + "&mes_ev=" + mes_ev + "&ano_ev=" + ano_ev + '&d_min=' + d_min + '&d_max=' + d_max + "&tipo=" + tipo + "&input_data_realiz=" + document.getElementById('in_data_realizacao').value + "&input_forn=" + document.getElementById('valores').value + "&input_custoReal=" + document.getElementById('in_dado_custo_real').value + "&input_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value))
     }
@@ -2722,7 +2987,7 @@
                 }
                 if (prosseguir == true || ((nivel_manut == 1 || nivel_manut == 2) && qt_docs > 0)) {
                     var ajax3 = new XMLHttpRequest();
-                    ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/salvar_manut.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&econst=" + e_construtora + "&idpm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&d_data_realiz=" + dateToEN2(document.getElementById('in_data_realizacao').value) + "&d_forn=" + document.getElementById('valores').value + "&d_custoReal=" + document.getElementById('in_dado_custo_real').value + "&d_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value) + "&tipo=" + tipo + "&versao=2.1&env_em=" + ev_email + "&segur=" + crypt_segur + "&t=" + Math.random(), false);
+                    ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/salvar_manut.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&econst=" + e_construtora + "&idpm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&d_data_realiz=" + dateToEN2(document.getElementById('in_data_realizacao').value) + "&d_forn=" + document.getElementById('valores').value + "&d_custoReal=" + document.getElementById('in_dado_custo_real').value + "&d_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value) + "&tipo=" + tipo + "&versao=2.2&env_em=" + ev_email + "&segur=" + crypt_segur + "&t=" + Math.random(), false);
                     ajax3.addEventListener("loadend", function (evt) {
                         var resposta_total = this.responseText;
                         if (tipo == "alt") {
@@ -2760,7 +3025,7 @@
                     if (continuar == false) { return }
                 }
                 var ajax3 = new XMLHttpRequest();
-                ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/salvar_manut.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&econst=" + e_construtora + "&idpm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&d_data_realiz=" + document.getElementById('in_data_realizacao').value + "&d_forn=" + document.getElementById('valores').value + "&d_custoReal=" + document.getElementById('in_dado_custo_real').value + "&d_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value) + "&tipo=" + tipo + "&versao=2.1&env_em=" + ev_email + "&segur=" + crypt_segur + "&t=" + Math.random(), false);
+                ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/salvar_manut.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&econst=" + e_construtora + "&idpm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&d_data_realiz=" + document.getElementById('in_data_realizacao').value + "&d_forn=" + document.getElementById('valores').value + "&d_custoReal=" + document.getElementById('in_dado_custo_real').value + "&d_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value) + "&tipo=" + tipo + "&versao=2.2&env_em=" + ev_email + "&segur=" + crypt_segur + "&t=" + Math.random(), false);
                 ajax3.addEventListener("loadend", function (evt) {
                     var resposta_total = this.responseText;
                     alert("Alterações realizadas com sucesso!")
@@ -2802,7 +3067,7 @@
                         var verif_fim = verific1 + "S" + verific2 + "C" + verific3
 
                         var ajax3 = new XMLHttpRequest();
-                        ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_excluir_arq.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&e_const=" + e_construtora + "&seg=" + verif_fim + "&cam=" + q_cam + "&versao=2.1");
+                        ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_excluir_arq.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&e_const=" + e_construtora + "&seg=" + verif_fim + "&cam=" + q_cam + "&versao=2.2");
                         ajax3.addEventListener("loadend", function (evt) {
                             var resposta_total = this.responseText;
                             reload_page_even();
@@ -2827,7 +3092,7 @@
                     var verif_fim = verific1 + "S" + verific2 + "C" + verific3
 
                     var ajax3 = new XMLHttpRequest();
-                    ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_excluir_arq.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&e_const=" + e_construtora + "&seg=" + verif_fim + "&cam=" + q_cam + "&versao=2.1");
+                    ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_excluir_arq.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&e_const=" + e_construtora + "&seg=" + verif_fim + "&cam=" + q_cam + "&versao=2.2");
                     ajax3.addEventListener("loadend", function (evt) {
                         var resposta_total = this.responseText;
                         reload_page_even();
@@ -2917,9 +3182,8 @@
     }
 
     function scrollDate() {
-        //alert('ponto 11')
         if (getMobileOperatingSystem() == "iOS") {
-            //alert(document.querySelector('.date_ios'));
+            document.querySelector('.date_ios').click();
             //document.querySelector('.date_ios').onclick = function() {
             //alert('ponto 8')
             // var options = {
@@ -3007,6 +3271,21 @@
         }
 
         return "unknown";
+    }
+
+    function closeApp() {
+        navigator.notification.confirm(
+            'Tem certeza que deseja sair do app SigmaCivil?',
+            function (buttonIndex) {
+                if (buttonIndex === 2) {
+                    return;
+                }
+
+                navigator.app.exitApp();
+            },
+            'SigmaCivil',
+            ['OK', 'Cancelar']
+        );
     }
 
 </script>

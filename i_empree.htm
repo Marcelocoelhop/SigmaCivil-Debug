@@ -3,7 +3,8 @@
 
 <head>
 	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, `user-scalable=no">
+	<meta name="viewport"
+		content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, `user-scalable=no">
 	<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
 	<script type="text/javascript" src="cordova.js"></script>
 	<script type="text/javascript" src="js/mc.js" />
@@ -20,7 +21,7 @@
 		window.onerror = function (message, url, lineNumber) {
 			alert(`Error: ${message} in ${url} at line ${lineNumber}`);
 		}
-    
+
 		var login = getquerystring("login");
 		var senha = getquerystring("senha");
 
@@ -50,13 +51,13 @@
 			}
 
 			var ajax = new XMLHttpRequest();
-			ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_emp.asp?l=" + login + "&s=" + senha + "&versao=2.1&t=" + Math.random(), true);
-			ajax.addEventListener("loadend", function(evt) {
+			ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_emp.asp?l=" + login + "&s=" + senha + "&versao=2.2&t=" + Math.random(), true);
+			ajax.addEventListener("loadend", function (evt) {
 				var resposta_total = this.responseText;
 				var jsontext = resposta_total.split("*")
-                        
+
 				var getLogin = JSON.parse(jsontext[0]);
-                                                
+
 				logou = getLogin.logou;
 				qual_id_cliente = getLogin.id_cliente;
 				num_empree = getLogin.id_empree;
@@ -95,6 +96,15 @@
 						},
 					];
 
+					var configs = [
+						{
+							id_config: qual_id_cliente,
+							editar_fotos: false,
+							upload_automatico: false,
+							tutorial: false
+						}
+					];
+
 					var manuts = [];
 
 					for (i = 0; i < objEmpree.dados_empreendimento.length; i++) {
@@ -104,7 +114,7 @@
 					request.onsuccess = function (event) {
 						db = request.result;
 
-						executarRemoverAdicionarDados(db, clientes, emprees, manuts);
+						executarRemoverAdicionarDados(db, clientes, emprees, manuts, configs);
 
 						db.onerror = function (event) {
 							alert("Database error: " + event.target.error);
@@ -113,7 +123,7 @@
 
 					var num = 0;
 
-					function executarRemoverAdicionarDados(db, clientes, emprees, manuts) {
+					function executarRemoverAdicionarDados(db, clientes, emprees, manuts, configs) {
 						var tx = db.transaction(['mtab_cliente'], 'readwrite');
 						var store = tx.objectStore('mtab_cliente');
 
@@ -127,7 +137,7 @@
 						});
 
 						tx.oncomplete = function () {
-							removerAdicionarDadosEmpree(db, emprees, manuts);
+							removerAdicionarDadosEmpree(db, emprees, manuts, configs);
 						}
 
 						tx.onerror = function (event) {
@@ -135,7 +145,7 @@
 						}
 					}
 
-					function removerAdicionarDadosEmpree(db, emprees, manuts) {
+					function removerAdicionarDadosEmpree(db, emprees, manuts, configs) {
 						var tx = db.transaction(['mtab_empree'], 'readwrite');
 						var store = tx.objectStore('mtab_empree');
 
@@ -149,7 +159,7 @@
 						});
 
 						tx.oncomplete = function () {
-							removerAdicionarDadosManuts(db, manuts);
+							removerAdicionarDadosManuts(db, manuts, configs);
 						}
 
 						tx.onerror = function (event) {
@@ -157,7 +167,7 @@
 						}
 					}
 
-					function removerAdicionarDadosManuts(db, manuts) {
+					function removerAdicionarDadosManuts(db, manuts, configs) {
 						var tx = db.transaction(['mtab_prog_manut'], 'readwrite');
 						var store = tx.objectStore('mtab_prog_manut');
 
@@ -168,6 +178,29 @@
 
 						manuts.map(function (manut) {
 							store.add(manut);
+						});
+
+						tx.oncomplete = function () {
+							removerAdicionarDadosConfigs(db, configs);
+							console.log(num);
+						}
+
+						tx.onerror = function (event) {
+							alert('error storing manut note ' + event.target.error);
+						}
+					}
+
+					function removerAdicionarDadosConfigs(db, configs) {
+						var tx = db.transaction(['mtab_config'], 'readwrite');
+						var store = tx.objectStore('mtab_config');
+
+						var objectStoreRequest = store.clear();
+						objectStoreRequest.onsuccess = function (event) {
+							num += 1;
+						}
+
+						configs.map(function (config) {
+							store.add(config);
 						});
 
 						tx.oncomplete = function () {
@@ -186,6 +219,16 @@
 
 						var objectStoreRequest = store.clear();
 						objectStoreRequest.onsuccess = function (event) {
+							removerDadosMtabCheckpoint(db);
+						}
+					}
+
+					function removerDadosMtabCheckpoint(db) {
+						var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
+						var store = tx.objectStore('mtab_checkpoint');
+
+						var objectStoreRequest = store.clear();
+						objectStoreRequest.onsuccess = function (event) {
 							go_to();
 						}
 					}
@@ -196,9 +239,9 @@
 					window.location.assign("login.htm");
 				}
 			});
-			
+
 			ajax.send();
-            
+
 		}
 
 		function tem_conexao() {
@@ -213,8 +256,8 @@
 
 		}
 
-		function go_to() {            
-            if (tem_conexao()) {
+		function go_to() {
+			if (tem_conexao()) {
 				window.location.assign("empree_online.htm?e=" + num_empree + "&l=" + login + "&s=" + senha)
 			} else {
 				window.location.assign("empree.htm?e=" + num_empree + "&l=" + login + "&s=" + senha);

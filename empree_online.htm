@@ -81,19 +81,19 @@
     <nav class="main-menu-bottom">
         <div>
             <button class="button-actived" type="button" onclick="enviar()">
-                <img src="images/home.png" width="22" alt="" />
+                <img src="images/home.png" width="22" alt="Home" />
                 <p>manutenções</p>
             </button>
             <button type="button" onclick="scan()">
-                <img src="images/qr_code.png" width="22" alt="" />
+                <img src="images/qr_code.png" width="22" alt="Qr_code" />
                 <p>qrcode</p>
             </button>
-            <button type="button">
-                <img src="images/graph.png" width="22" alt="" />
+            <button type="button" onclick="go_relat_check2()">
+                <img src="images/graph.png" width="22" alt="Relatório" />
                 <p>relatório</p>
             </button>
-            <button type="button">
-                <img src="images/call.png" width="22" alt="" />
+            <button type="button" onclick="openBrowser()">
+                <img src="images/call.png" width="22" alt="Chamado" />
                 <p>abrir chamado</p>
             </button>
         </div>
@@ -1313,6 +1313,20 @@
             text = text.replace(/ç/g, 'xcL0c')
 
             return text;
+        }
+
+        function go_relat_check2() {
+            if (tem_conexao()) {
+                window.location.assign("new_checkpoint_hist.htm?e=" + num_empree + /*"&id_sist=" + id_sis +*/ "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano))
+            } else {
+                alert('Você está sem conexão com a internet. Para visualizar o relatório online é necessário estar conectado. Favor se conectar.');
+            }
+        }
+
+        function openBrowser() {
+            var options = "location=yes,lefttoright=yes,toolbarcolor=#b10b0b,hideurlbar=yes,closebuttoncaption=<  SigmaCivil,closebuttoncolor=#ffffff";
+
+            cordova.InAppBrowser.open('https://www.google.com.br', '_blank', options);
         }
 
         function closeApp() {

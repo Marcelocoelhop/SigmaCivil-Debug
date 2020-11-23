@@ -80,6 +80,11 @@
         var editPictures = null;
         var uploadAutomatic = false;
 
+        var qtd_tam_ti = 0;
+        var qtd_tam_ti_audio = 0;
+        var qtd_tam_ti_video = 0;
+        var qtd_tam_ti_texto = 0;
+
         // FUNÇÃO QUE APRESENTA O ERRO NA APLICAÇÃO
         window.onerror = function (message, url, lineNumber) {
             alert(`Error: ${message} in ${url} at line ${lineNumber}`);
@@ -713,6 +718,7 @@
             ajax2.send();
 
             // capturando dados evento
+
             var db;
             var request = window.indexedDB.open("db_sigmacivil", "1");
 
@@ -724,6 +730,8 @@
                 db = request.result;
 
                 consultaManutEvento(db);
+
+                consultaConfig();
 
                 db.onerror = function (event) {
                     alert("Database error: " + event.target.errorCode);
@@ -744,11 +752,6 @@
                     var final_empree = "";
                     var tam_ti;
                     var aux_image_upload;
-
-                    var qtd_tam_ti = 0;
-                    var qtd_tam_ti_audio = 0;
-                    var qtd_tam_ti_video = 0;
-                    var qtd_tam_ti_texto = 0;
 
                     if (cursor) {
                         var rrr_caminho_imagens = cursor.value.caminho_imagens;
@@ -939,60 +942,61 @@
                     }
 
                     $("#idpopup_new_" + rrr2_id_prog_manut).popup();
+                }
+            }
+        }
 
-                    var db;
-                    var request = window.indexedDB.open("db_sigmacivil", "1");
+        function consultaConfig() {
+            var db;
+            var request = window.indexedDB.open("db_sigmacivil", "1");
 
-                    request.onerror = function (event) {
-                        alert("Erro ao criar o banco (cod 01)");
-                    };
+            request.onerror = function (event) {
+                alert("Erro ao criar o banco (cod 01)");
+            };
 
-                    request.onsuccess = function (event) {
-                        db = request.result;
+            request.onsuccess = function (event) {
+                db = request.result;
 
-                        consultaConfig(db);
+                var tx = db.transaction(['mtab_config'], 'readwrite');
+                var store = tx.objectStore('mtab_config');
+                var objectStoreRequest = store.openCursor();
+                objectStoreRequest.onsuccess = function (event) {
+                    var cursor = event.target.result;
+                    if (cursor) {
+                        var data = cursor.value;
 
-                        db.onerror = function (event) {
-                            alert("Database error: " + event.target.errorCode);
-                        }
-                    }
+                        editPictures = data['editar_fotos'];
+                        uploadAutomatic = data['upload_automatico'];
 
-                    function consultaConfig(db) {
-                        var tx = db.transaction(['mtab_config'], 'readwrite');
-                        var store = tx.objectStore('mtab_config');
-                        var objectStoreRequest = store.openCursor();
-                        objectStoreRequest.onsuccess = function (event) {
-                            var cursor = event.target.result;
-                            if (cursor) {
-                                var data = cursor.value;
-
-                                editPictures = data['editar_fotos'];
-                                uploadAutomatic = data['upload_automatico'];
-
-                                if (uploadAutomatic && qtd_tam_ti > 0) {
-                                    upload_imagem(qtd_tam_ti - 1);
-                                }
-
-                                // alert(qtd_tam_ti_audio);
-
-                                if (uploadAutomatic && qtd_tam_ti_audio > 0) {
-                                    upload_audio();
-                                }
-
-                                // alert(qtd_tam_ti_video);
-
-                                if (uploadAutomatic && qtd_tam_ti_video > 0) {
-                                    upload_video();
-                                }
-
-                                // alert(qtd_tam_ti_texto);
-
-                                if (uploadAutomatic && qtd_tam_ti_texto > 0) {
-                                    upload_texto();
-                                }
+                        setTimeout(function () {
+                            if (uploadAutomatic && qtd_tam_ti > 0) {
+                                upload_imagem(qtd_tam_ti - 1);
                             }
-                        }
+
+                            // alert(qtd_tam_ti_audio);
+
+                            if (uploadAutomatic && qtd_tam_ti_audio > 0) {
+                                upload_audio();
+                            }
+
+                            // alert(qtd_tam_ti_video);
+
+                            if (uploadAutomatic && qtd_tam_ti_video > 0) {
+                                upload_video();
+                            }
+
+                            // alert(qtd_tam_ti_texto);
+
+                            if (uploadAutomatic && qtd_tam_ti_texto > 0) {
+                                upload_texto();
+                            }
+                        }, 3000);
+
                     }
+                }
+
+                db.onerror = function (event) {
+                    alert("Database error: " + event.target.errorCode);
                 }
             }
         }
@@ -1359,9 +1363,7 @@
 
                         var request = cursor.update(data);
                         request.onsuccess = function (event) {
-                            if (uploadAutomatic) {
-                                // alert('subiu a imagem!!');
-                            } else {
+                            if (!uploadAutomatic) {
                                 reload_page();
                             }
                         }
@@ -1641,9 +1643,7 @@
 
                         var request = cursor.update(data);
                         request.onsuccess = function (event) {
-                            if (uploadAutomatic) {
-                                // alert('subiu o vídeo!!');
-                            } else {
+                            if (!uploadAutomatic) {
                                 reload_page();
                             }
                         }
@@ -1952,9 +1952,7 @@
 
                         var request = cursor.update(data);
                         request.onsuccess = function (event) {
-                            if (uploadAutomatic) {
-                                // alert('subiu o áudio!!');
-                            } else {
+                            if (!uploadAutomatic) {
                                 reload_page();
                             }
                         }
@@ -2061,9 +2059,7 @@
 
                                 var request = cursor.update(data);
                                 request.onsuccess = function (event) {
-                                    if (uploadAutomatic) {
-                                        // alert('subiu o texto!!');
-                                    } else {
+                                    if (!uploadAutomatic) {
                                         reload_page();
                                     }
                                 }

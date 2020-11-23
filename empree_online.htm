@@ -765,8 +765,8 @@
 
                                     if (filtro_sis === cada_parte_vet_manut[1]) {
                                         filtro_bool = true;
-                                        var ini_lista = "<form class='ui-filterable'><div class='ui-input-search ui-body-inherit ui-corner-all ui-shadow-inset ui-input-has-clear'><input data-role='listview' value='" + filtro_sis + "' placeholder='Buscar...' id='filterBasic-input' data-type='search'><a href='#' tabindex='-1' aria-hidden='true' class='ui-input-clear ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all ui-input-clear-hidden' title='Clear text'>Clear text</a></div></form><ul data-input='#filterBasic-input' id='q_empree' class='list-content' data-mini='true' data-role='listview' data-filter='true' data-filter-placeholder='Buscar...' data-inset='true'>"
-                                        var fim_lista = "</ul>"
+                                        ini_lista = "<form class='ui-filterable'><div class='ui-input-search ui-body-inherit ui-corner-all ui-shadow-inset ui-input-has-clear'><input data-role='listview' value='" + filtro_sis + "' placeholder='Buscar...' id='filterBasic-input' data-type='search'><a href='#' tabindex='-1' aria-hidden='true' class='ui-input-clear ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all ui-input-clear-hidden' title='Clear text'>Clear text</a></div></form><ul data-input='#filterBasic-input' id='q_empree' class='list-content' data-mini='true' data-role='listview' data-filter='true' data-filter-placeholder='Buscar...' data-inset='true'>"
+                                        fim_lista = "</ul>"
                                     }
 
                                     var focus = "";
@@ -866,37 +866,36 @@
                                         ].join('');
 
                                     }
-
                                 }
+
+                                if (filtro_sis !== '' && filtro_bool === false) {
+                                    navigator.notification.alert(
+                                        'Não há manutenções deste sistema neste mês!',  // message
+                                        function () {
+                                            return;
+                                        },         // callback
+                                        'SigmaCivil',            // title
+                                        'OK'                  // buttonName
+                                    );
+                                    filtro_sis = '';
+                                    ini_lista = "<form class='ui-filterable'><div class='ui-input-search ui-body-inherit ui-corner-all ui-shadow-inset ui-input-has-clear'><input data-role='listview' value='" + filtro_sis + "' placeholder='Buscar...' id='filterBasic-input' data-type='search'><a href='#' tabindex='-1' aria-hidden='true' class='ui-input-clear ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all ui-input-clear-hidden' title='Clear text'>Clear text</a></div></form><ul data-input='#filterBasic-input' id='q_empree' class='list-content' data-mini='true' data-role='listview' data-filter='true' data-filter-placeholder='Buscar...' data-inset='true'>"
+                                    fim_lista = "</ul>"
+                                }
+
+                                // Define a ordem que irá aparecer cada manutenção
+                                if (datadiff(Date.now(), data_maxima_alteracao) < 0 || datadiff2(Date.now(), data_minima_alteracao) > 0) {
+                                    document.getElementById('box-content').innerHTML = ini_lista + dados_1 + dados_0 + fim_lista
+                                } else {
+                                    document.getElementById('box-content').innerHTML = ini_lista + dados_0 + dados_1 + fim_lista
+                                }
+                                $(".loading_page").hide();
+                                $('#q_empree').listview();
+                                document.getElementById('nome_empree_').innerHTML = nome_empree
 
                             }
                         });
 
                         ajax2.send();
-
-                        if (filtro_sis !== '' && filtro_bool === false) {
-                            navigator.notification.alert(
-                                'Não há manutenções deste sistema neste mês!',  // message
-                                function () {
-                                    return;
-                                },         // callback
-                                'SigmaCivil',            // title
-                                'OK'                  // buttonName
-                            );
-                            filtro_sis = '';
-                            ini_lista = "<form class='ui-filterable'><div class='ui-input-search ui-body-inherit ui-corner-all ui-shadow-inset ui-input-has-clear'><input data-role='listview' value='" + filtro_sis + "' placeholder='Buscar...' id='filterBasic-input' data-type='search'><a href='#' tabindex='-1' aria-hidden='true' class='ui-input-clear ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all ui-input-clear-hidden' title='Clear text'>Clear text</a></div></form><ul data-input='#filterBasic-input' id='q_empree' class='list-content' data-mini='true' data-role='listview' data-filter='true' data-filter-placeholder='Buscar...' data-inset='true'>"
-                            fim_lista = "</ul>"
-                        }
-
-                        // Define a ordem que irá aparecer cada manutenção
-                        if (datadiff(Date.now(), data_maxima_alteracao) < 0 || datadiff2(Date.now(), data_minima_alteracao) > 0) {
-                            document.getElementById('box-content').innerHTML = ini_lista + dados_1 + dados_0 + fim_lista
-                        } else {
-                            document.getElementById('box-content').innerHTML = ini_lista + dados_0 + dados_1 + fim_lista
-                        }
-                        $(".loading_page").hide();
-                        $('#q_empree').listview();
-                        document.getElementById('nome_empree_').innerHTML = nome_empree
 
                     } else { //nao logou
                         window.location.assign("login.htm");

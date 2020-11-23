@@ -287,16 +287,28 @@
 
 	var formConfig = [
 		'<form>',
-		'<label for="flip-2">Ativar a edição de imagens ao serem tiradas:</label>',
+		'<div style="display: flex; align-items: center;">',
+		'<div style="margin: 0">',
+		'<p style="padding: 0 10px 0 0; margin-bottom: 8px;" for="flip-2">Ativar a edição de imagens ao serem tiradas:</p>',
+		'<small style="margin-left: 8px; color: #666;">teste testando</small>',
+		'</div>',
 		'<select name="flip-2" id="flip-2" onchange="editaImagem()" class="edit-picture" data-role="slider" data-mini="true" data-track-theme="b" data-theme="b">',
 		'<option value="off">Des</option>',
 		'<option value="on" ' + localStorage.getItem('sl1') + '>Lig</option>',
 		'</select>',
-		'<label for="flip-2">Ativar o upload de mídias automaticamente:</label>',
+		'</div>',
+		'<hr/>',
+
+		'<div style="display: flex; align-items: center;">',
+		'<div style="margin: 0">',
+		'<p style="padding: 0 10px 0 0; margin-bottom: 8px;" for="flip-2">Ativar o upload de mídias automaticamente:</p>',
+		'<small style="margin-left: 8px; color: #666;">teste testando</small>',
+		'</div>',
 		'<select name="flip-2" id="flip-2" onchange="editaImagem()" class="automatic-upload" data-role="slider" data-mini="true" data-track-theme="b" data-theme="b">',
 		'<option value="off">Des</option>',
 		'<option value="on" ' + localStorage.getItem('sl2') + '>Lig</option>',
 		'</select>',
+		'</div>',
 		'</form>'
 	].join('');
 

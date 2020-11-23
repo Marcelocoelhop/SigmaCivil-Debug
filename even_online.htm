@@ -1306,11 +1306,11 @@
 
         function up_loadPhoto(imageURI, q_k) {
 
-            if (!uploadAutomatic) {
+            //if (!uploadAutomatic) {
                 document.getElementById("parte_load_content").style.display = "block";
                 document.getElementById("parte_load").style.display = "flex";
                 window.location.href = "#ancora123"
-            }
+            //}
 
             var q_k;
             var options = new FileUploadOptions();
@@ -1363,9 +1363,9 @@
 
                         var request = cursor.update(data);
                         request.onsuccess = function (event) {
-                            if (!uploadAutomatic) {
+                            //if (!uploadAutomatic) {
                                 reload_page();
-                            }
+                            //}
                         }
                     }
                 }
@@ -1594,11 +1594,11 @@
         // UPLOAD VIDEO
         function up_loadVideo(videoURL) {
 
-            if (!uploadAutomatic) {
+            //if (!uploadAutomatic) {
                 document.getElementById("parte_load_content").style.display = "block";
                 document.getElementById("parte_load").style.display = "flex";
                 window.location.href = "#ancora123"
-            }
+            //}
 
             var options = new FileUploadOptions();
             options.fileKey = "file";
@@ -1643,9 +1643,9 @@
 
                         var request = cursor.update(data);
                         request.onsuccess = function (event) {
-                            if (!uploadAutomatic) {
+                            //if (!uploadAutomatic) {
                                 reload_page();
-                            }
+                            //}
                         }
                     }
                 }
@@ -1903,11 +1903,11 @@
 
         function up_loadAudio(audioURL) {
 
-            if (!uploadAutomatic) {
+            //if (!uploadAutomatic) {
                 document.getElementById("parte_load_content").style.display = "block";
                 document.getElementById("parte_load").style.display = "flex";
                 window.location.href = "#ancora123"
-            }
+            //}
 
             var options = new FileUploadOptions();
             options.fileKey = "file";
@@ -1952,9 +1952,9 @@
 
                         var request = cursor.update(data);
                         request.onsuccess = function (event) {
-                            if (!uploadAutomatic) {
+                            //if (!uploadAutomatic) {
                                 reload_page();
-                            }
+                            //}
                         }
                     }
                 }
@@ -2015,11 +2015,11 @@
 
         function up_loadTexto(textoURL) {
 
-            if (!uploadAutomatic) {
+            //if (!uploadAutomatic) {
                 document.getElementById("parte_load_content").style.display = "block";
                 document.getElementById("parte_load").style.display = "flex";
                 window.location.href = "#ancora123"
-            }
+            //}
 
             var data = 'tx=' + encodeURIComponent(textoURL) + '&ipm=' + id_prog_manut + '&d=' + dia_ev + '&m=' + mes_ev + '&a=' + ano_ev + "&econst=" + e_construtora + "&idc=" + id_cliente;
             var ajax = new XMLHttpRequest();
@@ -2059,9 +2059,9 @@
 
                                 var request = cursor.update(data);
                                 request.onsuccess = function (event) {
-                                    if (!uploadAutomatic) {
+                                    //if (!uploadAutomatic) {
                                         reload_page();
-                                    }
+                                    //}
                                 }
                             }
                         }

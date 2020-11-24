@@ -461,7 +461,7 @@
 
             function drawChart() {
                 var xhr = new XMLHttpRequest()
-                xhr.open("GET", "http://www.sigmacivil.com.br/app_sc/consult_checkpoint.asp?l=" + login + "&s=" + senha + "&mes=" + q_mes + "&ano=" + q_ano + "&versao=2.2&id_sist=" + q_sist + "&t=" + Math.random(), false);
+                xhr.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_checkpoint.asp?l=" + login + "&s=" + senha + "&mes=" + q_mes + "&ano=" + q_ano + "&versao=2.2&id_sist=" + q_sist + "&t=" + Math.random(), false);
                 xhr.addEventListener("loadend", function (evt) {
                     response = this.responseText;
                 });
@@ -471,7 +471,7 @@
 
 
                 /*var xhr = new XMLHttpRequest()
-                xhr.open("GET", "http://www.sigmacivil.com.br/app_sc/consult_checkpoint.asp?l=" + login + "&s=" + senha + "&mes=" + q_mes + "&ano=" + q_ano + "&versao=2.2&id_sist=" + q_sist + "&t=" + Math.random(), false);
+                xhr.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_checkpoint.asp?l=" + login + "&s=" + senha + "&mes=" + q_mes + "&ano=" + q_ano + "&versao=2.2&id_sist=" + q_sist + "&t=" + Math.random(), false);
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState == 4) {
                         if (xhr.status == 200 || xhr.status == 0) {

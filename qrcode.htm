@@ -222,14 +222,6 @@
 				<ul class="menu-tablet-responsive" style="border: 1px solid #e0e0e0;" data-role="listview"
 					data-mini="true">
 					<li>
-						<a class="ui-btn ui-icon-back ui-btn-icon-right ui-shadow ui-corner-all" href="#"
-							onClick="volta_uni()">Manutenções</a>
-					</li>
-					<li>
-						<a class="ui-btn ui-icon-carat-r ui-btn-icon-right ui-shadow ui-corner-all" href="#"
-							onClick="scan()">Ler QRcode</a>
-					</li>
-					<li>
 						<a class="ui-btn ui-icon-gear ui-btn-icon-right ui-shadow ui-corner-all" href="#"
 							onClick="go_to_page_config()">Configurações</a>
 					</li>
@@ -314,6 +306,29 @@
 
 	</div>
 
+	<!-- Menu bottom -->
+	<nav class="main-menu-bottom">
+		<div>
+			<button type="button" onclick="volta_uni()">
+				<img src="images/home.png" width="22" alt="Home" />
+				<p>manutenções</p>
+			</button>
+			<button type="button" onclick="scan()">
+				<img src="images/qr_code.png" width="22" alt="Qr_code" />
+				<p>qrcode</p>
+			</button>
+			<button type="button" onclick="go_relat_check2()">
+				<img src="images/graph.png" width="22" alt="Relatório" />
+				<p>relatório</p>
+			</button>
+			<button type="button" onclick="openBrowser()">
+				<img src="images/call.png" width="22" alt="Chamado" />
+				<p>abrir chamado</p>
+			</button>
+		</div>
+	</nav>
+	<!-- Fim Menu bottom -->
+
 </body>
 
 </html>
@@ -386,35 +401,35 @@
 				if (xhr.status == 200 || xhr.status == 0) {
 					var response = xhr.responseText;
 					var pedaco = response.split('*//*');
-					tem_alguma_manut = pedaco[0];
+		tem_alguma_manut = pedaco[0];
 
-					nome_sistema = pedaco[1];
+		nome_sistema = pedaco[1];
 
-					if (tem_alguma_manut == "0") {
-						alert('Não há manutenções para serem registradas!');
-					} else if (tem_alguma_manut == "1") {
-						if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
-							window.location.assign("empree.htm?l=" + login + "&s=" + senha + "&e=" + qual_num_empree + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&fil=" + removeAcento(nome_sistema));
-						} else {
-							window.location.assign("empree_online.htm?l=" + login + "&s=" + senha + "&e=" + qual_num_empree + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&fil=" + removeAcento(nome_sistema));
-						}
-					} else {
-						navigator.notification.alert(
-							'Problemas com sua conexão. Conecte seu celular com a internet e tente novamente!',  // message
-							function () {
-								go_page_qrcode(qual_id_sistema, qual_num_empree);
-							},         // callback
-							'SigmaCivil',            // title
-							'OK'                  // buttonName
-						);
-					}
-				} else {
-					alert("Problemas com sua conexao internet. Erro: 0146");
-				}
+		if (tem_alguma_manut == "0") {
+			alert('Não há manutenções para serem registradas!');
+		} else if (tem_alguma_manut == "1") {
+			if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
+				window.location.assign("empree.htm?l=" + login + "&s=" + senha + "&e=" + qual_num_empree + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&fil=" + removeAcento(nome_sistema));
+			} else {
+				window.location.assign("empree_online.htm?l=" + login + "&s=" + senha + "&e=" + qual_num_empree + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&fil=" + removeAcento(nome_sistema));
 			}
+		} else {
+			navigator.notification.alert(
+				'Problemas com sua conexão. Conecte seu celular com a internet e tente novamente!',  // message
+				function () {
+					go_page_qrcode(qual_id_sistema, qual_num_empree);
+				},         // callback
+				'SigmaCivil',            // title
+				'OK'                  // buttonName
+			);
 		}
+	} else {
+		alert("Problemas com sua conexao internet. Erro: 0146");
+	}
+}
+}
 
-		xhr.send()*/
+xhr.send()*/
 	}
 
 	function scan() {

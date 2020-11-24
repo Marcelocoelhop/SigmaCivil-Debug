@@ -82,3 +82,7 @@
     color: #c00c13;
     font-weight: bold;
 }
+
+.table-check:last-child {
+    margin-bottom: 60px;
+}

@@ -70,14 +70,6 @@
             </h4>
             <ul class="menu-tablet-responsive" style="border: 1px solid #e0e0e0;" data-role="listview" data-mini="true">
                 <li>
-                    <a class="ui-btn ui-icon-back ui-btn-icon-right ui-shadow ui-corner-all" href="#"
-                        onClick="volta_uni()">Manutenções</a>
-                </li>
-                <li>
-                    <a class="ui-btn ui-icon-carat-r ui-btn-icon-right ui-shadow ui-corner-all" href="#"
-                        onClick="scan()">Ler QRcode</a>
-                </li>
-                <li>
                     <a class="ui-btn ui-icon-gear ui-btn-icon-right ui-shadow ui-corner-all" href="#"
                         onClick="go_to_page_config()">Configurações</a>
                 </li>
@@ -147,6 +139,29 @@
     <div id="dados_usuario"></div>
 
     <div id="map"></div>
+
+    <!-- Menu bottom -->
+    <nav class="main-menu-bottom">
+        <div>
+            <button type="button" onclick="volta_uni()">
+                <img src="images/home.png" width="22" alt="Home" />
+                <p>manutenções</p>
+            </button>
+            <button type="button" onclick="scan()">
+                <img src="images/qr_code.png" width="22" alt="Qr_code" />
+                <p>qrcode</p>
+            </button>
+            <button class="button-actived" type="button">
+                <img src="images/graph.png" width="22" alt="Relatório" />
+                <p>relatório</p>
+            </button>
+            <button type="button" onclick="openBrowser()">
+                <img src="images/call.png" width="22" alt="Chamado" />
+                <p>abrir chamado</p>
+            </button>
+        </div>
+    </nav>
+    <!-- Fim Menu bottom -->
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
@@ -516,7 +531,7 @@
 
                         dados += [
                             '<tbody>',
-                            '<tr>',
+                            '<tr class="table-check">',
                             '<td style="text-align: center; font-size: 14px; border-bottom: 1px solid #cccccc; padding: 10px;">' + partUser[2] + '</td>',
                             '<td style="border-bottom: 1px solid #cccccc; padding: 10px;"><span style="color: #038ad0;">' + partUser[0] + '</span><div style="font-size: 14px;">' + partUser[1] + '</div></td>',
                             '<td style="text-align: center; border-bottom: 1px solid #cccccc; padding: 10px;"><img src="images/map-marked-alt.png" width="20" onclick="loadMap(' + "'" + q_lat + "'" + "," + "'" + q_lon + "'" + ')"></td>',
@@ -809,6 +824,13 @@
                 'SigmaCivil',
                 ['OK', 'Cancelar']
             );
+        }
+
+
+        function openBrowser() {
+            var options = "location=yes,lefttoright=yes,toolbarcolor=#b10b0b,hideurlbar=yes,closebuttoncaption=<  SigmaCivil,closebuttoncolor=#ffffff";
+
+            cordova.InAppBrowser.open('https://www.google.com.br', '_blank', options);
         }
 
         function goBack() {

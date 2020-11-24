@@ -51,7 +51,7 @@
 
 .main-menu-bottom {
     width: 100%;
-    background: #f9f9f9;
+    background: #d8d8d8;
     border-top: 1px solid #b10b0b;
     position: fixed;
     bottom: 0;
@@ -59,7 +59,11 @@
 }
 
 .button-actived {
-    background: #e8e8e8 !important;
+    background: #ececec !important;
+}
+
+.buttons-navigate {
+    background: none !important;
 }
 
 .main-menu-bottom div {
@@ -70,19 +74,22 @@
 }
 
 .main-menu-bottom div button {
-    background: #FFF;
     border: 0;
     padding: 3px;
     box-shadow: none;
+    outline: none;
+    transition: background 0.2s;
 }
 
 .main-menu-bottom div button:hover {
     box-shadow: none !important;
+    background: #c4c4c4 !important;
 }
 
 .main-menu-bottom div button p {
     font-size: 11px;
     font-weight: normal;
+    text-shadow: none;
     margin: 5px 0 0 0;
 }
 

@@ -2350,19 +2350,19 @@
     <!-- Menu bottom -->
     <nav class="main-menu-bottom">
         <div>
-            <button type="button" onclick="reload_page_empree()">
+            <button class="buttons-navigate" type="button" onclick="reload_page_empree()">
                 <img src="images/home.png" width="22" alt="Home" />
                 <p>manutenções</p>
             </button>
-            <button type="button" onclick="scan()">
+            <button class="buttons-navigate" type="button" onclick="scan()">
                 <img src="images/qr_code.png" width="22" alt="Qr_code" />
                 <p>qrcode</p>
             </button>
-            <button type="button" onclick="go_relat_check2()">
+            <button class="buttons-navigate" type="button" onclick="go_relat_check2()">
                 <img src="images/graph.png" width="22" alt="Relatório" />
                 <p>relatório</p>
             </button>
-            <button type="button" onclick="openBrowser()">
+            <button class="buttons-navigate" type="button" onclick="openBrowser()">
                 <img src="images/call.png" width="22" alt="Chamado" />
                 <p>abrir chamado</p>
             </button>
@@ -2819,7 +2819,7 @@
     }
 
     function reload_page() {
-        window.location.assign("even_online.htm?l=" + login + "&s=" + senha + "&ipm=" + id_prog_manut + "&dia_ev=" + dia_ev + "&mes_ev=" + mes_ev + "&ano_ev=" + ano_ev + '&d_min=' + d_min + '&d_max=' + d_max + "&tipo=" + tipo + "&input_data_realiz=" + document.getElementById('in_data_realizacao').value + "&input_forn=" + document.getElementById('valores').value + "&input_custoReal=" + document.getElementById('in_dado_custo_real').value + "&input_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value))
+        window.location.assign("even_online.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&ipm=" + id_prog_manut + "&dia_ev=" + dia_ev + "&mes_ev=" + mes_ev + "&ano_ev=" + ano_ev + '&d_min=' + d_min + '&d_max=' + d_max + "&tipo=" + tipo + "&input_data_realiz=" + document.getElementById('in_data_realizacao').value + "&input_forn=" + document.getElementById('valores').value + "&input_custoReal=" + document.getElementById('in_dado_custo_real').value + "&input_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value))
     }
 
     function reload_page_empree() {

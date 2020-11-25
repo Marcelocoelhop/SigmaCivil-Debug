@@ -452,8 +452,6 @@
             var data_final_p_busca = new Date(data2_aux)
             /////////////////////////////////////////////
 
-            var response;
-
             document.getElementById('opc_periodo').innerHTML = op_periodo
 
             google.charts.load('current', { 'packages': ['corechart'] });
@@ -463,7 +461,111 @@
                 var xhr = new XMLHttpRequest()
                 xhr.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_checkpoint.asp?l=" + login + "&s=" + senha + "&mes=" + q_mes + "&ano=" + q_ano + "&versao=2.2&id_sist=" + q_sist + "&t=" + Math.random(), false);
                 xhr.addEventListener("loadend", function (evt) {
-                    response = this.responseText;
+                    var response = this.responseText;
+
+                    if (response == "nok") {
+                        document.getElementById('barchart').innerHTML = '<p class="nok_text" style="position: relative; bottom: 50px;">Não há ocorrência de check points neste mês!</p>';
+                        return $('#load-sigma').hide();
+                    } else {
+
+                        var reqDados = response.split('//*//');
+                        var dadosGrafico = reqDados[0];
+                        var dadosUsuario = reqDados[1];
+                        var dadosBusca = reqDados[2];
+
+                        var blocoUsuario = dadosUsuario.split('/,/');
+                        var blocoBusca = dadosBusca.split('/,/');
+
+                        var ini_ = [
+                            '<table style="width: 100%;" data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke">',
+                            '<thead class="table_titles_blue">',
+                            '<tr>',
+                            '<th>Data check point</th>',
+                            '<th data-priority="1">Sistema e login</th>',
+                            '<th style="padding: 10px;">Local check</th>',
+                            '</tr>',
+                            '</thead>'
+                        ].join('');
+
+                        var fim_ = '</table>';
+
+                        var ini_select = [
+                            '<form style="margin: 0; padding: 0; font-weight: normal;">',
+                            '<div style="margin: 0 0.5rem; padding: 0; font-weight: normal;" class="ui-field-contain">',
+                            '<select style="width: 100%; padding: 6px; padding-left: 25px; box-shadow: none; position: relative; bottom: 8px;" class="ui-btn ui-icon-carat-d ui-btn-icon-right ui-corner-all ui-shadow select_manut" onchange="enviar_select()" name="select-native-2" id="q_manut" data-mini="true">',
+                            '<option value="">Buscar...</option>',
+                        ].join('');
+
+                        var fim_select = [
+                            '</select>',
+                            '</div>',
+                            '</form>'
+                        ].join('');
+
+                        var dados = "";
+                        var dados_select = "";
+                        var arr = [];
+
+                        for (var i = 0; i < blocoUsuario.length; i++) {
+                            var partUser = blocoUsuario[i].split('/_/');
+                            var q_lat = partUser[3];
+                            var q_lon = partUser[4];
+
+                            dados += [
+                                '<tbody>',
+                                '<tr class="table-check">',
+                                '<td style="text-align: center; font-size: 14px; border-bottom: 1px solid #cccccc; padding: 10px;">' + partUser[2] + '</td>',
+                                '<td style="border-bottom: 1px solid #cccccc; padding: 10px;"><span style="color: #038ad0;">' + partUser[0] + '</span><div style="font-size: 14px;">' + partUser[1] + '</div></td>',
+                                '<td style="text-align: center; border-bottom: 1px solid #cccccc; padding: 10px;"><img src="images/map-marked-alt.png" width="20" onclick="loadMap(' + "'" + q_lat + "'" + "," + "'" + q_lon + "'" + ')"></td>',
+                                '</tr>',
+                                '</tbody>'
+                            ].join('');
+                        }
+
+                        for (var i = 0; i < blocoBusca.length; i++) {
+                            var partBusca = blocoBusca[i].split('/_/');
+
+                            var encontrou = arr.indexOf(partBusca[0]);
+
+                            arr.push(partBusca[0]);
+
+                            partBusca[0] == q_sist ? sl = "selected" : sl = "";
+
+                            if (encontrou == -1) {
+                                dados_select += [
+                                    `<option style="color: #fff;" value="${partBusca[0]}" ${sl}>${partBusca[1]}</option>`,
+                                    // `<option style="color: #fff;" value="${partBusca[0]}">${partBusca[1]}</option>`,
+                                ].join('');
+                            }
+                        }
+
+                        document.getElementById('dados_usuario').innerHTML = ini_ + dados + fim_;
+                        document.getElementById('dados_select').innerHTML = ini_select + dados_select + fim_select;
+
+                        var search = '<img style="position: relative; z-index: 1; top: 25px; left: 15px;" src="images/search.png" width="15" />';
+                        document.getElementById('search').innerHTML = search;
+
+                        var result = "var data = google.visualization.arrayToDataTable([" + dadosGrafico + "]);"
+                        var sequencia_dados = eval(result);
+
+                        var options = {
+                            title: 'Quantidade de check points x Dia do mês',
+                            titleTextStyle: { width: '100%' },
+                            width: '100%',
+                            height: '650',
+                            hAxis: { textStyle: { color: '#333333', fontSize: 10.5 }, slantedTextAngle: 90 },
+                            fontSize: 11,
+                            isStacked: true,
+                            bar: { groupWidth: '60%' },
+                            legend: { textStyle: { fontSize: 11 } },
+                            chartArea: { width: '55%', height: '90%', left: '10%' },
+                        };
+
+                        var chart = new google.visualization.BarChart(document.getElementById('barchart'));
+
+                        chart.draw(data, options);
+                        $('#load-sigma').hide();
+                    }
                 });
 
                 xhr.send();
@@ -481,109 +583,6 @@
                 }
                 xhr.send();*/
 
-                if (response == "nok") {
-                    document.getElementById('barchart').innerHTML = '<p class="nok_text" style="position: relative; bottom: 50px;">Não há ocorrência de check points neste mês!</p>';
-                    return $('#load-sigma').hide();
-                } else {
-
-                    var reqDados = response.split('//*//');
-                    var dadosGrafico = reqDados[0];
-                    var dadosUsuario = reqDados[1];
-                    var dadosBusca = reqDados[2];
-
-                    var blocoUsuario = dadosUsuario.split('/,/');
-                    var blocoBusca = dadosBusca.split('/,/');
-
-                    var ini_ = [
-                        '<table style="width: 100%;" data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke">',
-                        '<thead class="table_titles_blue">',
-                        '<tr>',
-                        '<th>Data check point</th>',
-                        '<th data-priority="1">Sistema e login</th>',
-                        '<th style="padding: 10px;">Local check</th>',
-                        '</tr>',
-                        '</thead>'
-                    ].join('');
-
-                    var fim_ = '</table>';
-
-                    var ini_select = [
-                        '<form style="margin: 0; padding: 0; font-weight: normal;">',
-                        '<div style="margin: 0 0.5rem; padding: 0; font-weight: normal;" class="ui-field-contain">',
-                        '<select style="width: 100%; padding: 6px; padding-left: 25px; box-shadow: none; position: relative; bottom: 8px;" class="ui-btn ui-icon-carat-d ui-btn-icon-right ui-corner-all ui-shadow select_manut" onchange="enviar_select()" name="select-native-2" id="q_manut" data-mini="true">',
-                        '<option value="">Buscar...</option>',
-                    ].join('');
-
-                    var fim_select = [
-                        '</select>',
-                        '</div>',
-                        '</form>'
-                    ].join('');
-
-                    var dados = "";
-                    var dados_select = "";
-                    var arr = [];
-
-                    for (var i = 0; i < blocoUsuario.length; i++) {
-                        var partUser = blocoUsuario[i].split('/_/');
-                        var q_lat = partUser[3];
-                        var q_lon = partUser[4];
-
-                        dados += [
-                            '<tbody>',
-                            '<tr class="table-check">',
-                            '<td style="text-align: center; font-size: 14px; border-bottom: 1px solid #cccccc; padding: 10px;">' + partUser[2] + '</td>',
-                            '<td style="border-bottom: 1px solid #cccccc; padding: 10px;"><span style="color: #038ad0;">' + partUser[0] + '</span><div style="font-size: 14px;">' + partUser[1] + '</div></td>',
-                            '<td style="text-align: center; border-bottom: 1px solid #cccccc; padding: 10px;"><img src="images/map-marked-alt.png" width="20" onclick="loadMap(' + "'" + q_lat + "'" + "," + "'" + q_lon + "'" + ')"></td>',
-                            '</tr>',
-                            '</tbody>'
-                        ].join('');
-                    }
-
-                    for (var i = 0; i < blocoBusca.length; i++) {
-                        var partBusca = blocoBusca[i].split('/_/');
-
-                        var encontrou = arr.indexOf(partBusca[0]);
-
-                        arr.push(partBusca[0]);
-
-                        partBusca[0] == q_sist ? sl = "selected" : sl = "";
-
-                        if (encontrou == -1) {
-                            dados_select += [
-                                `<option style="color: #fff;" value="${partBusca[0]}" ${sl}>${partBusca[1]}</option>`,
-                                // `<option style="color: #fff;" value="${partBusca[0]}">${partBusca[1]}</option>`,
-                            ].join('');
-                        }
-                    }
-
-                    document.getElementById('dados_usuario').innerHTML = ini_ + dados + fim_;
-                    document.getElementById('dados_select').innerHTML = ini_select + dados_select + fim_select;
-
-                    var search = '<img style="position: relative; z-index: 1; top: 25px; left: 15px;" src="images/search.png" width="15" />';
-                    document.getElementById('search').innerHTML = search;
-
-                    var result = "var data = google.visualization.arrayToDataTable([" + dadosGrafico + "]);"
-                    var sequencia_dados = eval(result);
-
-                    var options = {
-                        title: 'Quantidade de check points x Dia do mês',
-                        titleTextStyle: { width: '100%' },
-                        width: '100%',
-                        height: '650',
-                        hAxis: { textStyle: { color: '#333333', fontSize: 10.5 }, slantedTextAngle: 90 },
-                        fontSize: 11,
-                        isStacked: true,
-                        bar: { groupWidth: '60%' },
-                        legend: { textStyle: { fontSize: 11 } },
-                        chartArea: { width: '55%', height: '90%', left: '10%' },
-                    };
-
-                    var chart = new google.visualization.BarChart(document.getElementById('barchart'));
-
-                    chart.draw(data, options);
-                    $('#load-sigma').hide();
-                }
             }
         }
 

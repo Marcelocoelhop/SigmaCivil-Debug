@@ -176,14 +176,14 @@
 								var botao_sincro = [
 									'<div style="margin-top: 16px;">',
 									'<img src="images/check-circle.png" width="25" />',
-									'<div style="margin-top: 8px;" align="center"><span style="text-decoration: none;">CheckPoints Sincronizados</span></div>',
+									'<div align="center"><span style="text-decoration: none;">Sincronizado</span></div>',
 									'</div>'
 								].join('');
 							} else {
 								var botao_sincro = [
 									'<div style="margin-top: 16px;>',
 									'<img src="images/exclamation-circle.png" width="25" />',
-									'<div style="margin-top: 8px;" align="center"><span style="text-decoration: none;">Sincronizar CheckPoints</span></div>',
+									'<div align="center"><span style="text-decoration: none;">Não sincronizado</span></div>',
 									'</div>'
 								].join('');
 							}
@@ -274,60 +274,64 @@
 		</div>
 
 		<div class="ui-grid-a">
-			<div class="ui-block-a">
+			<div class="ui-block">
 				<a href="#" class="is-not-decoration register">
-					<div class="ui-bar ui-bar-a cogs-button" style="height:60px;">
-						<img src="images/cogs.png" width="50" alt="cogs">
-						<span>Registrar manutenção</span>
-					</div>
-				</a>
-			</div>
-			<div class="ui-block-b">
-				<a href="#" class="is-not-decoration" onclick="openBrowser()">
-					<div class="ui-bar ui-bar-a cogs-button" style="height:60px;">
-						<img src="images/phone.png" width="50" alt="cogs">
-						<span>Abrir chamado</span>
+					<div class="ui-bar ui-bar-a cogs-button" style="height:24px;">
+						<div>
+							<img src="images/cogs.png" width="30" alt="cogs">
+							<span>Registrar manutenção</span>
+						</div>
 					</div>
 				</a>
 			</div>
 			<div class="ui-block">
+				<a href="#" class="is-not-decoration" onclick="openBrowser()">
+					<div class="ui-bar ui-bar-a cogs-button" style="height:24px;">
+						<div>
+							<img src="images/phone.png" width="30" alt="cogs">
+							<span>Abrir chamado</span>
+						</div>
+					</div>
+				</a>
+			</div>
+			<div class="ui-block" style="margin-bottom: 64px;">
 				<a href="#" class="is-not-decoration" onClick="go_relat_check2()">
-					<div class="ui-bar ui-bar-a cogs-button" style="height:60px">
-						<div style="display: flex; flex-direction: column; align-items: center;">
-							<img src="images/check-square.png" width="50" alt="cogs">
+					<div class="ui-bar ui-bar-a cogs-button" style="height:24px">
+						<div>
+							<img src="images/check-square.png" width="30" alt="cogs">
 							<span>Relatório de checkpoints</span>
 						</div>
+						<span id="bot_sincro"></span>
+
 					</div>
 				</a>
 			</div>
 		</div><!-- /grid-a -->
 
-		<span id="bot_sincro"></span>
-
 	</div>
 
-    <!-- Menu bottom -->
-    <nav class="main-menu-bottom">
-        <div>
-            <button class="buttons-navigate" type="button" onclick="volta_uni()">
-                <img src="images/home.png" width="22" alt="Home" />
-                <p>manutenções</p>
-            </button>
-            <button class="buttons-navigate" type="button" onclick="scan()">
-                <img src="images/qr_code.png" width="22" alt="Qr_code" />
-                <p>qrcode</p>
-            </button>
-            <button class="buttons-navigate" type="button" onclick="go_relat_check2()">
-                <img src="images/graph.png" width="22" alt="Relatório" />
-                <p>relatório</p>
-            </button>
-            <button class="buttons-navigate" type="button" onclick="openBrowser()">
-                <img src="images/call.png" width="22" alt="Chamado" />
-                <p>abrir chamado</p>
-            </button>
-        </div>
-    </nav>
-    <!-- Fim Menu bottom -->
+	<!-- Menu bottom -->
+	<nav class="main-menu-bottom">
+		<div>
+			<button class="buttons-navigate" type="button" onclick="volta_uni()">
+				<img src="images/home.png" width="22" alt="Home" />
+				<p>manutenções</p>
+			</button>
+			<button class="buttons-navigate" type="button" onclick="scan()">
+				<img src="images/qr_code.png" width="22" alt="Qr_code" />
+				<p>qrcode</p>
+			</button>
+			<button class="buttons-navigate" type="button" onclick="go_relat_check2()">
+				<img src="images/graph.png" width="22" alt="Relatório" />
+				<p>relatório</p>
+			</button>
+			<button class="buttons-navigate" type="button" onclick="openBrowser()">
+				<img src="images/call.png" width="22" alt="Chamado" />
+				<p>abrir chamado</p>
+			</button>
+		</div>
+	</nav>
+	<!-- Fim Menu bottom -->
 
 </body>
 
@@ -401,31 +405,31 @@
 				if (xhr.status == 200 || xhr.status == 0) {
 					var response = xhr.responseText;
 					var pedaco = response.split('*//*');
-		tem_alguma_manut = pedaco[0];
+tem_alguma_manut = pedaco[0];
 
-		nome_sistema = pedaco[1];
+nome_sistema = pedaco[1];
 
-		if (tem_alguma_manut == "0") {
-			alert('Não há manutenções para serem registradas!');
-		} else if (tem_alguma_manut == "1") {
-			if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
-				window.location.assign("empree.htm?l=" + login + "&s=" + senha + "&e=" + qual_num_empree + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&fil=" + removeAcento(nome_sistema));
-			} else {
-				window.location.assign("empree_online.htm?l=" + login + "&s=" + senha + "&e=" + qual_num_empree + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&fil=" + removeAcento(nome_sistema));
-			}
-		} else {
-			navigator.notification.alert(
-				'Problemas com sua conexão. Conecte seu celular com a internet e tente novamente!',  // message
-				function () {
-					go_page_qrcode(qual_id_sistema, qual_num_empree);
-				},         // callback
-				'SigmaCivil',            // title
-				'OK'                  // buttonName
-			);
-		}
-	} else {
-		alert("Problemas com sua conexao internet. Erro: 0146");
-	}
+if (tem_alguma_manut == "0") {
+alert('Não há manutenções para serem registradas!');
+} else if (tem_alguma_manut == "1") {
+if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
+window.location.assign("empree.htm?l=" + login + "&s=" + senha + "&e=" + qual_num_empree + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&fil=" + removeAcento(nome_sistema));
+} else {
+window.location.assign("empree_online.htm?l=" + login + "&s=" + senha + "&e=" + qual_num_empree + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&fil=" + removeAcento(nome_sistema));
+}
+} else {
+navigator.notification.alert(
+'Problemas com sua conexão. Conecte seu celular com a internet e tente novamente!',  // message
+function () {
+go_page_qrcode(qual_id_sistema, qual_num_empree);
+},         // callback
+'SigmaCivil',            // title
+'OK'                  // buttonName
+);
+}
+} else {
+alert("Problemas com sua conexao internet. Erro: 0146");
+}
 }
 }
 

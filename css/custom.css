@@ -52,10 +52,11 @@
 .main-menu-bottom {
     width: 100%;
     background: #d8d8d8;
-    border-top: 1px solid #b10b0b;
+    /* border-top: 1px solid #b10b0b; */
     position: fixed;
     bottom: 0;
     z-index: 1;
+    box-shadow: 0 0 10px 0 rgba(0,0,0,0.4);
 }
 
 .button-actived {
@@ -109,9 +110,19 @@
     box-shadow: 0 0 20px 0 rgba(0,0,0,.3);
 }
 
-.cogs-button span {
-    margin-top: 16px;
+.cogs-button div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
+
+.cogs-button div img {
+    margin-right: 16px;
+}
+
+/* .cogs-button span {
+    margin-top: 16px;
+} */
 
 .is-opacity {
     opacity: .2;

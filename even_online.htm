@@ -1017,22 +1017,35 @@
                 return
             }
 
-            var r = confirm("Para tirar uma foto com a câmera selecione OK. Para acessar sua galeria de imagens clique em CANCELAR");
+            navigator.notification.confirm(
+                'Deseja tirar uma foto ou escolher a foto da galeria?',
+                function (buttonIndex) {
+                    if (buttonIndex === 1) {
+                        source = pictureSource.CAMERA;
+                    } else {
+                        source = pictureSource.PHOTOLIBRARY;
+                    }
+
+                    navigator.camera.getPicture(onPhotoURISuccess, onFail, {
+                        quality: 50,
+                        destinationType: destinationType.FILE_URI,
+                        encodingType: Camera.EncodingType.JPEG,
+                        popoverOptions: CameraPopoverOptions,
+                        saveToPhotoAlbum: true,
+                        allowEdit: editPictures ? true : false,
+                        sourceType: source
+                    });
+                },
+                'SigmaCivil',
+                ['Tirar uma foto', 'Galeria']
+            );
+
+            /*var r = confirm("Para tirar uma foto com a câmera selecione OK. Para acessar sua galeria de imagens clique em CANCELAR");
             if (r == true) {
                 source = pictureSource.CAMERA;
             } else {
                 source = pictureSource.PHOTOLIBRARY;
-            }
-
-            navigator.camera.getPicture(onPhotoURISuccess, onFail, {
-                quality: 50,
-                destinationType: destinationType.FILE_URI,
-                encodingType: Camera.EncodingType.JPEG,
-                popoverOptions: CameraPopoverOptions,
-                saveToPhotoAlbum: true,
-                allowEdit: editPictures ? true : false,
-                sourceType: source
-            });
+            }*/
 
         }
 

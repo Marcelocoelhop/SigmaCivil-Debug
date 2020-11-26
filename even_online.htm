@@ -1022,9 +1022,9 @@
                 'Deseja tirar uma foto ou escolher a foto da galeria?',
                 function (buttonIndex) {
                     if (buttonIndex === 1) {
-                        source = pictureSource.CAMERA;
-                    } else {
                         source = pictureSource.PHOTOLIBRARY;
+                    } else {
+                        source = pictureSource.CAMERA;
                     }
 
                     navigator.camera.getPicture(onPhotoURISuccess, onFail, {
@@ -1038,7 +1038,7 @@
                     });
                 },
                 'SigmaCivil',
-                ['Tirar uma foto', 'Galeria']
+                ['Galeria', 'Tirar uma foto']
             );
 
             /*var r = confirm("Para tirar uma foto com a câmera selecione OK. Para acessar sua galeria de imagens clique em CANCELAR");
@@ -1389,7 +1389,18 @@
         var fail_up = function (error) {
             document.getElementById("parte_load_content").style.display = "none";
             document.getElementById("parte_load").style.display = "none";
-            alert("Não foi feito o upload da imagem!");
+            // alert("Não foi feito o upload da imagem!");
+
+            navigator.notification.confirm(
+                'Não foi feito o upload da imagem. Tentar novamente?',
+                function (buttonIndex) {
+                    if (buttonIndex === 2) {
+                        consultaConfig();
+                    }
+                },
+                'SigmaCivil',
+                ['Cancelar', 'Tentar novamente']
+            );
         }
         // FIM UPLOAD IMAGEM
 
@@ -1669,7 +1680,18 @@
         var fail_up_v = function (error) {
             document.getElementById("parte_load_content").style.display = "none";
             document.getElementById("parte_load").style.display = "none";
-            alert("Não foi feito o upload do vídeo!");
+            // alert("Não foi feito o upload do vídeo!");
+
+            navigator.notification.confirm(
+                'Não foi feito o upload do vídeo. Tentar novamente?',
+                function (buttonIndex) {
+                    if (buttonIndex === 2) {
+                        consultaConfig();
+                    }
+                },
+                'SigmaCivil',
+                ['Cancelar', 'Tentar novamente']
+            );
         }
         // FIM UPLOAD VIDEO
 
@@ -1978,7 +2000,18 @@
         var fail_up_a = function (error) {
             document.getElementById("parte_load_content").style.display = "none";
             document.getElementById("parte_load").style.display = "none";
-            alert("Não foi feito o upload do áudio!");
+            // alert("Não foi feito o upload do áudio!");
+
+            navigator.notification.confirm(
+                'Não foi feito o upload do áudio. Tentar novamente?',
+                function (buttonIndex) {
+                    if (buttonIndex === 2) {
+                        consultaConfig();
+                    }
+                },
+                'SigmaCivil',
+                ['Cancelar', 'Tentar novamente']
+            );
         }
         // FIM UPLOAD AUDIO
 
@@ -2081,7 +2114,20 @@
                         }
                     }
                 } else {
-                    alert("Problemas com a gravação do texto. Tente novamente mais tarde (cod 08).");
+                    document.getElementById("parte_load_content").style.display = "none";
+                    document.getElementById("parte_load").style.display = "none";
+                    // alert("Problemas com a gravação do texto. Tente novamente mais tarde (cod 08).");
+
+                    navigator.notification.confirm(
+                        'Problemas com a gravação do texto. Tentar novamente?',
+                        function (buttonIndex) {
+                            if (buttonIndex === 2) {
+                                consultaConfig();
+                            }
+                        },
+                        'SigmaCivil',
+                        ['Cancelar', 'Tentar novamente']
+                    );
                 }
             });
 

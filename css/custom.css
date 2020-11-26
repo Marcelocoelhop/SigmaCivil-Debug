@@ -124,6 +124,10 @@
     margin-top: 16px;
 } */
 
+.ui-flipswitch {
+    border-radius: 40px !important;
+}
+
 .is-opacity {
     opacity: .2;
     font-size: 25px;

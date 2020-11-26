@@ -182,7 +182,7 @@
 							} else {
 								var botao_sincro = [
 									'<div style="margin-top: 16px;>',
-									'<img src="images/exclamation-circle.png" width="25" />',
+									'<img src="images/exclamation-circ.png" width="25" />',
 									'<div align="center"><span style="text-decoration: none;">Não sincronizado</span></div>',
 									'</div>'
 								].join('');
@@ -314,7 +314,7 @@
 	<nav class="main-menu-bottom">
 		<div>
 			<button class="buttons-navigate" type="button" onclick="volta_uni()">
-				<img src="images/home.png" width="22" alt="Home" />
+				<img src="images/engenheiro_cogs.png" width="22" alt="Home" />
 				<p>manutenções</p>
 			</button>
 			<button class="buttons-navigate" type="button" onclick="scan()">
@@ -505,7 +505,7 @@ xhr.send()*/
 										});
 
 										tx.oncomplete = function () {
-											go_to_page(qid_sistema, qid_empree);
+											go_page_qrcode(qid_sistema, qid_empree);
 										}
 
 										tx.onerror = function (event) {
@@ -552,7 +552,7 @@ xhr.send()*/
 										});
 
 										tx.oncomplete = function () {
-											go_to_page(qid_sistema, qid_empree);
+											go_page_qrcode(qid_sistema, qid_empree);
 										}
 
 										tx.onerror = function (event) {

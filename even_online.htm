@@ -87,7 +87,8 @@
 
         // FUNÇÃO QUE APRESENTA O ERRO NA APLICAÇÃO
         window.onerror = function (message, url, lineNumber) {
-            alert(`Error: ${message} in ${url} at line ${lineNumber}`);
+            alert(`Erro: ${message} em ${url} na linha ${lineNumber}. Por favor, tente novamente.`);
+            reload_page();
         }
 
         // INICIALIZA O PROCESSAMENTO DA APLICAÇÃO
@@ -990,7 +991,7 @@
                             if (uploadAutomatic && qtd_tam_ti_texto > 0) {
                                 upload_texto();
                             }
-                        }, 1500);
+                        }, 1000);
 
                     }
                 }

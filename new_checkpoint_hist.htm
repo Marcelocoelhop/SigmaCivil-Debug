@@ -168,14 +168,8 @@
     <script type="text/javascript">
 
         window.onerror = function (message, url, lineNumber) {
-            navigator.notification.alert(
-                `Error: ${message} in ${url} at line ${lineNumber}`,  // message
-                function () {
-                    return;
-                },         // callback
-                'SigmaCivil',            // title
-                'OK'                  // buttonName
-            );
+            alert(`Erro: ${message} em ${url} na linha ${lineNumber}. Por favor, tente novamente.`);
+            enviar();
         }
 
         var num_empree = getquerystring("e");

@@ -101,6 +101,9 @@
 				var tx = db.transaction(['mtab_config'], 'readwrite');
 				var store = tx.objectStore('mtab_config');
 
+				localStorage.setItem('sl1', '');
+				localStorage.setItem('sl2', '');
+
 				var objectStoreRequest = store.clear();
 				objectStoreRequest.onsuccess = function (event) {
 					alert("Os dados do atual empreendimento já foram apagados. Você já pode importar um novo empreendimento!")

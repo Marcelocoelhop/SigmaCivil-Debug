@@ -1316,11 +1316,13 @@
                     }
                 }
             } else {
+                alert(q_id);
+
                 navigator.notification.confirm(
                     'Problemas com a sua conexão. Tentar novamente?',
                     function (buttonIndex) {
                         if (buttonIndex === 2) {
-                            consultaConfig();
+                            upload_imagem(q_id);
                         }
                     },
                     'SigmaCivil',
@@ -1629,7 +1631,7 @@
                     'Problemas com a sua conexão. Tentar novamente?',
                     function (buttonIndex) {
                         if (buttonIndex === 2) {
-                            consultaConfig();
+                            upload_video();
                         }
                     },
                     'SigmaCivil',
@@ -1961,7 +1963,7 @@
                     'Problemas com a sua conexão. Tentar novamente?',
                     function (buttonIndex) {
                         if (buttonIndex === 2) {
-                            consultaConfig();
+                            upload_audio();
                         }
                     },
                     'SigmaCivil',
@@ -2095,7 +2097,7 @@
                     'Problemas com a sua conexão. Tentar novamente?',
                     function (buttonIndex) {
                         if (buttonIndex === 2) {
-                            consultaConfig();
+                            upload_texto();
                         }
                     },
                     'SigmaCivil',

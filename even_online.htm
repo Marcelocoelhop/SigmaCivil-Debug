@@ -3068,136 +3068,174 @@
     }
 
     function enviar_dados() {
-        var crypt_segur = (parseInt(id_empree) * 3) + 5 + (parseInt(id_cliente)) * 2 + 7
+        if (tem_conexao()) {
+            var crypt_segur = (parseInt(id_empree) * 3) + 5 + (parseInt(id_cliente)) * 2 + 7
 
-        if (e_construtora == 0) {
+            if (e_construtora == 0) {
 
-            var data = document.querySelector('.data_formato')
-            var texto = ""
-            var continuar = null
+                var data = document.querySelector('.data_formato')
+                var texto = ""
+                var continuar = null
 
-            var d = new Date();
+                var d = new Date();
 
-            var aux_mes_novo = d.getMonth() + 1;
-            aux_mes_novo = '0' + aux_mes_novo
-            aux_mes_novo = aux_mes_novo.substring(aux_mes_novo.length - 2, aux_mes_novo.length);
+                var aux_mes_novo = d.getMonth() + 1;
+                aux_mes_novo = '0' + aux_mes_novo
+                aux_mes_novo = aux_mes_novo.substring(aux_mes_novo.length - 2, aux_mes_novo.length);
 
-            var aux_dia_novo = d.getDate();
-            aux_dia_novo = '0' + aux_dia_novo
-            aux_dia_novo = aux_dia_novo.substring(aux_dia_novo.length - 2, aux_dia_novo.length);
+                var aux_dia_novo = d.getDate();
+                aux_dia_novo = '0' + aux_dia_novo
+                aux_dia_novo = aux_dia_novo.substring(aux_dia_novo.length - 2, aux_dia_novo.length);
 
-            var data_hoje_formatada = d.getFullYear() + '-' + aux_mes_novo + '-' + aux_dia_novo
+                var data_hoje_formatada = d.getFullYear() + '-' + aux_mes_novo + '-' + aux_dia_novo
 
-            var $email_condominio = document.getElementById('email_condominio')
-            if ($email_condominio.checked == true) {
-                ev_email = 1
-            } else {
-                ev_email = 0
-            }
-
-            if (data.value == 0) {
-                alert('Obrigatório o preenchimento da data da realização da manutenção!')
-                FocusInput(data)
-            } else if (datadiff2(Date.now(), d_min) > 0) {
-                alert("Essa manutenção só pode ser informada a partir do dia " + dateToEN(d_min) + "!")
-            } else if (datadiff(Date.now(), d_max) < 0) {
-                alert("Essa manutenção não pode ser informada após o dia " + dateToEN(d_max) + "!")
-            } else if (datadiff2(transf_data_num(dateToEN2(document.getElementById('in_data_realizacao').value)), d_min) > 0) {
-                alert("Essa manutenção só pode ser realizada a partir do dia " + dateToEN(d_min) + "!")
-            } else if (datadiff(transf_data_num(dateToEN2(document.getElementById('in_data_realizacao').value)), d_max) < 0) {
-                alert("Essa manutenção não pode ser realizada após o dia " + dateToEN(d_max) + "!")
-            } else if (datadiff(transf_data_num(dateToEN2(document.getElementById('in_data_realizacao').value)), data_hoje_formatada) < 0) {
-                alert("Essa manutenção não pode ser realizada após o dia de hoje!")
-            } else if (nivel_manut == 2 && qt_docs == 0) {
-                alert('Esta manutenção precisa de pelo menos 1 documento comprovatório anexado!')
-            } else {
-                if (nivel_manut == 1 && qt_docs == 0) {
-                    var prosseguir = confirm('É importante anexar um documento que comprove esta manutenção. Tem certeza que deseja prosseguir sem anexar um comprovante?')
-                    if (prosseguir == false) { return }
+                var $email_condominio = document.getElementById('email_condominio')
+                if ($email_condominio.checked == true) {
+                    ev_email = 1
+                } else {
+                    ev_email = 0
                 }
-                if (qtdDocs_Device > 0) {
-                    if (qtdDocs_Device > 1) {
-                        continuar = confirm(`Você ainda tem ${qtdDocs_Device} documentos neste aparelho que não estão anexados no servidor! Deseja prosseguir?`)
-                    } else {
-                        continuar = confirm(`Você ainda tem ${qtdDocs_Device} documento neste aparelho que não está anexado no servidor! Deseja prosseguir?`)
+
+                if (data.value == 0) {
+                    alert('Obrigatório o preenchimento da data da realização da manutenção!')
+                    FocusInput(data)
+                } else if (datadiff2(Date.now(), d_min) > 0) {
+                    alert("Essa manutenção só pode ser informada a partir do dia " + dateToEN(d_min) + "!")
+                } else if (datadiff(Date.now(), d_max) < 0) {
+                    alert("Essa manutenção não pode ser informada após o dia " + dateToEN(d_max) + "!")
+                } else if (datadiff2(transf_data_num(dateToEN2(document.getElementById('in_data_realizacao').value)), d_min) > 0) {
+                    alert("Essa manutenção só pode ser realizada a partir do dia " + dateToEN(d_min) + "!")
+                } else if (datadiff(transf_data_num(dateToEN2(document.getElementById('in_data_realizacao').value)), d_max) < 0) {
+                    alert("Essa manutenção não pode ser realizada após o dia " + dateToEN(d_max) + "!")
+                } else if (datadiff(transf_data_num(dateToEN2(document.getElementById('in_data_realizacao').value)), data_hoje_formatada) < 0) {
+                    alert("Essa manutenção não pode ser realizada após o dia de hoje!")
+                } else if (nivel_manut == 2 && qt_docs == 0) {
+                    alert('Esta manutenção precisa de pelo menos 1 documento comprovatório anexado!')
+                } else {
+                    if (nivel_manut == 1 && qt_docs == 0) {
+                        var prosseguir = confirm('É importante anexar um documento que comprove esta manutenção. Tem certeza que deseja prosseguir sem anexar um comprovante?')
+                        if (prosseguir == false) { return }
                     }
-                    if (continuar == false) { return }
+                    if (qtdDocs_Device > 0) {
+                        if (qtdDocs_Device > 1) {
+                            continuar = confirm(`Você ainda tem ${qtdDocs_Device} documentos neste aparelho que não estão anexados no servidor! Deseja prosseguir?`)
+                        } else {
+                            continuar = confirm(`Você ainda tem ${qtdDocs_Device} documento neste aparelho que não está anexado no servidor! Deseja prosseguir?`)
+                        }
+                        if (continuar == false) { return }
+                    }
+                    if (prosseguir == true || ((nivel_manut == 1 || nivel_manut == 2) && qt_docs > 0)) {
+                        var ajax3 = new XMLHttpRequest();
+                        ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/salvar_manut.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&econst=" + e_construtora + "&idpm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&d_data_realiz=" + dateToEN2(document.getElementById('in_data_realizacao').value) + "&d_forn=" + document.getElementById('valores').value + "&d_custoReal=" + document.getElementById('in_dado_custo_real').value + "&d_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value) + "&tipo=" + tipo + "&versao=2.2&env_em=" + ev_email + "&segur=" + crypt_segur + "&t=" + Math.random(), false);
+                        ajax3.addEventListener("loadend", function (evt) {
+                            var resposta_total = this.responseText;
+                            if (tipo == "alt") {
+                                alert("Alteração realizada com sucesso!")
+                            } else {
+                                alert("Manutenção realizada com sucesso!")
+                            }
+
+                            atualizar_texto_empree(id_prog_manut);
+                        });
+
+                        ajax3.send();
+                    }
                 }
-                if (prosseguir == true || ((nivel_manut == 1 || nivel_manut == 2) && qt_docs > 0)) {
+
+            } else if (e_construtora == 1) {
+                var $email_construtora = document.getElementById('email_construtora')
+                if ($email_construtora.checked == true) {
+                    ev_email = 1
+                } else {
+                    ev_email = 0
+                }
+
+                if (datadiff2(Date.now(), d_min) > 0) {
+                    alert("Essa manutenção só pode ser informada a partir do dia " + dateToEN(d_min) + '!')
+                } else if (datadiff(Date.now(), d_max) <= 0) {
+                    alert("Essa manutenção não pode ser informada após o dia " + dateToEN(d_max) + '!')
+                } else {
+                    if (qtdDocs_Device > 0) {
+                        if (qtdDocs_Device > 1) {
+                            continuar = confirm(`Você ainda tem ${qtdDocs_Device} documentos neste aparelho que não estão anexados no servidor! Deseja prosseguir?`)
+                        } else {
+                            continuar = confirm(`Você ainda tem ${qtdDocs_Device} documento neste aparelho que não está anexado no servidor! Deseja prosseguir?`)
+                        }
+                        if (continuar == false) { return }
+                    }
                     var ajax3 = new XMLHttpRequest();
-                    ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/salvar_manut.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&econst=" + e_construtora + "&idpm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&d_data_realiz=" + dateToEN2(document.getElementById('in_data_realizacao').value) + "&d_forn=" + document.getElementById('valores').value + "&d_custoReal=" + document.getElementById('in_dado_custo_real').value + "&d_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value) + "&tipo=" + tipo + "&versao=2.2&env_em=" + ev_email + "&segur=" + crypt_segur + "&t=" + Math.random(), false);
+                    ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/salvar_manut.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&econst=" + e_construtora + "&idpm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&d_data_realiz=" + document.getElementById('in_data_realizacao').value + "&d_forn=" + document.getElementById('valores').value + "&d_custoReal=" + document.getElementById('in_dado_custo_real').value + "&d_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value) + "&tipo=" + tipo + "&versao=2.2&env_em=" + ev_email + "&segur=" + crypt_segur + "&t=" + Math.random(), false);
                     ajax3.addEventListener("loadend", function (evt) {
                         var resposta_total = this.responseText;
-                        if (tipo == "alt") {
-                            alert("Alteração realizada com sucesso!")
-                        } else {
-                            alert("Manutenção realizada com sucesso!")
-                        }
+                        alert("Alterações realizadas com sucesso!")
 
                         atualizar_texto_empree(id_prog_manut);
                     });
 
                     ajax3.send();
+
                 }
             }
-
-        } else if (e_construtora == 1) {
-            var $email_construtora = document.getElementById('email_construtora')
-            if ($email_construtora.checked == true) {
-                ev_email = 1
-            } else {
-                ev_email = 0
-            }
-
-            if (datadiff2(Date.now(), d_min) > 0) {
-                alert("Essa manutenção só pode ser informada a partir do dia " + dateToEN(d_min) + '!')
-            } else if (datadiff(Date.now(), d_max) <= 0) {
-                alert("Essa manutenção não pode ser informada após o dia " + dateToEN(d_max) + '!')
-            } else {
-                if (qtdDocs_Device > 0) {
-                    if (qtdDocs_Device > 1) {
-                        continuar = confirm(`Você ainda tem ${qtdDocs_Device} documentos neste aparelho que não estão anexados no servidor! Deseja prosseguir?`)
-                    } else {
-                        continuar = confirm(`Você ainda tem ${qtdDocs_Device} documento neste aparelho que não está anexado no servidor! Deseja prosseguir?`)
+        } else {
+            navigator.notification.confirm(
+                'Problemas com a sua conexão ao salvar a manutenção. Tentar novamente?',
+                function (buttonIndex) {
+                    if (buttonIndex === 2) {
+                        enviar_dados(q_id);
                     }
-                    if (continuar == false) { return }
-                }
-                var ajax3 = new XMLHttpRequest();
-                ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/salvar_manut.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&econst=" + e_construtora + "&idpm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&d_data_realiz=" + document.getElementById('in_data_realizacao').value + "&d_forn=" + document.getElementById('valores').value + "&d_custoReal=" + document.getElementById('in_dado_custo_real').value + "&d_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value) + "&tipo=" + tipo + "&versao=2.2&env_em=" + ev_email + "&segur=" + crypt_segur + "&t=" + Math.random(), false);
-                ajax3.addEventListener("loadend", function (evt) {
-                    var resposta_total = this.responseText;
-                    alert("Alterações realizadas com sucesso!")
-
-                    atualizar_texto_empree(id_prog_manut);
-                });
-
-                ajax3.send();
-
-            }
+                },
+                'SigmaCivil',
+                ['Cancelar', 'Tentar novamente']
+            );
         }
-
     }
 
     function apagar_fot_vid_aud_tex(q_cam) {
-        var q_cam;
-        if (e_construtora == 0) {
-            var trash = document.querySelector('.all_trash');
+        if (tem_conexao()) {
+            var q_cam;
+            if (e_construtora == 0) {
+                var trash = document.querySelector('.all_trash');
 
-            var res = confirm('Tem certeza que deseja excluir este arquivo?');
-            if (res == true) {
-                if (datadiff2(Date.now(), d_min) > 0 || datadiff(Date.now(), d_max) < 0) {
-                    alert("A exclusão deste arquivo só pode ser realizada entre o período " + dateToEN(d_min) + ' a ' + dateToEN(d_max) + '!')
-                } else if (nivel_manut == 2 && qt_docs == 1) {
-                    alert('Não é possível a exclusão, pois esta manutenção precisa de pelo menos 1 documento comprovatório anexado!')
-                } else {
-                    var deletar_arq = "S";
-                    if (nivel_manut == 1 && qt_docs == 1) {
-                        prosseguir = confirm('É importante anexar um documento que comprove esta manutenção. Tem certeza que deseja prosseguir sem anexar um comprovante?')
-                        if (prosseguir == false) {
-                            deletar_arq = "N"
+                var res = confirm('Tem certeza que deseja excluir este arquivo?');
+                if (res == true) {
+                    if (datadiff2(Date.now(), d_min) > 0 || datadiff(Date.now(), d_max) < 0) {
+                        alert("A exclusão deste arquivo só pode ser realizada entre o período " + dateToEN(d_min) + ' a ' + dateToEN(d_max) + '!')
+                    } else if (nivel_manut == 2 && qt_docs == 1) {
+                        alert('Não é possível a exclusão, pois esta manutenção precisa de pelo menos 1 documento comprovatório anexado!')
+                    } else {
+                        var deletar_arq = "S";
+                        if (nivel_manut == 1 && qt_docs == 1) {
+                            prosseguir = confirm('É importante anexar um documento que comprove esta manutenção. Tem certeza que deseja prosseguir sem anexar um comprovante?')
+                            if (prosseguir == false) {
+                                deletar_arq = "N"
+                            }
                         }
+                        if (deletar_arq == "S") {
+
+                            var verific1 = 3 * parseInt(id_empree) + 3 * parseInt(id_cliente)
+                            var verific2 = Math.abs(6 * parseInt(id_empree) - 3 * parseInt(id_cliente))
+                            var verific3 = Math.abs(3 * parseInt(id_empree) + 2 * parseInt(id_cliente))
+                            var verif_fim = verific1 + "S" + verific2 + "C" + verific3
+
+                            var ajax3 = new XMLHttpRequest();
+                            ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_excluir_arq.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&e_const=" + e_construtora + "&seg=" + verif_fim + "&cam=" + q_cam + "&versao=2.2");
+                            ajax3.addEventListener("loadend", function (evt) {
+                                var resposta_total = this.responseText;
+                                reload_page_even();
+                            });
+
+                            ajax3.send();
+
+                        }
+
                     }
-                    if (deletar_arq == "S") {
+                }
+            } else if (e_construtora == 1) {
+                var res = confirm('Tem certeza que deseja excluir este arquivo?');
+                if (res == true) {
+                    if (datadiff2(Date.now(), d_min) > 0 || datadiff(Date.now(), d_max) < 0) {
+                        alert("A exclusão deste arquivo só pode ser realizada no período de " + dateToEN(d_min) + ' a ' + dateToEN(d_max) + '!')
+                    } else {
 
                         var verific1 = 3 * parseInt(id_empree) + 3 * parseInt(id_cliente)
                         var verific2 = Math.abs(6 * parseInt(id_empree) - 3 * parseInt(id_cliente))
@@ -3214,32 +3252,19 @@
                         ajax3.send();
 
                     }
-
                 }
             }
-        } else if (e_construtora == 1) {
-            var res = confirm('Tem certeza que deseja excluir este arquivo?');
-            if (res == true) {
-                if (datadiff2(Date.now(), d_min) > 0 || datadiff(Date.now(), d_max) < 0) {
-                    alert("A exclusão deste arquivo só pode ser realizada no período de " + dateToEN(d_min) + ' a ' + dateToEN(d_max) + '!')
-                } else {
-
-                    var verific1 = 3 * parseInt(id_empree) + 3 * parseInt(id_cliente)
-                    var verific2 = Math.abs(6 * parseInt(id_empree) - 3 * parseInt(id_cliente))
-                    var verific3 = Math.abs(3 * parseInt(id_empree) + 2 * parseInt(id_cliente))
-                    var verif_fim = verific1 + "S" + verific2 + "C" + verific3
-
-                    var ajax3 = new XMLHttpRequest();
-                    ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_excluir_arq.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&e_const=" + e_construtora + "&seg=" + verif_fim + "&cam=" + q_cam + "&versao=2.2");
-                    ajax3.addEventListener("loadend", function (evt) {
-                        var resposta_total = this.responseText;
-                        reload_page_even();
-                    });
-
-                    ajax3.send();
-
-                }
-            }
+        } else {
+            navigator.notification.confirm(
+                'Problemas com a sua conexão ao salvar a manutenção. Tentar novamente?',
+                function (buttonIndex) {
+                    if (buttonIndex === 2) {
+                        enviar_dados(q_id);
+                    }
+                },
+                'SigmaCivil',
+                ['Cancelar', 'Tentar novamente']
+            );
         }
     }
 

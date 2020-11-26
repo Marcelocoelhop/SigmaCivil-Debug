@@ -1315,6 +1315,17 @@
                         }
                     }
                 }
+            } else {
+                navigator.notification.confirm(
+                    'Problemas com a sua conexão. Tentar novamente?',
+                    function (buttonIndex) {
+                        if (buttonIndex === 2) {
+                            consultaConfig();
+                        }
+                    },
+                    'SigmaCivil',
+                    ['Cancelar', 'Tentar novamente']
+                );
             }
         }
 
@@ -1613,6 +1624,17 @@
                         }
                     }
                 }
+            } else {
+                navigator.notification.confirm(
+                    'Problemas com a sua conexão. Tentar novamente?',
+                    function (buttonIndex) {
+                        if (buttonIndex === 2) {
+                            consultaConfig();
+                        }
+                    },
+                    'SigmaCivil',
+                    ['Cancelar', 'Tentar novamente']
+                );
             }
         }
 
@@ -1934,6 +1956,17 @@
                         }
                     }
                 }
+            } else {
+                navigator.notification.confirm(
+                    'Problemas com a sua conexão. Tentar novamente?',
+                    function (buttonIndex) {
+                        if (buttonIndex === 2) {
+                            consultaConfig();
+                        }
+                    },
+                    'SigmaCivil',
+                    ['Cancelar', 'Tentar novamente']
+                );
             }
         }
 
@@ -2057,6 +2090,17 @@
                         }
                     }
                 }
+            } else {
+                navigator.notification.confirm(
+                    'Problemas com a sua conexão. Tentar novamente?',
+                    function (buttonIndex) {
+                        if (buttonIndex === 2) {
+                            consultaConfig();
+                        }
+                    },
+                    'SigmaCivil',
+                    ['Cancelar', 'Tentar novamente']
+                );
             }
         }
 
@@ -2070,76 +2114,89 @@
 
             var data = 'tx=' + encodeURIComponent(textoURL) + '&ipm=' + id_prog_manut + '&d=' + dia_ev + '&m=' + mes_ev + '&a=' + ano_ev + "&econst=" + e_construtora + "&idc=" + id_cliente;
             var ajax = new XMLHttpRequest();
-            ajax.open("POST", "https://www.sigmacivil.com.br/app_sc/rec_texto_uploaded.asp?versao=2.2", true);
-            ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            ajax.addEventListener("loadend", function (evt) {
-                var resposta_total = this.responseText;
-                if (resposta_total == "grav_ok") {
-                    var db;
-                    var request = window.indexedDB.open("db_sigmacivil", "1");
+            if (tem_conexao()) {
+                ajax.open("POST", "https://www.sigmacivil.com.br/app_sc/rec_texto_uploaded.asp?versao=2.2", true);
+                ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                ajax.addEventListener("loadend", function (evt) {
+                    var resposta_total = this.responseText;
+                    if (resposta_total == "grav_ok") {
+                        var db;
+                        var request = window.indexedDB.open("db_sigmacivil", "1");
 
-                    request.onerror = function (event) {
-                        alert("Erro ao criar o banco (cod 15)");
-                    };
+                        request.onerror = function (event) {
+                            alert("Erro ao criar o banco (cod 15)");
+                        };
 
-                    request.onsuccess = function (event) {
-                        db = request.result;
+                        request.onsuccess = function (event) {
+                            db = request.result;
 
-                        uploadManutEventoWinUpTexto(db);
+                            uploadManutEventoWinUpTexto(db);
 
-                        db.onerror = function (event) {
-                            alert("Database error: " + event.target.errorCode);
+                            db.onerror = function (event) {
+                                alert("Database error: " + event.target.errorCode);
+                            }
                         }
-                    }
 
-                    function uploadManutEventoWinUpTexto(db) {
-                        var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
-                        var store = tx.objectStore('mtab_prog_manut_evento');
-                        var index = store.index('comparar');
-                        var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
-                        index.openCursor(whereEquals).onsuccess = function (event) {
-                            var cursor = event.target.result;
-                            if (cursor) {
-                                var data = cursor.value;
+                        function uploadManutEventoWinUpTexto(db) {
+                            var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+                            var store = tx.objectStore('mtab_prog_manut_evento');
+                            var index = store.index('comparar');
+                            var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+                            index.openCursor(whereEquals).onsuccess = function (event) {
+                                var cursor = event.target.result;
+                                if (cursor) {
+                                    var data = cursor.value;
 
-                                data.status_texto_upl = "1";
+                                    data.status_texto_upl = "1";
 
-                                var request = cursor.update(data);
-                                request.onsuccess = function (event) {
-                                    //if (!uploadAutomatic) {
-                                    reload_page();
-                                    //}
+                                    var request = cursor.update(data);
+                                    request.onsuccess = function (event) {
+                                        //if (!uploadAutomatic) {
+                                        reload_page();
+                                        //}
+                                    }
                                 }
                             }
                         }
+                    } else {
+                        document.getElementById("parte_load_content").style.display = "none";
+                        document.getElementById("parte_load").style.display = "none";
+                        // alert("Problemas com a gravação do texto. Tente novamente mais tarde (cod 08).");
+
+                        navigator.notification.confirm(
+                            'Problemas com a gravação do texto. Tentar novamente?',
+                            function (buttonIndex) {
+                                if (buttonIndex === 2) {
+                                    consultaConfig();
+                                }
+                            },
+                            'SigmaCivil',
+                            ['Cancelar', 'Tentar novamente']
+                        );
                     }
-                } else {
-                    document.getElementById("parte_load_content").style.display = "none";
-                    document.getElementById("parte_load").style.display = "none";
-                    // alert("Problemas com a gravação do texto. Tente novamente mais tarde (cod 08).");
+                });
 
-                    navigator.notification.confirm(
-                        'Problemas com a gravação do texto. Tentar novamente?',
-                        function (buttonIndex) {
-                            if (buttonIndex === 2) {
-                                consultaConfig();
-                            }
-                        },
-                        'SigmaCivil',
-                        ['Cancelar', 'Tentar novamente']
-                    );
-                }
-            });
+                data = data.split(":").join("%3A")
+                data = data.split("{").join(" % 7B")
+                data = data.split("}").join("%7D")
+                data = data.split(",").join("%2C")
+                data = data.split("[").join("%5B")
+                data = data.split("]").join("%5D")
+                data = data.split(String.fromCharCode(34)).join("%22")
 
-            data = data.split(":").join("%3A")
-            data = data.split("{").join(" % 7B")
-            data = data.split("}").join("%7D")
-            data = data.split(",").join("%2C")
-            data = data.split("[").join("%5B")
-            data = data.split("]").join("%5D")
-            data = data.split(String.fromCharCode(34)).join("%22")
-
-            ajax.send(data);
+                ajax.send(data);
+            } else {
+                navigator.notification.confirm(
+                    'Problemas com a sua conexão. Tentar novamente?',
+                    function (buttonIndex) {
+                        if (buttonIndex === 2) {
+                            consultaConfig();
+                        }
+                    },
+                    'SigmaCivil',
+                    ['Cancelar', 'Tentar novamente']
+                );
+            }
 
         }
         // FIM UPLOAD TEXTO

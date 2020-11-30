@@ -780,6 +780,9 @@
                         var rrr_status_caminho_texto = ""
                     }
 
+                    alert(rrr_caminho_imagens);
+                    alert(rrr_status_caminho_imagens);
+
                     var todas_imagens = ""
                     var todas_status_imagens = ""
                     if (rrr_caminho_imagens == null || rrr_caminho_imagens == "") {
@@ -1093,6 +1096,11 @@
                     status_texto_upl: ""
                 }
             ];
+
+            alert(id_prog_manut)
+            alert(dia_ev)
+            alert(mes_ev)
+            alert(ano_ev)
 
             function consultaManutEvento2(db, manutsEvento_imagem) {
                 var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');

@@ -45,7 +45,7 @@
     <div id="qtd_manut_pendentes"></div>
 
     <div class="btn-bars">
-        <div style="top:4; z-index: 50;" data-role="collapsible" data-collapsed="true" class="ui-btn-left menu"
+        <div style="top:4; z-index: 50;position: fixed; position: fixed;" data-role="collapsible" data-collapsed="true" class="ui-btn-left menu"
             data-mini="true">
             <h4 class="btn-bars-bars">
                 <!-- <span class="fas fa-bars"></span> -->
@@ -68,7 +68,7 @@
         </div>
     </div>
 
-    <div class="title" style="padding-top: 0px !important; padding-bottom: 10px;">
+    <div class="title" style="padding-top: 0px !important; padding-bottom: 10px; margin-top: 66px;">
         <h4 id="nome_empree_" style="display: inline;"></h4>
     </div>
     <table>
@@ -116,6 +116,10 @@
 
         var filtro_sis = addAcento(getquerystring("fil"));
         var filtro_bool = false;
+
+        var qual_id_cliente = "";
+        var q_e_construtora = "";
+
 
         /////////////////////////
         var q_mes = getquerystring("qm");
@@ -350,6 +354,7 @@
             ].join('');
 
             var menu_sup_online = [
+                '<div class="menu_opc">',
                 '<form name="form_sup" action="" method="get">',
                 '<div data-role="header" data-position="fixed" data-theme="a">',
                 '<div class="ui-corner-all custom-corners">',
@@ -365,7 +370,8 @@
                 '</div>',
                 '</div>',
                 '</div>',
-                '</form>'
+                '</form>',
+                '</div>'
             ].join('');
 
             document.getElementById('menu_opc2').innerHTML = menu_sup_online;
@@ -420,10 +426,10 @@
 
                 var getLogin = JSON.parse(jsontext[0]);
                 var logou = getLogin.logou;
-                var qual_id_cliente = getLogin.id_cliente;
+                qual_id_cliente = getLogin.id_cliente;
                 var num_empree = getLogin.id_empree;
                 var nome_empree = getLogin.nome_empree;
-                var q_e_construtora = getLogin.e_construtora;
+                q_e_construtora = getLogin.e_construtora;
                 var data_implantacao_sc = new Date(getLogin.data_implantacao_sc)
 
                 var resultado_consulta = getLogin.status_sync;
@@ -956,7 +962,7 @@
             if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
                 window.location.assign("empree.htm?l=" + login + "&s=" + senha + "&e=" + num_empree + "&qm=" + document.getElementById('idmes').value + "&qa=" + document.getElementById('idano').value);
             } else {
-                window.location.assign("empree_online.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + document.getElementById('idmes').value + "&qa=" + document.getElementById('idano').value);
+                window.location.assign("qrcode.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + document.getElementById('idmes').value + "&qa=" + document.getElementById('idano').value);
             }
         }
 
@@ -1253,7 +1259,7 @@
         }
 
         function go_to_page_config() {
-            window.location.assign("configuracoes.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano));
+            window.location.assign("configuracoes.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&idc=" + qual_id_cliente + "&econst=" + q_e_construtora);
         }
 
         function removeAcento(text) {

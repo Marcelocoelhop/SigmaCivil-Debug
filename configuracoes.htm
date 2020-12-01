@@ -496,7 +496,7 @@
 
 	//////////////////////////////////////
 
-	// function uploadArquivos() {
+	function uploadArquivos() {
 		var db;
 		var request = window.indexedDB.open("db_sigmacivil", "1");
 
@@ -520,7 +520,7 @@
 			var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
 			var store = tx.objectStore('mtab_prog_manut_evento');
 			var index = store.index('comparar');
-			var whereEquals = IDBKeyRange.only(["20456", "01", "11", "2020"]);
+			var whereEquals = IDBKeyRange.only(["20554", "05", "12", "2020"]);
 			var objectStoreRequest = index.openCursor(whereEquals);
 			objectStoreRequest.onsuccess = function (event) {
 				var cursor = event.target.result;
@@ -579,7 +579,7 @@
 
 			}
 		}
-	// }
+	}
 
 	var aux_1_status = "";
 
@@ -614,7 +614,7 @@
 				var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
 				var store = tx.objectStore('mtab_prog_manut_evento');
 				var index = store.index('comparar');
-				var whereEquals = IDBKeyRange.only(["20456", "01", "11", "2020"]);
+				var whereEquals = IDBKeyRange.only(["20554", "05", "12", "2020"]);
 				index.openCursor(whereEquals).onsuccess = function (event) {
 					var cursor = event.target.result;
 					if (cursor) {
@@ -631,6 +631,7 @@
 						// marcar que foi feito upload para esta imagem
 
 						aux_status_imagens_upl = data.status_imagens_upl;
+						alert(aux_status_imagens_upl)
 
 						all_status_images = aux_status_imagens_upl.split("**");
 						taman = all_status_images.length;
@@ -693,7 +694,7 @@
 		options.chunkedMode = false;
 
 		var ft = new FileTransfer();
-		ft.upload(imageURI, "http://www.sigmacivil.com.br/app_sc/rec_foto_uploaded.php?idpm=" + "20454" + "&dia=" + "16" + "&mes=" + q_mes + "&ano=" + q_ano + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up, fail_up, options);
+		ft.upload(imageURI, "http://www.sigmacivil.com.br/app_sc/rec_foto_uploaded.php?idpm=" + "20554" + "&dia=" + "05" + "&mes=" + q_mes + "&ano=" + q_ano + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up, fail_up, options);
 
 	}
 
@@ -720,7 +721,7 @@
 			var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
 			var store = tx.objectStore('mtab_prog_manut_evento');
 			var index = store.index('comparar');
-			var whereEquals = IDBKeyRange.only(["20456", "01", "11", "2020"]);
+			var whereEquals = IDBKeyRange.only(["20554", "05", "12", "2020"]);
 			index.openCursor(whereEquals).onsuccess = function (event) {
 				var cursor = event.target.result;
 				if (cursor) {

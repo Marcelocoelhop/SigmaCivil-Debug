@@ -45,8 +45,8 @@
     <div id="qtd_manut_pendentes"></div>
 
     <div class="btn-bars">
-        <div style="top:4; z-index: 50;position: fixed; position: fixed;" data-role="collapsible" data-collapsed="true" class="ui-btn-left menu"
-            data-mini="true">
+        <div style="top:4; z-index: 50;position: fixed; position: fixed;" data-role="collapsible" data-collapsed="true"
+            class="ui-btn-left menu" data-mini="true">
             <h4 class="btn-bars-bars">
                 <!-- <span class="fas fa-bars"></span> -->
                 <img class="is-bars" src="images/bars.svg" width="14" alt="Menu" />
@@ -1174,17 +1174,34 @@
                                         function inserirDadosCheckpoint(db, dadosCheckpoint) {
                                             var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
                                             var store = tx.objectStore('mtab_checkpoint');
+                                            var objectStoreRequest = store.openCursor();
+                                            objectStoreRequest.onsuccess = function (event) {
+                                                var cursor = event.target.result;
+                                                if (cursor) {
+                                                    var data = cursor.value;
 
-                                            dadosCheckpoint.map(function (dadoCheckpoint) {
-                                                store.add(dadoCheckpoint);
-                                            });
+                                                    go_to_page(qid_sistema, qid_empree);
 
-                                            tx.oncomplete = function () {
-                                                go_to_page(qid_sistema, qid_empree);
-                                            }
+                                                    alert('entrou aqui')
 
-                                            tx.onerror = function (event) {
-                                                alert('error storing checkpoint note ' + event.target.error);
+                                                } else {
+                                                    var tx2 = db.transaction(['mtab_checkpoint'], 'readwrite');
+                                                    var store2 = tx2.objectStore('mtab_checkpoint');
+
+                                                    alert('entrou aqui 2')
+
+                                                    dadosCheckpoint.map(function (dadoCheckpoint) {
+                                                        store2.add(dadoCheckpoint);
+                                                    });
+
+                                                    tx2.oncomplete = function () {
+                                                        go_to_page(qid_sistema, qid_empree);
+                                                    }
+
+                                                    tx2.onerror = function (event) {
+                                                        alert('error storing checkpoint note ' + event.target.error);
+                                                    }
+                                                }
                                             }
                                         }
                                     },

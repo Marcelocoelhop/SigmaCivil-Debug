@@ -1114,22 +1114,22 @@
         }
 
         function scan() {
-            cordova.plugins.barcodeScanner.scan(
-                function (result) {
-                    if (!result.cancelled) {
-                        // In this case we only want to process QR Codes
-                        if (result.format == "QR_CODE") {
-                            var value = result.text;
+            // cordova.plugins.barcodeScanner.scan(
+            //     function (result) {
+            //         if (!result.cancelled) {
+            //             // In this case we only want to process QR Codes
+            //             if (result.format == "QR_CODE") {
+            //                 var value = result.text;
 
-                            var ponto_ini = value.indexOf("www.sigmacivil.com.br/us/new_qr_hist_mp.asp?c=");
-                            var parte1 = value.substring(ponto_ini + 46);
+            //                 var ponto_ini = value.indexOf("www.sigmacivil.com.br/us/new_qr_hist_mp.asp?c=");
+            //                 var parte1 = value.substring(ponto_ini + 46);
 
-                            var pedaco = parte1.split("_");
+            //                 var pedaco = parte1.split("_");
 
                             if (num_empree == pedaco[0]) {
 
                                 var qid_empree = num_empree;
-                                var qid_sistema = pedaco[1];
+                                var qid_sistema = 131;
 
                                 alert(qid_sistema)
 
@@ -1260,7 +1260,7 @@
                                 alert("Esse QRCode não é válido");
                             }
 
-                        } else {
+                        /*} else {
                             alert("Desculpe, só é possível ler QRCODES");
                         }
                     } else {
@@ -1269,8 +1269,8 @@
                 },
                 function (error) {
                     // alert("Erro: " + error);
-                }
-            );
+                }*/
+            //);
         }
 
         function go_to_page(q_id_sistema, q_num_empree) {

@@ -312,8 +312,6 @@
 							var cada_vet_manut = vetor_dados_manutencao.split(";")
 							var cada_vet_evento = vetor_consulta_evento.split(';')
 
-							var qtdEv = 0
-
 							for (i = 0; i < objEvento.dados_emp.length; i++) {
 								string_auxiliar += " <br>-------CADA evento-----%%%%%%%%%%%%%%-------------  ev=" + objEvento.dados_emp[i].ev + "- up=" + objEvento.dados_emp[i].up + "---------FIM evento------------<br>"
 
@@ -507,7 +505,22 @@
 		request.onsuccess = function (event) {
 			db = request.result;
 
-			consultaManutEvento(db);
+			var ipm_ = "";
+			var dia_ = "";
+			var mes_ = "";
+			var ano_ = "";
+
+			for (var i = 0; i < attrs.length; i++) {
+				ipm_ = attrs[i].id_prog_manut;
+				dia_ = attrs[i].dia_ev;
+				mes_ = attrs[i].mes_ev;
+				ano_ = attrs[i].ano_ev;
+
+				consultaManutEvento(db, ipm_, dia_, mes_, ano_);
+			}
+
+
+			//consultaManutEvento(db);
 
 			// consultaConfig();
 
@@ -516,11 +529,11 @@
 			}
 		}
 
-		function consultaManutEvento(db) {
+		function consultaManutEvento(db, id_prog_manut, dia_ev, mes_ev, ano_ev) {
 			var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
 			var store = tx.objectStore('mtab_prog_manut_evento');
 			var index = store.index('comparar');
-			var whereEquals = IDBKeyRange.only(["20554", "05", "12", "2020"]);
+			var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
 			var objectStoreRequest = index.openCursor(whereEquals);
 			objectStoreRequest.onsuccess = function (event) {
 				var cursor = event.target.result;
@@ -529,7 +542,9 @@
 				var meio_empree = "";
 				var final_empree = "";
 				var tam_ti;
-				var aux_image_upload;;
+				var aux_image_upload;
+
+				// alert('chegou aqui 2');
 
 				if (cursor) {
 					var rrr_caminho_imagens = cursor.value.caminho_imagens;
@@ -546,8 +561,12 @@
 					var rrr_status_caminho_texto = cursor.value.status_texto_upl;
 				}
 
-				alert(rrr_caminho_imagens);
-				alert(rrr_status_caminho_imagens);
+				// alert('chegou aqui 3');
+
+				// alert(id_prog_manut);
+
+				// alert(rrr_caminho_imagens);
+				// alert(rrr_status_caminho_imagens);
 
 				var todas_imagens = ""
 				var todas_status_imagens = ""
@@ -564,8 +583,8 @@
 
 					if (todas_status_imagens[k] == '0') {
 						aux_image_upload = 'upload.png';
-						alert(k);
-						upload_imagem(k);
+						// alert(k);
+						upload_imagem(k, id_prog_manut, dia_ev, mes_ev, ano_ev);
 					}
 					else {
 						aux_image_upload = 'upload_verde.png';
@@ -583,7 +602,7 @@
 
 	var aux_1_status = "";
 
-	function upload_imagem(q_id) {
+	function upload_imagem(q_id, id_prog_manut, dia_ev, mes_ev, ano_ev) {
 
 		if (tem_conexao()) {
 
@@ -614,7 +633,7 @@
 				var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
 				var store = tx.objectStore('mtab_prog_manut_evento');
 				var index = store.index('comparar');
-				var whereEquals = IDBKeyRange.only(["20554", "05", "12", "2020"]);
+				var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
 				index.openCursor(whereEquals).onsuccess = function (event) {
 					var cursor = event.target.result;
 					if (cursor) {
@@ -631,29 +650,39 @@
 						// marcar que foi feito upload para esta imagem
 
 						aux_status_imagens_upl = data.status_imagens_upl;
-						alert(aux_status_imagens_upl)
+						// alert("aux_status_imagens_upl: " + aux_status_imagens_upl)
 
 						all_status_images = aux_status_imagens_upl.split("**");
 						taman = all_status_images.length;
 
+						aux_1_status = "";
+
 						for (k = 0; k < taman; k++) {
 							if (q_id != k) {
+								// alert('ponto 0');
 								aux_1_status = aux_1_status + all_status_images[k] + "**"
 							}
 							else {
+								// alert('ponto 1');
 								aux_1_status = aux_1_status + "1" + "**"
 								var ja_fez_upload = all_status_images[k]
 							}
 						}
 
+						// alert(id_prog_manut);
+
+						// alert("aux_1_status: " + aux_1_status)
+
 						aux_1_status = aux_1_status.substring(0, aux_1_status.length - 2)
 						// fim  marcar que foi feito upload para esta imagem
 
+						// alert("aux_1_status: " + aux_1_status)
+
 						if (ja_fez_upload != '1') {
-							up_loadPhoto(aux_2, q_id, aux_1_status);
+							up_loadPhoto(aux_2, q_id, aux_1_status, id_prog_manut, dia_ev, mes_ev, ano_ev);
 						}
 						else {
-							up_loadPhoto(aux_2, q_id, aux_status_imagens_upl);
+							up_loadPhoto(aux_2, q_id, aux_status_imagens_upl, id_prog_manut, dia_ev, mes_ev, ano_ev);
 						}
 					}
 				}
@@ -672,7 +701,7 @@
 		}
 	}
 
-	function up_loadPhoto(imageURI, q_k) {
+	function up_loadPhoto(imageURI, q_k, aux_1_status, id_prog_manut, dia_ev, mes_ev, ano_ev) {
 
 		//if (!uploadAutomatic) {
 		document.getElementById("parte_load_content").style.display = "block";
@@ -693,13 +722,15 @@
 		options.params = params;
 		options.chunkedMode = false;
 
-		var ft = new FileTransfer();
-		ft.upload(imageURI, "http://www.sigmacivil.com.br/app_sc/rec_foto_uploaded.php?idpm=" + "20554" + "&dia=" + "05" + "&mes=" + q_mes + "&ano=" + q_ano + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up, fail_up, options);
+		// alert("id_prog_manut: " + id_prog_manut);
 
+		var ft = new FileTransfer();
+		// alert("http://www.sigmacivil.com.br/app_sc/rec_foto_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + q_mes + "&ano=" + q_ano + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k)
+		ft.upload(imageURI, "http://www.sigmacivil.com.br/app_sc/rec_foto_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + q_mes + "&ano=" + q_ano + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up(id_prog_manut, dia_ev, mes_ev, ano_ev), fail_up, options);
+		win_up(id_prog_manut, dia_ev, mes_ev, ano_ev)
 	}
 
-	var win_up = function (r) {
-
+	var win_up = function (id_prog_manut, dia_ev, mes_ev, ano_ev, r) {
 		var db;
 		var request = window.indexedDB.open("db_sigmacivil", "1");
 
@@ -710,24 +741,28 @@
 		request.onsuccess = function (event) {
 			db = request.result;
 
-			updateManutEventoWinUp(db);
+			updateManutEventoWinUp(db, id_prog_manut, dia_ev, mes_ev, ano_ev);
 
 			db.onerror = function (event) {
 				alert("Database error: " + event.target.errorCode);
 			}
 		}
 
-		function updateManutEventoWinUp(db) {
+		function updateManutEventoWinUp(db, id_prog_manut, dia_ev, mes_ev, ano_ev) {
 			var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
 			var store = tx.objectStore('mtab_prog_manut_evento');
 			var index = store.index('comparar');
-			var whereEquals = IDBKeyRange.only(["20554", "05", "12", "2020"]);
+			var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
 			index.openCursor(whereEquals).onsuccess = function (event) {
 				var cursor = event.target.result;
 				if (cursor) {
 					var data = cursor.value;
 
-					data.status_imagens_upl = aux_1_status;
+					alert(id_prog_manut);
+
+					data.status_imagens_upl = aux_1_status.split('0').join('1');
+
+					// alert("data.status_imagens_upl: " + data.status_imagens_upl)
 
 					var request = cursor.update(data);
 					request.onsuccess = function (event) {

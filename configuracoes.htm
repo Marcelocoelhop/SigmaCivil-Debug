@@ -727,7 +727,6 @@
 		var ft = new FileTransfer();
 		// alert("http://www.sigmacivil.com.br/app_sc/rec_foto_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + q_mes + "&ano=" + q_ano + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k)
 		ft.upload(imageURI, "http://www.sigmacivil.com.br/app_sc/rec_foto_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + q_mes + "&ano=" + q_ano + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up(id_prog_manut, dia_ev, mes_ev, ano_ev), fail_up, options);
-		win_up(id_prog_manut, dia_ev, mes_ev, ano_ev)
 	}
 
 	var win_up = function (id_prog_manut, dia_ev, mes_ev, ano_ev, r) {

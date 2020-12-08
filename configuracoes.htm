@@ -486,6 +486,7 @@
 	var e_construtora = getquerystring("econst");
 
 	var attrs = [];
+	var ids = [];
 
 	var id_sis = getquerystring("id_sis");
 
@@ -704,9 +705,9 @@
 	function up_loadPhoto(imageURI, q_k, aux_1_status, id_prog_manut, dia_ev, mes_ev, ano_ev) {
 
 		//if (!uploadAutomatic) {
-		document.getElementById("parte_load_content").style.display = "block";
+		/*document.getElementById("parte_load_content").style.display = "block";
 		document.getElementById("parte_load").style.display = "flex";
-		window.location.href = "#ancora123"
+		window.location.href = "#ancora123"*/
 		//}
 
 		var q_k;
@@ -722,14 +723,12 @@
 		options.params = params;
 		options.chunkedMode = false;
 
-		// alert("id_prog_manut: " + id_prog_manut);
-
 		var ft = new FileTransfer();
 		// alert("http://www.sigmacivil.com.br/app_sc/rec_foto_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + q_mes + "&ano=" + q_ano + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k)
-		ft.upload(imageURI, "http://www.sigmacivil.com.br/app_sc/rec_foto_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + q_mes + "&ano=" + q_ano + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up(id_prog_manut, dia_ev, mes_ev, ano_ev), fail_up, options);
+		ft.upload(imageURI, "http://www.sigmacivil.com.br/app_sc/rec_foto_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + q_mes + "&ano=" + q_ano + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up(id_prog_manut, dia_ev, mes_ev, ano_ev, aux_1_status), fail_up, options);
 	}
 
-	var win_up = function (id_prog_manut, dia_ev, mes_ev, ano_ev, r) {
+	var win_up = function (id_prog_manut, dia_ev, mes_ev, ano_ev, aux_1_status, r) {
 		var db;
 		var request = window.indexedDB.open("db_sigmacivil", "1");
 
@@ -737,37 +736,45 @@
 			alert("Erro ao criar o banco (cod 05)");
 		};
 
+		ids.push(id_prog_manut);
+
 		request.onsuccess = function (event) {
 			db = request.result;
 
-			updateManutEventoWinUp(db, id_prog_manut, dia_ev, mes_ev, ano_ev);
+			// alert("length: " + ids.length);
+
+			updateManutEventoWinUp(db, id_prog_manut, dia_ev, mes_ev, ano_ev, aux_1_status, ids);
 
 			db.onerror = function (event) {
 				alert("Database error: " + event.target.errorCode);
 			}
 		}
 
-		function updateManutEventoWinUp(db, id_prog_manut, dia_ev, mes_ev, ano_ev) {
+		function updateManutEventoWinUp(db, id_prog_manut, dia_ev, mes_ev, ano_ev, aux_1_status, ids) {
 			var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
 			var store = tx.objectStore('mtab_prog_manut_evento');
 			var index = store.index('comparar');
-			var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
-			index.openCursor(whereEquals).onsuccess = function (event) {
-				var cursor = event.target.result;
-				if (cursor) {
-					var data = cursor.value;
+			for (var i = 0; i < ids.length; i++) {
+				var whereEquals = IDBKeyRange.only([ids[i], dia_ev, mes_ev, ano_ev]);
+				index.openCursor(whereEquals).onsuccess = function (event) {
+					var cursor = event.target.result;
+					if (cursor) {
+						var data = cursor.value;
 
-					alert(id_prog_manut);
+						data.status_imagens_upl = aux_1_status.split('0').join('1');
 
-					data.status_imagens_upl = aux_1_status.split('0').join('1');
+						// alert(id_prog_manut + " - " + aux_1_status);
+						// alert("data.status_imagens_upl: " + data.status_imagens_upl)
 
-					// alert("data.status_imagens_upl: " + data.status_imagens_upl)
+						var request = cursor.update(data);
+						request.onsuccess = function (event) {
+							//if (!uploadAutomatic) {
+							// go_to_page_config();
+							// alert('fooi')
+							//}
+						}
 
-					var request = cursor.update(data);
-					request.onsuccess = function (event) {
-						//if (!uploadAutomatic) {
-						go_to_page_config();
-						//}
+						// cursor.continue();
 					}
 				}
 			}

@@ -3,8 +3,7 @@
 
 <head>
 	<meta charset="UTF-8" />
-	<meta name="viewport"
-		content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, `user-scalable=no">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
 	<link rel="stylesheet" href="css/custom.css" />
 	<script src="https://kit.fontawesome.com/c202879e33.js" crossorigin="anonymous"></script>
@@ -29,7 +28,6 @@
 
 	<script type="text/javascript">
 
-		var num_empree = getquerystring("e");
 		var login = getquerystring("l");
 		var senha = getquerystring("s");
 
@@ -124,7 +122,7 @@
 
 			setInterval(function () {
 				// window.StatusBar.hide();
-
+				
 				if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
 					document.getElementById('menu_opc2').innerHTML = menu_sup_offline;
 					return false;
@@ -480,19 +478,7 @@
 	<div style="top:4" data-role="collapsible" data-collapsed="true" class="ui-btn-left" data-mini="true">
 		<h4>Menu</h4>
 		<ul data-role="listview" data-mini="true">
-			<li>
-				<a class="ui-btn ui-icon-back ui-btn-icon-right ui-shadow ui-corner-all" href="#"
-					onClick="volta_uni()">Manutenções</a>
-			</li>
-			<li>
-				<a class="ui-btn ui-icon-carat-r ui-btn-icon-right ui-shadow ui-corner-all" href="#"
-					onClick="scan()">Ler QRcode</a>
-			</li>
-			<li>
-				<a class="ui-btn ui-icon-power ui-btn-icon-right ui-shadow ui-corner-all" href="#"
-					onClick="closeApp()">Fechar app</a>
-			</li>
-			<li><a href="#" onClick="enviar_sync()">Logout</a></li>
+			<li><a href="#" onClick="enviar_sync()">Novo Login</a></li>
 		</ul>
 	</div>
 
@@ -651,7 +637,7 @@
 			destinationType: destinationType.FILE_URI,
 			encodingType: Camera.EncodingType.JPEG,
 			popoverOptions: CameraPopoverOptions,
-			saveToPhotoAlbum: true,
+			// saveToPhotoAlbum: true,
 			sourceType: source
 		});
 
@@ -941,7 +927,7 @@
 		options.chunkedMode = false;
 
 		var ft = new FileTransfer();
-		ft.upload(imageURI, "http://www.sigmacivil.com.br/app_sc/rec_foto_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up, fail_up, options);
+		ft.upload(imageURI, "http://www.sigmacivil.com.br/app_sc/rec_foto_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up, fail_up, options);
 
 	}
 
@@ -1207,7 +1193,7 @@
 		options.chunkedMode = false;
 
 		var ft = new FileTransfer();
-		ft.upload(videoURL, "http://www.sigmacivil.com.br/app_sc/rec_video_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente, win_up_v, fail_up_v, options);
+		ft.upload(videoURL, "http://www.sigmacivil.com.br/app_sc/rec_video_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente, win_up_v, fail_up_v, options);
 
 	}
 
@@ -1516,7 +1502,7 @@
 		options.chunkedMode = false;
 
 		var ft = new FileTransfer();
-		ft.upload(audioURL, "http://www.sigmacivil.com.br/app_sc/rec_audio_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente, win_up_a, fail_up_a, options);
+		ft.upload(audioURL, "http://www.sigmacivil.com.br/app_sc/rec_audio_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente, win_up_a, fail_up_a, options);
 
 	}
 
@@ -1618,52 +1604,61 @@
 
 		var data = 'tx=' + encodeURIComponent(textoURL) + '&ipm=' + id_prog_manut + '&d=' + dia_ev + '&m=' + mes_ev + '&a=' + ano_ev + "&econst=" + e_construtora + "&idc=" + id_cliente;
 		var ajax = new XMLHttpRequest();
-		ajax.open("POST", "https://www.sigmacivil.com.br/app_sc/rec_texto_uploaded.asp?versao=2.2", true);
+		ajax.open("POST", "https://www.sigmacivil.com.br/app_sc/rec_texto_uploaded.asp?versao=2.1", true);
 		ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-		ajax.addEventListener("loadend", function (evt) {
-			var resposta_total = ajax.responseText;
-			if (resposta_total == "grav_ok") {
-				var db;
-				var request = window.indexedDB.open("db_sigmacivil", "1");
+		ajax.onreadystatechange = function () {
+			if (ajax.readyState == 4) {//Request complete !!
+				if (ajax.status == 200 || ajax.status == 0) { // OK response
 
-				request.onerror = function (event) {
-					alert("Erro ao criar o banco (cod 16)");
-				};
+					var resposta_total = ajax.responseText;
+					if (resposta_total == "grav_ok") {
+						var db;
+						var request = window.indexedDB.open("db_sigmacivil", "1");
 
-				request.onsuccess = function (event) {
-					db = request.result;
+						request.onerror = function (event) {
+							alert("Erro ao criar o banco (cod 16)");
+						};
 
-					uploadManutEventoWinUpTexto(db);
+						request.onsuccess = function (event) {
+							db = request.result;
 
-					db.onerror = function (event) {
-						alert("Database error: " + event.target.errorCode);
-					}
-				}
+							uploadManutEventoWinUpTexto(db);
 
-				function uploadManutEventoWinUpTexto(db) {
-					var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
-					var store = tx.objectStore('mtab_prog_manut_evento');
-					var index = store.index('comparar');
-					var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
-					index.openCursor(whereEquals).onsuccess = function (event) {
-						var cursor = event.target.result;
-						if (cursor) {
-							var data = cursor.value;
-
-							data.status_texto_upl = "1";
-
-							var request = cursor.update(data);
-							request.onsuccess = function (event) {
-								reload_page();
+							db.onerror = function (event) {
+								alert("Database error: " + event.target.errorCode);
 							}
 						}
-					}
-				}
 
-			} else {
-				alert("Problemas com a gravação do texto. Tentar novamente.");
+						function uploadManutEventoWinUpTexto(db) {
+							var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+							var store = tx.objectStore('mtab_prog_manut_evento');
+							var index = store.index('comparar');
+							var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+							index.openCursor(whereEquals).onsuccess = function (event) {
+								var cursor = event.target.result;
+								if (cursor) {
+									var data = cursor.value;
+
+									data.status_texto_upl = "1";
+
+									var request = cursor.update(data);
+									request.onsuccess = function (event) {
+										reload_page();
+									}
+								}
+							}
+						}
+
+					} else {
+						alert("Problemas com a gravação do texto. Tentar novamente.");
+					}
+
+				} else {
+					alert("Problemas com sua conexao internet. Erro: 0148");
+				}
 			}
-		});
+
+		}
 
 		data = data.split(":").join("%3A")
 		data = data.split("{").join("%7B")
@@ -1681,155 +1676,8 @@
 
 	///////////////////////////////////////// FIM para Audio
 
-	function scan() {
-		cordova.plugins.barcodeScanner.scan(
-			function (result) {
-				if (!result.cancelled) {
-					// In this case we only want to process QR Codes
-					if (result.format == "QR_CODE") {
-						var value = result.text;
-
-						var ponto_ini = value.indexOf("www.sigmacivil.com.br/us/new_qr_hist_mp.asp?c=");
-						var parte1 = value.substring(ponto_ini + 46);
-
-						var pedaco = parte1.split("_");
-						// alert(id_empree);
-						// alert(pedaco[0]);
-
-						if (num_empree == pedaco[0]) {
-
-							var qid_empree = num_empree;
-							var qid_sistema = pedaco[1];
-
-							var d = new Date();
-							var qdata_checkpoint = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
-
-							var qatualizado_serv = "N";
-
-							navigator.geolocation.getCurrentPosition(
-								function (position) {
-									var qlatitude_checkpoint = position.coords.latitude;
-									var qlongitude_checkpoint = position.coords.longitude;
-									var qaltura_checkpoint = position.coords.altitude;
-
-									var db;
-									var request = window.indexedDB.open("db_sigmacivil", "1");
-
-									request.onerror = function (event) {
-										alert("Erro ao criar o banco (cod 02)");
-									};
-
-									request.onsuccess = function (event) {
-										db = request.result;
-
-										inserirDadosCheckpoint(db, dadosCheckpoint);
-
-										db.onerror = function (event) {
-											alert("Database error: " + event.target.errorCode);
-										}
-									}
-
-									var dadosCheckpoint = [
-										{
-											id_empree: qid_empree,
-											id_sistema: qid_sistema,
-											data_checkpoint: qdata_checkpoint,
-											latitude_checkpoint: qlatitude_checkpoint,
-											longitude_checkpoint: qlongitude_checkpoint,
-											altura_checkpoint: qaltura_checkpoint,
-											atualizado_serv: qatualizado_serv,
-										}
-									];
-
-									function inserirDadosCheckpoint(db, dadosCheckpoint) {
-										var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
-										var store = tx.objectStore('mtab_checkpoint');
-
-										dadosCheckpoint.map(function (dadoCheckpoint) {
-											store.add(dadoCheckpoint);
-										});
-
-										tx.oncomplete = function () {
-											go_to_page(qid_sistema, qid_empree);
-										}
-
-										tx.onerror = function (event) {
-											alert('error storing checkpoint note ' + event.target.error);
-										}
-									}
-								},
-								function (error) {
-									var db;
-									var request = window.indexedDB.open("db_sigmacivil", "1");
-
-									request.onerror = function (event) {
-										alert("Erro ao criar o banco (cod 03)");
-									};
-
-									request.onsuccess = function (event) {
-										db = request.result;
-
-										inserirDadosCheckpointError(db, dadosCheckpointError);
-
-										db.onerror = function (event) {
-											alert("Database error: " + event.target.errorCode);
-										}
-									}
-
-									var dadosCheckpointError = [
-										{
-											id_empree: qid_empree,
-											id_sistema: qid_sistema,
-											data_checkpoint: qdata_checkpoint,
-											latitude_checkpoint: "",
-											longitude_checkpoint: "",
-											altura_checkpoint: "",
-											atualizado_serv: qatualizado_serv,
-										}
-									];
-
-									function inserirDadosCheckpointError(db, dadosCheckpointError) {
-										var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
-										var store = tx.objectStore('mtab_checkpoint');
-
-										dadosCheckpointError.map(function (dadoCheckpointError) {
-											store.add(dadoCheckpointError);
-										});
-
-										tx.oncomplete = function () {
-											go_to_page(qid_sistema, qid_empree);
-										}
-
-										tx.onerror = function (event) {
-											alert('error storing checkpointError note ' + event.target.error);
-										}
-									}
-								}
-							);
-
-						} else {
-							alert("Esse QRCode não é válido");
-						}
-
-					} else {
-						alert("Desculpe, só é possível ler QRCODES");
-					}
-				} else {
-					// alert("Leitura do QRCODE cancelada");
-				}
-			},
-			function (error) {
-				// alert("Erro: " + error);
-			}
-		);
-	}
-
-	function go_to_page(q_id_sistema, q_num_empree) {
-		window.location.assign("qrcode.htm?l=" + login + "&s=" + senha + "&e=" + q_num_empree + "&id_sis=" + q_id_sistema + "&qm=" + parseInt(mes_ev) + "&qa=" + parseInt(ano_ev));
-	}
-
 	function reload_page() {
-		window.location.assign("even.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&ipm=" + id_prog_manut + "&dia_ev=" + dia_ev + "&mes_ev=" + mes_ev + "&ano_ev=" + ano_ev)
+		window.location.assign("even.htm?l=" + login + "&s=" + senha + "&ipm=" + id_prog_manut + "&dia_ev=" + dia_ev + "&mes_ev=" + mes_ev + "&ano_ev=" + ano_ev)
 	}
 
 	function volta_uni() {
@@ -1902,21 +1750,6 @@
 		}
 
 		return "unknown";
-	}
-
-	function closeApp() {
-		navigator.notification.confirm(
-			'Tem certeza que deseja sair do app SigmaCivil?',
-			function (buttonIndex) {
-				if (buttonIndex === 2) {
-					return;
-				}
-
-				navigator.app.exitApp();
-			},
-			'SigmaCivil',
-			['OK', 'Cancelar']
-		);
 	}
 
 </script>

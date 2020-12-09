@@ -3,11 +3,11 @@
 
 <head>
 	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport"
+		content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, `user-scalable=no">
 	<link rel="stylesheet" href="css/jquery.mobile-1.0.1.min.css" />
 	<script type="text/javascript" src="cordova.js"></script>
-	<script type="text/javascript" src="js/mc.js" />
-	</script>
+	<script type="text/javascript" src="js/mc.js"></script>
 
 	<script src="js/jquery.js"></script>
 	<script src="js/jquery.mobile-1.4.5.min.js"></script>
@@ -99,6 +99,23 @@
 				mtab_prog_manut_evento.createIndex("status_audio_upl", "status_audio_upl", { unique: false });
 				mtab_prog_manut_evento.createIndex("status_texto_upl", "status_texto_upl", { unique: false });
 				mtab_prog_manut_evento.createIndex("comparar", ["id_prog_manut", "dia_evento", "mes_evento", "ano_evento"], { unique: false });
+
+				var mtab_checkpoint = db.createObjectStore("mtab_checkpoint", { keyPath: "id_sistema" });
+
+				mtab_checkpoint.createIndex("id_sistema", "id_sistema", { unique: true });
+				mtab_checkpoint.createIndex("id_empree", "id_empree", { unique: false });
+				mtab_checkpoint.createIndex("data_checkpoint", "data_checkpoint", { unique: false });
+				mtab_checkpoint.createIndex("latitude_checkpoint", "latitude_checkpoint", { unique: false });
+				mtab_checkpoint.createIndex("longitude_checkpoint", "longitude_checkpoint", { unique: false });
+				mtab_checkpoint.createIndex("altura_checkpoint", "altura_checkpoint", { unique: false });
+				mtab_checkpoint.createIndex("atualizado_serv", "atualizado_serv", { unique: false });
+
+				var mtab_config = db.createObjectStore("mtab_config", { keyPath: "id_config" });
+
+				mtab_config.createIndex("id_config", "id_config", { unique: true });
+				mtab_config.createIndex("editar_fotos", "editar_fotos", { unique: false });
+				mtab_config.createIndex("upload_automatico", "upload_automatico", { unique: false });
+				mtab_config.createIndex("tutorial", "tutorial", { unique: false });
 			};
 
 			var clientes = [];
@@ -159,7 +176,6 @@
 		}
 
 		function cliente_nao_existe() {
-
 			window.location.assign("login.htm");
 		}
 

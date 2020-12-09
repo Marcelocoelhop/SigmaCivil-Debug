@@ -13,6 +13,7 @@
     <script type="text/javascript" src="js/mc.js"></script>
     <script src="js/jquery.js"></script>
     <script src="js/jquery.mobile-1.4.5.min.js"></script>
+    <script src="js/scrollPage.js"></script>
     <style>
         .menu .ui-mini.ui-btn-icon-left:after,
         .ui-mini .ui-btn-icon-left:after,
@@ -35,17 +36,17 @@
 <body>
     <!-- <div id="tutorial-video"></div> -->
 
-    <div class="loading_page"
+    <!-- <div class="loading_page"
         style="width: 100%; height: 100vh; display: flex; position: fixed; justify-content: center; align-items: center; z-index: 14;">
         <img src="images/loading.gif" width="40" alt="loading" />
-    </div>
+    </div> -->
 
     <span id="menu_opc2"></span>
 
     <div id="qtd_manut_pendentes"></div>
 
     <div class="btn-bars">
-        <div style="top:4; z-index: 50;position: fixed; position: fixed;" data-role="collapsible" data-collapsed="true"
+        <div style="top:4; z-index: 50; position: fixed;" data-role="collapsible" data-collapsed="true"
             class="ui-btn-left menu" data-mini="true">
             <h4 class="btn-bars-bars">
                 <!-- <span class="fas fa-bars"></span> -->
@@ -104,7 +105,7 @@
 
         window.onerror = function (message, url, lineNumber) {
             alert(`Erro: ${message} em ${url} na linha ${lineNumber}. Por favor, tente novamente`);
-            enviar();
+            // enviar();
         }
 
         var num_empree = getquerystring("e");
@@ -615,10 +616,13 @@
                         vetor_consulta_evento = vetor_consulta_evento.substring(0, vetor_consulta_evento.length - 1);
                         vetor_dados_manutencao = vetor_dados_manutencao.substring(0, vetor_dados_manutencao.length - 1);
 
+                        var data = "l=" + login + "&s=" + senha + "&d=" + vetor_consulta_evento
                         var ajax2 = new XMLHttpRequest();
-                        ajax2.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_evento_onlineB.asp?l=" + login + "&s=" + senha + "&d=" + vetor_consulta_evento + "&versao=2.2&t=" + Math.random(), false);
+                        ajax2.open("POST", "https://www.sigmacivil.com.br/app_sc/consult_evento_onlineB.asp?&versao=2.2&t=" + Math.random(), false);
+                        ajax2.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
                         ajax2.addEventListener("loadend", function (evt) {
                             var resposta_total = this.responseText;
+                            alert(resposta_total);
                             var jsontext = resposta_total.split("#")
 
                             var getLogin = JSON.parse(jsontext[0]);
@@ -917,7 +921,7 @@
                             }
                         });
 
-                        ajax2.send();
+                        ajax2.send(data);
 
                     } else { //nao logou
                         window.location.assign("login.htm");

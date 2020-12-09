@@ -3,8 +3,6 @@
 
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport"
-        content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, `user-scalable=no">
     <link rel="stylesheet" href="css/custom.css" />
     <link rel="stylesheet" href="css/custom-mobile.css" />
     <link rel="stylesheet" href="css/custom-even.css" />
@@ -44,7 +42,6 @@
 
     <script>
         // VARIÁVEIS ACESSADAS VIA QUERY.PARAMS
-        var num_empree = getquerystring("e");
         var login = getquerystring("l");
         var senha = getquerystring("s");
 
@@ -77,18 +74,9 @@
 
         var apagar1;
 
-        var editPictures = null;
-        var uploadAutomatic = false;
-
-        var qtd_tam_ti = 0;
-        var qtd_tam_ti_audio = 0;
-        var qtd_tam_ti_video = 0;
-        var qtd_tam_ti_texto = 0;
-
         // FUNÇÃO QUE APRESENTA O ERRO NA APLICAÇÃO
         window.onerror = function (message, url, lineNumber) {
-            alert(`Erro: ${message} em ${url} na linha ${lineNumber}. Por favor, tente novamente.`);
-            reload_page();
+            alert(`Error: ${message} in ${url} at line ${lineNumber}`);
         }
 
         // INICIALIZA O PROCESSAMENTO DA APLICAÇÃO
@@ -103,7 +91,7 @@
             if (tem_conexao()) {
                 iniciar()
             } else {
-                window.location.assign("even.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&ipm=" + id_prog_manut + "&dia_ev=" + dia_ev + "&mes_ev=" + mes_ev + "&ano_ev=" + ano_ev)
+                window.location.assign("even.htm?l=" + login + "&s=" + senha + "&ipm=" + id_prog_manut + "&dia_ev=" + dia_ev + "&mes_ev=" + mes_ev + "&ano_ev=" + ano_ev)
             }
         }
 
@@ -130,7 +118,7 @@
                 '<a href="#"><button style="box-shadow: none !important; background: #ebebeb !important; border: none;" onclick="atualizar_texto_empree(' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right ui-icon-carat-l">Voltar</button></a>',
                 '<table width="30" border="0" cellpadding="0" cellspacing="0" >',
                 '<tr>',
-                '<td width="30" ><img src="images/logo6.png" width="142"> </td>',
+                '<td width="30" ><img src="images/logo4.png" width="142"> </td>',
                 '</tr>',
                 '</table>',
                 '</div>',
@@ -151,7 +139,7 @@
                 '<a href="#"><button style="box-shadow: none !important; background: #ebebeb !important; border: none;" onclick="atualizar_texto_empree(' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right ui-icon-carat-l">Voltar</button></a>',
                 '<table width="30" border="0" cellpadding="0" cellspacing="0" >',
                 '<tr>',
-                '<td width="30" ><img src="images/logo6.png" width="142"> </td>',
+                '<td width="30" ><img src="images/logo4.png" width="142"> </td>',
                 '</tr>',
                 '</table>',
                 '</div>',
@@ -160,14 +148,13 @@
                 '</div>',
                 '</form>'
             ].join('');
-
+                                  
             document.getElementById('menu_opc2').innerHTML = menu_sup_online;
-
 
             // FUNÇÃO QUE VERIFICA SE TEM INTERNET A CADA 5 SEGUNDOS
             setInterval(function () {
                 // window.StatusBar.hide();
-
+                
                 if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
                     document.getElementById('menu_opc2').innerHTML = menu_sup_offline;
                     return false;
@@ -177,548 +164,578 @@
                 }
             }, 5000);
 
+            // CAPTURANDO DADOS DO EVENTO
             var ajax2 = new XMLHttpRequest();
-            ajax2.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_dados_evento_online.asp?l=" + login + "&s=" + senha + "&ipm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&versao=2.2&t=" + Math.random(), false);
-            ajax2.addEventListener("loadend", function (evt) {
-                var resposta_total = this.responseText;
-                var jsontext = resposta_total.split("#")
+            // ajax2.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_dados_evento_online.asp?l=" + login + "&s=" + senha + "&ipm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&versao=2.1&t=" + Math.random(), false);
+            ajax2.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_dados_evento_online.asp?l=" + login + "&s=" + senha + "&ipm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&versao=2.1&t=" + Math.random(), false);
+            ajax2.onreadystatechange = function () {
+                if (ajax2.readyState == 4) { //Request complete !!
+                    if (ajax2.status == 200 || ajax2.status == 0) { // OK response
 
-                var getLogin = JSON.parse(jsontext[0]);
-                var logou = getLogin.logou;
+                        var resposta_total = ajax2.responseText;
+                        var jsontext = resposta_total.split("#")
 
-                if (logou == "S") {
+                        var getLogin = JSON.parse(jsontext[0]);
+                        var logou = getLogin.logou;
 
-                    // DADOS COLETADOS DA REQUISIÇÃO
-                    id_cliente = getLogin.id_cliente;
-                    e_construtora = getLogin.e_construtora;
-                    var nome_empree = getLogin.nome_empree;
-                    id_empree = getLogin.id_empree;
-                    nome_sistema = getLogin.nome_sistema;
-                    var nome_atividade = getLogin.nome_atividade;
-                    var aux_data = getLogin.aux_data;
-                    var periodicidade = getLogin.periodicidade;
-                    var nome_emp_resp = getLogin.nome_emp_resp;
-                    var data_manut_realizada = getLogin.data_manut_realizada;
-                    var custo_estimado = getLogin.custo_estimado;
-                    var custo_real = getLogin.custo_real;
-                    nivel_manut = getLogin.nivel_manut;
-                    qt_docs = getLogin.qt_docs;
-                    qt_docs_constr = getLogin.qt_docs_constr;
-                    var fornecedor = getLogin.fornecedor;
-                    var observacao_evento = getLogin.observacao_evento;
-                    var observacao_evento_construtora = getLogin.observacao_evento_construtora;
-                    var id_ajuda_docs = getLogin.id_ajuda_docs;
+                        if (logou == "S") {
 
-                    var getCaminhos = jsontext[1];
-                    var objCaminhos = JSON.parse(getCaminhos);
+                            // DADOS COLETADOS DA REQUISIÇÃO
+                            id_cliente = getLogin.id_cliente;
+                            e_construtora = getLogin.e_construtora;
+                            var nome_empree = getLogin.nome_empree;
+                            id_empree = getLogin.id_empree;
+                            nome_sistema = getLogin.nome_sistema;
+                            var nome_atividade = getLogin.nome_atividade;
+                            var aux_data = getLogin.aux_data;
+                            var periodicidade = getLogin.periodicidade;
+                            var nome_emp_resp = getLogin.nome_emp_resp;
+                            var data_manut_realizada = getLogin.data_manut_realizada;
+                            var custo_estimado = getLogin.custo_estimado;
+                            var custo_real = getLogin.custo_real;
+                            nivel_manut = getLogin.nivel_manut;
+                            qt_docs = getLogin.qt_docs;
+                            qt_docs_constr = getLogin.qt_docs_constr;
+                            var fornecedor = getLogin.fornecedor;
+                            var observacao_evento = getLogin.observacao_evento;
+                            var observacao_evento_construtora = getLogin.observacao_evento_construtora;
+                            var id_ajuda_docs = getLogin.id_ajuda_docs;
 
-                    var trecho_imagens_constr_imagens = "";
-                    var trecho_imagens_constr_videos = "";
-                    var trecho_imagens_constr_audios = "";
-                    var trecho_imagens_constr_textos = "";
+                            var getCaminhos = jsontext[1];
+                            var objCaminhos = JSON.parse(getCaminhos);
 
-                    var dados_popup_img = "";
+                            var trecho_imagens_constr_imagens = "";
+                            var trecho_imagens_constr_videos = "";
+                            var trecho_imagens_constr_audios = "";
+                            var trecho_imagens_constr_textos = "";
 
-                    var trecho_imagens_cond_imagens = "";
-                    var trecho_imagens_cond_videos = "";
-                    var trecho_imagens_cond_audios = "";
-                    var trecho_imagens_cond_textos = "";
-                    var dados_manutencao = "";
-                    var dados_documentos = "";
-                    var dados_observacao = "";
-                    var dados_ajuda_docs = "";
+                            var dados_popup_img = "";
 
-                    var texto_total;
-                    var variavelx = "";
-                    var variavelx2 = "";
+                            var trecho_imagens_cond_imagens = "";
+                            var trecho_imagens_cond_videos = "";
+                            var trecho_imagens_cond_audios = "";
+                            var trecho_imagens_cond_textos = "";
+                            var dados_manutencao = "";
+                            var dados_documentos = "";
+                            var dados_observacao = "";
+                            var dados_ajuda_docs = "";
 
-                    // CONDIÇÃO QUE VERIFICA SE TEM ALGUM DOCUMENTO DO CONDOMÍNIO DENTRO DA GALERIA DE IMAGENS SERVIDOR
-                    if (qt_docs == 0) {
-                        document.getElementById('condominio_content').innerHTML = [
-                            '<div class="ui-body ui-body-a">',
-                            '<h4 class="margin">',
-                            '<strong class="is-red">Galeria condomínio vazia</strong>',
-                            '</h4>',
-                            '<div id="imagens_bco"></div>',
-                            '<div id="videos_bco"></div>',
-                            '<div id="audios_bco"></div>',
-                            '<div id="textos_bco"></div>',
-                            '</div>'
-                        ].join('')
-                    }
+                            var texto_total;
+                            var variavelx = "";
+                            var variavelx2 = "";
 
-                    // CONDIÇÃO QUE VERIFICA SE TEM ALGUM DOCUMENTO DA CONSTRUTORA DENTRO DA GALERIA DE IMAGENS SERVIDOR
-                    if (qt_docs_constr == 0) {
-                        document.getElementById('construtora_content').innerHTML = [
-                            '<div class="ui-body ui-body-a">',
-                            '<h4 class="margin">',
-                            '<strong class="is-red">Galeria construtora vazia</strong>',
-                            '</h4>',
-                            '<div id="imagens_bco_constr"></div>',
-                            '<div id="videos_bco_constr"></div>',
-                            '<div id="audios_bco_constr"></div>',
-                            '<div id="textos_bco_constr"></div>',
-                            '</div>'
-                        ].join('')
-                    }
-
-                    // VERIFICA A ORIGEM E TIPO DO ARQUIVO
-                    for (i = 0; i < objCaminhos.cam_arquivos.length; i++) {
-
-                        if (objCaminhos.cam_arquivos[i].ori == 'd' && e_construtora == '0') {
-                            if (objCaminhos.cam_arquivos[i].ta == 'i') {
-                                trecho_imagens_cond_imagens += '<div style="display: inline-block;"><button style="background: transparent; border: none;"><img src="' + objCaminhos.cam_arquivos[i].cam + '" class="imagem_popup popphoto" onclick="abrir_popup_gal(' + i + ')" alt="" width="100" height="75"></button><div style="color: #6A2628; font-size: 11px; width: 80%; text-align: left; position: relative; left: 5px;">' + objCaminhos.cam_arquivos[i].data + '</div><button style="background-color: transparent; float: right; position: relative; bottom: 22px; border: none; outline: none;" type="button"><img src="images/trash.png" style="float: right; position: relative;" class="all_trash" width="14" onclick="apagar_fot_vid_aud_tex(' + String.fromCharCode(39) + objCaminhos.cam_arquivos[i].cam + String.fromCharCode(39) + ')"></button></div>'
-                                dados_popup_img += '<div style="width: 100%; height: 100%; position: fixed; background: rgba(0,0,0,.8);" onclick="fechar_popup_gal(' + i + ')" id="popup_fundo_' + i + '"></div><div style="width: 80%; height: 80%; background: rgba(0,0,0,.5); margin: 0 auto; position: relative; top: 60px; border-radius: 8px;" id="idpopup_img_' + i + '"><a style="bottom:10px" href="#" onclick="fechar_popup_gal(' + i + ')" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a><img class="popphoto" src="' + objCaminhos.cam_arquivos[i].cam + '" onclick="fechar_popup_gal(' + i + ')" style="height: 80%; width: 100%; border-radius: 8px;"></div>'
-                                variavelx += '$("#idpopup_img_' + i + '").css({  display: "none"  });'
-                                variavelx2 += '$("#popup_fundo_' + i + '").css({  display: "none"  });'
-                            } else if (objCaminhos.cam_arquivos[i].ta == 'v') {
-                                trecho_imagens_cond_videos += '<div style="display: inline-block;"><video class="imagem_popup" poster="images/video.png" width="120" height="120" controls><source src="' + objCaminhos.cam_arquivos[i].cam + '" type="video/mp4"></video><div style="color: #6A2628; font-size: 11px; width: 60%; text-align: left;">' + objCaminhos.cam_arquivos[i].data + '</div><button style="background-color: transparent; float: right; position: relative; right: 10px; bottom: 22px; border: none; outline: none;" type="button"><img src="images/trash.png" style="float: right; position: relative;" class="all_trash" width="14" onclick="apagar_fot_vid_aud_tex(' + String.fromCharCode(39) + objCaminhos.cam_arquivos[i].cam + String.fromCharCode(39) + ')"></button></div>'
-                            } else if (objCaminhos.cam_arquivos[i].ta == 'a') {
-                                trecho_imagens_cond_audios += '<div><audio style="margin-bottom: 10px; width: 100%;" controls><source src="' + objCaminhos.cam_arquivos[i].cam + '"></audio><div style="color: #6A2628; font-size: 11px; width: 60%; text-align: left;">' + objCaminhos.cam_arquivos[i].data + '</div><button style="background-color: transparent; float: right; position: relative; right: 10px; bottom: 19px; border: none; outline: none;" type="button"><img src="images/trash.png" style="float: right; position: relative;" class="all_trash" width="14" onclick="apagar_fot_vid_aud_tex(' + String.fromCharCode(39) + objCaminhos.cam_arquivos[i].cam + String.fromCharCode(39) + ')"></button></div>'
-                            } else if (objCaminhos.cam_arquivos[i].ta == 't') {
-                                texto_total = objCaminhos.cam_arquivos[i].cam.split('*$*')
-                                trecho_imagens_cond_textos += '<div><textarea style="width: 100%; background: #e7e7e7; resize: none" class="imagem_popup" rows="4" cols="30" readonly="readonly">' + texto_total[1] + '</textarea><div style="color: #6A2628; font-size: 11px; width: 60%; text-align: left;">' + objCaminhos.cam_arquivos[i].data + '</div><button style="background-color: transparent; float: right; position: relative; right: 10px; bottom: 15px; border: none; outline: none;" type="button"><img src="images/trash.png" style="float: right; position: relative;" class="all_trash" width="14" onclick="apagar_fot_vid_aud_tex(' + String.fromCharCode(39) + texto_total[0] + String.fromCharCode(39) + ')"></button></div>'
+                            // CONDIÇÃO QUE VERIFICA SE TEM ALGUM DOCUMENTO DO CONDOMÍNIO DENTRO DA GALERIA DE IMAGENS SERVIDOR
+                            if (qt_docs == 0) {
+                                document.getElementById('condominio_content').innerHTML = [
+                                    '<div class="ui-body ui-body-a">',
+                                    '<h4 class="margin">',
+                                    '<strong class="is-red">Galeria condomínio vazia</strong>',
+                                    '</h4>',
+                                    '<div id="imagens_bco"></div>',
+                                    '<div id="videos_bco"></div>',
+                                    '<div id="audios_bco"></div>',
+                                    '<div id="textos_bco"></div>',
+                                    '</div>'
+                                ].join('')
                             }
-                        } else if (objCaminhos.cam_arquivos[i].ori == 'd' && e_construtora == '1') {
-                            if (objCaminhos.cam_arquivos[i].ta == 'i') {
-                                trecho_imagens_cond_imagens += '<div style="display: inline-block;"><button style="background: transparent; border: none;"><img src="' + objCaminhos.cam_arquivos[i].cam + '" class="imagem_popup popphoto" onclick="abrir_popup_gal(' + i + ')" alt="" width="100" height="75"></button><div style="color: #6A2628; font-size: 11px; width: 80%; text-align: left; position: relative; left: 5px;">' + objCaminhos.cam_arquivos[i].data + '</div></div>'
-                                dados_popup_img += '<div style="width: 100%; height: 100%; position: fixed; background: rgba(0,0,0,.8);" onclick="fechar_popup_gal(' + i + ')" id="popup_fundo_' + i + '"></div><div style="width: 80%; height: 80%; background: rgba(0,0,0,.5); margin: 0 auto; position: relative; top: 60px; border-radius: 8px;" id="idpopup_img_' + i + '"><a style="bottom:10px" href="#" onclick="fechar_popup_gal(' + i + ')" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a><img class="popphoto" src="' + objCaminhos.cam_arquivos[i].cam + '" onclick="fechar_popup_gal(' + i + ')" style="height: 80%; width: 100%; border-radius: 8px;"></div>'
-                                variavelx += '$("#idpopup_img_' + i + '").css({  display: "none"  });'
-                                variavelx2 += '$("#popup_fundo_' + i + '").css({  display: "none"  });'
-                            } else if (objCaminhos.cam_arquivos[i].ta == 'v') {
-                                trecho_imagens_cond_videos += '<div style="display: inline-block;"><video class="imagem_popup" poster="images/video.png" width="120" height="120" controls><source src="' + objCaminhos.cam_arquivos[i].cam + '" type="video/mp4"></video><div style="color: #6A2628; font-size: 11px; width: 60%; text-align: left;">' + objCaminhos.cam_arquivos[i].data + '</div></div>'
-                            } else if (objCaminhos.cam_arquivos[i].ta == 'a') {
-                                trecho_imagens_cond_audios += '<div><audio style="margin-bottom: 10px; width: 100%;" controls><source src="' + objCaminhos.cam_arquivos[i].cam + '"></audio><div style="color: #6A2628; font-size: 11px; width: 60%; text-align: left;">' + objCaminhos.cam_arquivos[i].data + '</div></div>'
-                            } else if (objCaminhos.cam_arquivos[i].ta == 't') {
-                                texto_total = objCaminhos.cam_arquivos[i].cam.split('*$*')
-                                trecho_imagens_cond_textos += '<div><textarea style="width: 100%; background: #e7e7e7; resize: none" class="imagem_popup" rows="4" cols="30" readonly="readonly">' + texto_total[1] + '</textarea><div style="color: #6A2628; font-size: 11px; width: 60%; text-align: left;">' + objCaminhos.cam_arquivos[i].data + '</div></div>'
+
+                            // CONDIÇÃO QUE VERIFICA SE TEM ALGUM DOCUMENTO DA CONSTRUTORA DENTRO DA GALERIA DE IMAGENS SERVIDOR
+                            if (qt_docs_constr == 0) {
+                                document.getElementById('construtora_content').innerHTML = [
+                                    '<div class="ui-body ui-body-a">',
+                                    '<h4 class="margin">',
+                                    '<strong class="is-red">Galeria construtora vazia</strong>',
+                                    '</h4>',
+                                    '<div id="imagens_bco_constr"></div>',
+                                    '<div id="videos_bco_constr"></div>',
+                                    '<div id="audios_bco_constr"></div>',
+                                    '<div id="textos_bco_constr"></div>',
+                                    '</div>'
+                                ].join('')
                             }
-                        } else if (objCaminhos.cam_arquivos[i].ori == 's' && e_construtora == '1') {
-                            if (objCaminhos.cam_arquivos[i].ta == 'i') {
-                                trecho_imagens_constr_imagens += '<div style="display: inline-block;"><button style="background: transparent; border: none;"><img src="' + objCaminhos.cam_arquivos[i].cam + '" class="imagem_popup popphoto" onclick="abrir_popup_gal(' + i + ')" alt="" width="100" height="75"></button><div style="color: #6A2628; font-size: 11px; width: 80%; text-align: left; position: relative; left: 5px;">' + objCaminhos.cam_arquivos[i].data + '</div><button style="background-color: transparent; float: right; position: relative; bottom: 22px; border: none; outline: none;" type="button"><img src="images/trash.png" style="float: right; position: relative;" class="all_trash" width="14" onclick="apagar_fot_vid_aud_tex(' + String.fromCharCode(39) + objCaminhos.cam_arquivos[i].cam + String.fromCharCode(39) + ')"></button></div>'
-                                dados_popup_img += '<div style="width: 100%; height: 100%; position: fixed; background: rgba(0,0,0,.8);" onclick="fechar_popup_gal(' + i + ')" id="popup_fundo_' + i + '"></div><div style="width: 80%; height: 80%; background: rgba(0,0,0,.5); margin: 0 auto; position: relative; top: 60px; border-radius: 8px;" id="idpopup_img_' + i + '"><a style="bottom:10px" href="#" onclick="fechar_popup_gal(' + i + ')" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a><img class="popphoto" src="' + objCaminhos.cam_arquivos[i].cam + '" onclick="fechar_popup_gal(' + i + ')" style="height: 80%; width: 100%; border-radius: 8px;"></div>'
-                                variavelx += '$("#idpopup_img_' + i + '").css({  display: "none"  });'
-                                variavelx2 += '$("#popup_fundo_' + i + '").css({  display: "none"  });'
-                            } else if (objCaminhos.cam_arquivos[i].ta == 'v') {
-                                trecho_imagens_constr_videos += '<div style="display: inline-block;"><video class="imagem_popup" poster="images/video.png" width="120" height="120" controls><source src="' + objCaminhos.cam_arquivos[i].cam + '" type="video/mp4"></video><div style="color: #6A2628; font-size: 11px; width: 60%; text-align: left;">' + objCaminhos.cam_arquivos[i].data + '</div><button style="background-color: transparent; float: right; position: relative; right: 10px; bottom: 22px; border: none; outline: none;" type="button"><img src="images/trash.png" style="float: right; position: relative;" class="all_trash" width="14" onclick="apagar_fot_vid_aud_tex(' + String.fromCharCode(39) + objCaminhos.cam_arquivos[i].cam + String.fromCharCode(39) + ')"></button></div>'
-                            } else if (objCaminhos.cam_arquivos[i].ta == 'a') {
-                                trecho_imagens_constr_audios += '<div><audio style="margin-bottom: 10px; width: 100%;" controls><source src="' + objCaminhos.cam_arquivos[i].cam + '"></audio><div style="color: #6A2628; font-size: 11px; width: 60%; text-align: left;">' + objCaminhos.cam_arquivos[i].data + '</div><button style="background-color: transparent; float: right; position: relative; right: 10px; bottom: 19px; border: none; outline: none;" type="button"><img src="images/trash.png" style="float: right; position: relative;" class="all_trash" width="14" onclick="apagar_fot_vid_aud_tex(' + String.fromCharCode(39) + objCaminhos.cam_arquivos[i].cam + String.fromCharCode(39) + ')"></button></div>'
-                            } else if (objCaminhos.cam_arquivos[i].ta == 't') {
-                                texto_total = objCaminhos.cam_arquivos[i].cam.split('*$*')
-                                trecho_imagens_constr_textos += '<div><textarea style="width: 100%; background: #e7e7e7; resize: none" class="imagem_popup" rows="4" cols="30" readonly="readonly">' + texto_total[1] + '</textarea><div style="color: #6A2628; font-size: 11px; width: 60%; text-align: left;">' + objCaminhos.cam_arquivos[i].data + '</div><button style="background-color: transparent; float: right; position: relative; right: 10px; bottom: 15px; border: none; outline: none;" type="button"><img src="images/trash.png" style="float: right; position: relative;" class="all_trash" width="14" onclick="apagar_fot_vid_aud_tex(' + String.fromCharCode(39) + texto_total[0] + String.fromCharCode(39) + ')"></button></div>'
+
+                            // VERIFICA A ORIGEM E TIPO DO ARQUIVO
+                            for (i = 0; i < objCaminhos.cam_arquivos.length; i++) {
+
+                                if (objCaminhos.cam_arquivos[i].ori == 'd' && e_construtora == '0') {
+                                    if (objCaminhos.cam_arquivos[i].ta == 'i') {
+                                        trecho_imagens_cond_imagens += '<div style="display: inline-block;"><button style="background: transparent; border: none;"><img src="' + objCaminhos.cam_arquivos[i].cam + '" class="imagem_popup popphoto" onclick="abrir_popup_gal(' + i + ')" alt="" width="100" height="75"></button><div style="color: #6A2628; font-size: 11px; width: 80%; text-align: left; position: relative; left: 5px;">' + objCaminhos.cam_arquivos[i].data + '</div><button style="background-color: transparent; float: right; position: relative; bottom: 22px; border: none; outline: none;" type="button"><img src="images/trash.png" style="float: right; position: relative;" class="all_trash" width="14" onclick="apagar_fot_vid_aud_tex(' + String.fromCharCode(39) + objCaminhos.cam_arquivos[i].cam + String.fromCharCode(39) + ')"></button></div>'
+                                        dados_popup_img += '<div style="width: 100%; height: 100%; position: fixed; background: rgba(0,0,0,.8);" onclick="fechar_popup_gal(' + i + ')" id="popup_fundo_' + i + '"></div><div style="width: 80%; height: 80%; background: rgba(0,0,0,.5); margin: 0 auto; position: relative; top: 60px; border-radius: 8px;" id="idpopup_img_' + i + '"><a style="bottom:10px" href="#" onclick="fechar_popup_gal(' + i + ')" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a><img class="popphoto" src="' + objCaminhos.cam_arquivos[i].cam + '" onclick="fechar_popup_gal(' + i + ')" style="height: 80%; width: 100%; border-radius: 8px;"></div>'
+                                        variavelx += '$("#idpopup_img_' + i + '").css({  display: "none"  });'
+                                        variavelx2 += '$("#popup_fundo_' + i + '").css({  display: "none"  });'
+                                    } else if (objCaminhos.cam_arquivos[i].ta == 'v') {
+                                        trecho_imagens_cond_videos += '<div style="display: inline-block;"><video class="imagem_popup" poster="images/video.png" width="120" height="120" controls><source src="' + objCaminhos.cam_arquivos[i].cam + '" type="video/mp4"></video><div style="color: #6A2628; font-size: 11px; width: 60%; text-align: left;">' + objCaminhos.cam_arquivos[i].data + '</div><button style="background-color: transparent; float: right; position: relative; right: 10px; bottom: 22px; border: none; outline: none;" type="button"><img src="images/trash.png" style="float: right; position: relative;" class="all_trash" width="14" onclick="apagar_fot_vid_aud_tex(' + String.fromCharCode(39) + objCaminhos.cam_arquivos[i].cam + String.fromCharCode(39) + ')"></button></div>'
+                                    } else if (objCaminhos.cam_arquivos[i].ta == 'a') {
+                                        trecho_imagens_cond_audios += '<div><audio style="margin-bottom: 10px; width: 100%;" controls><source src="' + objCaminhos.cam_arquivos[i].cam + '"></audio><div style="color: #6A2628; font-size: 11px; width: 60%; text-align: left;">' + objCaminhos.cam_arquivos[i].data + '</div><button style="background-color: transparent; float: right; position: relative; right: 10px; bottom: 19px; border: none; outline: none;" type="button"><img src="images/trash.png" style="float: right; position: relative;" class="all_trash" width="14" onclick="apagar_fot_vid_aud_tex(' + String.fromCharCode(39) + objCaminhos.cam_arquivos[i].cam + String.fromCharCode(39) + ')"></button></div>'
+                                    } else if (objCaminhos.cam_arquivos[i].ta == 't') {
+                                        texto_total = objCaminhos.cam_arquivos[i].cam.split('*$*')
+                                        trecho_imagens_cond_textos += '<div><textarea style="width: 100%; background: #e7e7e7; resize: none" class="imagem_popup" rows="4" cols="30" readonly="readonly">' + texto_total[1] + '</textarea><div style="color: #6A2628; font-size: 11px; width: 60%; text-align: left;">' + objCaminhos.cam_arquivos[i].data + '</div><button style="background-color: transparent; float: right; position: relative; right: 10px; bottom: 15px; border: none; outline: none;" type="button"><img src="images/trash.png" style="float: right; position: relative;" class="all_trash" width="14" onclick="apagar_fot_vid_aud_tex(' + String.fromCharCode(39) + texto_total[0] + String.fromCharCode(39) + ')"></button></div>'
+                                    }
+                                } else if (objCaminhos.cam_arquivos[i].ori == 'd' && e_construtora == '1') {
+                                    if (objCaminhos.cam_arquivos[i].ta == 'i') {
+                                        trecho_imagens_cond_imagens += '<div style="display: inline-block;"><button style="background: transparent; border: none;"><img src="' + objCaminhos.cam_arquivos[i].cam + '" class="imagem_popup popphoto" onclick="abrir_popup_gal(' + i + ')" alt="" width="100" height="75"></button><div style="color: #6A2628; font-size: 11px; width: 80%; text-align: left; position: relative; left: 5px;">' + objCaminhos.cam_arquivos[i].data + '</div></div>'
+                                        dados_popup_img += '<div style="width: 100%; height: 100%; position: fixed; background: rgba(0,0,0,.8);" onclick="fechar_popup_gal(' + i + ')" id="popup_fundo_' + i + '"></div><div style="width: 80%; height: 80%; background: rgba(0,0,0,.5); margin: 0 auto; position: relative; top: 60px; border-radius: 8px;" id="idpopup_img_' + i + '"><a style="bottom:10px" href="#" onclick="fechar_popup_gal(' + i + ')" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a><img class="popphoto" src="' + objCaminhos.cam_arquivos[i].cam + '" onclick="fechar_popup_gal(' + i + ')" style="height: 80%; width: 100%; border-radius: 8px;"></div>'
+                                        variavelx += '$("#idpopup_img_' + i + '").css({  display: "none"  });'
+                                        variavelx2 += '$("#popup_fundo_' + i + '").css({  display: "none"  });'
+                                    } else if (objCaminhos.cam_arquivos[i].ta == 'v') {
+                                        trecho_imagens_cond_videos += '<div style="display: inline-block;"><video class="imagem_popup" poster="images/video.png" width="120" height="120" controls><source src="' + objCaminhos.cam_arquivos[i].cam + '" type="video/mp4"></video><div style="color: #6A2628; font-size: 11px; width: 60%; text-align: left;">' + objCaminhos.cam_arquivos[i].data + '</div></div>'
+                                    } else if (objCaminhos.cam_arquivos[i].ta == 'a') {
+                                        trecho_imagens_cond_audios += '<div><audio style="margin-bottom: 10px; width: 100%;" controls><source src="' + objCaminhos.cam_arquivos[i].cam + '"></audio><div style="color: #6A2628; font-size: 11px; width: 60%; text-align: left;">' + objCaminhos.cam_arquivos[i].data + '</div></div>'
+                                    } else if (objCaminhos.cam_arquivos[i].ta == 't') {
+                                        texto_total = objCaminhos.cam_arquivos[i].cam.split('*$*')
+                                        trecho_imagens_cond_textos += '<div><textarea style="width: 100%; background: #e7e7e7; resize: none" class="imagem_popup" rows="4" cols="30" readonly="readonly">' + texto_total[1] + '</textarea><div style="color: #6A2628; font-size: 11px; width: 60%; text-align: left;">' + objCaminhos.cam_arquivos[i].data + '</div></div>'
+                                    }
+                                } else if (objCaminhos.cam_arquivos[i].ori == 's' && e_construtora == '1') {
+                                    if (objCaminhos.cam_arquivos[i].ta == 'i') {
+                                        trecho_imagens_constr_imagens += '<div style="display: inline-block;"><button style="background: transparent; border: none;"><img src="' + objCaminhos.cam_arquivos[i].cam + '" class="imagem_popup popphoto" onclick="abrir_popup_gal(' + i + ')" alt="" width="100" height="75"></button><div style="color: #6A2628; font-size: 11px; width: 80%; text-align: left; position: relative; left: 5px;">' + objCaminhos.cam_arquivos[i].data + '</div><button style="background-color: transparent; float: right; position: relative; bottom: 22px; border: none; outline: none;" type="button"><img src="images/trash.png" style="float: right; position: relative;" class="all_trash" width="14" onclick="apagar_fot_vid_aud_tex(' + String.fromCharCode(39) + objCaminhos.cam_arquivos[i].cam + String.fromCharCode(39) + ')"></button></div>'
+                                        dados_popup_img += '<div style="width: 100%; height: 100%; position: fixed; background: rgba(0,0,0,.8);" onclick="fechar_popup_gal(' + i + ')" id="popup_fundo_' + i + '"></div><div style="width: 80%; height: 80%; background: rgba(0,0,0,.5); margin: 0 auto; position: relative; top: 60px; border-radius: 8px;" id="idpopup_img_' + i + '"><a style="bottom:10px" href="#" onclick="fechar_popup_gal(' + i + ')" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a><img class="popphoto" src="' + objCaminhos.cam_arquivos[i].cam + '" onclick="fechar_popup_gal(' + i + ')" style="height: 80%; width: 100%; border-radius: 8px;"></div>'
+                                        variavelx += '$("#idpopup_img_' + i + '").css({  display: "none"  });'
+                                        variavelx2 += '$("#popup_fundo_' + i + '").css({  display: "none"  });'
+                                    } else if (objCaminhos.cam_arquivos[i].ta == 'v') {
+                                        trecho_imagens_constr_videos += '<div style="display: inline-block;"><video class="imagem_popup" poster="images/video.png" width="120" height="120" controls><source src="' + objCaminhos.cam_arquivos[i].cam + '" type="video/mp4"></video><div style="color: #6A2628; font-size: 11px; width: 60%; text-align: left;">' + objCaminhos.cam_arquivos[i].data + '</div><button style="background-color: transparent; float: right; position: relative; right: 10px; bottom: 22px; border: none; outline: none;" type="button"><img src="images/trash.png" style="float: right; position: relative;" class="all_trash" width="14" onclick="apagar_fot_vid_aud_tex(' + String.fromCharCode(39) + objCaminhos.cam_arquivos[i].cam + String.fromCharCode(39) + ')"></button></div>'
+                                    } else if (objCaminhos.cam_arquivos[i].ta == 'a') {
+                                        trecho_imagens_constr_audios += '<div><audio style="margin-bottom: 10px; width: 100%;" controls><source src="' + objCaminhos.cam_arquivos[i].cam + '"></audio><div style="color: #6A2628; font-size: 11px; width: 60%; text-align: left;">' + objCaminhos.cam_arquivos[i].data + '</div><button style="background-color: transparent; float: right; position: relative; right: 10px; bottom: 19px; border: none; outline: none;" type="button"><img src="images/trash.png" style="float: right; position: relative;" class="all_trash" width="14" onclick="apagar_fot_vid_aud_tex(' + String.fromCharCode(39) + objCaminhos.cam_arquivos[i].cam + String.fromCharCode(39) + ')"></button></div>'
+                                    } else if (objCaminhos.cam_arquivos[i].ta == 't') {
+                                        texto_total = objCaminhos.cam_arquivos[i].cam.split('*$*')
+                                        trecho_imagens_constr_textos += '<div><textarea style="width: 100%; background: #e7e7e7; resize: none" class="imagem_popup" rows="4" cols="30" readonly="readonly">' + texto_total[1] + '</textarea><div style="color: #6A2628; font-size: 11px; width: 60%; text-align: left;">' + objCaminhos.cam_arquivos[i].data + '</div><button style="background-color: transparent; float: right; position: relative; right: 10px; bottom: 15px; border: none; outline: none;" type="button"><img src="images/trash.png" style="float: right; position: relative;" class="all_trash" width="14" onclick="apagar_fot_vid_aud_tex(' + String.fromCharCode(39) + texto_total[0] + String.fromCharCode(39) + ')"></button></div>'
+                                    }
+                                } else if (objCaminhos.cam_arquivos[i].ori == 's' && e_construtora == '0') {
+                                    if (objCaminhos.cam_arquivos[i].ta == 'i') {
+                                        trecho_imagens_constr_imagens += '<div style="display: inline-block;"><button style="background: transparent; border: none;"><img src="' + objCaminhos.cam_arquivos[i].cam + '" class="imagem_popup popphoto" onclick="abrir_popup_gal(' + i + ')" alt="" width="100" height="75"></button><div style="color: #6A2628; font-size: 11px; width: 80%; text-align: left; position: relative; left: 5px;">' + objCaminhos.cam_arquivos[i].data + '</div></div>'
+                                        dados_popup_img += '<div style="width: 100%; height: 100%; position: fixed; background: rgba(0,0,0,.8);" onclick="fechar_popup_gal(' + i + ')" id="popup_fundo_' + i + '"></div><div style="width: 80%; height: 80%; background: rgba(0,0,0,.5); margin: 0 auto; position: relative; top: 60px; border-radius: 8px;" id="idpopup_img_' + i + '"><a style="bottom:10px" href="#" onclick="fechar_popup_gal(' + i + ')" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a><img class="popphoto" src="' + objCaminhos.cam_arquivos[i].cam + '" onclick="fechar_popup_gal(' + i + ')" style="height: 80%; width: 100%; border-radius: 8px;"></div>'
+                                        variavelx += '$("#idpopup_img_' + i + '").css({  display: "none"  });'
+                                        variavelx2 += '$("#popup_fundo_' + i + '").css({  display: "none"  });'
+                                    } else if (objCaminhos.cam_arquivos[i].ta == 'v') {
+                                        trecho_imagens_constr_videos += '<div style="display: inline-block;"><video class="imagem_popup" poster="images/video.png" width="120" height="120" controls><source src="' + objCaminhos.cam_arquivos[i].cam + '" type="video/mp4"></video><div style="color: #6A2628; font-size: 11px; width: 60%; text-align: left;">' + objCaminhos.cam_arquivos[i].data + '</div></div>'
+                                    } else if (objCaminhos.cam_arquivos[i].ta == 'a') {
+                                        trecho_imagens_constr_audios += '<div><audio style="margin-bottom: 10px; width: 100%;" controls><source src="' + objCaminhos.cam_arquivos[i].cam + '"></audio><div style="color: #6A2628; font-size: 11px; width: 60%; text-align: left;">' + objCaminhos.cam_arquivos[i].data + '</div></div>'
+                                    } else if (objCaminhos.cam_arquivos[i].ta == 't') {
+                                        texto_total = objCaminhos.cam_arquivos[i].cam.split('*$*')
+                                        trecho_imagens_constr_textos += '<div><textarea style="width: 100%; background: #e7e7e7; resize: none" class="imagem_popup" rows="4" cols="30" readonly="readonly">' + texto_total[1] + '</textarea><div style="color: #6A2628; font-size: 11px; width: 60%; text-align: left;">' + objCaminhos.cam_arquivos[i].data + '</div></div>'
+                                    }
+                                }
                             }
-                        } else if (objCaminhos.cam_arquivos[i].ori == 's' && e_construtora == '0') {
-                            if (objCaminhos.cam_arquivos[i].ta == 'i') {
-                                trecho_imagens_constr_imagens += '<div style="display: inline-block;"><button style="background: transparent; border: none;"><img src="' + objCaminhos.cam_arquivos[i].cam + '" class="imagem_popup popphoto" onclick="abrir_popup_gal(' + i + ')" alt="" width="100" height="75"></button><div style="color: #6A2628; font-size: 11px; width: 80%; text-align: left; position: relative; left: 5px;">' + objCaminhos.cam_arquivos[i].data + '</div></div>'
-                                dados_popup_img += '<div style="width: 100%; height: 100%; position: fixed; background: rgba(0,0,0,.8);" onclick="fechar_popup_gal(' + i + ')" id="popup_fundo_' + i + '"></div><div style="width: 80%; height: 80%; background: rgba(0,0,0,.5); margin: 0 auto; position: relative; top: 60px; border-radius: 8px;" id="idpopup_img_' + i + '"><a style="bottom:10px" href="#" onclick="fechar_popup_gal(' + i + ')" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a><img class="popphoto" src="' + objCaminhos.cam_arquivos[i].cam + '" onclick="fechar_popup_gal(' + i + ')" style="height: 80%; width: 100%; border-radius: 8px;"></div>'
-                                variavelx += '$("#idpopup_img_' + i + '").css({  display: "none"  });'
-                                variavelx2 += '$("#popup_fundo_' + i + '").css({  display: "none"  });'
-                            } else if (objCaminhos.cam_arquivos[i].ta == 'v') {
-                                trecho_imagens_constr_videos += '<div style="display: inline-block;"><video class="imagem_popup" poster="images/video.png" width="120" height="120" controls><source src="' + objCaminhos.cam_arquivos[i].cam + '" type="video/mp4"></video><div style="color: #6A2628; font-size: 11px; width: 60%; text-align: left;">' + objCaminhos.cam_arquivos[i].data + '</div></div>'
-                            } else if (objCaminhos.cam_arquivos[i].ta == 'a') {
-                                trecho_imagens_constr_audios += '<div><audio style="margin-bottom: 10px; width: 100%;" controls><source src="' + objCaminhos.cam_arquivos[i].cam + '"></audio><div style="color: #6A2628; font-size: 11px; width: 60%; text-align: left;">' + objCaminhos.cam_arquivos[i].data + '</div></div>'
-                            } else if (objCaminhos.cam_arquivos[i].ta == 't') {
-                                texto_total = objCaminhos.cam_arquivos[i].cam.split('*$*')
-                                trecho_imagens_constr_textos += '<div><textarea style="width: 100%; background: #e7e7e7; resize: none" class="imagem_popup" rows="4" cols="30" readonly="readonly">' + texto_total[1] + '</textarea><div style="color: #6A2628; font-size: 11px; width: 60%; text-align: left;">' + objCaminhos.cam_arquivos[i].data + '</div></div>'
+
+                            var ini_lista = "<ul id='q_empree' class='list-content' data-mini='true' data-role='listview' data-filter='true' data-filter-placeholder='Buscar...' data-inset='true'>";
+                            var fim_lista = "</ul>";
+
+                            var seleciona1 = ""
+                            var seleciona2 = ""
+                            var seleciona3 = ""
+
+                            var aux_data_preench;
+                            var aux_custoReal_preench;
+                            var aux_custoEstim_preench;
+                            var aux_obsCondo_preench;
+                            var aux_obsConstr_preench;
+
+                            if (input_data_realiz == "") {
+                                if (getMobileOperatingSystem() == "iOS") {
+                                    aux_data_preench = data_manut_realizada
+                                } else {
+                                    aux_data_preench = dateToEN2(data_manut_realizada)
+                                }
+                            } else {
+                                aux_data_preench = input_data_realiz
                             }
+
+                            if (input_forn == "") {
+                                if (fornecedor == "Equipe Local") {
+                                    seleciona1 = "selected"
+                                }
+                                if (fornecedor == "Empresa Capacitada") {
+                                    seleciona2 = "selected"
+                                }
+                                if (fornecedor == "Empresa Especializada") {
+                                    seleciona3 = "selected"
+                                }
+                            } else {
+                                if (input_forn == "1") {
+                                    seleciona1 = "selected"
+                                }
+                                if (input_forn == "2") {
+                                    seleciona2 = "selected"
+                                }
+                                if (input_forn == "3") {
+                                    seleciona3 = "selected"
+                                }
+                            }
+
+                            if (input_custoReal == "") {
+                                aux_custoReal_preench = custo_real
+                            } else {
+                                aux_custoReal_preench = input_custoReal
+                            }
+
+                            if (input_custoEstim == "") {
+                                aux_custoEstim_preench = custo_estimado
+                            } else {
+                                aux_custoEstim_preench = input_custoEstim
+                            }
+
+                            if (e_construtora == '0') {
+                                if (getMobileOperatingSystem() == "iOS") {
+                                    dados_manutencao = [
+                                        '<li class="shadow_box">',
+                                        '<div class="text-center-title">',
+                                        '<font style="font-weight: bold; text-shadow: none;" id="atividade_title" size="4" face="Arial">' + nome_sistema + '</font>',
+                                        '</div>',
+                                        '<div class="text-center-paragraph">',
+                                        '<p id="atividade_content" class="text-size-content" size="2" face="Arial" color="#0000FF">' + nome_atividade + '</p>',
+                                        '</div>',
+                                        '<div class="mensalmente-paragraph">',
+                                        '<strong class="mensalmente">' + periodicidade + '</strong> - <span>' + nome_emp_resp + '</span>',
+                                        '</div>',
+                                        '<div class="data_periodicidade_paragraph">',
+                                        '<font class="atividade_title" size="3" face="Arial">' + dateToEN(aux_data) + '</font>',
+                                        '</div>',
+                                        '</li>',
+
+                                        '<li class="shadow_box box__content__funcoes" style="border-radius: 0;">',
+                                        '<div class="ui-grid-a">',
+                                        '<div class="ui-block-a">',
+                                        '<tbody>',
+                                        '<tr>',
+                                        '<th style="padding: 0">',
+                                        '<div class="input-responsive">',
+                                        '<label for="">Data realização:</label>',
+                                        '<input maxlength="10" style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao date_ios" id="in_data_realizacao" readonly="readonly" required="" value="' + aux_data_preench + '" />',
+                                        '<img src="images/calendar-alt.png" width="16" style="position: relative; float: right; bottom: 35px; right: 10px;" />',
+                                        '</div>',
+                                        '</th>',
+                                        '</tr>',
+                                        '</tbody>',
+                                        '</div>',
+                                        '<div style="position: relative;" class="ui-block-b">',
+                                        '<label for="">Empresa:</label>',
+                                        '<select style="height: 35px; background: #f6f6f6; border-color: #dddddd; font-size: 13px; outline: none; width: 100%; border-radius: 4px; padding-left: 5px;" id="valores" name="select-native-2" data-mini="true" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)">',
+                                        '<option class="size_option" value="1" ' + seleciona1 + '>Equipe Local</option>',
+                                        '<option class="size_option" value="2" ' + seleciona2 + '>Empresa Capacitada</option>',
+                                        '<option class="size_option" value="3" ' + seleciona3 + '>Empresa Especializada</option>',
+                                        '</select>',
+                                        '</div>',
+                                        '</div>',
+                                        '<table>',
+                                        '<div class="ui-grid-a">',
+                                        '<div class="ui-block-a custo-estimado">',
+                                        '<label for="">Custo estimado:</label>',
+                                        '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-estimado-input" type="tel" name="text-basic" id="in_dado_custo_estimado" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo estimado" value="' + aux_custoEstim_preench + '" />',
+                                        '<img src="images/money-bill-alt-verde.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
+                                        '</div>',
+                                        '<div class="ui-block-b custo-real">',
+                                        '<label for="">Custo real:</label>',
+                                        '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-real-input" type="tel" name="text-basic" id="in_dado_custo_real" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo real" value="' + aux_custoReal_preench + '" />',
+                                        '<img src="images/money-bill-alt-verde.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
+                                        '</div>',
+                                        '</div>',
+                                        '</table>',
+                                        '</li>'
+                                    ].join('');
+                                } else {
+                                    dados_manutencao = [
+                                        '<li class="shadow_box">',
+                                        '<div class="text-center-title">',
+                                        '<font style="font-weight: bold; text-shadow: none;" id="atividade_title" size="4" face="Arial">' + nome_sistema + '</font>',
+                                        '</div>',
+                                        '<div class="text-center-paragraph">',
+                                        '<p id="atividade_content" class="text-size-content" size="2" face="Arial" color="#0000FF">' + nome_atividade + '</p>',
+                                        '</div>',
+                                        '<div class="mensalmente-paragraph">',
+                                        '<strong class="mensalmente">' + periodicidade + '</strong> - <span>' + nome_emp_resp + '</span>',
+                                        '</div>',
+                                        '<div class="data_periodicidade_paragraph">',
+                                        '<font class="atividade_title" size="3" face="Arial">' + dateToEN(aux_data) + '</font>',
+                                        '</div>',
+                                        '</li>',
+
+                                        '<li class="shadow_box box__content__funcoes" style="border-radius: 0;">',
+                                        '<div class="ui-grid-a">',
+                                        '<div class="ui-block-a">',
+                                        '<tbody>',
+                                        '<tr>',
+                                        '<th style="padding: 0">',
+                                        '<div class="input-responsive">',
+                                        '<label for="">Data realização:</label>',
+                                        '<input style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao" id="in_data_realizacao" type="date" onkeypress="mascara(this, sonumeros_data)" required="" value="' + aux_data_preench + '" />',
+                                        '</div>',
+                                        '</th>',
+                                        '</tr>',
+                                        '</tbody>',
+                                        '</div>',
+                                        '<div style="position: relative;" class="ui-block-b">',
+                                        '<label for="">Empresa:</label>',
+                                        '<select style="height: 35px; background: #f6f6f6; border-color: #dddddd; font-size: 13px; outline: none; width: 100%; border-radius: 4px; padding-left: 5px;" id="valores" name="select-native-2" data-mini="true" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)">',
+                                        '<option class="size_option" value="1" ' + seleciona1 + '>Equipe Local</option>',
+                                        '<option class="size_option" value="2" ' + seleciona2 + '>Empresa Capacitada</option>',
+                                        '<option class="size_option" value="3" ' + seleciona3 + '>Empresa Especializada</option>',
+                                        '</select>',
+                                        '</div>',
+                                        '</div>',
+                                        '<table>',
+                                        '<div class="ui-grid-a">',
+                                        '<div class="ui-block-a custo-estimado">',
+                                        '<label for="">Custo estimado:</label>',
+                                        '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-estimado-input" type="tel" name="text-basic" id="in_dado_custo_estimado" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo estimado" value="' + aux_custoEstim_preench + '" />',
+                                        '<img src="images/money-bill-alt-verde.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
+                                        '</div>',
+                                        '<div class="ui-block-b custo-real">',
+                                        '<label for="">Custo real:</label>',
+                                        '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-real-input" type="tel" name="text-basic" id="in_dado_custo_real" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo real" value="' + aux_custoReal_preench + '" />',
+                                        '<img src="images/money-bill-alt-verde.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
+                                        '</div>',
+                                        '</div>',
+                                        '</table>',
+                                        '</li>'
+                                    ].join('');
+                                }
+                            } else {
+                                if (getMobileOperatingSystem() == "iOS") {
+                                    dados_manutencao = [
+                                        '<li class="shadow_box">',
+                                        '<div class="text-center-title">',
+                                        '<font style="font-weight: bold; text-shadow: none;" id="atividade_title" size="4" face="Arial">' + nome_sistema + '</font>',
+                                        '</div>',
+                                        '<div class="text-center-paragraph">',
+                                        '<p id="atividade_content" class="text-size-content" size="2" face="Arial" color="#0000FF">' + nome_atividade + '</p>',
+                                        '</div>',
+                                        '<div class="mensalmente-paragraph">',
+                                        '<strong class="mensalmente">' + periodicidade + '</strong> - <span>' + nome_emp_resp + '</span>',
+                                        '</div>',
+                                        '<div class="data_periodicidade_paragraph">',
+                                        '<font class="atividade_title" size="3" face="Arial">' + dateToEN(aux_data) + '</font>',
+                                        '</div>',
+                                        '</li>',
+
+                                        '<li class="shadow_box box__content__funcoes" style="border-radius: 0;">',
+                                        '<div class="ui-grid-a">',
+                                        '<div class="ui-block-a">',
+                                        '<tbody>',
+                                        '<tr>',
+                                        '<th style="padding: 0">',
+                                        '<div class="input-responsive">',
+                                        '<label for="">Data realização:</label>',
+                                        '<input maxlength="10" style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao date_ios" id="in_data_realizacao" disabled="" readonly="readonly" required="" value="' + aux_data_preench + '" />',
+                                        '<img src="images/calendar-alt.png" width="16" style="position: relative; float: right; bottom: 35px; right: 10px;" />',
+                                        '</div>',
+                                        '</th>',
+                                        '</tr>',
+                                        '</tbody>',
+                                        '</div>',
+                                        '<div style="position: relative;" class="ui-block-b">',
+                                        '<label for="">Empresa:</label>',
+                                        '<select style="height: 35px; background: #f6f6f6; border-color: #dddddd; font-size: 13px; outline: none; width: 100%; border-radius: 4px; padding-left: 5px;" id="valores" name="select-native-2" data-mini="true" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)" disabled="">',
+                                        '<option class="size_option" value="1" ' + seleciona1 + '>Equipe Local</option>',
+                                        '<option class="size_option" value="2" ' + seleciona2 + '>Empresa Capacitada</option>',
+                                        '<option class="size_option" value="3" ' + seleciona3 + '>Empresa Especializada</option>',
+                                        '</select>',
+                                        '</div>',
+                                        '</div>',
+                                        '<table>',
+                                        '<div class="ui-grid-a">',
+                                        '<div class="ui-block-a custo-estimado">',
+                                        '<label for="">Custo estimado:</label>',
+                                        '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-estimado-input" type="tel" name="text-basic" id="in_dado_custo_estimado" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo estimado" disabled="" value="' + aux_custoEstim_preench + '" />',
+                                        '<img src="images/money-bill-alt.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
+                                        '</div>',
+                                        '<div class="ui-block-b custo-real">',
+                                        '<label for="">Custo real:</label>',
+                                        '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-real-input" type="tel" name="text-basic" id="in_dado_custo_real" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo real" disabled="" value="' + aux_custoReal_preench + '" />',
+                                        '<img src="images/money-bill-alt.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
+                                        '</div>',
+                                        '</div>',
+                                        '</table>',
+                                        '</li>'
+                                    ].join('');
+                                } else {
+                                    dados_manutencao = [
+                                        '<li class="shadow_box">',
+                                        '<div class="text-center-title">',
+                                        '<font style="font-weight: bold; text-shadow: none;" id="atividade_title" size="4" face="Arial">' + nome_sistema + '</font>',
+                                        '</div>',
+                                        '<div class="text-center-paragraph">',
+                                        '<p id="atividade_content" class="text-size-content" size="2" face="Arial" color="#0000FF">' + nome_atividade + '</p>',
+                                        '</div>',
+                                        '<div class="mensalmente-paragraph">',
+                                        '<strong class="mensalmente">' + periodicidade + '</strong> - <span>' + nome_emp_resp + '</span>',
+                                        '</div>',
+                                        '<div class="data_periodicidade_paragraph">',
+                                        '<font class="atividade_title" size="3" face="Arial">' + dateToEN(aux_data) + '</font>',
+                                        '</div>',
+                                        '</li>',
+
+                                        '<li class="shadow_box box__content__funcoes" style="border-radius: 0;">',
+                                        '<div class="ui-grid-a">',
+                                        '<div class="ui-block-a">',
+                                        '<tbody>',
+                                        '<tr>',
+                                        '<th style="padding: 0">',
+                                        '<div class="input-responsive">',
+                                        '<label for="">Data realização:</label>',
+                                        '<input style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao" type="date" onkeypress="mascara(this, sonumeros_data)" id="in_data_realizacao" disabled="" required="" value="' + aux_data_preench + '" />',
+                                        '</div>',
+                                        '</th>',
+                                        '</tr>',
+                                        '</tbody>',
+                                        '</div>',
+                                        '<div style="position: relative;" class="ui-block-b">',
+                                        '<label for="">Empresa:</label>',
+                                        '<select style="height: 35px; background: #f6f6f6; border-color: #dddddd; font-size: 13px; outline: none; width: 100%; border-radius: 4px; padding-left: 5px;" id="valores" name="select-native-2" data-mini="true" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)" disabled="">',
+                                        '<option class="size_option" value="1" ' + seleciona1 + '>Equipe Local</option>',
+                                        '<option class="size_option" value="2" ' + seleciona2 + '>Empresa Capacitada</option>',
+                                        '<option class="size_option" value="3" ' + seleciona3 + '>Empresa Especializada</option>',
+                                        '</select>',
+                                        '</div>',
+                                        '</div>',
+                                        '<table>',
+                                        '<div class="ui-grid-a">',
+                                        '<div class="ui-block-a custo-estimado">',
+                                        '<label for="">Custo estimado:</label>',
+                                        '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-estimado-input" type="tel" name="text-basic" id="in_dado_custo_estimado" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo estimado" disabled="" value="' + aux_custoEstim_preench + '" />',
+                                        '<img src="images/money-bill-alt.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
+                                        '</div>',
+                                        '<div class="ui-block-b custo-real">',
+                                        '<label for="">Custo real:</label>',
+                                        '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-real-input" type="tel" name="text-basic" id="in_dado_custo_real" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo real" disabled="" value="' + aux_custoReal_preench + '" />',
+                                        '<img src="images/money-bill-alt.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
+                                        '</div>',
+                                        '</div>',
+                                        '</table>',
+                                        '</li>'
+                                    ].join('');
+                                }
+                            }
+
+                            if (e_construtora == '0') {
+                                dados_observacao = [
+                                    '<li style="padding: .7em 1em; background: #fff;" class="shadow_box" style="border-radius: 0;">',
+                                    '<table>',
+                                    '<div class="ui-grid ui-responsive">',
+                                    '<div class="ui-block-a ui-grid-full">',
+                                    '<table data-role="table" id="table-column-toggle" class="ui-responsive table-stroke">',
+                                    '<tbody>',
+                                    '<label style="font-weight: 600;" class="label-center" for="textarea-1">Observações</label>',
+                                    '<label style="margin-top: 15px;" for="">Condomínio:</label>',
+                                    '<textarea rows="3" style="width: 100%; border-color: #dddddd; font-size: 13px; outline: none; border-radius: 4px; padding: 5px; resize: none" class="size-14 condominio condominio_obs" name="textarea-1" id="txt_dado_condominio" data-placeholder="true" placeholder="Condomínio..." autocomplete="off" onclick="RestricaoData_obs();" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)">' + observacao_evento + '</textarea>',
+                                    '<fieldset data-role="controlgroup">',
+                                    '<div id="form_email" style="background: #f5f5f5; position: relative; top: 3px; padding: 3px; border-radius: 4px; border: 1px solid #dddddd;">',
+                                    '<input style="position: relative; top: 1px; padding-right: 100%;" type="checkbox" name="email_condominio" id="email_condominio">',
+                                    '<span style="font-size: 12px; position: relative; bottom: 1.8px;"><span style="color: rgb(153, 0, 0);">Marque para enviar um alerta</span> por email a construtora.</span>',
+                                    '</div>',
+                                    '</fieldset>',
+                                    '</tbody>',
+                                    '<tbody>',
+                                    '<label style="margin-top: 10px;" for="">Construtora:</label>',
+                                    '<textarea rows="3" style="background: #e7e7e7; width: 100%; border-color: #dddddd; font-size: 13px; outline: none; border-radius: 4px; padding: 5px; resize: none" class="size-14 construtora" name="textarea-1" id="txt_dado_construtora" data-placeholder="true" placeholder="Construtora..." autocomplete="off" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)" readonly="readonly">' + observacao_evento_construtora + '</textarea>',
+                                    '</tbody>',
+                                    '</table>',
+                                    '</div>',
+                                    '</div>',
+                                    '</table>',
+                                    '</li>'
+                                ].join('');
+                            } else {
+                                dados_observacao = [
+                                    '<li style="padding: .7em 1em; background: #fff;" class="shadow_box" style="border-radius: 0;">',
+                                    '<table>',
+                                    '<div class="ui-grid ui-responsive">',
+                                    '<div class="ui-block-a ui-grid-full">',
+                                    '<table data-role="table" id="table-column-toggle" class="ui-responsive table-stroke">',
+                                    '<tbody>',
+                                    '<label style="font-weight: 600;" class="label-center" for="textarea-1">Observações</label>',
+                                    '<label style="margin-top: 15px;" for="">Condomínio:</label>',
+                                    '<textarea rows="3" style="background: #e7e7e7; width: 100%; border-color: #dddddd; font-size: 13px; outline: none; border-radius: 4px; padding: 5px; resize: none" class="size-14 condominio" name="textarea-1" id="txt_dado_condominio" data-placeholder="true" placeholder="Condomínio..." autocomplete="off" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)" readonly="readonly">' + observacao_evento + '</textarea>',
+                                    '</tbody>',
+                                    '<tbody>',
+                                    '<label style="margin-top: 10px;" for="">Construtora:</label>',
+                                    '<textarea rows="3" style="width: 100%; border-color: #dddddd; font-size: 13px; outline: none; border-radius: 4px; padding: 5px; resize: none" class="size-14 construtora construtora_obs" name="textarea-1" id="txt_dado_construtora" data-placeholder="true" placeholder="Construtora..." autocomplete="off" onclick="RestricaoData_obs_constr();" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)">' + observacao_evento_construtora + '</textarea>',
+                                    '<fieldset data-role="controlgroup">',
+                                    '<div style="background: #f5f5f5; position: relative; top: 3px; padding: 3px; border-radius: 4px; border: 1px solid #dddddd;">',
+                                    '<input style="position: relative; top: 1px; padding-right: 100%;" type="checkbox" name="email_construtora" id="email_construtora">',
+                                    '<span style="font-size: 12px; position: relative; bottom: 1.8px;"><span style="color: rgb(153, 0, 0);">Marque para enviar um alerta</span> por email ao condomínio.</span>',
+                                    '</div>',
+                                    '</fieldset>',
+                                    '</tbody>',
+                                    '</table>',
+                                    '</div>',
+                                    '</div>',
+                                    '</table>',
+                                    '</li>'
+                                ].join('');
+                            }
+
+                            dados_ajuda_docs = [
+                                '<div class="screen-over-content ui-responsive">',
+                                '<div class="title-content">',
+                                '<span class="size-14">Documentos a serem anexados para esta manutenção:</span>',
+                                '<span style="text-align: center;" class="size-14" style="display: block;">',
+                                '<strong>Nota fiscal</strong>',
+                                '</span>',
+                                '</div>',
+                                '<div class="image-content">',
+                                '<img style="width: 100%; height: auto;" src="https://www.sigmacivil.com.br/us/imagens/ajuda_docs/' + id_ajuda_docs + '.gif" alt="" />',
+                                '</div>',
+                                '<div class="title-content" style="margin-top: 15px;">',
+                                '<span style="text-align: center;" class="size-14">Arquivo de exemplo</span>',
+                                '</div>',
+                                '</div>'
+                            ].join('')
+
+                            document.getElementById('nome_empree_id').innerHTML = nome_empree
+                            document.getElementById('dados_ajuda').innerHTML = dados_ajuda_docs
+                            document.getElementById('dados_manut').innerHTML = ini_lista + dados_manutencao + fim_lista
+                            document.getElementById('dados_obs').innerHTML = dados_observacao
+
+                            document.getElementById('popup_img').innerHTML = dados_popup_img
+
+                            document.getElementById('imagens_bco').innerHTML = trecho_imagens_cond_imagens
+                            document.getElementById('videos_bco').innerHTML = trecho_imagens_cond_videos
+                            document.getElementById('audios_bco').innerHTML = trecho_imagens_cond_audios
+                            document.getElementById('textos_bco').innerHTML = trecho_imagens_cond_textos
+
+                            document.getElementById('imagens_bco_constr').innerHTML = trecho_imagens_constr_imagens
+                            document.getElementById('videos_bco_constr').innerHTML = trecho_imagens_constr_videos
+                            document.getElementById('audios_bco_constr').innerHTML = trecho_imagens_constr_audios
+                            document.getElementById('textos_bco_constr').innerHTML = trecho_imagens_constr_textos
+                            $('#q_empree').listview();
+
+                            eval(variavelx);
+                            eval(variavelx2);
+
                         }
-                    }
 
-                    var ini_lista = "<ul id='q_empree' class='list-content' data-mini='true' data-role='listview' data-filter='true' data-filter-placeholder='Buscar...' data-inset='true'>";
-                    var fim_lista = "</ul>";
-
-                    var seleciona1 = ""
-                    var seleciona2 = ""
-                    var seleciona3 = ""
-
-                    var aux_data_preench;
-                    var aux_custoReal_preench;
-                    var aux_custoEstim_preench;
-                    var aux_obsCondo_preench;
-                    var aux_obsConstr_preench;
-
-                    if (input_data_realiz == "") {
-                        if (getMobileOperatingSystem() == "iOS") {
-                            aux_data_preench = data_manut_realizada
-                        } else {
-                            aux_data_preench = dateToEN2(data_manut_realizada)
-                        }
                     } else {
-                        aux_data_preench = input_data_realiz
+                        alert("Problemas com sua conexao internet. Erro: 0167");
                     }
-
-                    if (input_forn == "") {
-                        if (fornecedor == "Equipe Local") {
-                            seleciona1 = "selected"
-                        }
-                        if (fornecedor == "Empresa Capacitada") {
-                            seleciona2 = "selected"
-                        }
-                        if (fornecedor == "Empresa Especializada") {
-                            seleciona3 = "selected"
-                        }
-                    } else {
-                        if (input_forn == "1") {
-                            seleciona1 = "selected"
-                        }
-                        if (input_forn == "2") {
-                            seleciona2 = "selected"
-                        }
-                        if (input_forn == "3") {
-                            seleciona3 = "selected"
-                        }
-                    }
-
-                    if (input_custoReal == "") {
-                        aux_custoReal_preench = custo_real
-                    } else {
-                        aux_custoReal_preench = input_custoReal
-                    }
-
-                    if (input_custoEstim == "") {
-                        aux_custoEstim_preench = custo_estimado
-                    } else {
-                        aux_custoEstim_preench = input_custoEstim
-                    }
-
-                    if (e_construtora == '0') {
-                        if (getMobileOperatingSystem() == "iOS") {
-                            dados_manutencao = [
-                                '<li class="shadow_box">',
-                                '<div class="text-center-title">',
-                                '<font style="font-weight: bold; text-shadow: none;" id="atividade_title" size="4" face="Arial">' + nome_sistema + '</font>',
-                                '</div>',
-                                '<div class="text-center-paragraph">',
-                                '<p id="atividade_content" class="text-size-content" size="2" face="Arial" color="#0000FF">' + nome_atividade + '</p>',
-                                '</div>',
-                                '<div class="mensalmente-paragraph">',
-                                '<strong class="mensalmente">' + periodicidade + '</strong> - <span>' + nome_emp_resp + '</span>',
-                                '</div>',
-                                '<div class="data_periodicidade_paragraph">',
-                                '<font class="atividade_title" size="3" face="Arial">' + dateToEN(aux_data) + '</font>',
-                                '</div>',
-                                '</li>',
-
-                                '<li class="shadow_box box__content__funcoes" style="border-radius: 0;">',
-                                '<div class="ui-grid-a">',
-                                '<div class="ui-block-a">',
-                                '<tbody>',
-                                '<tr>',
-                                '<th style="padding: 0">',
-                                '<div class="input-responsive">',
-                                '<label for="">Data realização:</label>',
-                                '<input maxlength="10" style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao date_ios" onclick="scrollDate()" id="in_data_realizacao" readonly="readonly" required="" value="' + aux_data_preench + '" />',
-                                '<img src="images/calendar-alt.png" width="16" style="position: relative; float: right; bottom: 35px; right: 10px;" />',
-                                '</div>',
-                                '</th>',
-                                '</tr>',
-                                '</tbody>',
-                                '</div>',
-                                '<div style="position: relative;" class="ui-block-b">',
-                                '<label for="">Empresa:</label>',
-                                '<select style="height: 35px; background: #f6f6f6; border-color: #dddddd; font-size: 13px; outline: none; width: 100%; border-radius: 4px; padding-left: 5px;" id="valores" name="select-native-2" data-mini="true" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)">',
-                                '<option class="size_option" value="1" ' + seleciona1 + '>Equipe Local</option>',
-                                '<option class="size_option" value="2" ' + seleciona2 + '>Empresa Capacitada</option>',
-                                '<option class="size_option" value="3" ' + seleciona3 + '>Empresa Especializada</option>',
-                                '</select>',
-                                '</div>',
-                                '</div>',
-                                '<table>',
-                                '<div class="ui-grid-a">',
-                                '<div class="ui-block-a custo-estimado">',
-                                '<label for="">Custo estimado:</label>',
-                                '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-estimado-input" type="tel" name="text-basic" id="in_dado_custo_estimado" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo estimado" value="' + aux_custoEstim_preench + '" />',
-                                '<img src="images/money-bill-alt-verde.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
-                                '</div>',
-                                '<div class="ui-block-b custo-real">',
-                                '<label for="">Custo real:</label>',
-                                '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-real-input" type="tel" name="text-basic" id="in_dado_custo_real" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo real" value="' + aux_custoReal_preench + '" />',
-                                '<img src="images/money-bill-alt-verde.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
-                                '</div>',
-                                '</div>',
-                                '</table>',
-                                '</li>'
-                            ].join('');
-                        } else {
-                            dados_manutencao = [
-                                '<li class="shadow_box">',
-                                '<div class="text-center-title">',
-                                '<font style="font-weight: bold; text-shadow: none;" id="atividade_title" size="4" face="Arial">' + nome_sistema + '</font>',
-                                '</div>',
-                                '<div class="text-center-paragraph">',
-                                '<p id="atividade_content" class="text-size-content" size="2" face="Arial" color="#0000FF">' + nome_atividade + '</p>',
-                                '</div>',
-                                '<div class="mensalmente-paragraph">',
-                                '<strong class="mensalmente">' + periodicidade + '</strong> - <span>' + nome_emp_resp + '</span>',
-                                '</div>',
-                                '<div class="data_periodicidade_paragraph">',
-                                '<font class="atividade_title" size="3" face="Arial">' + dateToEN(aux_data) + '</font>',
-                                '</div>',
-                                '</li>',
-
-                                '<li class="shadow_box box__content__funcoes" style="border-radius: 0;">',
-                                '<div class="ui-grid-a">',
-                                '<div class="ui-block-a">',
-                                '<tbody>',
-                                '<tr>',
-                                '<th style="padding: 0">',
-                                '<div class="input-responsive">',
-                                '<label for="">Data realização:</label>',
-                                '<input style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao" id="in_data_realizacao" type="date" onkeypress="mascara(this, sonumeros_data)" required="" value="' + aux_data_preench + '" />',
-                                '</div>',
-                                '</th>',
-                                '</tr>',
-                                '</tbody>',
-                                '</div>',
-                                '<div style="position: relative;" class="ui-block-b">',
-                                '<label for="">Empresa:</label>',
-                                '<select style="height: 35px; background: #f6f6f6; border-color: #dddddd; font-size: 13px; outline: none; width: 100%; border-radius: 4px; padding-left: 5px;" id="valores" name="select-native-2" data-mini="true" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)">',
-                                '<option class="size_option" value="1" ' + seleciona1 + '>Equipe Local</option>',
-                                '<option class="size_option" value="2" ' + seleciona2 + '>Empresa Capacitada</option>',
-                                '<option class="size_option" value="3" ' + seleciona3 + '>Empresa Especializada</option>',
-                                '</select>',
-                                '</div>',
-                                '</div>',
-                                '<table>',
-                                '<div class="ui-grid-a">',
-                                '<div class="ui-block-a custo-estimado">',
-                                '<label for="">Custo estimado:</label>',
-                                '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-estimado-input" type="tel" name="text-basic" id="in_dado_custo_estimado" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo estimado" value="' + aux_custoEstim_preench + '" />',
-                                '<img src="images/money-bill-alt-verde.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
-                                '</div>',
-                                '<div class="ui-block-b custo-real">',
-                                '<label for="">Custo real:</label>',
-                                '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-real-input" type="tel" name="text-basic" id="in_dado_custo_real" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo real" value="' + aux_custoReal_preench + '" />',
-                                '<img src="images/money-bill-alt-verde.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
-                                '</div>',
-                                '</div>',
-                                '</table>',
-                                '</li>'
-                            ].join('');
-                        }
-                    } else {
-                        if (getMobileOperatingSystem() == "iOS") {
-                            dados_manutencao = [
-                                '<li class="shadow_box">',
-                                '<div class="text-center-title">',
-                                '<font style="font-weight: bold; text-shadow: none;" id="atividade_title" size="4" face="Arial">' + nome_sistema + '</font>',
-                                '</div>',
-                                '<div class="text-center-paragraph">',
-                                '<p id="atividade_content" class="text-size-content" size="2" face="Arial" color="#0000FF">' + nome_atividade + '</p>',
-                                '</div>',
-                                '<div class="mensalmente-paragraph">',
-                                '<strong class="mensalmente">' + periodicidade + '</strong> - <span>' + nome_emp_resp + '</span>',
-                                '</div>',
-                                '<div class="data_periodicidade_paragraph">',
-                                '<font class="atividade_title" size="3" face="Arial">' + dateToEN(aux_data) + '</font>',
-                                '</div>',
-                                '</li>',
-
-                                '<li class="shadow_box box__content__funcoes" style="border-radius: 0;">',
-                                '<div class="ui-grid-a">',
-                                '<div class="ui-block-a">',
-                                '<tbody>',
-                                '<tr>',
-                                '<th style="padding: 0">',
-                                '<div class="input-responsive">',
-                                '<label for="">Data realização:</label>',
-                                '<input maxlength="10" style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao date_ios" id="in_data_realizacao" disabled="" readonly="readonly" required="" value="' + aux_data_preench + '" />',
-                                '<img src="images/calendar-alt.png" width="16" style="position: relative; float: right; bottom: 35px; right: 10px;" />',
-                                '</div>',
-                                '</th>',
-                                '</tr>',
-                                '</tbody>',
-                                '</div>',
-                                '<div style="position: relative;" class="ui-block-b">',
-                                '<label for="">Empresa:</label>',
-                                '<select style="height: 35px; background: #f6f6f6; border-color: #dddddd; font-size: 13px; outline: none; width: 100%; border-radius: 4px; padding-left: 5px;" id="valores" name="select-native-2" data-mini="true" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)" disabled="">',
-                                '<option class="size_option" value="1" ' + seleciona1 + '>Equipe Local</option>',
-                                '<option class="size_option" value="2" ' + seleciona2 + '>Empresa Capacitada</option>',
-                                '<option class="size_option" value="3" ' + seleciona3 + '>Empresa Especializada</option>',
-                                '</select>',
-                                '</div>',
-                                '</div>',
-                                '<table>',
-                                '<div class="ui-grid-a">',
-                                '<div class="ui-block-a custo-estimado">',
-                                '<label for="">Custo estimado:</label>',
-                                '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-estimado-input" type="tel" name="text-basic" id="in_dado_custo_estimado" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo estimado" disabled="" value="' + aux_custoEstim_preench + '" />',
-                                '<img src="images/money-bill-alt.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
-                                '</div>',
-                                '<div class="ui-block-b custo-real">',
-                                '<label for="">Custo real:</label>',
-                                '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-real-input" type="tel" name="text-basic" id="in_dado_custo_real" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo real" disabled="" value="' + aux_custoReal_preench + '" />',
-                                '<img src="images/money-bill-alt.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
-                                '</div>',
-                                '</div>',
-                                '</table>',
-                                '</li>'
-                            ].join('');
-                        } else {
-                            dados_manutencao = [
-                                '<li class="shadow_box">',
-                                '<div class="text-center-title">',
-                                '<font style="font-weight: bold; text-shadow: none;" id="atividade_title" size="4" face="Arial">' + nome_sistema + '</font>',
-                                '</div>',
-                                '<div class="text-center-paragraph">',
-                                '<p id="atividade_content" class="text-size-content" size="2" face="Arial" color="#0000FF">' + nome_atividade + '</p>',
-                                '</div>',
-                                '<div class="mensalmente-paragraph">',
-                                '<strong class="mensalmente">' + periodicidade + '</strong> - <span>' + nome_emp_resp + '</span>',
-                                '</div>',
-                                '<div class="data_periodicidade_paragraph">',
-                                '<font class="atividade_title" size="3" face="Arial">' + dateToEN(aux_data) + '</font>',
-                                '</div>',
-                                '</li>',
-
-                                '<li class="shadow_box box__content__funcoes" style="border-radius: 0;">',
-                                '<div class="ui-grid-a">',
-                                '<div class="ui-block-a">',
-                                '<tbody>',
-                                '<tr>',
-                                '<th style="padding: 0">',
-                                '<div class="input-responsive">',
-                                '<label for="">Data realização:</label>',
-                                '<input style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao" type="date" onkeypress="mascara(this, sonumeros_data)" id="in_data_realizacao" disabled="" required="" value="' + aux_data_preench + '" />',
-                                '</div>',
-                                '</th>',
-                                '</tr>',
-                                '</tbody>',
-                                '</div>',
-                                '<div style="position: relative;" class="ui-block-b">',
-                                '<label for="">Empresa:</label>',
-                                '<select style="height: 35px; background: #f6f6f6; border-color: #dddddd; font-size: 13px; outline: none; width: 100%; border-radius: 4px; padding-left: 5px;" id="valores" name="select-native-2" data-mini="true" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)" disabled="">',
-                                '<option class="size_option" value="1" ' + seleciona1 + '>Equipe Local</option>',
-                                '<option class="size_option" value="2" ' + seleciona2 + '>Empresa Capacitada</option>',
-                                '<option class="size_option" value="3" ' + seleciona3 + '>Empresa Especializada</option>',
-                                '</select>',
-                                '</div>',
-                                '</div>',
-                                '<table>',
-                                '<div class="ui-grid-a">',
-                                '<div class="ui-block-a custo-estimado">',
-                                '<label for="">Custo estimado:</label>',
-                                '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-estimado-input" type="tel" name="text-basic" id="in_dado_custo_estimado" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo estimado" disabled="" value="' + aux_custoEstim_preench + '" />',
-                                '<img src="images/money-bill-alt.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
-                                '</div>',
-                                '<div class="ui-block-b custo-real">',
-                                '<label for="">Custo real:</label>',
-                                '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-real-input" type="tel" name="text-basic" id="in_dado_custo_real" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo real" disabled="" value="' + aux_custoReal_preench + '" />',
-                                '<img src="images/money-bill-alt.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
-                                '</div>',
-                                '</div>',
-                                '</table>',
-                                '</li>'
-                            ].join('');
-                        }
-                    }
-
-                    if (e_construtora == '0') {
-                        dados_observacao = [
-                            '<li style="padding: .7em 1em; background: #fff;" class="shadow_box" style="border-radius: 0;">',
-                            '<table>',
-                            '<div class="ui-grid ui-responsive">',
-                            '<div class="ui-block-a ui-grid-full">',
-                            '<table data-role="table" id="table-column-toggle" class="ui-responsive table-stroke">',
-                            '<tbody>',
-                            '<label style="font-weight: 600;" class="label-center" for="textarea-1">Observações</label>',
-                            '<label style="margin-top: 15px;" for="">Condomínio:</label>',
-                            '<textarea rows="3" style="width: 100%; border-color: #dddddd; font-size: 13px; outline: none; border-radius: 4px; padding: 5px; resize: none" class="size-14 condominio condominio_obs" name="textarea-1" id="txt_dado_condominio" data-placeholder="true" placeholder="Condomínio..." autocomplete="off" onclick="RestricaoData_obs();" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)">' + observacao_evento + '</textarea>',
-                            '<fieldset data-role="controlgroup">',
-                            '<div id="form_email" style="background: #f5f5f5; position: relative; top: 3px; padding: 3px; border-radius: 4px; border: 1px solid #dddddd;">',
-                            '<div style="display: flex; align-items: center;">',
-                            '<input style="height: 20px; width: 20px; margin-right: 4px;" type="checkbox" name="email_condominio" id="email_condominio">',
-                            '<span style="font-size: 12px;"><span style="color: rgb(153, 0, 0);">Marque e clique em salvar abaixo para enviar um alerta</span> por email a construtora.</span>',
-                            '</div>',
-                            '</div>',
-                            '</fieldset>',
-                            '</tbody>',
-                            '<tbody>',
-                            '<label style="margin-top: 10px;" for="">Construtora:</label>',
-                            '<textarea rows="3" style="background: #e7e7e7; width: 100%; border-color: #dddddd; font-size: 13px; outline: none; border-radius: 4px; padding: 5px; resize: none" class="size-14 construtora" name="textarea-1" id="txt_dado_construtora" data-placeholder="true" placeholder="Construtora..." autocomplete="off" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)" readonly="readonly">' + observacao_evento_construtora + '</textarea>',
-                            '</tbody>',
-                            '</table>',
-                            '</div>',
-                            '</div>',
-                            '</table>',
-                            '</li>'
-                        ].join('');
-                    } else {
-                        dados_observacao = [
-                            '<li style="padding: .7em 1em; background: #fff;" class="shadow_box" style="border-radius: 0;">',
-                            '<table>',
-                            '<div class="ui-grid ui-responsive">',
-                            '<div class="ui-block-a ui-grid-full">',
-                            '<table data-role="table" id="table-column-toggle" class="ui-responsive table-stroke">',
-                            '<tbody>',
-                            '<label style="font-weight: 600;" class="label-center" for="textarea-1">Observações</label>',
-                            '<label style="margin-top: 15px;" for="">Condomínio:</label>',
-                            '<textarea rows="3" style="background: #e7e7e7; width: 100%; border-color: #dddddd; font-size: 13px; outline: none; border-radius: 4px; padding: 5px; resize: none" class="size-14 condominio" name="textarea-1" id="txt_dado_condominio" data-placeholder="true" placeholder="Condomínio..." autocomplete="off" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)" readonly="readonly">' + observacao_evento + '</textarea>',
-                            '</tbody>',
-                            '<tbody>',
-                            '<label style="margin-top: 10px;" for="">Construtora:</label>',
-                            '<textarea rows="3" style="width: 100%; border-color: #dddddd; font-size: 13px; outline: none; border-radius: 4px; padding: 5px; resize: none" class="size-14 construtora construtora_obs" name="textarea-1" id="txt_dado_construtora" data-placeholder="true" placeholder="Construtora..." autocomplete="off" onclick="RestricaoData_obs_constr();" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)">' + observacao_evento_construtora + '</textarea>',
-                            '<fieldset data-role="controlgroup">',
-                            '<div style="background: #f5f5f5; position: relative; top: 3px; padding: 3px; border-radius: 4px; border: 1px solid #dddddd;">',
-                            '<div style="display: flex; align-items: center;">',
-                            '<input style="height: 20px; width: 20px; margin-right: 4px;" type="checkbox" name="email_construtora" id="email_construtora">',
-                            '<span style="font-size: 12px;"><span style="color: rgb(153, 0, 0);">Marque e clique em salvar abaixo para enviar um alerta</span> por email ao condomínio.</span>',
-                            '</div>',
-                            '</div>',
-                            '</fieldset>',
-                            '</tbody>',
-                            '</table>',
-                            '</div>',
-                            '</div>',
-                            '</table>',
-                            '</li>'
-                        ].join('');
-                    }
-
-                    dados_ajuda_docs = [
-                        '<div class="screen-over-content ui-responsive">',
-                        '<div class="title-content">',
-                        '<span class="size-14">Documentos a serem anexados para esta manutenção:</span>',
-                        '<span style="text-align: center;" class="size-14" style="display: block;">',
-                        '<strong>Nota fiscal</strong>',
-                        '</span>',
-                        '</div>',
-                        '<div class="image-content">',
-                        '<img style="width: 100%; height: auto;" src="https://www.sigmacivil.com.br/us/imagens/ajuda_docs/' + id_ajuda_docs + '.gif" alt="" />',
-                        '</div>',
-                        '<div class="title-content" style="margin-top: 15px;">',
-                        '<span style="text-align: center;" class="size-14">Arquivo de exemplo</span>',
-                        '</div>',
-                        '</div>'
-                    ].join('')
-
-                    document.getElementById('nome_empree_id').innerHTML = nome_empree
-                    document.getElementById('dados_ajuda').innerHTML = dados_ajuda_docs
-                    document.getElementById('dados_manut').innerHTML = ini_lista + dados_manutencao + fim_lista
-                    document.getElementById('dados_obs').innerHTML = dados_observacao
-
-                    document.getElementById('popup_img').innerHTML = dados_popup_img
-
-                    document.getElementById('imagens_bco').innerHTML = trecho_imagens_cond_imagens
-                    document.getElementById('videos_bco').innerHTML = trecho_imagens_cond_videos
-                    document.getElementById('audios_bco').innerHTML = trecho_imagens_cond_audios
-                    document.getElementById('textos_bco').innerHTML = trecho_imagens_cond_textos
-
-                    document.getElementById('imagens_bco_constr').innerHTML = trecho_imagens_constr_imagens
-                    document.getElementById('videos_bco_constr').innerHTML = trecho_imagens_constr_videos
-                    document.getElementById('audios_bco_constr').innerHTML = trecho_imagens_constr_audios
-                    document.getElementById('textos_bco_constr').innerHTML = trecho_imagens_constr_textos
-                    $('#q_empree').listview();
-
-                    eval(variavelx);
-                    eval(variavelx2);
-
                 }
-            });
-
+            }
             ajax2.send();
+            ////  capturando dados do evento
 
-            // capturando dados evento
+            if (getMobileOperatingSystem() == "iOS") {
+                document.querySelector('.date_ios').addEventListener('click', function() {
+                    // var options = {
+                    //     date: new Date(),
+                    //     mode: 'date'
+                    // };
+
+                    // function onSuccess(date) {
+                    //     var mes_atual = date.getMonth() + 1;
+                    //     document.querySelector('.date_ios').value = date.getDate() + '/' + mes_atual + '/' + date.getFullYear();
+                    // }
+
+                    // function onError(error) { // Android only
+                    //     // alert('Error: ' + error);
+                    // }
+
+                    // datePicker.show(options, onSuccess, onError);
+                    new Rolldate({
+                        el: '.date_ios',
+                        format: 'DD/MM/YYYY',
+                        beginYear: 2016,
+                        endYear: 2040
+                    })
+                });
+            }
 
             var db;
             var request = window.indexedDB.open("db_sigmacivil", "1");
@@ -731,8 +748,6 @@
                 db = request.result;
 
                 consultaManutEvento(db);
-
-                consultaConfig();
 
                 db.onerror = function (event) {
                     alert("Database error: " + event.target.errorCode);
@@ -780,9 +795,12 @@
                         var rrr_status_caminho_texto = ""
                     }
 
+<<<<<<< HEAD
                     alert(rrr_caminho_imagens);
                     alert(rrr_status_caminho_imagens);
 
+=======
+>>>>>>> 4cb53f942f1496b5d1534dd8b19e7c2913aef823
                     var todas_imagens = ""
                     var todas_status_imagens = ""
                     if (rrr_caminho_imagens == null || rrr_caminho_imagens == "") {
@@ -806,12 +824,6 @@
                         else {
                             aux_image_upload = 'upload_verde.png';
                         }
-
-                        // automatic upload
-                        if (aux_image_upload == 'upload.png') {
-                            qtd_tam_ti = k + 1;
-                        }
-
 
                         //imagens da seta, preta ou verde
 
@@ -839,7 +851,6 @@
                         // selec_audio = "<div class='icon-size' style='position: relative; text-align: center; top: 10px;'><table cellpadding='0' cellspacing='0'><div id='latesq_" + rrr_id_prog_manut + "'width='40' height='30'></div><div style='border: 1px solid black; width: 60%; border-radius: 3px; margin: 0 auto; padding: 4px;'><img src='images/play.svg' width='15' style='margin-right: 5px;' class='top-9px' id='player_" + rrr_id_prog_manut + "'onclick='abrir_audio(" + String.fromCharCode(34) + rrr_caminho_audio + String.fromCharCode(34) + ")' ><img src='images/pause.svg' width='15' style='margin-right: 5px;' class='top-9px position-icons' id='pause_" + rrr_id_prog_manut + "' onclick='pause_audio()'><img src='images/stop.svg' width='15' style='margin-right: 5px;' class='top-9px position-icons' id='stop_" + rrr_id_prog_manut + "'onclick='stop_audio()'><img src='images/microphone.svg' width='15' style='margin-right: 5px;' class='top-9px position-icons' id='rec_" + rrr_id_prog_manut + "'onclick='captureAudio(" + String.fromCharCode(34) + rrr_id_prog_manut + String.fromCharCode(34) + ")'></div><div id='latdir_" + rrr_id_prog_manut + "'width='40' height='30'></div><div align='center'><img src='images/trash.svg' style='position: relative; top: 8px; right: 55px; text-align: center; text-shadow: none;' class='icon-size' width='15' onclick='deletar_audio()'></div><div align='center'><img src='images/" + aux_image_upload + "' style='position: relative; bottom: 10px; left: 45px; text-align: center; text-shadow: none;' class='icon-size' width='17' onclick='upload_audio()'></div></table></div>            <audio style='margin-bottom: 10px; width: 100%;' controls><source src='" + rrr_caminho_audio + "'></audio>"
                         if (aux_image_upload === "upload.png") {
                             qtdDocs_Device += 1
-                            qtd_tam_ti_audio += 1;
                         }
                     }
                     //barra do áudio
@@ -860,7 +871,6 @@
                         selec_video = "<div id='video_invis_" + rrr_id_prog_manut + "' style='display:inline; margin-left: 5px;'><table cellpadding='0' cellspacing='0'><video id='qvideo_" + rrr_id_prog_manut + "' controls poster='images/video.png' width='150' height='150'>   <source id='qsource_" + rrr_id_prog_manut + "' src='" + rrr_caminho_video + "' type='video/mp4'></video><div align='center'><img src='images/trash.svg' style='float: left; padding: 0.5rem; position: relative; left: 55px; text-shadow: none;' class='icon-size' width='15' onclick='deletar_video()'></div><div align='center'><img src='images/" + aux_image_upload + "' style='padding: 0.5rem; float: left; position: relative; left: 120px; text-shadow: none;' class='icon-size' width='17' onclick='upload_video()'/></div></table></div>"
                         if (aux_image_upload === "upload.png") {
                             qtdDocs_Device += 1
-                            qtd_tam_ti_video += 1;
                         }
                     }
                     //barrinha do vídeo
@@ -884,7 +894,6 @@
                         bot_up = "<img src='images/" + aux_image_upload + "' style='float: right; position: relative; right: 110px; top: 3px; text-shadow: none;' class='icon-size' width='17' onclick='upload_texto()'></i>"
                         if (aux_image_upload === "upload.png") {
                             qtdDocs_Device += 1
-                            qtd_tam_ti_texto += 1;
                         }
                     }
 
@@ -950,66 +959,10 @@
             }
         }
 
-        function consultaConfig() {
-            var db;
-            var request = window.indexedDB.open("db_sigmacivil", "1");
-
-            request.onerror = function (event) {
-                alert("Erro ao criar o banco (cod 01)");
-            };
-
-            request.onsuccess = function (event) {
-                db = request.result;
-
-                var tx = db.transaction(['mtab_config'], 'readwrite');
-                var store = tx.objectStore('mtab_config');
-                var objectStoreRequest = store.openCursor();
-                objectStoreRequest.onsuccess = function (event) {
-                    var cursor = event.target.result;
-                    if (cursor) {
-                        var data = cursor.value;
-
-                        editPictures = data['editar_fotos'];
-                        uploadAutomatic = data['upload_automatico'];
-
-                        setTimeout(function () {
-                            if (uploadAutomatic && qtd_tam_ti > 0) {
-                                upload_imagem(qtd_tam_ti - 1);
-                            }
-
-                            // alert(qtd_tam_ti_audio);
-
-                            if (uploadAutomatic && qtd_tam_ti_audio > 0) {
-                                upload_audio();
-                            }
-
-                            // alert(qtd_tam_ti_video);
-
-                            if (uploadAutomatic && qtd_tam_ti_video > 0) {
-                                upload_video();
-                            }
-
-                            // alert(qtd_tam_ti_texto);
-
-                            if (uploadAutomatic && qtd_tam_ti_texto > 0) {
-                                upload_texto();
-                            }
-                        }, 1000);
-
-                    }
-                }
-
-                db.onerror = function (event) {
-                    alert("Database error: " + event.target.errorCode);
-                }
-            }
-        }
-
         var aux_caminho_imagens = ""
         var aux_status_imagens_upl = ""
 
         function getPhoto(source, qual) {
-
             qual_id_prog_manut = qual;
 
             // RESTRIÇÕES DE DATAS
@@ -1021,40 +974,26 @@
                 return
             }
 
-            navigator.notification.confirm(
-                'Deseja tirar uma foto ou escolher a foto da galeria?',
-                function (buttonIndex) {
-                    if (buttonIndex === 1) {
-                        source = pictureSource.PHOTOLIBRARY;
-                    } else {
-                        source = pictureSource.CAMERA;
-                    }
-
-                    navigator.camera.getPicture(onPhotoURISuccess, onFail, {
-                        quality: 50,
-                        destinationType: destinationType.FILE_URI,
-                        encodingType: Camera.EncodingType.JPEG,
-                        popoverOptions: CameraPopoverOptions,
-                        saveToPhotoAlbum: true,
-                        allowEdit: editPictures ? true : false,
-                        sourceType: source
-                    });
-                },
-                'SigmaCivil',
-                ['Galeria', 'Tirar uma foto']
-            );
-
-            /*var r = confirm("Para tirar uma foto com a câmera selecione OK. Para acessar sua galeria de imagens clique em CANCELAR");
+            var r = confirm("Para tirar uma foto com a câmera selecione OK. Para acessar sua galeria de imagens clique em CANCELAR");
             if (r == true) {
                 source = pictureSource.CAMERA;
             } else {
                 source = pictureSource.PHOTOLIBRARY;
-            }*/
+            }
+
+            navigator.camera.getPicture(onPhotoURISuccess, onFail, {
+                quality: 50,
+                destinationType: destinationType.FILE_URI,
+                encodingType: Camera.EncodingType.JPEG,
+                popoverOptions: CameraPopoverOptions,
+                // saveToPhotoAlbum: true,
+                sourceType: source
+            });
 
         }
 
         function onFail(message) {
-            // alert('Failed because: ' + message);
+            alert('Failed because: ' + message);
         }
 
         var qual_id_prog_manut;
@@ -1096,11 +1035,6 @@
                     status_texto_upl: ""
                 }
             ];
-
-            // alert(id_prog_manut)
-            // alert(dia_ev)
-            // alert(mes_ev)
-            // alert(ano_ev)
 
             function consultaManutEvento2(db, manutsEvento_imagem) {
                 var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
@@ -1323,27 +1257,14 @@
                         }
                     }
                 }
-            } else {
-                navigator.notification.confirm(
-                    'Problemas com a sua conexão ao fazer upload da imagem. Tentar novamente?',
-                    function (buttonIndex) {
-                        if (buttonIndex === 2) {
-                            upload_imagem(q_id);
-                        }
-                    },
-                    'SigmaCivil',
-                    ['Cancelar', 'Tentar novamente']
-                );
             }
         }
 
         function up_loadPhoto(imageURI, q_k) {
 
-            //if (!uploadAutomatic) {
             document.getElementById("parte_load_content").style.display = "block";
             document.getElementById("parte_load").style.display = "flex";
             window.location.href = "#ancora123"
-            //}
 
             var q_k;
             var options = new FileUploadOptions();
@@ -1359,7 +1280,7 @@
             options.chunkedMode = false;
 
             var ft = new FileTransfer();
-            ft.upload(imageURI, "http://www.sigmacivil.com.br/app_sc/rec_foto_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up, fail_up, options);
+            ft.upload(imageURI, "http://www.sigmacivil.com.br/app_sc/rec_foto_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up, fail_up, options);
 
         }
 
@@ -1396,9 +1317,7 @@
 
                         var request = cursor.update(data);
                         request.onsuccess = function (event) {
-                            //if (!uploadAutomatic) {
                             reload_page();
-                            //}
                         }
                     }
                 }
@@ -1408,18 +1327,7 @@
         var fail_up = function (error) {
             document.getElementById("parte_load_content").style.display = "none";
             document.getElementById("parte_load").style.display = "none";
-            // alert("Não foi feito o upload da imagem!");
-
-            navigator.notification.confirm(
-                'Não foi feito o upload da imagem. Tentar novamente?',
-                function (buttonIndex) {
-                    if (buttonIndex === 2) {
-                        consultaConfig();
-                    }
-                },
-                'SigmaCivil',
-                ['Cancelar', 'Tentar novamente']
-            );
+            alert("Não foi feito o upload da imagem!");
         }
         // FIM UPLOAD IMAGEM
 
@@ -1632,28 +1540,15 @@
                         }
                     }
                 }
-            } else {
-                navigator.notification.confirm(
-                    'Problemas com a sua conexão ao fazer upload do vídeo. Tentar novamente?',
-                    function (buttonIndex) {
-                        if (buttonIndex === 2) {
-                            upload_video();
-                        }
-                    },
-                    'SigmaCivil',
-                    ['Cancelar', 'Tentar novamente']
-                );
             }
         }
 
         // UPLOAD VIDEO
         function up_loadVideo(videoURL) {
 
-            //if (!uploadAutomatic) {
             document.getElementById("parte_load_content").style.display = "block";
             document.getElementById("parte_load").style.display = "flex";
             window.location.href = "#ancora123"
-            //}
 
             var options = new FileUploadOptions();
             options.fileKey = "file";
@@ -1662,7 +1557,7 @@
             options.chunkedMode = false;
 
             var ft = new FileTransfer();
-            ft.upload(videoURL, "http://www.sigmacivil.com.br/app_sc/rec_video_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente, win_up_v, fail_up_v, options);
+            ft.upload(videoURL, "http://www.sigmacivil.com.br/app_sc/rec_video_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente, win_up_v, fail_up_v, options);
 
         }
 
@@ -1698,9 +1593,7 @@
 
                         var request = cursor.update(data);
                         request.onsuccess = function (event) {
-                            //if (!uploadAutomatic) {
                             reload_page();
-                            //}
                         }
                     }
                 }
@@ -1710,18 +1603,7 @@
         var fail_up_v = function (error) {
             document.getElementById("parte_load_content").style.display = "none";
             document.getElementById("parte_load").style.display = "none";
-            // alert("Não foi feito o upload do vídeo!");
-
-            navigator.notification.confirm(
-                'Não foi feito o upload do vídeo. Tentar novamente?',
-                function (buttonIndex) {
-                    if (buttonIndex === 2) {
-                        consultaConfig();
-                    }
-                },
-                'SigmaCivil',
-                ['Cancelar', 'Tentar novamente']
-            );
+            alert("Não foi feito o upload do vídeo!");
         }
         // FIM UPLOAD VIDEO
 
@@ -1964,27 +1846,14 @@
                         }
                     }
                 }
-            } else {
-                navigator.notification.confirm(
-                    'Problemas com a sua conexão ao fazer upload do áudio. Tentar novamente?',
-                    function (buttonIndex) {
-                        if (buttonIndex === 2) {
-                            upload_audio();
-                        }
-                    },
-                    'SigmaCivil',
-                    ['Cancelar', 'Tentar novamente']
-                );
             }
         }
 
         function up_loadAudio(audioURL) {
 
-            //if (!uploadAutomatic) {
             document.getElementById("parte_load_content").style.display = "block";
             document.getElementById("parte_load").style.display = "flex";
             window.location.href = "#ancora123"
-            //}
 
             var options = new FileUploadOptions();
             options.fileKey = "file";
@@ -1993,7 +1862,7 @@
             options.chunkedMode = false;
 
             var ft = new FileTransfer();
-            ft.upload(audioURL, "http://www.sigmacivil.com.br/app_sc/rec_audio_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente, win_up_a, fail_up_a, options);
+            ft.upload(audioURL, "http://www.sigmacivil.com.br/app_sc/rec_audio_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.1&econst=" + e_construtora + "&idc=" + id_cliente, win_up_a, fail_up_a, options);
 
         }
 
@@ -2029,9 +1898,7 @@
 
                         var request = cursor.update(data);
                         request.onsuccess = function (event) {
-                            //if (!uploadAutomatic) {
                             reload_page();
-                            //}
                         }
                     }
                 }
@@ -2041,18 +1908,7 @@
         var fail_up_a = function (error) {
             document.getElementById("parte_load_content").style.display = "none";
             document.getElementById("parte_load").style.display = "none";
-            // alert("Não foi feito o upload do áudio!");
-
-            navigator.notification.confirm(
-                'Não foi feito o upload do áudio. Tentar novamente?',
-                function (buttonIndex) {
-                    if (buttonIndex === 2) {
-                        consultaConfig();
-                    }
-                },
-                'SigmaCivil',
-                ['Cancelar', 'Tentar novamente']
-            );
+            alert("Não foi feito o upload do áudio!");
         }
         // FIM UPLOAD AUDIO
 
@@ -2098,113 +1954,81 @@
                         }
                     }
                 }
-            } else {
-                navigator.notification.confirm(
-                    'Problemas com a sua conexão ao fazer upload do texto. Tentar novamente?',
-                    function (buttonIndex) {
-                        if (buttonIndex === 2) {
-                            upload_texto();
-                        }
-                    },
-                    'SigmaCivil',
-                    ['Cancelar', 'Tentar novamente']
-                );
             }
         }
 
         function up_loadTexto(textoURL) {
 
-            //if (!uploadAutomatic) {
             document.getElementById("parte_load_content").style.display = "block";
             document.getElementById("parte_load").style.display = "flex";
             window.location.href = "#ancora123"
-            //}
 
             var data = 'tx=' + encodeURIComponent(textoURL) + '&ipm=' + id_prog_manut + '&d=' + dia_ev + '&m=' + mes_ev + '&a=' + ano_ev + "&econst=" + e_construtora + "&idc=" + id_cliente;
             var ajax = new XMLHttpRequest();
-            if (tem_conexao()) {
-                ajax.open("POST", "https://www.sigmacivil.com.br/app_sc/rec_texto_uploaded.asp?versao=2.2", true);
-                ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                ajax.addEventListener("loadend", function (evt) {
-                    var resposta_total = this.responseText;
-                    if (resposta_total == "grav_ok") {
-                        var db;
-                        var request = window.indexedDB.open("db_sigmacivil", "1");
+            ajax.open("POST", "https://www.sigmacivil.com.br/app_sc/rec_texto_uploaded.asp?versao=2.1", true);
+            ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            ajax.onreadystatechange = function () {
+                if (ajax.readyState == 4) {//Request complete !!
+                    if (ajax.status == 200 || ajax.status == 0) { // OK response
 
-                        request.onerror = function (event) {
-                            alert("Erro ao criar o banco (cod 15)");
-                        };
+                        var resposta_total = ajax.responseText;
+                        if (resposta_total == "grav_ok") {
+                            var db;
+                            var request = window.indexedDB.open("db_sigmacivil", "1");
 
-                        request.onsuccess = function (event) {
-                            db = request.result;
+                            request.onerror = function (event) {
+                                alert("Erro ao criar o banco (cod 15)");
+                            };
 
-                            uploadManutEventoWinUpTexto(db);
+                            request.onsuccess = function (event) {
+                                db = request.result;
 
-                            db.onerror = function (event) {
-                                alert("Database error: " + event.target.errorCode);
+                                uploadManutEventoWinUpTexto(db);
+
+                                db.onerror = function (event) {
+                                    alert("Database error: " + event.target.errorCode);
+                                }
                             }
-                        }
 
-                        function uploadManutEventoWinUpTexto(db) {
-                            var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
-                            var store = tx.objectStore('mtab_prog_manut_evento');
-                            var index = store.index('comparar');
-                            var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
-                            index.openCursor(whereEquals).onsuccess = function (event) {
-                                var cursor = event.target.result;
-                                if (cursor) {
-                                    var data = cursor.value;
+                            function uploadManutEventoWinUpTexto(db) {
+                                var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+                                var store = tx.objectStore('mtab_prog_manut_evento');
+                                var index = store.index('comparar');
+                                var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+                                index.openCursor(whereEquals).onsuccess = function (event) {
+                                    var cursor = event.target.result;
+                                    if (cursor) {
+                                        var data = cursor.value;
 
-                                    data.status_texto_upl = "1";
+                                        data.status_texto_upl = "1";
 
-                                    var request = cursor.update(data);
-                                    request.onsuccess = function (event) {
-                                        //if (!uploadAutomatic) {
-                                        reload_page();
-                                        //}
+                                        var request = cursor.update(data);
+                                        request.onsuccess = function (event) {
+                                            reload_page();
+                                        }
                                     }
                                 }
                             }
+                        } else {
+                            alert("Problemas com a gravação do texto. Tente novamente mais tarde (cod 08).");
                         }
+
                     } else {
-                        document.getElementById("parte_load_content").style.display = "none";
-                        document.getElementById("parte_load").style.display = "none";
-                        // alert("Problemas com a gravação do texto. Tente novamente mais tarde (cod 08).");
-
-                        navigator.notification.confirm(
-                            'Problemas com a gravação do texto. Tentar novamente?',
-                            function (buttonIndex) {
-                                if (buttonIndex === 2) {
-                                    consultaConfig();
-                                }
-                            },
-                            'SigmaCivil',
-                            ['Cancelar', 'Tentar novamente']
-                        );
+                        alert("Problemas com sua conexão internet. Cod: 01");
                     }
-                });
+                }
 
-                data = data.split(":").join("%3A")
-                data = data.split("{").join(" % 7B")
-                data = data.split("}").join("%7D")
-                data = data.split(",").join("%2C")
-                data = data.split("[").join("%5B")
-                data = data.split("]").join("%5D")
-                data = data.split(String.fromCharCode(34)).join("%22")
-
-                ajax.send(data);
-            } else {
-                navigator.notification.confirm(
-                    'Problemas com a sua conexão. Tentar novamente?',
-                    function (buttonIndex) {
-                        if (buttonIndex === 2) {
-                            consultaConfig();
-                        }
-                    },
-                    'SigmaCivil',
-                    ['Cancelar', 'Tentar novamente']
-                );
             }
+
+            data = data.split(":").join("%3A")
+            data = data.split("{").join(" % 7B")
+            data = data.split("}").join("%7D")
+            data = data.split(",").join("%2C")
+            data = data.split("[").join("%5B")
+            data = data.split("]").join("%5D")
+            data = data.split(String.fromCharCode(34)).join("%22")
+
+            ajax.send(data);
 
         }
         // FIM UPLOAD TEXTO
@@ -2223,8 +2047,7 @@
     </div>
 
     <div id="parte_load_content"
-        style="width: 100%; display: none; height: 100%; position: absolute; background: rgba(0,0,0,.7); z-index: 50;">
-    </div>
+        style="width: 100%; height: 100%; position: absolute; background: rgba(0,0,0,.5); z-index: 10;"></div>
 
     <!-- MENU ONLINE/OFFLINE -->
     <span id="menu_opc2"></span>
@@ -2233,13 +2056,11 @@
     <!-- <span id="nome_emp"></span> -->
 
     <!-- TELA DE LOADING AO ENVIAR ALGUM ARQUIVO PARA A GALERIA DE IMAGENS SERVIDOR -->
-    <div id="parte_load"
-        style="z-index: 150; display: none; position: fixed; width: 100%; height: 80%; justify-content: center; align-items: center;"
-        align="center">
+    <div id="parte_load" align="center">
         <table width="224" border="0" cellpadding="0" cellspacing="0">
             <tr>
                 <td width="42" height="49">
-                    <div align="center">
+                    <div align="center" style="background: rgba(0,0,0,.5); padding: 1rem; border-radius: 5px;">
                         <img src="images/tail-spin.svg" width="35" height="35">
                         <span class="quad_text">Aguarde o envio</span>
                     </div>
@@ -2252,25 +2073,14 @@
 
     <!-- MENU BURGER -->
     <div class="btn-bars" style="display: none;">
-        <div style="top:4; z-index: 30;" data-role="collapsible" data-collapsed="true" class="ui-btn-left menu"
-            data-mini="true">
+        <div style="top:4;" data-role="collapsible" data-collapsed="true" class="ui-btn-left menu" data-mini="true">
             <h4 class="btn-bars-bars">
                 <!-- <span class="fas fa-bars"></span> -->
                 <img class="is-bars" src="images/bars.svg" width="14" alt="Menu" />
                 <img class="is-times is-disabled" src="images/times.svg" width="13" alt="Menu" />
             </h4>
             <ul style="border: 1px solid #e0e0e0;" data-role="listview" data-mini="true">
-                <li>
-                    <a class="ui-btn ui-icon-gear ui-btn-icon-right ui-shadow ui-corner-all" href="#"
-                        onClick="go_to_page_config()">Configurações</a>
-                </li>
-                <li>
-                    <a class="ui-btn ui-icon-power ui-btn-icon-right ui-shadow ui-corner-all" href="#"
-                        onClick="closeApp()">Fechar app</a>
-                </li>
-                <li>
-                    <a style="z-index: 10" class="click" href="#" onClick="enviar_sync()">Logout</a>
-                </li>
+                <li><a style="z-index: 10" class="click" href="#" onClick="enviar_sync()">Novo Login</a></li>
             </ul>
         </div>
     </div>
@@ -2454,7 +2264,7 @@
         </li>
 
         <!-- BOTÕES SALVAR E VOLTAR -->
-        <li class="shadow_box" style="border-radius: 0; display: none; margin-bottom: 60px;">
+        <li class="shadow_box" style="border-radius: 0; display: none;">
             <table>
                 <fieldset class="ui-grid-a">
                     <div class="ui-block-a ui-responsive">
@@ -2469,31 +2279,7 @@
         </li>
 
     </ul>
-
     <div id="id_ev_email"></div>
-
-    <!-- Menu bottom -->
-    <nav class="main-menu-bottom">
-        <div>
-            <button class="buttons-navigate" type="button" onclick="reload_page_empree()">
-                <img src="images/engenheiro_cogs.png" width="22" alt="Home" />
-                <p>manutenções</p>
-            </button>
-            <button class="buttons-navigate" type="button" onclick="scan()">
-                <img src="images/qr_code.png" width="22" alt="Qr_code" />
-                <p>qrcode</p>
-            </button>
-            <button class="buttons-navigate" type="button" onclick="go_relat_check2()">
-                <img src="images/graph.png" width="22" alt="Relatório" />
-                <p>rel.checkpoint</p>
-            </button>
-            <button class="buttons-navigate" type="button" onclick="openBrowser()">
-                <img src="images/call.png" width="22" alt="Chamado" />
-                <p>abrir chamado</p>
-            </button>
-        </div>
-    </nav>
-    <!-- Fim Menu bottom -->
 </body>
 
 </html>
@@ -2792,159 +2578,8 @@
         }
     }
 
-    function scan() {
-        cordova.plugins.barcodeScanner.scan(
-            function (result) {
-                if (!result.cancelled) {
-                    // In this case we only want to process QR Codes
-                    if (result.format == "QR_CODE") {
-                        var value = result.text;
-
-                        var ponto_ini = value.indexOf("www.sigmacivil.com.br/us/new_qr_hist_mp.asp?c=");
-                        var parte1 = value.substring(ponto_ini + 46);
-
-                        var pedaco = parte1.split("_");
-                        // alert(id_empree);
-                        // alert(pedaco[0]);
-
-                        if (num_empree == pedaco[0]) {
-
-                            var qid_empree = num_empree;
-                            var qid_sistema = pedaco[1];
-
-                            var d = new Date();
-                            var qdata_checkpoint = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
-
-                            var qatualizado_serv = "N";
-
-                            navigator.geolocation.getCurrentPosition(
-                                function (position) {
-                                    var qlatitude_checkpoint = position.coords.latitude;
-                                    var qlongitude_checkpoint = position.coords.longitude;
-                                    var qaltura_checkpoint = position.coords.altitude;
-
-                                    var db;
-                                    var request = window.indexedDB.open("db_sigmacivil", "1");
-
-                                    request.onerror = function (event) {
-                                        alert("Erro ao criar o banco (cod 02)");
-                                    };
-
-                                    request.onsuccess = function (event) {
-                                        db = request.result;
-
-                                        inserirDadosCheckpoint(db, dadosCheckpoint);
-
-                                        db.onerror = function (event) {
-                                            alert("Database error: " + event.target.errorCode);
-                                        }
-                                    }
-
-                                    var dadosCheckpoint = [
-                                        {
-                                            id_empree: qid_empree,
-                                            id_sistema: qid_sistema,
-                                            data_checkpoint: qdata_checkpoint,
-                                            latitude_checkpoint: qlatitude_checkpoint,
-                                            longitude_checkpoint: qlongitude_checkpoint,
-                                            altura_checkpoint: qaltura_checkpoint,
-                                            atualizado_serv: qatualizado_serv,
-                                        }
-                                    ];
-
-                                    function inserirDadosCheckpoint(db, dadosCheckpoint) {
-                                        var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
-                                        var store = tx.objectStore('mtab_checkpoint');
-
-                                        dadosCheckpoint.map(function (dadoCheckpoint) {
-                                            store.add(dadoCheckpoint);
-                                        });
-
-                                        tx.oncomplete = function () {
-                                            go_to_page(qid_sistema, qid_empree);
-                                        }
-
-                                        tx.onerror = function (event) {
-                                            alert('error storing checkpoint note ' + event.target.error);
-                                        }
-                                    }
-                                },
-                                function (error) {
-                                    var db;
-                                    var request = window.indexedDB.open("db_sigmacivil", "1");
-
-                                    request.onerror = function (event) {
-                                        alert("Erro ao criar o banco (cod 03)");
-                                    };
-
-                                    request.onsuccess = function (event) {
-                                        db = request.result;
-
-                                        inserirDadosCheckpointError(db, dadosCheckpointError);
-
-                                        db.onerror = function (event) {
-                                            alert("Database error: " + event.target.errorCode);
-                                        }
-                                    }
-
-                                    var dadosCheckpointError = [
-                                        {
-                                            id_empree: qid_empree,
-                                            id_sistema: qid_sistema,
-                                            data_checkpoint: qdata_checkpoint,
-                                            latitude_checkpoint: "",
-                                            longitude_checkpoint: "",
-                                            altura_checkpoint: "",
-                                            atualizado_serv: qatualizado_serv,
-                                        }
-                                    ];
-
-                                    function inserirDadosCheckpointError(db, dadosCheckpointError) {
-                                        var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
-                                        var store = tx.objectStore('mtab_checkpoint');
-
-                                        dadosCheckpointError.map(function (dadoCheckpointError) {
-                                            store.add(dadoCheckpointError);
-                                        });
-
-                                        tx.oncomplete = function () {
-                                            go_to_page(qid_sistema, qid_empree);
-                                        }
-
-                                        tx.onerror = function (event) {
-                                            alert('error storing checkpointError note ' + event.target.error);
-                                        }
-                                    }
-                                }
-                            );
-
-                        } else {
-                            alert("Esse QRCode não é válido");
-                        }
-
-                    } else {
-                        alert("Desculpe, só é possível ler QRCODES");
-                    }
-                } else {
-                    // alert("Leitura do QRCODE cancelada");
-                }
-            },
-            function (error) {
-                // alert("Erro: " + error);
-            }
-        );
-    }
-
-    function go_to_page(q_id_sistema, q_num_empree) {
-        window.location.assign("qrcode.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&e=" + q_num_empree + "&id_sis=" + q_id_sistema + "&qm=" + parseInt(mes_ev) + "&qa=" + parseInt(ano_ev));
-    }
-
-    function go_to_page_config() {
-        window.location.assign("configuracoes.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + parseInt(mes_ev) + "&qa=" + parseInt(ano_ev));
-    }
-
     function reload_page() {
-        window.location.assign("even_online.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&ipm=" + id_prog_manut + "&dia_ev=" + dia_ev + "&mes_ev=" + mes_ev + "&ano_ev=" + ano_ev + '&d_min=' + d_min + '&d_max=' + d_max + "&tipo=" + tipo + "&input_data_realiz=" + document.getElementById('in_data_realizacao').value + "&input_forn=" + document.getElementById('valores').value + "&input_custoReal=" + document.getElementById('in_dado_custo_real').value + "&input_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value))
+        window.location.assign("even_online.htm?l=" + login + "&s=" + senha + "&ipm=" + id_prog_manut + "&dia_ev=" + dia_ev + "&mes_ev=" + mes_ev + "&ano_ev=" + ano_ev + '&d_min=' + d_min + '&d_max=' + d_max + "&tipo=" + tipo + "&input_data_realiz=" + document.getElementById('in_data_realizacao').value + "&input_forn=" + document.getElementById('valores').value + "&input_custoReal=" + document.getElementById('in_dado_custo_real').value + "&input_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value))
     }
 
     function reload_page_empree() {
@@ -2958,10 +2593,10 @@
 
     function reload_page_even() {
         if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
-            window.location.assign("even.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&ipm=" + id_prog_manut + "&dia_ev=" + dia_ev + "&mes_ev=" + mes_ev + "&ano_ev=" + ano_ev)
+            window.location.assign("even.htm?l=" + login + "&s=" + senha + "&ipm=" + id_prog_manut + "&dia_ev=" + dia_ev + "&mes_ev=" + mes_ev + "&ano_ev=" + ano_ev)
         }
         else {
-            window.location.assign("even_online.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&ipm=" + id_prog_manut + "&dia_ev=" + dia_ev + "&mes_ev=" + mes_ev + "&ano_ev=" + ano_ev + '&d_min=' + d_min + '&d_max=' + d_max + "&tipo=" + tipo)
+            window.location.assign("even_online.htm?l=" + login + "&s=" + senha + "&ipm=" + id_prog_manut + "&dia_ev=" + dia_ev + "&mes_ev=" + mes_ev + "&ano_ev=" + ano_ev + '&d_min=' + d_min + '&d_max=' + d_max + "&tipo=" + tipo)
         }
     }
 
@@ -3076,174 +2711,150 @@
     }
 
     function enviar_dados() {
-        if (tem_conexao()) {
-            var crypt_segur = (parseInt(id_empree) * 3) + 5 + (parseInt(id_cliente)) * 2 + 7
+        var crypt_segur = (parseInt(id_empree) * 3) + 5 + (parseInt(id_cliente)) * 2 + 7
 
-            if (e_construtora == 0) {
+        if (e_construtora == 0) {
 
-                var data = document.querySelector('.data_formato')
-                var texto = ""
-                var continuar = null
+            var data = document.querySelector('.data_formato')
+            var texto = ""
+            var continuar = null
 
-                var d = new Date();
+            var d = new Date();
 
-                var aux_mes_novo = d.getMonth() + 1;
-                aux_mes_novo = '0' + aux_mes_novo
-                aux_mes_novo = aux_mes_novo.substring(aux_mes_novo.length - 2, aux_mes_novo.length);
+            var aux_mes_novo = d.getMonth() + 1;
+            aux_mes_novo = '0' + aux_mes_novo
+            aux_mes_novo = aux_mes_novo.substring(aux_mes_novo.length - 2, aux_mes_novo.length);
 
-                var aux_dia_novo = d.getDate();
-                aux_dia_novo = '0' + aux_dia_novo
-                aux_dia_novo = aux_dia_novo.substring(aux_dia_novo.length - 2, aux_dia_novo.length);
+            var aux_dia_novo = d.getDate();
+            aux_dia_novo = '0' + aux_dia_novo
+            aux_dia_novo = aux_dia_novo.substring(aux_dia_novo.length - 2, aux_dia_novo.length);
 
-                var data_hoje_formatada = d.getFullYear() + '-' + aux_mes_novo + '-' + aux_dia_novo
+            var data_hoje_formatada = d.getFullYear() + '-' + aux_mes_novo + '-' + aux_dia_novo
 
-                var $email_condominio = document.getElementById('email_condominio')
-                if ($email_condominio.checked == true) {
-                    ev_email = 1
-                } else {
-                    ev_email = 0
+            var $email_condominio = document.getElementById('email_condominio')
+            if ($email_condominio.checked == true) {
+                ev_email = 1
+            } else {
+                ev_email = 0
+            }
+
+            if (data.value == 0) {
+                alert('Obrigatório o preenchimento da data da realização da manutenção!')
+                FocusInput(data)
+            } else if (datadiff2(Date.now(), d_min) > 0) {
+                alert("Essa manutenção só pode ser informada a partir do dia " + dateToEN(d_min) + "!")
+            } else if (datadiff(Date.now(), d_max) < 0) {
+                alert("Essa manutenção não pode ser informada após o dia " + dateToEN(d_max) + "!")
+            } else if (datadiff2(transf_data_num(dateToEN2(document.getElementById('in_data_realizacao').value)), d_min) > 0) {
+                alert("Essa manutenção só pode ser realizada a partir do dia " + dateToEN(d_min) + "!")
+            } else if (datadiff(transf_data_num(dateToEN2(document.getElementById('in_data_realizacao').value)), d_max) < 0) {
+                alert("Essa manutenção não pode ser realizada após o dia " + dateToEN(d_max) + "!")
+            } else if (datadiff(transf_data_num(dateToEN2(document.getElementById('in_data_realizacao').value)), data_hoje_formatada) < 0) {
+                alert("Essa manutenção não pode ser realizada após o dia de hoje!")
+            } else if (nivel_manut == 2 && qt_docs == 0) {
+                alert('Esta manutenção precisa de pelo menos 1 documento comprovatório anexado!')
+            } else {
+                if (nivel_manut == 1 && qt_docs == 0) {
+                    var prosseguir = confirm('É importante anexar um documento que comprove esta manutenção. Tem certeza que deseja prosseguir sem anexar um comprovante?')
+                    if (prosseguir == false) { return }
                 }
-
-                if (data.value == 0) {
-                    alert('Obrigatório o preenchimento da data da realização da manutenção!')
-                    FocusInput(data)
-                } else if (datadiff2(Date.now(), d_min) > 0) {
-                    alert("Essa manutenção só pode ser informada a partir do dia " + dateToEN(d_min) + "!")
-                } else if (datadiff(Date.now(), d_max) < 0) {
-                    alert("Essa manutenção não pode ser informada após o dia " + dateToEN(d_max) + "!")
-                } else if (datadiff2(transf_data_num(dateToEN2(document.getElementById('in_data_realizacao').value)), d_min) > 0) {
-                    alert("Essa manutenção só pode ser realizada a partir do dia " + dateToEN(d_min) + "!")
-                } else if (datadiff(transf_data_num(dateToEN2(document.getElementById('in_data_realizacao').value)), d_max) < 0) {
-                    alert("Essa manutenção não pode ser realizada após o dia " + dateToEN(d_max) + "!")
-                } else if (datadiff(transf_data_num(dateToEN2(document.getElementById('in_data_realizacao').value)), data_hoje_formatada) < 0) {
-                    alert("Essa manutenção não pode ser realizada após o dia de hoje!")
-                } else if (nivel_manut == 2 && qt_docs == 0) {
-                    alert('Esta manutenção precisa de pelo menos 1 documento comprovatório anexado!')
-                } else {
-                    if (nivel_manut == 1 && qt_docs == 0) {
-                        var prosseguir = confirm('É importante anexar um documento que comprove esta manutenção. Tem certeza que deseja prosseguir sem anexar um comprovante?')
-                        if (prosseguir == false) { return }
+                if (qtdDocs_Device > 0) {
+                    if (qtdDocs_Device > 1) {
+                        continuar = confirm(`Você ainda tem ${qtdDocs_Device} documentos neste aparelho que não estão anexados no servidor! Deseja prosseguir?`)
+                    } else {
+                        continuar = confirm(`Você ainda tem ${qtdDocs_Device} documento neste aparelho que não está anexado no servidor! Deseja prosseguir?`)
                     }
-                    if (qtdDocs_Device > 0) {
-                        if (qtdDocs_Device > 1) {
-                            continuar = confirm(`Você ainda tem ${qtdDocs_Device} documentos neste aparelho que não estão anexados no servidor! Deseja prosseguir?`)
-                        } else {
-                            continuar = confirm(`Você ainda tem ${qtdDocs_Device} documento neste aparelho que não está anexado no servidor! Deseja prosseguir?`)
-                        }
-                        if (continuar == false) { return }
-                    }
-                    if (prosseguir == true || ((nivel_manut == 1 || nivel_manut == 2) && qt_docs > 0)) {
-                        var ajax3 = new XMLHttpRequest();
-                        ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/salvar_manut.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&econst=" + e_construtora + "&idpm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&d_data_realiz=" + dateToEN2(document.getElementById('in_data_realizacao').value) + "&d_forn=" + document.getElementById('valores').value + "&d_custoReal=" + document.getElementById('in_dado_custo_real').value + "&d_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value) + "&tipo=" + tipo + "&versao=2.2&env_em=" + ev_email + "&segur=" + crypt_segur + "&t=" + Math.random(), false);
-                        ajax3.addEventListener("loadend", function (evt) {
-                            var resposta_total = this.responseText;
-                            if (tipo == "alt") {
-                                alert("Alteração realizada com sucesso!")
-                            } else {
-                                alert("Manutenção realizada com sucesso!")
-                            }
-
-                            atualizar_texto_empree(id_prog_manut);
-                        });
-
-                        ajax3.send();
-                    }
+                    if (continuar == false) { return }
                 }
-
-            } else if (e_construtora == 1) {
-                var $email_construtora = document.getElementById('email_construtora')
-                if ($email_construtora.checked == true) {
-                    ev_email = 1
-                } else {
-                    ev_email = 0
-                }
-
-                if (datadiff2(Date.now(), d_min) > 0) {
-                    alert("Essa manutenção só pode ser informada a partir do dia " + dateToEN(d_min) + '!')
-                } else if (datadiff(Date.now(), d_max) <= 0) {
-                    alert("Essa manutenção não pode ser informada após o dia " + dateToEN(d_max) + '!')
-                } else {
-                    if (qtdDocs_Device > 0) {
-                        if (qtdDocs_Device > 1) {
-                            continuar = confirm(`Você ainda tem ${qtdDocs_Device} documentos neste aparelho que não estão anexados no servidor! Deseja prosseguir?`)
-                        } else {
-                            continuar = confirm(`Você ainda tem ${qtdDocs_Device} documento neste aparelho que não está anexado no servidor! Deseja prosseguir?`)
-                        }
-                        if (continuar == false) { return }
-                    }
+                if (prosseguir == true || ((nivel_manut == 1 || nivel_manut == 2) && qt_docs > 0)) {
                     var ajax3 = new XMLHttpRequest();
-                    ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/salvar_manut.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&econst=" + e_construtora + "&idpm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&d_data_realiz=" + document.getElementById('in_data_realizacao').value + "&d_forn=" + document.getElementById('valores').value + "&d_custoReal=" + document.getElementById('in_dado_custo_real').value + "&d_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value) + "&tipo=" + tipo + "&versao=2.2&env_em=" + ev_email + "&segur=" + crypt_segur + "&t=" + Math.random(), false);
-                    ajax3.addEventListener("loadend", function (evt) {
-                        var resposta_total = this.responseText;
-                        alert("Alterações realizadas com sucesso!")
+                    ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/salvar_manut.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&econst=" + e_construtora + "&idpm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&d_data_realiz=" + dateToEN2(document.getElementById('in_data_realizacao').value) + "&d_forn=" + document.getElementById('valores').value + "&d_custoReal=" + document.getElementById('in_dado_custo_real').value + "&d_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value) + "&tipo=" + tipo + "&versao=2.1&env_em=" + ev_email + "&segur=" + crypt_segur + "&t=" + Math.random(), false);
+                    ajax3.onreadystatechange = function () {
+                        if (ajax3.readyState == 4) {
+                            if (ajax3.status == 200 || ajax3.status == 0) {
 
-                        atualizar_texto_empree(id_prog_manut);
-                    });
+                                var resposta_total = ajax3.responseText;
+                                if (tipo == "alt") {
+                                    alert("Alteração realizada com sucesso!")
+                                } else {
+                                    alert("Manutenção realizada com sucesso!")
+                                }
 
+                                // reload_page_empree();
+                                atualizar_texto_empree(id_prog_manut);
+
+                            } else {
+                                alert("Problemas com sua conexão internet. Cod: 0166");
+                            }
+                        }
+                    }
                     ajax3.send();
-
                 }
             }
-        } else {
-            navigator.notification.confirm(
-                'Problemas com a sua conexão ao salvar a manutenção. Tentar novamente?',
-                function (buttonIndex) {
-                    if (buttonIndex === 2) {
-                        enviar_dados();
+
+        } else if (e_construtora == 1) {
+            var $email_construtora = document.getElementById('email_construtora')
+            if ($email_construtora.checked == true) {
+                ev_email = 1
+            } else {
+                ev_email = 0
+            }
+
+            if (datadiff2(Date.now(), d_min) > 0) {
+                alert("Essa manutenção só pode ser informada a partir do dia " + dateToEN(d_min) + '!')
+            } else if (datadiff(Date.now(), d_max) <= 0) {
+                alert("Essa manutenção não pode ser informada após o dia " + dateToEN(d_max) + '!')
+            } else {
+                if (qtdDocs_Device > 0) {
+                    if (qtdDocs_Device > 1) {
+                        continuar = confirm(`Você ainda tem ${qtdDocs_Device} documentos neste aparelho que não estão anexados no servidor! Deseja prosseguir?`)
+                    } else {
+                        continuar = confirm(`Você ainda tem ${qtdDocs_Device} documento neste aparelho que não está anexado no servidor! Deseja prosseguir?`)
                     }
-                },
-                'SigmaCivil',
-                ['Cancelar', 'Tentar novamente']
-            );
+                    if (continuar == false) { return }
+                }
+                var ajax3 = new XMLHttpRequest();
+                ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/salvar_manut.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&econst=" + e_construtora + "&idpm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&d_data_realiz=" + document.getElementById('in_data_realizacao').value + "&d_forn=" + document.getElementById('valores').value + "&d_custoReal=" + document.getElementById('in_dado_custo_real').value + "&d_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value) + "&tipo=" + tipo + "&versao=2.1&env_em=" + ev_email + "&segur=" + crypt_segur + "&t=" + Math.random(), false);
+                ajax3.onreadystatechange = function () {
+                    if (ajax3.readyState == 4) {
+                        if (ajax3.status == 200 || ajax3.status == 0) {
+
+                            var resposta_total = ajax3.responseText;
+                            alert("Alterações realizadas com sucesso!")
+
+                            reload_page_empree();
+
+                        } else {
+                            alert("Problemas com sua conexão internet. Cod: 0137");
+                        }
+                    }
+                }
+                ajax3.send();
+            }
         }
+
     }
 
     function apagar_fot_vid_aud_tex(q_cam) {
-        if (tem_conexao()) {
-            var q_cam;
-            if (e_construtora == 0) {
-                var trash = document.querySelector('.all_trash');
+        var q_cam;
+        if (e_construtora == 0) {
+            var trash = document.querySelector('.all_trash');
 
-                var res = confirm('Tem certeza que deseja excluir este arquivo?');
-                if (res == true) {
-                    if (datadiff2(Date.now(), d_min) > 0 || datadiff(Date.now(), d_max) < 0) {
-                        alert("A exclusão deste arquivo só pode ser realizada entre o período " + dateToEN(d_min) + ' a ' + dateToEN(d_max) + '!')
-                    } else if (nivel_manut == 2 && qt_docs == 1) {
-                        alert('Não é possível a exclusão, pois esta manutenção precisa de pelo menos 1 documento comprovatório anexado!')
-                    } else {
-                        var deletar_arq = "S";
-                        if (nivel_manut == 1 && qt_docs == 1) {
-                            prosseguir = confirm('É importante anexar um documento que comprove esta manutenção. Tem certeza que deseja prosseguir sem anexar um comprovante?')
-                            if (prosseguir == false) {
-                                deletar_arq = "N"
-                            }
+            var res = confirm('Tem certeza que deseja excluir este arquivo?');
+            if (res == true) {
+                if (datadiff2(Date.now(), d_min) > 0 || datadiff(Date.now(), d_max) < 0) {
+                    alert("A exclusão deste arquivo só pode ser realizada entre o período " + dateToEN(d_min) + ' a ' + dateToEN(d_max) + '!')
+                } else if (nivel_manut == 2 && qt_docs == 1) {
+                    alert('Não é possível a exclusão, pois esta manutenção precisa de pelo menos 1 documento comprovatório anexado!')
+                } else {
+                    var deletar_arq = "S";
+                    if (nivel_manut == 1 && qt_docs == 1) {
+                        prosseguir = confirm('É importante anexar um documento que comprove esta manutenção. Tem certeza que deseja prosseguir sem anexar um comprovante?')
+                        if (prosseguir == false) {
+                            deletar_arq = "N"
                         }
-                        if (deletar_arq == "S") {
-
-                            var verific1 = 3 * parseInt(id_empree) + 3 * parseInt(id_cliente)
-                            var verific2 = Math.abs(6 * parseInt(id_empree) - 3 * parseInt(id_cliente))
-                            var verific3 = Math.abs(3 * parseInt(id_empree) + 2 * parseInt(id_cliente))
-                            var verif_fim = verific1 + "S" + verific2 + "C" + verific3
-
-                            var ajax3 = new XMLHttpRequest();
-                            ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_excluir_arq.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&e_const=" + e_construtora + "&seg=" + verif_fim + "&cam=" + q_cam + "&versao=2.2");
-                            ajax3.addEventListener("loadend", function (evt) {
-                                var resposta_total = this.responseText;
-                                reload_page_even();
-                            });
-
-                            ajax3.send();
-
-                        }
-
                     }
-                }
-            } else if (e_construtora == 1) {
-                var res = confirm('Tem certeza que deseja excluir este arquivo?');
-                if (res == true) {
-                    if (datadiff2(Date.now(), d_min) > 0 || datadiff(Date.now(), d_max) < 0) {
-                        alert("A exclusão deste arquivo só pode ser realizada no período de " + dateToEN(d_min) + ' a ' + dateToEN(d_max) + '!')
-                    } else {
+                    if (deletar_arq == "S") {
 
                         var verific1 = 3 * parseInt(id_empree) + 3 * parseInt(id_cliente)
                         var verific2 = Math.abs(6 * parseInt(id_empree) - 3 * parseInt(id_cliente))
@@ -3251,28 +2862,55 @@
                         var verif_fim = verific1 + "S" + verific2 + "C" + verific3
 
                         var ajax3 = new XMLHttpRequest();
-                        ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_excluir_arq.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&e_const=" + e_construtora + "&seg=" + verif_fim + "&cam=" + q_cam + "&versao=2.2");
-                        ajax3.addEventListener("loadend", function (evt) {
-                            var resposta_total = this.responseText;
-                            reload_page_even();
-                        });
+                        ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_excluir_arq.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&e_const=" + e_construtora + "&seg=" + verif_fim + "&cam=" + q_cam + "&versao=2.1")
+                        ajax3.onreadystatechange = function () {
+                            if (ajax3.readyState == 4) {
+                                if (ajax3.status == 200 || ajax3.status == 0) {
 
+                                    var resposta_total = ajax3.responseText;
+                                    reload_page_even();
+
+                                } else {
+                                    alert("Problemas com sua conexão internet. Cod: 0147");
+                                }
+                            }
+                        }
                         ajax3.send();
 
                     }
+
                 }
             }
-        } else {
-            navigator.notification.confirm(
-                'Problemas com a sua conexão ao deletar arquivo. Tentar novamente?',
-                function (buttonIndex) {
-                    if (buttonIndex === 2) {
-                        apagar_fot_vid_aud_tex(q_cam);
+        } else if (e_construtora == 1) {
+            var res = confirm('Tem certeza que deseja excluir este arquivo?');
+            if (res == true) {
+                if (datadiff2(Date.now(), d_min) > 0 || datadiff(Date.now(), d_max) < 0) {
+                    alert("A exclusão deste arquivo só pode ser realizada no período de " + dateToEN(d_min) + ' a ' + dateToEN(d_max) + '!')
+                } else {
+
+                    var verific1 = 3 * parseInt(id_empree) + 3 * parseInt(id_cliente)
+                    var verific2 = Math.abs(6 * parseInt(id_empree) - 3 * parseInt(id_cliente))
+                    var verific3 = Math.abs(3 * parseInt(id_empree) + 2 * parseInt(id_cliente))
+                    var verif_fim = verific1 + "S" + verific2 + "C" + verific3
+
+                    var ajax3 = new XMLHttpRequest();
+                    ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_excluir_arq.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&e_const=" + e_construtora + "&seg=" + verif_fim + "&cam=" + q_cam + "&versao=2.1")
+                    ajax3.onreadystatechange = function () {
+                        if (ajax3.readyState == 4) {
+                            if (ajax3.status == 200 || ajax3.status == 0) {
+
+                                var resposta_total = ajax3.responseText;
+                                // alert("Arquivo excluido com sucesso!")
+                                reload_page_even();
+
+                            } else {
+                                alert("Problemas com sua conexão internet. Cod: 0157");
+                            }
+                        }
                     }
-                },
-                'SigmaCivil',
-                ['Cancelar', 'Tentar novamente']
-            );
+                    ajax3.send();
+                }
+            }
         }
     }
 
@@ -3352,50 +2990,6 @@
         return text;
     }
 
-    function go_relat_check2() {
-        if (tem_conexao()) {
-            window.location.assign("new_checkpoint_hist.htm?e=" + num_empree + /*"&id_sist=" + id_sis +*/ "&l=" + login + "&s=" + senha + "&qm=" + parseInt(mes_ev) + "&qa=" + parseInt(ano_ev))
-        } else {
-            alert('Você está sem conexão com a internet. Para visualizar o relatório online é necessário estar conectado. Favor se conectar.');
-        }
-    }
-
-    function openBrowser() {
-        var options = "location=yes,lefttoright=yes,toolbarcolor=#b10b0b,hideurlbar=yes,closebuttoncaption=<  SigmaCivil,closebuttoncolor=#ffffff";
-
-        cordova.InAppBrowser.open('https://www.google.com.br', '_blank', options);
-    }
-
-    function scrollDate() {
-        if (getMobileOperatingSystem() == "iOS") {
-            document.querySelector('.date_ios').click();
-            //document.querySelector('.date_ios').onclick = function() {
-            //alert('ponto 8')
-            // var options = {
-            //     date: new Date(),
-            //     mode: 'date'
-            // };
-
-            // function onSuccess(date) {
-            //     var mes_atual = date.getMonth() + 1;
-            //     document.querySelector('.date_ios').value = date.getDate() + '/' + mes_atual + '/' + date.getFullYear();
-            // }
-
-            // function onError(error) { // Android only
-            //     // alert('Error: ' + error);
-            // }
-
-            // datePicker.show(options, onSuccess, onError);
-            new Rolldate({
-                el: '.date_ios',
-                format: 'DD/MM/YYYY',
-                beginYear: 2016,
-                endYear: 2040
-            })
-            //};
-        }
-    }
-
     function RestricaoData() {
         // RESTRIÇÕES DE DATAS
         var textarea = document.querySelector('.textarea_obs');
@@ -3439,38 +3033,23 @@
     }
 
     function getMobileOperatingSystem() {
-        var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+		var userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
-        // Windows Phone must come first because its UA also contains "Android"
-        if (/windows phone/i.test(userAgent)) {
-            return "Windows Phone";
-        }
+		// Windows Phone must come first because its UA also contains "Android"
+		if (/windows phone/i.test(userAgent)) {
+			return "Windows Phone";
+		}
 
-        if (/android/i.test(userAgent)) {
-            return "Android";
-        }
+		if (/android/i.test(userAgent)) {
+			return "Android";
+		}
 
-        // iOS detection from: http://stackoverflow.com/a/9039885/177710
-        if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-            return "iOS";
-        }
+		// iOS detection from: http://stackoverflow.com/a/9039885/177710
+		if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+			return "iOS";
+		}
 
-        return "unknown";
-    }
-
-    function closeApp() {
-        navigator.notification.confirm(
-            'Tem certeza que deseja sair do app SigmaCivil?',
-            function (buttonIndex) {
-                if (buttonIndex === 2) {
-                    return;
-                }
-
-                navigator.app.exitApp();
-            },
-            'SigmaCivil',
-            ['OK', 'Cancelar']
-        );
-    }
+		return "unknown";
+	}
 
 </script>

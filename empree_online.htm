@@ -335,14 +335,12 @@
                 }
             }
 
-            var imgConexao = 'images/wifi_verde.png';
-
             var menu_sup_offline = [
                 '<form name="form_sup" action="" method="get">',
                 '<div data-role="header" data-position="fixed" data-theme="a">',
                 '<div class="ui-corner-all custom-corners">',
                 '<div class="ui-bar ui-bar-a" style="height:38;text-align:center">',
-                '<div class="barra1" align="left"><img src="' + imgConexao + '" style="position: absolute; left: 70px; top: 20px;" width="17" /></div>',
+                '<div class="barra1" align="left"><img src="images/wifi_vermelho.png" style="position: absolute; left: 70px; top: 20px;" width="17" /></div>',
                 '<div align="center">',
                 '<table width="30" border="0" cellpadding="0" cellspacing="0" >',
                 '<tr>',
@@ -362,7 +360,7 @@
                 '<div data-role="header" data-position="fixed" data-theme="a">',
                 '<div class="ui-corner-all custom-corners">',
                 '<div class="ui-bar ui-bar-a" style="height:38;text-align:center">',
-                '<div class="barra1" align="left"><img src="' + imgConexao + '" style="position: absolute; left: 70px; top: 20px;" width="17" /></div>',
+                '<div class="barra1" align="left"><img src="images/wifi_verde.png" style="position: absolute; left: 70px; top: 20px;" width="17" /></div>',
                 '<div align="center">',
                 '<table width="30" border="0" cellpadding="0" cellspacing="0" >',
                 '<tr>',
@@ -383,16 +381,8 @@
                 // window.StatusBar.hide();
 
                 if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
-                    // document.getElementById('menu_opc2').innerHTML = menu_sup_offline;
-                    imgConexao = 'images/wifi_vermelho.png'
-
+                    document.getElementById('menu_opc2').innerHTML = menu_sup_offline;
                     return false;
-                }
-                else {
-                    // document.getElementById('menu_opc2').innerHTML = menu_sup_online;
-                    imgConexao = 'images/wifi_verde.png'
-
-                    return true;
                 }
             }, 5000);
 

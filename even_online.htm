@@ -15,6 +15,7 @@
     <script src="js/jquery.js"></script>
     <script src="js/jquery.mobile-1.4.5.min.js"></script>
     <script src="js/rolldate.js"></script>
+    <script src="js/scrollPage.js"></script>
     <style>
         .menu .ui-mini.ui-btn-icon-left:after,
         .ui-mini .ui-btn-icon-left:after,
@@ -121,6 +122,7 @@
 
             // CASCA OFFLINE
             var menu_sup_offline = [
+                '<div class="menu_opc">',
                 '<form name="form_sup" action="" method="get">',
                 '<div data-role="header" data-position="fixed" data-theme="a">',
                 '<div class="ui-corner-all custom-corners">',
@@ -137,11 +139,13 @@
                 '</div>',
                 '</div>',
                 '</div>',
-                '</form>'
+                '</form>',
+                '</div>'
             ].join('');
 
             // CASCA ONLINE
             var menu_sup_online = [
+                '<div class="menu_opc">',
                 '<form name="form_sup" action="" method="get">',
                 '<div data-role="header" data-position="fixed" data-theme="a">',
                 '<div class="ui-corner-all custom-corners">',
@@ -158,11 +162,29 @@
                 '</div>',
                 '</div>',
                 '</div>',
-                '</form>'
+                '</form>',
+                '</div>'
             ].join('');
 
             document.getElementById('menu_opc2').innerHTML = menu_sup_online;
 
+            var prevScrollpos = window.pageYOffset;
+            window.onscroll = function () {
+                var currentScrollPos = window.pageYOffset;
+                if (prevScrollpos > currentScrollPos) {
+                    document.querySelector(".menu_opc").style.top = "0";
+                    // document.querySelector("#qtd_manut_pendentes").style.top = "16px";
+                    document.querySelector(".main-menu-bars").style.top = "4px";
+                } else if (prevScrollpos < currentScrollPos) {
+                    document.querySelector(".menu_opc").style.top = "-80px";
+                    // document.querySelector("#qtd_manut_pendentes").style.top = "-80px";
+                    document.querySelector(".main-menu-bars").style.top = "-80px";
+                } else {
+                    console.log('entrou');
+                }
+
+                prevScrollpos = currentScrollPos;
+            }
 
             // FUNÇÃO QUE VERIFICA SE TEM INTERNET A CADA 5 SEGUNDOS
             setInterval(function () {
@@ -2253,7 +2275,7 @@
 
     <!-- MENU BURGER -->
     <div class="btn-bars" style="display: none;">
-        <div style="top:4; z-index: 30;" data-role="collapsible" data-collapsed="true" class="ui-btn-left menu"
+        <div style="top:4; z-index: 50; position: fixed;" data-role="collapsible" data-collapsed="true" class="ui-btn-left menu main-menu-bars"
             data-mini="true">
             <h4 class="btn-bars-bars">
                 <!-- <span class="fas fa-bars"></span> -->
@@ -2277,7 +2299,7 @@
     </div>
 
     <!-- NOME EMPREENDIMENTO -->
-    <div style="text-align: center;">
+    <div style="text-align: center;  margin-top: 66px; margin-top: 66px;">
         <h4 id="nome_empree_id" style="display: inline; position: relative; bottom: 2px;"></h4>
     </div>
 
@@ -2501,51 +2523,51 @@
 
 <script>
     $(document).ready(function () {
-        $('.circle-question').mouseover(function () {
-            $('.screen-over').fadeIn(400)
-        })
+    $('.circle-question').mouseover(function () {
+    $('.screen-over').fadeIn(400)
+    })
 
-        $('.fa-times').click(function () {
-            $('.screen-over').hide()
-        })
+    $('.fa-times').click(function () {
+    $('.screen-over').hide()
+    })
 
-        $('.btn-bars .ui-btn').click(function () {
-            $('.menu .fa-bars').toggleClass('fa-times')
-        })
+    $('.btn-bars .ui-btn').click(function () {
+    $('.menu .fa-bars').toggleClass('fa-times')
+    })
 
-        $('.btn-bars-bars').click(function () {
-            $('.is-bars').toggleClass('is-disabled')
-            $('.is-times').toggleClass('is-disabled')
-        })
+    $('.btn-bars-bars').click(function () {
+    $('.is-bars').toggleClass('is-disabled')
+    $('.is-times').toggleClass('is-disabled')
+    })
 
-        $('#parte_load').click(function () {
-            $('html, body').animate({
-                scrollTop: 1500
-            }, 500)
-        })
+    $('#parte_load').click(function () {
+    $('html, body').animate({
+    scrollTop: 1500
+    }, 500)
+    })
 
-        $('.abrir_popup_foto').click(function () {
-            $('.pop_photo_big').css({
-                display: 'flex'
-            })
-        })
+    $('.abrir_popup_foto').click(function () {
+    $('.pop_photo_big').css({
+    display: 'flex'
+    })
+    })
 
-        $(".btn-salvar").click(function () {
-            $('html, body').animate({
-                scrollTop: 0
-            }, 500);
-        });
+    $(".btn-salvar").click(function () {
+    $('html, body').animate({
+    scrollTop: 0
+    }, 500);
+    });
 
-        $("#parte_load").click(function () {
-            $('html, body').animate({
-                scrollTop: 0
-            }, 500);
-        });
+    $("#parte_load").click(function () {
+    $('html, body').animate({
+    scrollTop: 0
+    }, 500);
+    });
 
     })
 
     function FocusInput(element) {
-        return element.click()
+    return element.click()
     }
 
 </script>

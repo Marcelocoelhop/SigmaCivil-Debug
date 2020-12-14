@@ -382,9 +382,17 @@
             setInterval(function () {
                 // window.StatusBar.hide();
 
+                var currentScrollPos = window.pageYOffset;
+
                 if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
+                    if (currentScrollPos > 0) return;
                     document.getElementById('menu_opc2').innerHTML = menu_sup_offline;
                     return false;
+                }
+                else {
+                    if (currentScrollPos > 0) return;
+                    document.getElementById('menu_opc2').innerHTML = menu_sup_online;
+                    return true;
                 }
             }, 5000);
 

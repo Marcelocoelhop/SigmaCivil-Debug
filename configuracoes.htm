@@ -1135,6 +1135,8 @@
 		// window.location.href = "#ancora123"
 		//}
 
+		if (!textoURL) return;
+
 		var data = 'tx=' + encodeURIComponent(textoURL) + '&ipm=' + id_prog_manut + '&d=' + dia_ev + '&m=' + mes_ev + '&a=' + ano_ev + "&econst=" + e_construtora + "&idc=" + id_cliente;
 		var ajax = new XMLHttpRequest();
 		if (tem_conexao()) {
@@ -1142,7 +1144,6 @@
 			ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 			ajax.addEventListener("loadend", function (evt) {
 				var resposta_total = this.responseText;
-				alert(resposta_total);
 				if (resposta_total == "grav_ok") {
 					var db;
 					var request = window.indexedDB.open("db_sigmacivil", "1");

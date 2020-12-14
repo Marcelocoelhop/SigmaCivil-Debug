@@ -10,7 +10,7 @@ window.onscroll = function () {
         document.querySelector("#qtd_manut_pendentes").style.top = "-80px";
         document.querySelector(".main-menu-bars").style.top = "-80px";
     } else {
-        console.log('entrou');
+        null;
     }
 
     prevScrollpos = currentScrollPos;

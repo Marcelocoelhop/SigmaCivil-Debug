@@ -12,6 +12,7 @@
 	<script type="text/javascript" src="cordova.js"></script>
 	<script src="js/jquery.js"></script>
 	<script src="js/jquery.mobile-1.4.5.min.js"></script>
+	<script src="js/asyncawait.js"></script>
 	<style>
 		.menu .ui-mini.ui-btn-icon-left:after,
 		.ui-mini .ui-btn-icon-left:after,
@@ -295,8 +296,10 @@
 					vetor_consulta_evento = vetor_consulta_evento.substring(0, vetor_consulta_evento.length - 1);
 					vetor_dados_manutencao = vetor_dados_manutencao.substring(0, vetor_dados_manutencao.length - 1);
 
+					var data_post = "l=" + login + "&s=" + senha + "&d=" + vetor_consulta_evento;
 					var ajax2 = new XMLHttpRequest();
-					ajax2.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_evento_onlineB.asp?l=" + login + "&s=" + senha + "&d=" + vetor_consulta_evento + "&versao=2.2&t=" + Math.random(), false);
+					ajax2.open("POST", "https://www.sigmacivil.com.br/app_sc/consult_evento_onlineB.asp?versao=2.2&t=" + Math.random(), true);
+					ajax2.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 					ajax2.addEventListener("loadend", function (evt) {
 						var resposta_total = this.responseText;
 						var jsontext = resposta_total.split("#")
@@ -337,7 +340,7 @@
 						}
 					});
 
-					ajax2.send();
+					ajax2.send(data_post);
 
 				} else { //nao logou
 					window.location.assign("login.htm");
@@ -445,6 +448,8 @@
 
 	<button type="button" onclick="uploadArquivos()">Upload de arquivos</button>
 
+	<div id="progress-value"></div>
+
 	<!-- Menu bottom -->
 	<nav class="main-menu-bottom">
 		<div>
@@ -486,8 +491,6 @@
 	var e_construtora = getquerystring("econst");
 
 	var attrs = [];
-	var ids = [];
-	var auxs = [];
 
 	var id_sis = getquerystring("id_sis");
 
@@ -521,11 +524,6 @@
 				consultaManutEvento(db, ipm_, dia_, mes_, ano_);
 			}
 
-
-			//consultaManutEvento(db);
-
-			// consultaConfig();
-
 			db.onerror = function (event) {
 				alert("Database error: " + event.target.errorCode);
 			}
@@ -546,8 +544,6 @@
 				var tam_ti;
 				var aux_image_upload;
 
-				// alert('chegou aqui 2');
-
 				if (cursor) {
 					var rrr_caminho_imagens = cursor.value.caminho_imagens;
 					var rrr_caminho_texto = cursor.value.caminho_texto;
@@ -562,13 +558,6 @@
 					var rrr_status_caminho_audio = cursor.value.status_audio_upl;
 					var rrr_status_caminho_texto = cursor.value.status_texto_upl;
 				}
-
-				// alert('chegou aqui 3');
-
-				// alert(id_prog_manut);
-
-				// alert(rrr_caminho_imagens);
-				// alert(rrr_status_caminho_imagens);
 
 				var todas_imagens = ""
 				var todas_status_imagens = ""
@@ -585,7 +574,6 @@
 
 					if (todas_status_imagens[k] == '0') {
 						aux_image_upload = 'upload.png';
-						// alert(k);
 						upload_imagem(k, id_prog_manut, dia_ev, mes_ev, ano_ev);
 					}
 					else {
@@ -596,6 +584,30 @@
 					if (aux_image_upload == 'upload.png') {
 						qtd_tam_ti = k + 1;
 					}
+				}
+
+				if (rrr_status_caminho_video == '0') {
+					aux_image_upload = 'upload.png';
+					upload_video(id_prog_manut, dia_ev, mes_ev, ano_ev);
+				}
+				else {
+					aux_image_upload = 'upload_verde.png';
+				}
+
+				if (rrr_status_caminho_audio == '0') {
+					aux_image_upload = "upload.png";
+					upload_audio(id_prog_manut, dia_ev, mes_ev, ano_ev);
+				}
+				else {
+					aux_image_upload = "upload_verde.png";
+				}
+
+				if (rrr_status_caminho_texto == '0') {
+					aux_image_upload = 'upload.png';
+					upload_texto(id_prog_manut, dia_ev, mes_ev, ano_ev);
+				}
+				else {
+					aux_image_upload = 'upload_verde.png';
 				}
 
 			}
@@ -652,7 +664,6 @@
 						// marcar que foi feito upload para esta imagem
 
 						aux_status_imagens_upl = data.status_imagens_upl;
-						// alert("aux_status_imagens_upl: " + aux_status_imagens_upl)
 
 						all_status_images = aux_status_imagens_upl.split("**");
 						taman = all_status_images.length;
@@ -661,24 +672,16 @@
 
 						for (k = 0; k < taman; k++) {
 							if (q_id != k) {
-								// alert('ponto 0');
 								aux_1_status = aux_1_status + all_status_images[k] + "**"
 							}
 							else {
-								// alert('ponto 1');
 								aux_1_status = aux_1_status + "1" + "**"
 								var ja_fez_upload = all_status_images[k]
 							}
 						}
 
-						// alert(id_prog_manut);
-
-						// alert("aux_1_status: " + aux_1_status)
-
 						aux_1_status = aux_1_status.substring(0, aux_1_status.length - 2)
 						// fim  marcar que foi feito upload para esta imagem
-
-						// alert("aux_1_status: " + aux_1_status)
 
 						if (ja_fez_upload != '1') {
 							up_loadPhoto(aux_2, q_id, aux_1_status, id_prog_manut, dia_ev, mes_ev, ano_ev);
@@ -705,12 +708,6 @@
 
 	function up_loadPhoto(imageURI, q_k, aux_1_status, id_prog_manut, dia_ev, mes_ev, ano_ev) {
 
-		//if (!uploadAutomatic) {
-		/*document.getElementById("parte_load_content").style.display = "block";
-		document.getElementById("parte_load").style.display = "flex";
-		window.location.href = "#ancora123"*/
-		//}
-
 		var q_k;
 		var options = new FileUploadOptions();
 		options.fileKey = "file";
@@ -725,7 +722,19 @@
 		options.chunkedMode = false;
 
 		var ft = new FileTransfer();
-		// alert("http://www.sigmacivil.com.br/app_sc/rec_foto_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + q_mes + "&ano=" + q_ano + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k)
+		var progressValue = 0;
+		ft.onprogress = function (progressEvent) {
+			if (progressEvent.lengthComputable) {
+				// Calculate the percentage
+				progressValue = Math.round(progressEvent.loaded / progressEvent.total * 100);
+			} else {
+				progressValue++;
+			}
+
+			// Display percentage in the UI
+			document.getElementById("progress-value").innerHTML = progressValue.toFixed(2);
+		};
+
 		ft.upload(imageURI, "http://www.sigmacivil.com.br/app_sc/rec_foto_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + q_mes + "&ano=" + q_ano + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up(id_prog_manut, dia_ev, mes_ev, ano_ev, aux_1_status), fail_up, options);
 	}
 
@@ -737,46 +746,35 @@
 			alert("Erro ao criar o banco (cod 05)");
 		};
 
-		ids.push(id_prog_manut);
+		sleep(2000);
+
+		var status_photo = aux_1_status.split('0').join('1');
+
+		var storage = localStorage.setItem(`status_${id_prog_manut}_${dia_ev}_${mes_ev}_${ano_ev}`, status_photo);
 
 		request.onsuccess = function (event) {
 			db = request.result;
 
-			// alert("length: " + ids.length);
-
-			updateManutEventoWinUp(db, id_prog_manut, dia_ev, mes_ev, ano_ev, aux_1_status, ids);
+			updateManutEventoWinUp(db, id_prog_manut, dia_ev, mes_ev, ano_ev, aux_1_status);
 
 			db.onerror = function (event) {
 				alert("Database error: " + event.target.errorCode);
 			}
 		}
 
-		function updateManutEventoWinUp(db, id_prog_manut, dia_ev, mes_ev, ano_ev, aux_1_status, ids) {
+		function updateManutEventoWinUp(db, id_prog_manut, dia_ev, mes_ev, ano_ev, aux_1_status) {
 			var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
 			var store = tx.objectStore('mtab_prog_manut_evento');
 			var index = store.index('comparar');
-			for (var i = 0; i < ids.length; i++) {
-				var whereEquals = IDBKeyRange.only([ids[i], dia_ev, mes_ev, ano_ev]);
-				index.openCursor(whereEquals).onsuccess = function (event) {
-					var cursor = event.target.result;
-					if (cursor) {
-						var data = cursor.value;
+			var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+			index.openCursor(whereEquals).onsuccess = function (event) {
+				var cursor = event.target.result;
+				if (cursor) {
+					var data = cursor.value;
 
-						data.status_imagens_upl = aux_1_status.split('0').join('1');
+					data.status_imagens_upl = localStorage.getItem(`status_${id_prog_manut}_${dia_ev}_${mes_ev}_${ano_ev}`);
 
-						// alert(id_prog_manut + " - " + aux_1_status);
-						// alert("data.status_imagens_upl: " + data.status_imagens_upl)
-
-						var request = cursor.update(data);
-						request.onsuccess = function (event) {
-							//if (!uploadAutomatic) {
-							// go_to_page_config();
-							// alert('fooi')
-							//}
-						}
-
-						// cursor.continue();
-					}
+					var request = cursor.update(data);
 				}
 			}
 		}
@@ -799,6 +797,433 @@
 		);
 	}
 	// FIM UPLOAD IMAGEM
+
+	// UPLOAD VIDEO
+	function upload_video(id_prog_manut, dia_ev, mes_ev, ano_ev) {
+
+		if (tem_conexao()) {
+
+			var db;
+			var request = window.indexedDB.open("db_sigmacivil", "1");
+
+			request.onerror = function (event) {
+				alert("Erro ao criar o banco (cod 08)");
+			};
+
+			request.onsuccess = function (event) {
+				db = request.result;
+
+				uploadManutEventoVideo(db);
+
+				db.onerror = function (event) {
+					alert("Database error: " + event.target.errorCode);
+				}
+			}
+
+			function uploadManutEventoVideo(db) {
+				var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+				var store = tx.objectStore('mtab_prog_manut_evento');
+				var index = store.index('comparar');
+				var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+				var objectStoreRequest = index.openCursor(whereEquals);
+				objectStoreRequest.onsuccess = function (event) {
+					var cursor = event.target.result;
+					if (cursor) {
+						var data = cursor.value;
+
+						if (cursor.value.status_video_upl != '1') {
+							var aux_caminho_video = data.caminho_video;
+							up_loadVideo(aux_caminho_video, id_prog_manut, dia_ev, mes_ev, ano_ev);
+						}
+						else {
+							var aux_caminho_video = data.caminho_video;
+							up_loadVideo(aux_caminho_video, id_prog_manut, dia_ev, mes_ev, ano_ev);
+						}
+					}
+				}
+			}
+		} else {
+			navigator.notification.confirm(
+				'Problemas com a sua conexão ao fazer upload do vídeo. Tentar novamente?',
+				function (buttonIndex) {
+					if (buttonIndex === 2) {
+						upload_video(id_prog_manut, dia_ev, mes_ev, ano_ev);
+					}
+				},
+				'SigmaCivil',
+				['Cancelar', 'Tentar novamente']
+			);
+		}
+	}
+
+	// UPLOAD VIDEO
+	function up_loadVideo(videoURL, id_prog_manut, dia_ev, mes_ev, ano_ev) {
+
+		//if (!uploadAutomatic) {
+		// document.getElementById("parte_load_content").style.display = "block";
+		// document.getElementById("parte_load").style.display = "flex";
+		// window.location.href = "#ancora123"
+		//}
+
+		var options = new FileUploadOptions();
+		options.fileKey = "file";
+		options.fileName = videoURL.substr(videoURL.lastIndexOf('/') + 1);
+		options.mimeType = "video/mp4";
+		options.chunkedMode = false;
+
+		var ft = new FileTransfer();
+		ft.upload(videoURL, "http://www.sigmacivil.com.br/app_sc/rec_video_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente, win_up_v(id_prog_manut, dia_ev, mes_ev, ano_ev), fail_up_v, options);
+
+	}
+
+	var win_up_v = function (id_prog_manut, dia_ev, mes_ev, ano_ev, r) {
+		var db;
+		var request = window.indexedDB.open("db_sigmacivil", "1");
+
+		request.onerror = function (event) {
+			alert("Erro ao criar o banco (cod 09)");
+		};
+
+		request.onsuccess = function (event) {
+			db = request.result;
+
+			updateManutEventoWinUpVideo(db, id_prog_manut, dia_ev, mes_ev, ano_ev);
+
+			db.onerror = function (event) {
+				alert("Database error: " + event.target.errorCode);
+			}
+		}
+
+		function updateManutEventoWinUpVideo(db, id_prog_manut, dia_ev, mes_ev, ano_ev) {
+			var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+			var store = tx.objectStore('mtab_prog_manut_evento');
+			var index = store.index('comparar');
+			var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+			index.openCursor(whereEquals).onsuccess = function (event) {
+				var cursor = event.target.result;
+				if (cursor) {
+					var data = cursor.value;
+
+					data.status_video_upl = "1";
+
+					var request = cursor.update(data);
+					request.onsuccess = function (event) {
+						//if (!uploadAutomatic) {
+						//reload_page();
+						//}
+					}
+				}
+			}
+		}
+	}
+
+	var fail_up_v = function (error) {
+		document.getElementById("parte_load_content").style.display = "none";
+		document.getElementById("parte_load").style.display = "none";
+		// alert("Não foi feito o upload do vídeo!");
+
+		navigator.notification.confirm(
+			'Não foi feito o upload do vídeo. Tentar novamente?',
+			function (buttonIndex) {
+				if (buttonIndex === 2) {
+					consultaConfig();
+				}
+			},
+			'SigmaCivil',
+			['Cancelar', 'Tentar novamente']
+		);
+	}
+	// FIM UPLOAD VIDEO
+
+	// UPLOAD AUDIO
+	function upload_audio(id_prog_manut, dia_ev, mes_ev, ano_ev) {
+
+		if (tem_conexao()) {
+
+			var db;
+			var request = window.indexedDB.open("db_sigmacivil", "1");
+
+			request.onerror = function (event) {
+				alert("Erro ao criar o banco (cod 12)");
+			};
+
+			request.onsuccess = function (event) {
+				db = request.result;
+
+				uploadManutEventoAudio(db);
+
+				db.onerror = function (event) {
+					alert("Database error: " + event.target.errorCode);
+				}
+			}
+
+			function uploadManutEventoAudio(db) {
+				var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+				var store = tx.objectStore('mtab_prog_manut_evento');
+				var index = store.index('comparar');
+				var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+				var objectStoreRequest = index.openCursor(whereEquals);
+				objectStoreRequest.onsuccess = function (event) {
+					var cursor = event.target.result;
+					if (cursor) {
+						var data = cursor.value;
+
+						if (cursor.value.status_audio_upl != '1') {
+							var aux_caminho_audio = data.caminho_audio;
+							up_loadAudio(aux_caminho_audio, id_prog_manut, dia_ev, mes_ev, ano_ev);
+						}
+						else {
+							var aux_caminho_audio = data.caminho_audio;
+							up_loadAudio(aux_caminho_audio, id_prog_manut, dia_ev, mes_ev, ano_ev);
+						}
+					}
+				}
+			}
+		} else {
+			navigator.notification.confirm(
+				'Problemas com a sua conexão ao fazer upload do áudio. Tentar novamente?',
+				function (buttonIndex) {
+					if (buttonIndex === 2) {
+						upload_audio();
+					}
+				},
+				'SigmaCivil',
+				['Cancelar', 'Tentar novamente']
+			);
+		}
+	}
+
+	function up_loadAudio(audioURL, id_prog_manut, dia_ev, mes_ev, ano_ev) {
+
+		//if (!uploadAutomatic) {
+		document.getElementById("parte_load_content").style.display = "block";
+		document.getElementById("parte_load").style.display = "flex";
+		window.location.href = "#ancora123"
+		//}
+
+		var options = new FileUploadOptions();
+		options.fileKey = "file";
+		options.fileName = audioURL.substr(audioURL.lastIndexOf('/') + 1);
+		options.mimeType = "audio/amr";
+		options.chunkedMode = false;
+
+		var ft = new FileTransfer();
+		ft.upload(audioURL, "http://www.sigmacivil.com.br/app_sc/rec_audio_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente, win_up_a(id_prog_manut, dia_ev, mes_ev, ano_ev), fail_up_a, options);
+
+	}
+
+	var win_up_a = function (id_prog_manut, dia_ev, mes_ev, ano_ev, r) {
+		var db;
+		var request = window.indexedDB.open("db_sigmacivil", "1");
+
+		request.onerror = function (event) {
+			alert("Erro ao criar o banco (cod 13)");
+		};
+
+		request.onsuccess = function (event) {
+			db = request.result;
+
+			updateManutEventoWinUpAudio(db);
+
+			db.onerror = function (event) {
+				alert("Database error: " + event.target.errorCode);
+			}
+		}
+
+		function updateManutEventoWinUpAudio(db) {
+			var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+			var store = tx.objectStore('mtab_prog_manut_evento');
+			var index = store.index('comparar');
+			var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+			index.openCursor(whereEquals).onsuccess = function (event) {
+				var cursor = event.target.result;
+				if (cursor) {
+					var data = cursor.value;
+
+					data.status_audio_upl = "1";
+
+					var request = cursor.update(data);
+					request.onsuccess = function (event) {
+						//if (!uploadAutomatic) {
+						//reload_page();
+						//}
+					}
+				}
+			}
+		}
+	}
+
+	var fail_up_a = function (error) {
+		document.getElementById("parte_load_content").style.display = "none";
+		document.getElementById("parte_load").style.display = "none";
+		// alert("Não foi feito o upload do áudio!");
+
+		navigator.notification.confirm(
+			'Não foi feito o upload do áudio. Tentar novamente?',
+			function (buttonIndex) {
+				if (buttonIndex === 2) {
+					consultaConfig();
+				}
+			},
+			'SigmaCivil',
+			['Cancelar', 'Tentar novamente']
+		);
+	}
+	// FIM UPLOAD AUDIO
+
+	// UPLOAD TEXTO
+	function upload_texto(id_prog_manut, dia_ev, mes_ev, ano_ev) {
+
+		if (tem_conexao()) {
+			var db;
+			var request = window.indexedDB.open("db_sigmacivil", "1");
+
+			request.onerror = function (event) {
+				alert("Erro ao criar o banco (cod 14)");
+			};
+
+			request.onsuccess = function (event) {
+				db = request.result;
+
+				uploadManutEventoTexto(db);
+
+				db.onerror = function (event) {
+					alert("Database error: " + event.target.errorCode);
+				}
+			}
+
+			function uploadManutEventoTexto(db) {
+				var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+				var store = tx.objectStore('mtab_prog_manut_evento');
+				var index = store.index('comparar');
+				var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+				var objectStoreRequest = index.openCursor(whereEquals);
+				objectStoreRequest.onsuccess = function (event) {
+					var cursor = event.target.result;
+					if (cursor) {
+						var data = cursor.value;
+
+						if (cursor.value.status_texto_upl != '1') {
+							var aux_caminho_texto = data.caminho_texto;
+							up_loadTexto(aux_caminho_texto, id_prog_manut, dia_ev, mes_ev, ano_ev);
+						} else {
+							var aux_caminho_texto = data.caminho_texto;
+							up_loadTexto(aux_caminho_texto, id_prog_manut, dia_ev, mes_ev, ano_ev);
+						}
+					}
+				}
+			}
+		} else {
+			navigator.notification.confirm(
+				'Problemas com a sua conexão ao fazer upload do texto. Tentar novamente?',
+				function (buttonIndex) {
+					if (buttonIndex === 2) {
+						upload_texto();
+					}
+				},
+				'SigmaCivil',
+				['Cancelar', 'Tentar novamente']
+			);
+		}
+	}
+
+	function up_loadTexto(textoURL, id_prog_manut, dia_ev, mes_ev, ano_ev) {
+
+		//if (!uploadAutomatic) {
+		// document.getElementById("parte_load_content").style.display = "block";
+		// document.getElementById("parte_load").style.display = "flex";
+		// window.location.href = "#ancora123"
+		//}
+
+		var data = 'tx=' + encodeURIComponent(textoURL) + '&ipm=' + id_prog_manut + '&d=' + dia_ev + '&m=' + mes_ev + '&a=' + ano_ev + "&econst=" + e_construtora + "&idc=" + id_cliente;
+		var ajax = new XMLHttpRequest();
+		if (tem_conexao()) {
+			ajax.open("POST", "https://www.sigmacivil.com.br/app_sc/rec_texto_uploaded.asp?versao=2.2", true);
+			ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			ajax.addEventListener("loadend", function (evt) {
+				var resposta_total = this.responseText;
+				alert(resposta_total);
+				if (resposta_total == "grav_ok") {
+					var db;
+					var request = window.indexedDB.open("db_sigmacivil", "1");
+
+					request.onerror = function (event) {
+						alert("Erro ao criar o banco (cod 15)");
+					};
+
+					request.onsuccess = function (event) {
+						db = request.result;
+
+						uploadManutEventoWinUpTexto(db);
+
+						db.onerror = function (event) {
+							alert("Database error: " + event.target.errorCode);
+						}
+					}
+
+					function uploadManutEventoWinUpTexto(db) {
+						var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+						var store = tx.objectStore('mtab_prog_manut_evento');
+						var index = store.index('comparar');
+						var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+						index.openCursor(whereEquals).onsuccess = function (event) {
+							var cursor = event.target.result;
+							if (cursor) {
+								var data = cursor.value;
+
+								data.status_texto_upl = "1";
+
+								var request = cursor.update(data);
+								request.onsuccess = function (event) {
+									//if (!uploadAutomatic) {
+									//reload_page();
+									//}
+								}
+							}
+						}
+					}
+				} else {
+					document.getElementById("parte_load_content").style.display = "none";
+					document.getElementById("parte_load").style.display = "none";
+					// alert("Problemas com a gravação do texto. Tente novamente mais tarde (cod 08).");
+
+					navigator.notification.confirm(
+						'Problemas com a gravação do texto. Tentar novamente?',
+						function (buttonIndex) {
+							if (buttonIndex === 2) {
+								consultaConfig();
+							}
+						},
+						'SigmaCivil',
+						['Cancelar', 'Tentar novamente']
+					);
+				}
+			});
+
+			data = data.split(":").join("%3A")
+			data = data.split("{").join(" % 7B")
+			data = data.split("}").join("%7D")
+			data = data.split(",").join("%2C")
+			data = data.split("[").join("%5B")
+			data = data.split("]").join("%5D")
+			data = data.split(String.fromCharCode(34)).join("%22")
+
+			ajax.send(data);
+		} else {
+			navigator.notification.confirm(
+				'Problemas com a sua conexão. Tentar novamente?',
+				function (buttonIndex) {
+					if (buttonIndex === 2) {
+						consultaConfig();
+					}
+				},
+				'SigmaCivil',
+				['Cancelar', 'Tentar novamente']
+			);
+		}
+
+	}
+	// FIM UPLOAD TEXTO
 
 	function editaImagem() {
 		var db;
@@ -1266,6 +1691,15 @@ xhr.send()*/
 			'SigmaCivil',
 			['OK', 'Cancelar']
 		);
+	}
+
+	function sleep(milliseconds) {
+		var start = new Date().getTime();
+		for (var i = 0; i < 1e7; i++) {
+			if ((new Date().getTime() - start) > milliseconds) {
+				break;
+			}
+		}
 	}
 
 </script>

@@ -1097,7 +1097,7 @@
                 }
             ];
 
-            // alert(id_prog_manut)
+            alert(id_prog_manut)
             // alert(dia_ev)
             // alert(mes_ev)
             // alert(ano_ev)
@@ -2127,6 +2127,7 @@
                 ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
                 ajax.addEventListener("loadend", function (evt) {
                     var resposta_total = this.responseText;
+                    alert(resposta_total);
                     if (resposta_total == "grav_ok") {
                         var db;
                         var request = window.indexedDB.open("db_sigmacivil", "1");

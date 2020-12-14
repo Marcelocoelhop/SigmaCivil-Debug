@@ -643,12 +643,9 @@
 			alert("Sem conexão com internet! Não é possível sincronizar!");
 		} else {
 			var ajax = new XMLHttpRequest();
-			ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/sincronizar_checkpoint.asp?retor=" + dados_checkpoint + "&l=" + login + "&s=" + senha, true);
-			alert('ponto 0');
+			ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/sincronizar_checkpoint.asp?retor=" + encodeURIComponent(dados_checkpoint) + "&l=" + login + "&s=" + senha, true);
 			ajax.addEventListener("loadend", function (evt) {
-				alert('ponto 1');
 				var resposta_total = this.responseText;
-				alert(resposta_total);
 				if (resposta_total == 'sim') {
 					var db;
 					var request = window.indexedDB.open("db_sigmacivil", "1");

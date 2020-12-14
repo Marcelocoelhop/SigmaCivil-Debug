@@ -53,6 +53,7 @@
     width: 100%;
     position: fixed;
     z-index: 49;
+    transition: top 0.3s;
 }
 
 .menu_opc form {
@@ -67,6 +68,7 @@
     bottom: 0;
     z-index: 1;
     box-shadow: 0 0 5px 0 rgba(0,0,0,0.4);
+    transition: bottom 0.3s;
 }
 
 .button-actived {
@@ -246,9 +248,9 @@ hr.line-color {
     border-bottom: 1px solid #8e8e8e;
 }
 
-.shadow-box:last-child {
+/* .shadow-box:last-child {
     margin-bottom: 60px;
-}
+} */
 
 .dates-and-years {
     width: 100%;
@@ -297,6 +299,10 @@ hr.line-color {
     padding: 16px;
 }
 
+.main-menu-bars {
+    transition: top 0.3s !important;
+}
+
 #qtd_manut_pendentes {
     float: right;
     position: fixed;
@@ -313,6 +319,7 @@ hr.line-color {
     display: none;
     align-items: center;
     justify-content: center;
+    transition: top 0.3s;
 }
 
 #assistir_tutorial:hover {

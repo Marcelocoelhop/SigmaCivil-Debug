@@ -364,16 +364,7 @@
 	<div id="parte_load"
 		style="z-index: 150; display: none; position: fixed; width: 100%; height: 80%; justify-content: center; align-items: center;"
 		align="center">
-		<table width="224" border="0" cellpadding="0" cellspacing="0">
-			<tr>
-				<td width="42" height="49">
-					<div align="center">
-						<img src="images/tail-spin.svg" width="35" height="35">
-						<span class="quad_text">Aguarde o envio</span>
-					</div>
-				</td>
-			</tr>
-		</table>
+		<div id="progress-value"></div>
 	</div>
 
 	<div align="center">
@@ -389,7 +380,7 @@
 					<img class="is-bars" src="images/bars.svg" width="14" alt="Menu" />
 					<img class="is-times is-disabled" src="images/times.svg" width="13" alt="Menu" />
 				</h4>
-				<ul class="menu-tablet-responsive" style="border: 1px solid #e0e0e0;" data-role="listview"
+				<ul class="menu-tablet-responsive" style="border: 1px solid #38c;" data-role="listview"
 					data-mini="true">
 					<li>
 						<a class="ui-btn ui-icon-gear ui-btn-icon-right ui-shadow ui-corner-all actived" href="#"
@@ -446,9 +437,19 @@
 
 	<div id="forms-configs" class="div-spacing"></div>
 
-	<button type="button" onclick="uploadArquivos()">Upload de arquivos</button>
+	<div style="margin: 0; padding: 0 16px;">
+		<div style="display: flex; flex-direction: column;">
+			<div style="margin: 0">
+				<p style="margin: 0 0 8px;" for="flip-select">Upload de todos os arquivos
+					pendentes:</p>
+				<small style="margin-left: 8px; color: #666;">Realize o upload de todos os arquivos</small>
+			</div>
+			<button class="ui-btn ui-icon-cloud ui-btn-icon-left ui-shadow ui-corner-all btn-success" type="button"
+				onclick="uploadArquivos()">Upload de arquivos</button>
+		</div>
+	</div>
 
-	<div id="progress-value"></div>
+	<!-- <div id="progress-value"></div> -->
 
 	<!-- Menu bottom -->
 	<nav class="main-menu-bottom">
@@ -707,6 +708,10 @@
 	}
 
 	function up_loadPhoto(imageURI, q_k, aux_1_status, id_prog_manut, dia_ev, mes_ev, ano_ev) {
+
+		document.getElementById("parte_load_content").style.display = "block";
+        document.getElementById("parte_load").style.display = "flex";
+        window.location.href = "#ancora123"
 
 		var q_k;
 		var options = new FileUploadOptions();
@@ -996,9 +1001,9 @@
 	function up_loadAudio(audioURL, id_prog_manut, dia_ev, mes_ev, ano_ev) {
 
 		//if (!uploadAutomatic) {
-		document.getElementById("parte_load_content").style.display = "block";
-		document.getElementById("parte_load").style.display = "flex";
-		window.location.href = "#ancora123"
+		// document.getElementById("parte_load_content").style.display = "block";
+		// document.getElementById("parte_load").style.display = "flex";
+		// window.location.href = "#ancora123"
 		//}
 
 		var options = new FileUploadOptions();
@@ -1308,7 +1313,8 @@
 		'<option value="on" ' + localStorage.getItem('sl2') + '>Lig</option>',
 		'</select>',
 		'</div>',
-		'</form>'
+		'</form>',
+		'<hr/>'
 	].join('');
 
 	document.getElementById('forms-configs').innerHTML = formConfig;

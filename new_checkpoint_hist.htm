@@ -62,13 +62,13 @@
     <span id="menu_opc2"></span>
 
     <div class="btn-bars">
-        <div style="top:4; z-index: 50" data-role="collapsible" data-collapsed="true" class="ui-btn-left menu"
-            data-mini="true">
+        <div style="top:4; z-index: 50; position: fixed;" data-role="collapsible" data-collapsed="true"
+            class="ui-btn-left menu main-menu-bars" data-mini="true">
             <h4 class="btn-bars-bars">
                 <img class="is-bars" src="images/bars.svg" width="14" alt="Menu" />
                 <img class="is-times is-disabled" src="images/times.svg" width="13" alt="Menu" />
             </h4>
-            <ul class="menu-tablet-responsive" style="border: 1px solid #e0e0e0;" data-role="listview" data-mini="true">
+            <ul class="menu-tablet-responsive" style="border: 1px solid #38c;" data-role="listview" data-mini="true">
                 <li>
                     <a class="ui-btn ui-icon-gear ui-btn-icon-right ui-shadow ui-corner-all" href="#"
                         onClick="go_to_page_config()">Configurações</a>
@@ -82,9 +82,13 @@
         </div>
     </div>
 
+    <div class="title" style="padding-top: 0px !important; padding-bottom: 10px; margin-top: 66px;">
+        <h4 id="nome_empree_" style="display: inline;"></h4>
+    </div>
+
     <td width="20" class="menu_2">
         <div align="right">
-            <a style="position: absolute; top: 80px; right: 20px;" href="#transitionExample" data-transition="pop"
+            <a style="position: absolute; top: 105px; right: 20px;" href="#transitionExample" data-transition="pop"
                 data-rel="popup">
                 <img src="images/question-circle.png" width="15" alt="">
             </a>
@@ -371,6 +375,7 @@
         function iniciar() {
 
             var menu_sup_offline = [
+                '<div class="menu_opc">',
                 '<form name="form_sup" action="" method="get">',
                 '<div data-role="header" data-position="fixed" data-theme="a">',
                 '<div class="ui-corner-all custom-corners">',
@@ -387,10 +392,12 @@
                 '</div>',
                 '</div>',
                 '</div>',
-                '</form>'
+                '</form>',
+                '</div>'
             ].join('');
 
             var menu_sup_online = [
+                '<div class="menu_opc">',
                 '<form name="form_sup" action="" method="get">',
                 '<div data-role="header" data-position="fixed" data-theme="a">',
                 '<div class="ui-corner-all custom-corners">',
@@ -407,20 +414,43 @@
                 '</div>',
                 '</div>',
                 '</div>',
-                '</form>'
+                '</form>',
+                '</div>'
             ].join('');
 
             document.getElementById('menu_opc2').innerHTML = menu_sup_online;
+
+            var prevScrollpos = window.pageYOffset;
+            window.onscroll = function () {
+                var currentScrollPos = window.pageYOffset;
+                if (prevScrollpos > currentScrollPos) {
+                    document.querySelector(".menu_opc").style.top = "0";
+                    // document.querySelector("#qtd_manut_pendentes").style.top = "16px";
+                    document.querySelector(".main-menu-bars").style.top = "4px";
+                } else if (prevScrollpos < currentScrollPos) {
+                    document.querySelector(".menu_opc").style.top = "-80px";
+                    // document.querySelector("#qtd_manut_pendentes").style.top = "-80px";
+                    document.querySelector(".main-menu-bars").style.top = "-80px";
+                } else {
+                    null;
+                }
+
+                prevScrollpos = currentScrollPos;
+            }
 
             setInterval(function () {
                 // window.StatusBar.hide();
 
                 if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
                     document.getElementById('menu_opc2').innerHTML = menu_sup_offline;
+                    document.querySelector(".main-menu-bars").style.top = "4px";
+
                     return false;
                 }
                 else {
                     document.getElementById('menu_opc2').innerHTML = menu_sup_online;
+                    document.querySelector(".main-menu-bars").style.top = "4px";
+
                     return true;
                 }
             }, 5000);
@@ -447,6 +477,22 @@
             /////////////////////////////////////////////
 
             document.getElementById('opc_periodo').innerHTML = op_periodo
+
+            // carregar dados das manutenções do servidor 
+            var ajax = new XMLHttpRequest();
+            ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_emp_online.asp?l=" + login + "&s=" + senha + "&versao=2.2&t=" + Math.random(), true);
+            ajax.addEventListener("loadend", function (evt) {
+                var resposta_total = this.responseText;
+                var jsontext = resposta_total.split("*")
+
+                var getLogin = JSON.parse(jsontext[0]);
+                var nome_empree = getLogin.nome_empree;
+
+                document.getElementById('nome_empree_').innerHTML = nome_empree;
+            });
+
+            ajax.send();
+            // fim carregar dados manutenção
 
             google.charts.load('current', { 'packages': ['corechart'] });
             google.charts.setOnLoadCallback(drawChart);

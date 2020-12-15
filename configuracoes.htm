@@ -56,6 +56,8 @@
 		// var id_cliente;
 		var id_empree;
 
+		var progressValue = 0;
+
 		document.addEventListener("deviceready", onDeviceReady, false);
 
 		function onDeviceReady() {
@@ -357,14 +359,15 @@
 
 <body>
 	<div id="parte_load_content"
-		style="width: 100%; display: none; height: 100%; position: absolute; background: rgba(0,0,0,.7); z-index: 50;">
+		style="width: 100%; display: none; height: 100%; position: absolute; background: rgba(0,0,0,.7); z-index: 150;">
 	</div>
 
 	<!-- TELA DE LOADING AO ENVIAR ALGUM ARQUIVO PARA A GALERIA DE IMAGENS SERVIDOR -->
 	<div id="parte_load"
-		style="z-index: 150; display: none; position: fixed; width: 100%; height: 80%; justify-content: center; align-items: center;"
+		style="z-index: 250; display: none; position: fixed; width: 100%; height: 100%; flex-direction: column; justify-content: center; align-items: center;"
 		align="center">
-		<div id="progress-value"></div>
+		<img src="images/tail-spin.svg" width="35" height="35">
+		<p id="progress-value"></p>
 	</div>
 
 	<div align="center">
@@ -710,8 +713,8 @@
 	function up_loadPhoto(imageURI, q_k, aux_1_status, id_prog_manut, dia_ev, mes_ev, ano_ev) {
 
 		document.getElementById("parte_load_content").style.display = "block";
-        document.getElementById("parte_load").style.display = "flex";
-        window.location.href = "#ancora123"
+		document.getElementById("parte_load").style.display = "flex";
+		window.location.href = "#ancora123"
 
 		var q_k;
 		var options = new FileUploadOptions();
@@ -727,7 +730,7 @@
 		options.chunkedMode = false;
 
 		var ft = new FileTransfer();
-		var progressValue = 0;
+		// var progressValue = 0;
 		ft.onprogress = function (progressEvent) {
 			if (progressEvent.lengthComputable) {
 				// Calculate the percentage
@@ -737,7 +740,7 @@
 			}
 
 			// Display percentage in the UI
-			document.getElementById("progress-value").innerHTML = progressValue.toFixed(2);
+			document.getElementById("progress-value").innerHTML = `${progressValue.toFixed()}%`;
 		};
 
 		ft.upload(imageURI, "http://www.sigmacivil.com.br/app_sc/rec_foto_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + q_mes + "&ano=" + q_ano + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up(id_prog_manut, dia_ev, mes_ev, ano_ev, aux_1_status), fail_up, options);
@@ -780,6 +783,11 @@
 					data.status_imagens_upl = localStorage.getItem(`status_${id_prog_manut}_${dia_ev}_${mes_ev}_${ano_ev}`);
 
 					var request = cursor.update(data);
+					sleep(2000);
+					request.onsuccess = function (event) {
+						document.getElementById("parte_load_content").style.display = "none";
+						document.getElementById("parte_load").style.display = "none";
+					}
 				}
 			}
 		}

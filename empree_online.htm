@@ -8,12 +8,14 @@
     <link rel="stylesheet" href="css/custom.css" />
     <link rel="stylesheet" href="css/custom-mobile.css" />
     <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
+    <link rel="stylesheet" href="css/introjs.css" />
     <title>Empree_onlline</title>
     <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
     <script type="text/javascript" src="js/mc.js"></script>
     <script src="js/jquery.js"></script>
     <script src="js/jquery.mobile-1.4.5.min.js"></script>
     <script src="js/scrollPage.js"></script>
+    <script src="js/intro.js"></script>
     <style>
         .menu .ui-mini.ui-btn-icon-left:after,
         .ui-mini .ui-btn-icon-left:after,
@@ -46,7 +48,7 @@
     <div id="qtd_manut_pendentes"></div>
 
     <div class="btn-bars">
-        <div style="top:4; z-index: 50; position: fixed;" data-role="collapsible" data-collapsed="true"
+        <div id="step1" style="top:4; z-index: 50; position: fixed;" data-role="collapsible" data-collapsed="true"
             class="ui-btn-left menu main-menu-bars" data-mini="true">
             <h4 class="btn-bars-bars">
                 <!-- <span class="fas fa-bars"></span> -->
@@ -76,11 +78,13 @@
         <div id="opc_periodo"></div>
     </table>
 
+    <button type="button" onclick="startIntro()">Start intro</button>
+
     <div id="box-content"></div>
 
     <!-- Menu bottom -->
     <nav class="main-menu-bottom">
-        <div>
+        <div id="step2">
             <button class="button-actived" type="button" onclick="enviar()">
                 <img src="images/engenheiro_cogs.png" width="22" alt="Home" />
                 <p>manutenções</p>
@@ -93,10 +97,10 @@
                 <img src="images/graph.png" width="22" alt="Relatório" />
                 <p>rel.checkpoint</p>
             </button>
-            <!--button class="buttons-navigate" type="button" onclick="openBrowser()">
+            <!-- <button class="buttons-navigate" type="button" onclick="openBrowser()">
                 <img src="images/call.png" width="22" alt="Chamado" />
                 <p>abrir chamado</p>
-            </!--button-->
+            </button> -->
         </div>
     </nav>
     <!-- Fim Menu bottom -->
@@ -384,7 +388,7 @@
 
                 if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
                     document.getElementById('menu_opc2').innerHTML = menu_sup_offline;
-                    
+
                     document.querySelector("#qtd_manut_pendentes").style.top = "16px";
                     document.querySelector(".main-menu-bars").style.top = "4px";
                     return false;
@@ -1668,6 +1672,34 @@
 
         function closeTutorial() {
             document.getElementById('tutorial-video').innerHTML = '';
+        }
+
+        function startIntro() {
+            var intro = introJs();
+            intro.setOptions({
+                steps: [
+                    {
+                        intro: "Hello world!"
+                    },
+                    {
+                        element: document.querySelector('#step1'),
+                        intro: "This is a tooltip.",
+                        position: 'top'
+                    },
+                    {
+                        element: document.querySelectorAll('#step2')[0],
+                        intro: "Ok, wasn't that fun?",
+                        position: 'top'
+                    },
+                    {
+                        element: '#step3',
+                        intro: 'More features, more fun.',
+                        position: 'left'
+                    }
+                ]
+            });
+
+            intro.start();
         }
 
     </script>

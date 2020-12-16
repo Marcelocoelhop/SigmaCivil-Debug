@@ -2279,8 +2279,8 @@
 
     <!-- MENU BURGER -->
     <div class="btn-bars" style="display: none;">
-        <div style="top:4; z-index: 50; position: fixed;" data-role="collapsible" data-collapsed="true" class="ui-btn-left menu main-menu-bars"
-            data-mini="true">
+        <div style="top:4; z-index: 50; position: fixed;" data-role="collapsible" data-collapsed="true"
+            class="ui-btn-left menu main-menu-bars" data-mini="true">
             <h4 class="btn-bars-bars">
                 <!-- <span class="fas fa-bars"></span> -->
                 <img class="is-bars" src="images/bars.svg" width="14" alt="Menu" />
@@ -2514,10 +2514,10 @@
                 <img src="images/graph.png" width="22" alt="Relatório" />
                 <p>rel.checkpoint</p>
             </button>
-            <button class="buttons-navigate" type="button" onclick="openBrowser()">
+            <!--button class="buttons-navigate" type="button" onclick="openBrowser()">
                 <img src="images/call.png" width="22" alt="Chamado" />
                 <p>abrir chamado</p>
-            </button>
+            </!--button-->
         </div>
     </nav>
     <!-- Fim Menu bottom -->
@@ -2527,51 +2527,51 @@
 
 <script>
     $(document).ready(function () {
-    $('.circle-question').mouseover(function () {
-    $('.screen-over').fadeIn(400)
-    })
+        $('.circle-question').mouseover(function () {
+            $('.screen-over').fadeIn(400)
+        })
 
-    $('.fa-times').click(function () {
-    $('.screen-over').hide()
-    })
+        $('.fa-times').click(function () {
+            $('.screen-over').hide()
+        })
 
-    $('.btn-bars .ui-btn').click(function () {
-    $('.menu .fa-bars').toggleClass('fa-times')
-    })
+        $('.btn-bars .ui-btn').click(function () {
+            $('.menu .fa-bars').toggleClass('fa-times')
+        })
 
-    $('.btn-bars-bars').click(function () {
-    $('.is-bars').toggleClass('is-disabled')
-    $('.is-times').toggleClass('is-disabled')
-    })
+        $('.btn-bars-bars').click(function () {
+            $('.is-bars').toggleClass('is-disabled')
+            $('.is-times').toggleClass('is-disabled')
+        })
 
-    $('#parte_load').click(function () {
-    $('html, body').animate({
-    scrollTop: 1500
-    }, 500)
-    })
+        $('#parte_load').click(function () {
+            $('html, body').animate({
+                scrollTop: 1500
+            }, 500)
+        })
 
-    $('.abrir_popup_foto').click(function () {
-    $('.pop_photo_big').css({
-    display: 'flex'
-    })
-    })
+        $('.abrir_popup_foto').click(function () {
+            $('.pop_photo_big').css({
+                display: 'flex'
+            })
+        })
 
-    $(".btn-salvar").click(function () {
-    $('html, body').animate({
-    scrollTop: 0
-    }, 500);
-    });
+        $(".btn-salvar").click(function () {
+            $('html, body').animate({
+                scrollTop: 0
+            }, 500);
+        });
 
-    $("#parte_load").click(function () {
-    $('html, body').animate({
-    scrollTop: 0
-    }, 500);
-    });
+        $("#parte_load").click(function () {
+            $('html, body').animate({
+                scrollTop: 0
+            }, 500);
+        });
 
     })
 
     function FocusInput(element) {
-    return element.click()
+        return element.click()
     }
 
 </script>

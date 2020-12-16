@@ -787,8 +787,8 @@
 					var request = cursor.update(data);
 					// sleep(2000);
 					request.onsuccess = function (event) {
-						document.getElementById("parte_load_content").style.display = "none";
-						document.getElementById("parte_load").style.display = "none";
+						// document.getElementById("parte_load_content").style.display = "none";
+						// document.getElementById("parte_load").style.display = "none";
 					}
 				}
 			}
@@ -875,9 +875,9 @@
 	function up_loadVideo(videoURL, id_prog_manut, dia_ev, mes_ev, ano_ev) {
 
 		//if (!uploadAutomatic) {
-		document.getElementById("parte_load_content").style.display = "block";
-		document.getElementById("parte_load").style.display = "flex";
-		window.location.href = "#ancora123"
+		// document.getElementById("parte_load_content").style.display = "block";
+		// document.getElementById("parte_load").style.display = "flex";
+		// window.location.href = "#ancora123"
 		//}
 
 		var options = new FileUploadOptions();
@@ -935,8 +935,8 @@
 
 					var request = cursor.update(data);
 					request.onsuccess = function (event) {
-						document.getElementById("parte_load_content").style.display = "none";
-						document.getElementById("parte_load").style.display = "none";
+						// document.getElementById("parte_load_content").style.display = "none";
+						// document.getElementById("parte_load").style.display = "none";
 					}
 				}
 			}
@@ -1022,9 +1022,9 @@
 	function up_loadAudio(audioURL, id_prog_manut, dia_ev, mes_ev, ano_ev) {
 
 		//if (!uploadAutomatic) {
-		document.getElementById("parte_load_content").style.display = "block";
-		document.getElementById("parte_load").style.display = "flex";
-		window.location.href = "#ancora123"
+		// document.getElementById("parte_load_content").style.display = "block";
+		// document.getElementById("parte_load").style.display = "flex";
+		// window.location.href = "#ancora123"
 		//}
 
 		var options = new FileUploadOptions();
@@ -1082,8 +1082,8 @@
 
 					var request = cursor.update(data);
 					request.onsuccess = function (event) {
-						document.getElementById("parte_load_content").style.display = "none";
-						document.getElementById("parte_load").style.display = "none";
+						// document.getElementById("parte_load_content").style.display = "none";
+						// document.getElementById("parte_load").style.display = "none";
 					}
 				}
 			}
@@ -1169,9 +1169,9 @@
 		if (!textoURL) return;
 
 		//if (!uploadAutomatic) {
-		document.getElementById("parte_load_content").style.display = "block";
-		document.getElementById("parte_load").style.display = "flex";
-		window.location.href = "#ancora123"
+		// document.getElementById("parte_load_content").style.display = "block";
+		// document.getElementById("parte_load").style.display = "flex";
+		// window.location.href = "#ancora123"
 		//}
 
 		var data = 'tx=' + encodeURIComponent(textoURL) + '&ipm=' + id_prog_manut + '&d=' + dia_ev + '&m=' + mes_ev + '&a=' + ano_ev + "&econst=" + e_construtora + "&idc=" + id_cliente;
@@ -1213,8 +1213,8 @@
 
 								var request = cursor.update(data);
 								request.onsuccess = function (event) {
-									document.getElementById("parte_load_content").style.display = "none";
-									document.getElementById("parte_load").style.display = "none";
+									// document.getElementById("parte_load_content").style.display = "none";
+									// document.getElementById("parte_load").style.display = "none";
 								}
 							}
 						}

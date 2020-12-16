@@ -875,9 +875,9 @@
 	function up_loadVideo(videoURL, id_prog_manut, dia_ev, mes_ev, ano_ev) {
 
 		//if (!uploadAutomatic) {
-		// document.getElementById("parte_load_content").style.display = "block";
-		// document.getElementById("parte_load").style.display = "flex";
-		// window.location.href = "#ancora123"
+		document.getElementById("parte_load_content").style.display = "block";
+		document.getElementById("parte_load").style.display = "flex";
+		window.location.href = "#ancora123"
 		//}
 
 		var options = new FileUploadOptions();
@@ -897,6 +897,11 @@
 
 			// Display percentage in the UI
 			document.getElementById("progress-value").innerHTML = `${progressValue.toFixed()}%`;
+
+			// if (progressValue === 100) {
+			// 	document.getElementById("parte_load").style.display = "none";
+			// 	document.getElementById("parte_load_content").style.display = "none";
+			// }
 		};
 
 		ft.upload(videoURL, "http://www.sigmacivil.com.br/app_sc/rec_video_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente, win_up_v(id_prog_manut, dia_ev, mes_ev, ano_ev), fail_up_v, options);
@@ -1576,7 +1581,7 @@ xhr.send()*/
 	}
 
 	function go_page_qrcode(q_id_sistema, q_num_empree) {
-		window.location.assign("qrcode.htm?l=" + login + "&s=" + senha + "&e=" + q_num_empree + "&id_sis=" + q_id_sistema + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano));
+		window.location.assign("qrcode.htm?l=" + login + "&s=" + senha + "&e=" + q_num_empree + "&id_sis=" + q_id_sistema + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&idc=" + id_cliente + "&econst=" + e_construtora);
 	}
 
 	function volta_uni() {
@@ -1591,7 +1596,7 @@ xhr.send()*/
 	}
 
 	function go_to_page_config() {
-		window.location.assign("configuracoes.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano));
+		window.location.assign("configuracoes.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&idc=" + id_cliente + "&econst=" + e_construtora);
 	}
 
 	function tem_conexao() {
@@ -1667,7 +1672,7 @@ xhr.send()*/
 
 	function go_relat_check2() {
 		if (tem_conexao()) {
-			window.location.assign("new_checkpoint_hist.htm?e=" + num_empree + /*"&id_sist=" + id_sis +*/ "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano))
+			window.location.assign("new_checkpoint_hist.htm?e=" + num_empree + /*"&id_sist=" + id_sis +*/ "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&idc=" + id_cliente + "&econst=" + e_construtora)
 		} else {
 			alert('Você está sem conexão com a internet. Para visualizar o relatório online é necessário estar conectado. Favor se conectar.');
 		}

@@ -119,6 +119,11 @@
 			setInterval(function () {
 				// window.StatusBar.hide();
 
+				if (progressValue == 100) {
+					document.getElementById("parte_load_content").style.display = "none";
+					document.getElementById("parte_load").style.display = "none";
+				}
+
 				if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
 					document.getElementById('menu_opc2').innerHTML = menu_sup_offline;
 					return false;
@@ -405,14 +410,10 @@
 		align="center">
 		<img src="images/tail-spin.svg" width="35" height="35">
 		<p id="progress-value"></p>
-		<div style="width: 250px; display: flex; margin-top: 50px;">
+		<div style="display: flex; margin-top: 50px;">
 			<button class="ui-btn ui-mini" style="margin-right: 10px; background: #b10b0b; border-color: #b10b0b;" type="button">
 				<a href="#" onclick="cancelarUpload()"
 					style="color: #fff; text-shadow: none; text-decoration: none;">Cancelar</a>
-			</button>
-			<button class="ui-btn ui-mini" style="background: green; border-color: green;" type="button">
-				<a href="#" onclick="cancelarUpload()"
-					style="color: #fff; text-shadow: none; text-decoration: none;">Concluir</a>
 			</button>
 		</div>
 	</div>

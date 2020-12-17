@@ -101,8 +101,14 @@
 				var tx = db.transaction(['mtab_config'], 'readwrite');
 				var store = tx.objectStore('mtab_config');
 
-				localStorage.setItem('sl1', '');
-				localStorage.setItem('sl2', '');
+				localStorage.removeItem('sl1');
+				localStorage.removeItem('sl2');
+				
+				localStorage.removeItem('empree_online_end');
+				localStorage.removeItem('empree_online_current_step');
+				
+				localStorage.removeItem('config_end');
+				localStorage.removeItem('config_current_step');
 
 				var objectStoreRequest = store.clear();
 				objectStoreRequest.onsuccess = function (event) {

@@ -81,7 +81,7 @@
 				'<div class="ui-bar ui-bar-a" style="height:38;text-align:center">',
 				'<div class="barra1" align="left"><img src="images/wifi_vermelho.png" style="position: absolute; left: 70px; top: 20px;" width="17" /></div>',
 				'<div align="center">',
-				'<a style="position: relative; float: right; left: 15px; bottom: 4px;" href="#"><button style="box-shadow: none !important; background: #ebebeb !important; border: none;" onclick="volta_uni()" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right ui-icon-carat-l">Voltar</button></a>',
+				'<a style="position: relative; float: right; left: 15px; bottom: 4px;" href="#"><button style="box-shadow: none !important; background: #ebebeb !important; border: none;" onclick="goBack()" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right ui-icon-carat-l">Voltar</button></a>',
 				'<table width="30" border="0" cellpadding="0" cellspacing="0" >',
 				'<tr>',
 				'<td width="30" ><img src="images/logo6.png" width="142"> </td>',
@@ -101,7 +101,7 @@
 				'<div class="ui-bar ui-bar-a" style="height:38;text-align:center">',
 				'<div class="barra1" align="left"><img src="images/wifi_verde.png" style="position: absolute; left: 70px; top: 20px;" width="17" /></div>',
 				'<div align="center">',
-				'<a style="position: relative; float: right; left: 15px; bottom: 4px;" href="#"><button style="box-shadow: none !important; background: #ebebeb !important; border: none;" onclick="volta_uni()" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right ui-icon-carat-l">Voltar</button></a>',
+				'<a style="position: relative; float: right; left: 15px; bottom: 4px;" href="#"><button style="box-shadow: none !important; background: #ebebeb !important; border: none;" onclick="goBack()" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right ui-icon-carat-l">Voltar</button></a>',
 				'<table width="30" border="0" cellpadding="0" cellspacing="0" >',
 				'<tr>',
 				'<td width="30" ><img src="images/logo6.png" width="142"> </td>',
@@ -148,13 +148,13 @@
 					},
 					{
 						element: "#step-3",
-						title: "Configurações",
-						content: "Configure o seu aplicativo da sua melhor forma.",
+						title: "Upload de arquivos",
+						content: "Aqui você faz o upload de todos os arquivos que ainda não estão no servidor",
 						placement: "bottom",
 						template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Anterior</button><span data-role='separator'></span><button class='btn btn-default' data-role='next'>Próximo »</button><button class='btn btn-danger' data-role='end'>Fechar</button></div></div>",
 					},
 				],
-				storage: false,
+				name: "config",
 				backdrop: true,
 				autoscroll: false
 			});
@@ -405,8 +405,16 @@
 		align="center">
 		<img src="images/tail-spin.svg" width="35" height="35">
 		<p id="progress-value"></p>
-		<a href="#" onclick="cancelarUpload()"
-			style="margin-top: 50px; color: #ff3a3a; text-shadow: none; text-decoration: none;">Cancelar</a>
+		<div style="width: 250px; display: flex; margin-top: 50px;">
+			<button class="ui-btn ui-mini" style="margin-right: 10px; background: #b10b0b; border-color: #b10b0b;" type="button">
+				<a href="#" onclick="cancelarUpload()"
+					style="color: #fff; text-shadow: none; text-decoration: none;">Cancelar</a>
+			</button>
+			<button class="ui-btn ui-mini" style="background: green; border-color: green;" type="button">
+				<a href="#" onclick="cancelarUpload()"
+					style="color: #fff; text-shadow: none; text-decoration: none;">Concluir</a>
+			</button>
+		</div>
 	</div>
 
 	<div align="center">
@@ -1634,6 +1642,10 @@ xhr.send()*/
 
 	function go_to_page_config() {
 		window.location.assign("configuracoes.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&idc=" + id_cliente + "&econst=" + e_construtora);
+	}
+
+	function goBack() {
+		return history.back();
 	}
 
 	function tem_conexao() {

@@ -782,7 +782,7 @@
 			document.getElementById("progress-value").innerHTML = `${progressValue.toFixed()}%`;
 		};
 
-		ft.upload(imageURI, "http://www.sigmacivil.com.br/app_sc/rec_foto_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + q_mes + "&ano=" + q_ano + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up(id_prog_manut, dia_ev, mes_ev, ano_ev, aux_1_status), fail_up((imageURI, q_k, id_prog_manut, dia_ev, mes_ev, ano_ev, aux_1_status)), options);
+		ft.upload(imageURI, "http://www.sigmacivil.com.br/app_sc/rec_foto_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + q_mes + "&ano=" + q_ano + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up(id_prog_manut, dia_ev, mes_ev, ano_ev, aux_1_status), fail_up, options);
 	}
 
 	var win_up = function (id_prog_manut, dia_ev, mes_ev, ano_ev, aux_1_status, r) {
@@ -832,7 +832,7 @@
 		}
 	}
 
-	var fail_up = function (q_id, imageURI, id_prog_manut, dia_ev, mes_ev, ano_ev, aux_1_status, error) {
+	var fail_up = function (error) {
 		document.getElementById("parte_load_content").style.display = "none";
 		document.getElementById("parte_load").style.display = "none";
 		// alert("Não foi feito o upload da imagem!");
@@ -841,7 +841,7 @@
 			'Não foi feito o upload da imagem. Tentar novamente?',
 			function (buttonIndex) {
 				if (buttonIndex === 2) {
-					up_loadPhoto(imageURI, q_id, id_prog_manut, dia_ev, mes_ev, ano_ev);
+					go_to_page_config();
 				}
 			},
 			'SigmaCivil',
@@ -941,7 +941,7 @@
 			// }
 		};
 
-		ft.upload(videoURL, "http://www.sigmacivil.com.br/app_sc/rec_video_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente, win_up_v(id_prog_manut, dia_ev, mes_ev, ano_ev), fail_up_v(videoURL, id_prog_manut, dia_ev, mes_ev, ano_ev), options);
+		ft.upload(videoURL, "http://www.sigmacivil.com.br/app_sc/rec_video_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente, win_up_v(id_prog_manut, dia_ev, mes_ev, ano_ev), fail_up_v, options);
 
 	}
 
@@ -985,7 +985,7 @@
 		}
 	}
 
-	var fail_up_v = function (videoURL, id_prog_manut, dia_ev, mes_ev, ano_ev, error) {
+	var fail_up_v = function (error) {
 		document.getElementById("parte_load_content").style.display = "none";
 		document.getElementById("parte_load").style.display = "none";
 		// alert("Não foi feito o upload do vídeo!");
@@ -994,7 +994,7 @@
 			'Não foi feito o upload do vídeo. Tentar novamente?',
 			function (buttonIndex) {
 				if (buttonIndex === 2) {
-					up_loadVideo(videoURL, id_prog_manut, dia_ev, mes_ev, ano_ev);
+					go_to_page_config();
 				}
 			},
 			'SigmaCivil',
@@ -1088,7 +1088,7 @@
 			document.getElementById("progress-value").innerHTML = `${progressValue.toFixed()}%`;
 		};
 
-		ft.upload(audioURL, "http://www.sigmacivil.com.br/app_sc/rec_audio_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente, win_up_a(id_prog_manut, dia_ev, mes_ev, ano_ev), fail_up_a(audioURL, id_prog_manut, dia_ev, mes_ev, ano_ev), options);
+		ft.upload(audioURL, "http://www.sigmacivil.com.br/app_sc/rec_audio_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente, win_up_a(id_prog_manut, dia_ev, mes_ev, ano_ev), fail_up_a, options);
 
 	}
 
@@ -1132,7 +1132,7 @@
 		}
 	}
 
-	var fail_up_a = function (audioURL, id_prog_manut, dia_ev, mes_ev, ano_ev, error) {
+	var fail_up_a = function (error) {
 		document.getElementById("parte_load_content").style.display = "none";
 		document.getElementById("parte_load").style.display = "none";
 		// alert("Não foi feito o upload do áudio!");
@@ -1141,7 +1141,7 @@
 			'Não foi feito o upload do áudio. Tentar novamente?',
 			function (buttonIndex) {
 				if (buttonIndex === 2) {
-					up_loadAudio(audioURL, id_prog_manut, dia_ev, mes_ev, ano_ev);
+					go_to_page_config();
 				}
 			},
 			'SigmaCivil',
@@ -1270,7 +1270,7 @@
 						'Problemas com a gravação do texto. Tentar novamente?',
 						function (buttonIndex) {
 							if (buttonIndex === 2) {
-								up_loadTexto(textoURL, id_prog_manut, dia_ev, mes_ev, ano_ev);
+								go_to_page_config();
 							}
 						},
 						'SigmaCivil',
@@ -1293,7 +1293,7 @@
 				'Problemas com a sua conexão. Tentar novamente?',
 				function (buttonIndex) {
 					if (buttonIndex === 2) {
-						consultaConfig();
+						go_to_page_config();
 					}
 				},
 				'SigmaCivil',

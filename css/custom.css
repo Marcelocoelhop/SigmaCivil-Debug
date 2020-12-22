@@ -152,6 +152,27 @@
     text-align: center;
 }
 
+.btns_opcionais {
+    display: flex;
+    padding: 0 16px;
+    margin-top: 10px;
+}
+
+.btns_opcionais button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 5px;
+    border: 0 !important;
+    background: #e7d8fc !important;
+    text-shadow: none !important;
+    outline: none !important;
+}
+
+.btns_opcionais img {
+    margin-bottom: 5px;
+}
+
 .ui-flipswitch {
     border-radius: 40px !important;
 }

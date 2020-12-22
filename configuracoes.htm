@@ -13,7 +13,7 @@
 	<script type="text/javascript" src="cordova.js"></script>
 	<script src="js/jquery.js"></script>
 	<script src="js/jquery.mobile-1.4.5.min.js"></script>
-    <script src="js/shepherd.js"></script>
+	<script src="js/shepherd.js"></script>
 	<!-- <script src="js/bootstrap-tour-standalone.min.js"></script> -->
 	<style>
 		.menu .ui-mini.ui-btn-icon-left:after,
@@ -135,96 +135,132 @@
 				}
 			}, 5000);
 
-			var tour = new Shepherd.Tour({
-				useModalOverlay: true,
-				defaultStepOptions: {
-					cancelIcon: {
-						enabled: true,
-					},
-					classes: "shadow-md bg-purple-dark",
-					scrollTo: false,
-				},
-			});
+			var db;
+			var request = window.indexedDB.open("db_sigmacivil", "1");
 
-			tour.addSteps([
-				{
-					title: "Creating a Shepherd Tour",
-					text: `Creating a Shepherd tour is easy. too!\
- Just create a \`Tour\` instance, and add as many steps as you want.`,
-					attachTo: {
-						element: "#step-1",
-						on: "bottom",
-					},
-					buttons: [
-						{
-							action() {
-								return this.back();
-							},
-							classes: "shepherd-button-secondary",
-							text: "Back",
-						},
-						{
-							action() {
-								return this.next();
-							},
-							text: "Next",
-						},
-					],
-					id: "creating",
-				},
-				{
-					title: "Creating a Shepherd Tour",
-					text: `Creating a Shepherd tour is easy. too!\
- Just create a \`Tour\` instance, and add as many steps as you want.`,
-					attachTo: {
-						element: "#step-2",
-						on: "bottom",
-					},
-					buttons: [
-						{
-							action() {
-								return this.back();
-							},
-							classes: "shepherd-button-secondary",
-							text: "Back",
-						},
-						{
-							action() {
-								return this.next();
-							},
-							text: "Next",
-						},
-					],
-					id: "creating",
-				},
-				{
-					title: "Creating a Shepherd Tour",
-					text: `Creating a Shepherd tour is easy. too!\
- Just create a \`Tour\` instance, and add as many steps as you want.`,
-					attachTo: {
-						element: "#step-3",
-						on: "bottom",
-					},
-					buttons: [
-						{
-							action() {
-								return this.back();
-							},
-							classes: "shepherd-button-secondary",
-							text: "Back",
-						},
-						{
-							action() {
-								return this.next();
-							},
-							text: "Next",
-						},
-					],
-					id: "creating",
-				},
-			]);
+			request.onerror = function (event) {
+				alert("Erro ao criar o banco (cod 03)");
+			};
 
-			tour.start();
+			request.onsuccess = function (event) {
+				db = request.result;
+
+				updateMtabConfigTutorial(db, true);
+
+				db.onerror = function (event) {
+					alert("Database error: " + event.target.errorCode);
+				}
+			}
+
+			function updateMtabConfigTutorial(db, complete) {
+				var tx = db.transaction(['mtab_config'], 'readwrite');
+				var store = tx.objectStore('mtab_config');
+				var objectStoreRequest = store.openCursor();
+				objectStoreRequest.onsuccess = function (event) {
+					var cursor = event.target.result;
+					if (cursor) {
+						var data = cursor.value;
+
+						if (!data.tutorial) {
+							var tour = new Shepherd.Tour({
+								useModalOverlay: true,
+								defaultStepOptions: {
+									cancelIcon: {
+										enabled: true,
+									},
+									classes: "shadow-md bg-purple-dark",
+									scrollTo: false,
+								},
+							});
+
+							tour.addSteps([
+								{
+									title: "Creating a Shepherd Tour",
+									text: `Creating a Shepherd tour is easy. too!\
+ Just create a \`Tour\` instance, and add as many steps as you want.`,
+									attachTo: {
+										element: "#step-1",
+										on: "bottom",
+									},
+									buttons: [
+										{
+											action() {
+												return this.back();
+											},
+											classes: "shepherd-button-secondary",
+											text: "Back",
+										},
+										{
+											action() {
+												return this.next();
+											},
+											text: "Next",
+										},
+									],
+									id: "creating",
+								},
+								{
+									title: "Creating a Shepherd Tour",
+									text: `Creating a Shepherd tour is easy. too!\
+ Just create a \`Tour\` instance, and add as many steps as you want.`,
+									attachTo: {
+										element: "#step-2",
+										on: "bottom",
+									},
+									buttons: [
+										{
+											action() {
+												return this.back();
+											},
+											classes: "shepherd-button-secondary",
+											text: "Back",
+										},
+										{
+											action() {
+												return this.next();
+											},
+											text: "Next",
+										},
+									],
+									id: "creating",
+								},
+								{
+									title: "Creating a Shepherd Tour",
+									text: `Creating a Shepherd tour is easy. too!\
+ Just create a \`Tour\` instance, and add as many steps as you want.`,
+									attachTo: {
+										element: "#step-3",
+										on: "bottom",
+									},
+									buttons: [
+										{
+											action() {
+												return this.back();
+											},
+											classes: "shepherd-button-secondary",
+											text: "Back",
+										},
+										{
+											action() {
+												return this.next();
+											},
+											text: "Next",
+										},
+									],
+									id: "creating",
+								},
+							]);
+
+							tour.start();
+						}
+
+						data.tutorial = complete;
+						var request = cursor.update(data);
+					}
+				}
+			}
+
+			//tour.start();
 
 			// Instance the tour
 			/*var tour = new Tour({
@@ -591,6 +627,17 @@
 			<button class="ui-btn ui-icon-cloud ui-btn-icon-left ui-shadow ui-corner-all btn-success" type="button"
 				onclick="uploadArquivos()">Upload de arquivos</button>
 		</div>
+	</div>
+
+	<div class="btns_opcionais">
+		<button type="button" onclick="showTour()">
+			<img src="images/chalkboard-teacher.svg" width="25" alt="Tour" />
+			Tour
+		</button>
+		<button type="button">
+			<img src="images/chalkboard-teacher.svg" width="25" alt="Tour" />
+			Tutorial em vídeo
+		</button>
 	</div>
 
 	<!-- <div id="progress-value"></div> -->
@@ -1535,45 +1582,6 @@
 		});
 
 		xhr.send();
-
-
-
-		/*var xhr = new XMLHttpRequest();
-		xhr.open("GET", "http://www.sigmacivil.com.br/app_sc/consult_sist_checkpoint.asp?id_sis=" + qual_id_sistema + "&l=" + login + "&s=" + senha, true)
-		xhr.onreadystatechange = function () {
-			if (xhr.readyState == 4) {
-				if (xhr.status == 200 || xhr.status == 0) {
-					var response = xhr.responseText;
-					var pedaco = response.split('*//*');
-tem_alguma_manut = pedaco[0];
-
-nome_sistema = pedaco[1];
-
-if (tem_alguma_manut == "0") {
-alert('Não há manutenções para serem registradas!');
-} else if (tem_alguma_manut == "1") {
-if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
-window.location.assign("empree.htm?l=" + login + "&s=" + senha + "&e=" + qual_num_empree + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&fil=" + removeAcento(nome_sistema));
-} else {
-window.location.assign("empree_online.htm?l=" + login + "&s=" + senha + "&e=" + qual_num_empree + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&fil=" + removeAcento(nome_sistema));
-}
-} else {
-navigator.notification.alert(
-'Problemas com sua conexão. Conecte seu celular com a internet e tente novamente!',  // message
-function () {
-go_page_qrcode(qual_id_sistema, qual_num_empree);
-},         // callback
-'SigmaCivil',            // title
-'OK'                  // buttonName
-);
-}
-} else {
-alert("Problemas com sua conexao internet. Erro: 0146");
-}
-}
-}
-
-xhr.send()*/
 	}
 
 	function scan() {
@@ -1877,6 +1885,39 @@ xhr.send()*/
 			'SigmaCivil',
 			['OK', 'Cancelar']
 		);
+	}
+
+	function showTour() {
+		var db;
+        var request = window.indexedDB.open("db_sigmacivil", "1");
+
+        request.onerror = function (event) {
+            alert("Erro ao criar o banco (cod 03)");
+        };
+
+        request.onsuccess = function (event) {
+            db = request.result;
+
+			var tx = db.transaction(['mtab_config'], 'readwrite');
+            var store = tx.objectStore('mtab_config');
+            var objectStoreRequest = store.openCursor();
+            objectStoreRequest.onsuccess = function (event) {
+                var cursor = event.target.result;
+                if (cursor) {
+					var data = cursor.value;
+
+					data.tutorial = false;
+					var request = cursor.update(data);
+					request.onsuccess = function (event) {
+						volta_uni();
+					}
+				}
+			}
+
+            db.onerror = function (event) {
+                alert("Database error: " + event.target.errorCode);
+            }
+        }
 	}
 
 	function sleep(milliseconds) {

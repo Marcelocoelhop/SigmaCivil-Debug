@@ -405,196 +405,6 @@
             var statusDocumentacao;
             var mudaStatus = '<img src="images/danger.svg" width="25" height="25" />'
 
-            var tour = new Shepherd.Tour({
-                useModalOverlay: true,
-                defaultStepOptions: {
-                    cancelIcon: {
-                        enabled: true,
-                    },
-                    classes: "shadow-md bg-purple-dark",
-                    scrollTo: false,
-                },
-            });
-
-            tour.addSteps([
-                {
-                    title: "Creating a Shepherd Tour",
-                    text: `Creating a Shepherd tour is easy. too!\
- Just create a \`Tour\` instance, and add as many steps as you want.`,
-                    attachTo: {
-                        element: "#step-0",
-                        on: "bottom",
-                    },
-                    buttons: [
-                        {
-                            action() {
-                                return this.back();
-                            },
-                            classes: "shepherd-button-secondary",
-                            text: "Back",
-                        },
-                        {
-                            action() {
-                                return this.next();
-                            },
-                            text: "Next",
-                        },
-                    ],
-                    id: "creating",
-                },
-                {
-                    title: "Creating a Shepherd Tour",
-                    text: `Creating a Shepherd tour is easy. too!\
- Just create a \`Tour\` instance, and add as many steps as you want.`,
-                    attachTo: {
-                        element: "#step-1",
-                        on: "bottom",
-                    },
-                    buttons: [
-                        {
-                            action() {
-                                return this.back();
-                            },
-                            classes: "shepherd-button-secondary",
-                            text: "Back",
-                        },
-                        {
-                            action() {
-                                return this.next();
-                            },
-                            text: "Next",
-                        },
-                    ],
-                    id: "creating",
-                },
-                {
-                    title: "Creating a Shepherd Tour",
-                    text: `Creating a Shepherd tour is easy. too!\
- Just create a \`Tour\` instance, and add as many steps as you want.`,
-                    attachTo: {
-                        element: "#step-2",
-                        on: "bottom",
-                    },
-                    buttons: [
-                        {
-                            action() {
-                                return this.back();
-                            },
-                            classes: "shepherd-button-secondary",
-                            text: "Back",
-                        },
-                        {
-                            action() {
-                                return this.next();
-                            },
-                            text: "Next",
-                        },
-                    ],
-                    id: "creating",
-                },
-                {
-                    title: "Creating a Shepherd Tour",
-                    text: `Creating a Shepherd tour is easy. too!\
- Just create a \`Tour\` instance, and add as many steps as you want.`,
-                    attachTo: {
-                        element: "#step-3",
-                        on: "bottom",
-                    },
-                    buttons: [
-                        {
-                            action() {
-                                return this.back();
-                            },
-                            classes: "shepherd-button-secondary",
-                            text: "Back",
-                        },
-                        {
-                            action() {
-                                return this.next();
-                            },
-                            text: "Next",
-                        },
-                    ],
-                    id: "creating",
-                },
-                {
-                    title: "Creating a Shepherd Tour",
-                    text: `Creating a Shepherd tour is easy. too!\
- Just create a \`Tour\` instance, and add as many steps as you want.`,
-                    attachTo: {
-                        element: "#step-4",
-                        on: "bottom",
-                    },
-                    buttons: [
-                        {
-                            action() {
-                                return this.back();
-                            },
-                            classes: "shepherd-button-secondary",
-                            text: "Back",
-                        },
-                        {
-                            action() {
-                                return this.next();
-                            },
-                            text: "Next",
-                        },
-                    ],
-                    id: "creating",
-                    when: {
-                        show: function () {
-                            document.querySelector('.btn-bars-bars').click();
-                        },
-                    },
-                },
-                {
-                    title: "Creating a Shepherd Tour",
-                    text: `Creating a Shepherd tour is easy. too!\
- Just create a \`Tour\` instance, and add as many steps as you want.`,
-                    attachTo: {
-                        element: "#step-5",
-                        on: "bottom",
-                    },
-                    buttons: [
-                        {
-                            action() {
-                                return this.back();
-                            },
-                            classes: "shepherd-button-secondary",
-                            text: "Back",
-                        },
-                        {
-                            action() {
-                                return this.next();
-                            },
-                            text: "Next",
-                        },
-                    ],
-                    id: "creating",
-                },
-                {
-                    title: "Creating a Shepherd Tour",
-                    text: `Creating a Shepherd tour is easy. too!\
- Just create a \`Tour\` instance, and add as many steps as you want.`,
-                    attachTo: {
-                        element: "#step-6",
-                        on: "bottom",
-                    },
-                    buttons: [
-                        {
-                            action() {
-                                go_to_page_config();
-                                return;
-                            },
-                            text: "Configurações",
-                        },
-                    ],
-                    id: "creating",
-                },
-            ]);
-
-            tour.start();
-
             /////////////////////////////////
             var data1_aux = q_mes + "/01/" + q_ano
             var data_ini_p_busca = new Date(data1_aux)
@@ -1577,46 +1387,198 @@
                 if (cursor) {
                     var data = cursor.value;
 
-                    if (!data['tutorial']) {
-                        var tutorial_video = [
-                            '<div id="tutorial_div" style="width: 100%; height: 100vh; position: fixed; display: flex; flex-direction: column; background: rgba(0,0,0,0.8); z-index: 100; transition: 2s; color: #FFF; text-shadow: none;">',
-                            '<div style="padding: 20px; margin-top: 10px; display: flex; justify-content: flex-end;">',
-                            '<button id="close_tutorial" onclick="closeTutorial()" style="width: 50px; background: none; border: 0;" type="button">',
-                            '<img src="images/times-branco.png" width="16" alt="Fechar"/>',
-                            '</button>',
-                            '</div>',
-                            '<div style="display: flex; height: 100vh; align-items: center; flex-direction: column; justify-content: center; padding: 20px;">',
-                            '<h1 style="text-align: center;">Bem vindo ao aplicativo SigmaCivil!</h1>',
-                            '<p style="font-size: 18px; line-height: 22px">Este aplicativo lista as manutenções preventivas mensais personalizadas de determinado empreendimento e permite que seja realizada a gestão das manutenções, possibilitando ao usuário que faça upload de fotos, videos, áudios e textos que mostrem e comprovem sua realização.</p>',
-                            '<div style="width: 100%; display: flex; flex-direction: row; justify-content: space-between;">',
-                            '<button id="assistir_tutorial" style="width: 100%; background: #c00c13; padding: 8px; border: 0; border-radius: 4px; color: #FFF; font-weight: bold; transition: background 0.2s;" type="button">Assistir tutorial</button>',
-                            '<button class="closeTutorial" onclick="closeTutorial()" style="width: 100%; background: #666; padding: 8px; border: 0; border-radius: 4px; color: #FFF; font-weight: bold; transition: background 0.2s;" type="button">Pular</button>',
-                            '</div>',
-                            '</div>',
-                            '</div>'
-                        ].join('');
+                    if (!data.tutorial) {
+                        var tour = new Shepherd.Tour({
+                            useModalOverlay: true,
+                            defaultStepOptions: {
+                                cancelIcon: {
+                                    enabled: true,
+                                },
+                                classes: "shadow-md bg-purple-dark",
+                                scrollTo: false,
+                            },
+                        });
 
-                        // document.getElementById('tutorial-video').innerHTML = tutorial_video;
+                        tour.addSteps([
+                            {
+                                title: "Creating a Shepherd Tour",
+                                text: `Creating a Shepherd tour is easy. too!\
+ Just create a \`Tour\` instance, and add as many steps as you want.`,
+                                attachTo: {
+                                    element: "#step-0",
+                                    on: "bottom",
+                                },
+                                buttons: [
+                                    {
+                                        action() {
+                                            return this.back();
+                                        },
+                                        classes: "shepherd-button-secondary",
+                                        text: "Back",
+                                    },
+                                    {
+                                        action() {
+                                            return this.next();
+                                        },
+                                        text: "Next",
+                                    },
+                                ],
+                                id: "creating",
+                            },
+                            {
+                                title: "Creating a Shepherd Tour",
+                                text: `Creating a Shepherd tour is easy. too!\
+ Just create a \`Tour\` instance, and add as many steps as you want.`,
+                                attachTo: {
+                                    element: "#step-1",
+                                    on: "bottom",
+                                },
+                                buttons: [
+                                    {
+                                        action() {
+                                            return this.back();
+                                        },
+                                        classes: "shepherd-button-secondary",
+                                        text: "Back",
+                                    },
+                                    {
+                                        action() {
+                                            return this.next();
+                                        },
+                                        text: "Next",
+                                    },
+                                ],
+                                id: "creating",
+                            },
+                            {
+                                title: "Creating a Shepherd Tour",
+                                text: `Creating a Shepherd tour is easy. too!\
+ Just create a \`Tour\` instance, and add as many steps as you want.`,
+                                attachTo: {
+                                    element: "#step-2",
+                                    on: "bottom",
+                                },
+                                buttons: [
+                                    {
+                                        action() {
+                                            return this.back();
+                                        },
+                                        classes: "shepherd-button-secondary",
+                                        text: "Back",
+                                    },
+                                    {
+                                        action() {
+                                            return this.next();
+                                        },
+                                        text: "Next",
+                                    },
+                                ],
+                                id: "creating",
+                            },
+                            {
+                                title: "Creating a Shepherd Tour",
+                                text: `Creating a Shepherd tour is easy. too!\
+ Just create a \`Tour\` instance, and add as many steps as you want.`,
+                                attachTo: {
+                                    element: "#step-3",
+                                    on: "bottom",
+                                },
+                                buttons: [
+                                    {
+                                        action() {
+                                            return this.back();
+                                        },
+                                        classes: "shepherd-button-secondary",
+                                        text: "Back",
+                                    },
+                                    {
+                                        action() {
+                                            return this.next();
+                                        },
+                                        text: "Next",
+                                    },
+                                ],
+                                id: "creating",
+                            },
+                            {
+                                title: "Creating a Shepherd Tour",
+                                text: `Creating a Shepherd tour is easy. too!\
+ Just create a \`Tour\` instance, and add as many steps as you want.`,
+                                attachTo: {
+                                    element: "#step-4",
+                                    on: "bottom",
+                                },
+                                buttons: [
+                                    {
+                                        action() {
+                                            return this.back();
+                                        },
+                                        classes: "shepherd-button-secondary",
+                                        text: "Back",
+                                    },
+                                    {
+                                        action() {
+                                            return this.next();
+                                        },
+                                        text: "Next",
+                                    },
+                                ],
+                                id: "creating",
+                                when: {
+                                    show: function () {
+                                        document.querySelector('.btn-bars-bars').click();
+                                    },
+                                },
+                            },
+                            {
+                                title: "Creating a Shepherd Tour",
+                                text: `Creating a Shepherd tour is easy. too!\
+ Just create a \`Tour\` instance, and add as many steps as you want.`,
+                                attachTo: {
+                                    element: "#step-5",
+                                    on: "bottom",
+                                },
+                                buttons: [
+                                    {
+                                        action() {
+                                            return this.back();
+                                        },
+                                        classes: "shepherd-button-secondary",
+                                        text: "Back",
+                                    },
+                                    {
+                                        action() {
+                                            return this.next();
+                                        },
+                                        text: "Next",
+                                    },
+                                ],
+                                id: "creating",
+                            },
+                            {
+                                title: "Creating a Shepherd Tour",
+                                text: `Creating a Shepherd tour is easy. too!\
+ Just create a \`Tour\` instance, and add as many steps as you want.`,
+                                attachTo: {
+                                    element: "#step-6",
+                                    on: "bottom",
+                                },
+                                buttons: [
+                                    {
+                                        action() {
+                                            go_to_page_config();
+                                            return;
+                                        },
+                                        text: "Configurações",
+                                    },
+                                ],
+                                id: "creating",
+                            },
+                        ]);
 
-                        /*document.getElementById('assistir_tutorial').addEventListener('click', function () {
-                            tutorial_video = [
-                                '<div id="tutorial_div" style="width: 100%; height: 100vh; position: fixed; display: flex; justify-content: center; flex-direction: column; align-items: center; background: rgba(0,0,0,0.8); z-index: 100; color: #FFF; text-shadow: none;">',
-                                '<div style="padding: 20px; margin-right: 40px; width: 100%; display: flex; justify-content: flex-end;">',
-                                '<button id="close_tutorial" onclick="closeTutorial()" style="width: 50px; background: none; border: 0;" type="button">',
-                                '<img src="images/times-branco.png" width="16" alt="Fechar"/>',
-                                '</button>',
-                                '</div>',
-                                '<video poster="images/background.jpg" style="border-radius: 20px;" width="100%" height="600" controls>',
-                                '<source style="border-radius: 20px;" src="images/tutorial.mp4" type="video/mp4">',
-                                '</video>',
-                                '</div>'
-                            ].join('');
-
-                            document.getElementById('tutorial-video').innerHTML = tutorial_video;
-                        });*/
+                        tour.start();
                     }
 
-                    data['tutorial'] = true;
                     var request = cursor.update(data);
                 }
             }

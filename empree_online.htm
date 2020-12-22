@@ -8,14 +8,15 @@
     <link rel="stylesheet" href="css/custom.css" />
     <link rel="stylesheet" href="css/custom-mobile.css" />
     <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
-    <link rel="stylesheet" href="css/bootstrap-tour-standalone.min.css" />
+    <!-- <link rel="stylesheet" href="css/bootstrap-tour-standalone.min.css" /> -->
     <title>Empree_onlline</title>
     <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
     <script type="text/javascript" src="js/mc.js"></script>
     <script src="js/jquery.js"></script>
     <script src="js/jquery.mobile-1.4.5.min.js"></script>
     <script src="js/scrollPage.js"></script>
-    <script src="js/bootstrap-tour-standalone.min.js"></script>
+    <script src="js/shepherd.js"></script>
+    <!-- <script src="js/bootstrap-tour-standalone.min.js"></script> -->
     <style>
         .menu .ui-mini.ui-btn-icon-left:after,
         .ui-mini .ui-btn-icon-left:after,
@@ -404,82 +405,194 @@
             var statusDocumentacao;
             var mudaStatus = '<img src="images/danger.svg" width="25" height="25" />'
 
-            // Instance the tour
-            var tour = new Tour({
-                steps: [
-                    {
-                        element: ".box-shadow",
-                        title: "Bem vindo ao SigmaCivil",
-                        content: "Confira as novidades da versão 2.2",
-                        // placement: "auto",
-                        template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Anterior</button><span data-role='separator'></span><button class='btn btn-default' data-role='next'>Próximo »</button><button class='btn btn-danger' data-role='end'>Fechar</button></div></div>",
-                        orphan: true
+            var tour = new Shepherd.Tour({
+                useModalOverlay: true,
+                defaultStepOptions: {
+                    cancelIcon: {
+                        enabled: true,
                     },
-                    {
-                        element: "#step-0",
-                        title: "Novo menu de navegação",
-                        content: "Navegue mais rápido entre as páginas",
-                        placement: "top",
-                        template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Anterior</button><span data-role='separator'></span><button class='btn btn-default' data-role='next'>Próximo »</button><button class='btn btn-danger' data-role='end'>Fechar</button></div></div>",
-                    },
-                    {
-                        element: "#step-1",
-                        title: "Veja as manutenções",
-                        content: "Aqui você encontra todas as suas manutenções pendentes e realizadas",
-                        placement: "top",
-                        template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Anterior</button><span data-role='separator'></span><button class='btn btn-default' data-role='next'>Próximo »</button><button class='btn btn-danger' data-role='end'>Fechar</button></div></div>",
-                    },
-                    {
-                        element: "#step-2",
-                        title: "Scanear um QRCode",
-                        content: "Aqui você consegue realizar uma manutenção especifica através de um QRCode ou realizar um checkpoint.",
-                        placement: "top",
-                        template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Anterior</button><span data-role='separator'></span><button class='btn btn-default' data-role='next'>Próximo »</button><button class='btn btn-danger' data-role='end'>Fechar</button></div></div>",
-                    },
-                    {
-                        element: "#step-3",
-                        title: "Gráfico de checkpoints",
-                        content: "Aqui você consulta todos os checkpoints realizados",
-                        placement: "top",
-                        template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Anterior</button><span data-role='separator'></span><button class='btn btn-default' data-role='next'>Próximo »</button><button class='btn btn-danger' data-role='end'>Fechar</button></div></div>",
-                        onHidden: function (tour) {
-                            document.querySelector('.btn-bars-bars').click();
-                        }
-                    },
-                    {
-                        element: "#step-4",
-                        title: "Configurações",
-                        content: "Configure o seu aplicativo da sua melhor forma.",
-                        placement: "bottom",
-                        template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Anterior</button><span data-role='separator'></span><button class='btn btn-default' data-role='next'>Próximo »</button><button class='btn btn-danger' data-role='end'>Fechar</button></div></div>",
-                    },
-                    {
-                        element: "#step-5",
-                        title: "Fechar aplicativo",
-                        content: "Aqui você fecha o aplicativo completamente.",
-                        placement: "bottom",
-                        template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Anterior</button><span data-role='separator'></span><button class='btn btn-default' data-role='next'>Próximo »</button><button class='btn btn-danger' data-role='end'>Fechar</button></div></div>",
-                    },
-                    {
-                        element: "#step-6",
-                        title: "Fazer logout",
-                        content: "Aqui você faz login com outro usuário e senha",
-                        placement: "bottom",
-                        template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Anterior</button><span data-role='separator'></span><button class='btn btn-primary' data-role='end'>Configurações</button></div></div>",
-                        onHidden: function (tour) {
-                            window.location.assign("configuracoes.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&idc=" + qual_id_cliente + "&econst=" + q_e_construtora);
-                        }
-                    },
-                ],
-                name: "empree_online",
-                backdrop: true,
-                autoscroll: false
+                    classes: "shadow-md bg-purple-dark",
+                    scrollTo: false,
+                },
             });
 
-            // Initialize the tour
-            tour.init();
+            tour.addSteps([
+                {
+                    title: "Creating a Shepherd Tour",
+                    text: `Creating a Shepherd tour is easy. too!\
+ Just create a \`Tour\` instance, and add as many steps as you want.`,
+                    attachTo: {
+                        element: "#step-0",
+                        on: "bottom",
+                    },
+                    buttons: [
+                        {
+                            action() {
+                                return this.back();
+                            },
+                            classes: "shepherd-button-secondary",
+                            text: "Back",
+                        },
+                        {
+                            action() {
+                                return this.next();
+                            },
+                            text: "Next",
+                        },
+                    ],
+                    id: "creating",
+                },
+                {
+                    title: "Creating a Shepherd Tour",
+                    text: `Creating a Shepherd tour is easy. too!\
+ Just create a \`Tour\` instance, and add as many steps as you want.`,
+                    attachTo: {
+                        element: "#step-1",
+                        on: "bottom",
+                    },
+                    buttons: [
+                        {
+                            action() {
+                                return this.back();
+                            },
+                            classes: "shepherd-button-secondary",
+                            text: "Back",
+                        },
+                        {
+                            action() {
+                                return this.next();
+                            },
+                            text: "Next",
+                        },
+                    ],
+                    id: "creating",
+                },
+                {
+                    title: "Creating a Shepherd Tour",
+                    text: `Creating a Shepherd tour is easy. too!\
+ Just create a \`Tour\` instance, and add as many steps as you want.`,
+                    attachTo: {
+                        element: "#step-2",
+                        on: "bottom",
+                    },
+                    buttons: [
+                        {
+                            action() {
+                                return this.back();
+                            },
+                            classes: "shepherd-button-secondary",
+                            text: "Back",
+                        },
+                        {
+                            action() {
+                                return this.next();
+                            },
+                            text: "Next",
+                        },
+                    ],
+                    id: "creating",
+                },
+                {
+                    title: "Creating a Shepherd Tour",
+                    text: `Creating a Shepherd tour is easy. too!\
+ Just create a \`Tour\` instance, and add as many steps as you want.`,
+                    attachTo: {
+                        element: "#step-3",
+                        on: "bottom",
+                    },
+                    buttons: [
+                        {
+                            action() {
+                                return this.back();
+                            },
+                            classes: "shepherd-button-secondary",
+                            text: "Back",
+                        },
+                        {
+                            action() {
+                                return this.next();
+                            },
+                            text: "Next",
+                        },
+                    ],
+                    id: "creating",
+                },
+                {
+                    title: "Creating a Shepherd Tour",
+                    text: `Creating a Shepherd tour is easy. too!\
+ Just create a \`Tour\` instance, and add as many steps as you want.`,
+                    attachTo: {
+                        element: "#step-4",
+                        on: "bottom",
+                    },
+                    buttons: [
+                        {
+                            action() {
+                                return this.back();
+                            },
+                            classes: "shepherd-button-secondary",
+                            text: "Back",
+                        },
+                        {
+                            action() {
+                                return this.next();
+                            },
+                            text: "Next",
+                        },
+                    ],
+                    id: "creating",
+                    when: {
+                        show: function () {
+                            document.querySelector('.btn-bars-bars').click();
+                        },
+                    },
+                },
+                {
+                    title: "Creating a Shepherd Tour",
+                    text: `Creating a Shepherd tour is easy. too!\
+ Just create a \`Tour\` instance, and add as many steps as you want.`,
+                    attachTo: {
+                        element: "#step-5",
+                        on: "bottom",
+                    },
+                    buttons: [
+                        {
+                            action() {
+                                return this.back();
+                            },
+                            classes: "shepherd-button-secondary",
+                            text: "Back",
+                        },
+                        {
+                            action() {
+                                return this.next();
+                            },
+                            text: "Next",
+                        },
+                    ],
+                    id: "creating",
+                },
+                {
+                    title: "Creating a Shepherd Tour",
+                    text: `Creating a Shepherd tour is easy. too!\
+ Just create a \`Tour\` instance, and add as many steps as you want.`,
+                    attachTo: {
+                        element: "#step-6",
+                        on: "bottom",
+                    },
+                    buttons: [
+                        {
+                            action() {
+                                go_to_page_config();
+                                return;
+                            },
+                            text: "Configurações",
+                        },
+                    ],
+                    id: "creating",
+                },
+            ]);
 
-            // Start the tour
             tour.start();
 
             /////////////////////////////////

@@ -147,9 +147,10 @@
     margin-right: 16px;
 }
 
-/* .cogs-button span {
-    margin-top: 16px;
-} */
+.cogs-button span {
+    width: 100%;
+    text-align: center;
+}
 
 .ui-flipswitch {
     border-radius: 40px !important;

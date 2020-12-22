@@ -8,12 +8,13 @@
 		content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, `user-scalable=no">
 	<link rel="stylesheet" href="css/custom.css" />
 	<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
-	<link rel="stylesheet" href="css/bootstrap-tour-standalone.min.css" />
+	<!-- <link rel="stylesheet" href="css/bootstrap-tour-standalone.min.css" /> -->
 	<script type="text/javascript" src="js/mc.js"></script>
 	<script type="text/javascript" src="cordova.js"></script>
 	<script src="js/jquery.js"></script>
 	<script src="js/jquery.mobile-1.4.5.min.js"></script>
-	<script src="js/bootstrap-tour-standalone.min.js"></script>
+    <script src="js/shepherd.js"></script>
+	<!-- <script src="js/bootstrap-tour-standalone.min.js"></script> -->
 	<style>
 		.menu .ui-mini.ui-btn-icon-left:after,
 		.ui-mini .ui-btn-icon-left:after,
@@ -134,8 +135,99 @@
 				}
 			}, 5000);
 
+			var tour = new Shepherd.Tour({
+				useModalOverlay: true,
+				defaultStepOptions: {
+					cancelIcon: {
+						enabled: true,
+					},
+					classes: "shadow-md bg-purple-dark",
+					scrollTo: false,
+				},
+			});
+
+			tour.addSteps([
+				{
+					title: "Creating a Shepherd Tour",
+					text: `Creating a Shepherd tour is easy. too!\
+ Just create a \`Tour\` instance, and add as many steps as you want.`,
+					attachTo: {
+						element: "#step-1",
+						on: "bottom",
+					},
+					buttons: [
+						{
+							action() {
+								return this.back();
+							},
+							classes: "shepherd-button-secondary",
+							text: "Back",
+						},
+						{
+							action() {
+								return this.next();
+							},
+							text: "Next",
+						},
+					],
+					id: "creating",
+				},
+				{
+					title: "Creating a Shepherd Tour",
+					text: `Creating a Shepherd tour is easy. too!\
+ Just create a \`Tour\` instance, and add as many steps as you want.`,
+					attachTo: {
+						element: "#step-2",
+						on: "bottom",
+					},
+					buttons: [
+						{
+							action() {
+								return this.back();
+							},
+							classes: "shepherd-button-secondary",
+							text: "Back",
+						},
+						{
+							action() {
+								return this.next();
+							},
+							text: "Next",
+						},
+					],
+					id: "creating",
+				},
+				{
+					title: "Creating a Shepherd Tour",
+					text: `Creating a Shepherd tour is easy. too!\
+ Just create a \`Tour\` instance, and add as many steps as you want.`,
+					attachTo: {
+						element: "#step-3",
+						on: "bottom",
+					},
+					buttons: [
+						{
+							action() {
+								return this.back();
+							},
+							classes: "shepherd-button-secondary",
+							text: "Back",
+						},
+						{
+							action() {
+								return this.next();
+							},
+							text: "Next",
+						},
+					],
+					id: "creating",
+				},
+			]);
+
+			tour.start();
+
 			// Instance the tour
-			var tour = new Tour({
+			/*var tour = new Tour({
 				steps: [
 					{
 						element: "#step-1",
@@ -168,7 +260,7 @@
 			tour.init();
 
 			// Start the tour
-			tour.start();
+			tour.start();*/
 
 			/////////////////////////////////
 			var data1_aux = q_mes + "/01/" + q_ano
@@ -411,7 +503,8 @@
 		<img src="images/tail-spin.svg" width="35" height="35">
 		<p id="progress-value"></p>
 		<div style="display: flex; margin-top: 50px;">
-			<button class="ui-btn ui-mini" style="margin-right: 10px; background: #b10b0b; border-color: #b10b0b;" type="button">
+			<button class="ui-btn ui-mini" style="margin-right: 10px; background: #b10b0b; border-color: #b10b0b;"
+				type="button">
 				<a href="#" onclick="cancelarUpload()"
 					style="color: #fff; text-shadow: none; text-decoration: none;">Cancelar</a>
 			</button>

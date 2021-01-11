@@ -4,8 +4,9 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Configurações</title>
-	<meta name="viewport"
-		content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, `user-scalable=no">
+	<!-- <meta name="viewport"
+		content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, `user-scalable=no"> -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 	<link rel="stylesheet" href="css/custom.css" />
 	<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
 	<!-- <link rel="stylesheet" href="css/bootstrap-tour-standalone.min.css" /> -->
@@ -145,14 +146,14 @@
 			request.onsuccess = function (event) {
 				db = request.result;
 
-				updateMtabConfigTutorial(db, true);
+				updateMtabConfigTutorial(db);
 
 				db.onerror = function (event) {
 					alert("Database error: " + event.target.errorCode);
 				}
 			}
 
-			function updateMtabConfigTutorial(db, complete) {
+			function updateMtabConfigTutorial(db) {
 				var tx = db.transaction(['mtab_config'], 'readwrite');
 				var store = tx.objectStore('mtab_config');
 				var objectStoreRequest = store.openCursor();
@@ -254,49 +255,11 @@
 							tour.start();
 						}
 
-						data.tutorial = complete;
+						data.tutorial = true;
 						var request = cursor.update(data);
 					}
 				}
 			}
-
-			//tour.start();
-
-			// Instance the tour
-			/*var tour = new Tour({
-				steps: [
-					{
-						element: "#step-1",
-						title: "Novo menu de navegação",
-						content: "Navegue mais rápido entre as páginas",
-						placement: "bottom",
-						template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Anterior</button><span data-role='separator'></span><button class='btn btn-default' data-role='next'>Próximo »</button><button class='btn btn-danger' data-role='end'>Fechar</button></div></div>",
-					},
-					{
-						element: "#step-2",
-						title: "Veja as manutenções",
-						content: "Aqui você encontra todas as suas manutenções pendentes e realizadas",
-						placement: "bottom",
-						template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Anterior</button><span data-role='separator'></span><button class='btn btn-default' data-role='next'>Próximo »</button><button class='btn btn-danger' data-role='end'>Fechar</button></div></div>",
-					},
-					{
-						element: "#step-3",
-						title: "Upload de arquivos",
-						content: "Aqui você faz o upload de todos os arquivos que ainda não estão no servidor",
-						placement: "bottom",
-						template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Anterior</button><span data-role='separator'></span><button class='btn btn-default' data-role='next'>Próximo »</button><button class='btn btn-danger' data-role='end'>Fechar</button></div></div>",
-					},
-				],
-				name: "config",
-				backdrop: true,
-				autoscroll: false
-			});
-
-			// Initialize the tour
-			tour.init();
-
-			// Start the tour
-			tour.start();*/
 
 			/////////////////////////////////
 			var data1_aux = q_mes + "/01/" + q_ano

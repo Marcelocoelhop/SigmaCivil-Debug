@@ -1053,32 +1053,48 @@
                 function (buttonIndex) {
                     if (buttonIndex === 1) {
                         source = pictureSource.PHOTOLIBRARY;
+
+                        window.imagePicker.getPictures(onSuccess, onError, {
+                            maximumImagesCount: 5,
+                            width: 150,
+                            height: 100
+                        });
                     } else {
                         source = pictureSource.CAMERA;
-                    }
 
-                    navigator.camera.getPicture(onPhotoURISuccess, onFail, {
-                        quality: 50,
-                        destinationType: destinationType.FILE_URI,
-                        encodingType: Camera.EncodingType.JPEG,
-                        popoverOptions: CameraPopoverOptions,
-                        saveToPhotoAlbum: true,
-                        allowEdit: editPictures ? true : false,
-                        sourceType: source
-                    });
+                        navigator.camera.getPicture(onPhotoURISuccess, onFail, {
+                            quality: 50,
+                            destinationType: destinationType.FILE_URI,
+                            encodingType: Camera.EncodingType.JPEG,
+                            popoverOptions: CameraPopoverOptions,
+                            saveToPhotoAlbum: true,
+                            allowEdit: editPictures ? true : false,
+                            sourceType: source
+                        });
+                    }
                 },
                 'SigmaCivil',
                 ['Galeria', 'Tirar uma foto']
             );
 
-            /*var r = confirm("Para tirar uma foto com a câmera selecione OK. Para acessar sua galeria de imagens clique em CANCELAR");
-            if (r == true) {
-                source = pictureSource.CAMERA;
-            } else {
-                source = pictureSource.PHOTOLIBRARY;
-            }*/
-
         }
+
+        function onSuccess(results) {
+            results.map(function (result, index) {
+                alert(result);
+                var image = document.createElement('img');
+                image.setAttribute('src', result);
+                
+                document.getElementById('foto_' + id_prog_manut).appendChild(image);
+                document.getElementById('foto_' + qual_id_prog_manut).style.display = "inline";
+            });
+        }
+
+        function onError(error) {
+            alert('Error: ' + error);
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////
 
         function onFail(message) {
             // alert('Failed because: ' + message);

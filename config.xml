@@ -140,7 +140,6 @@
     <plugin name="cordova-plugin-inappbrowser" spec="~4.0.0" />
 
     <plugin name="cordova-plugin-app-exit" spec="~0.0.1" />
-    <plugin name="cordova-plugin-telerik-imagepicker" spec="~2.3.5" />
     
     <!-- <plugin name="cordova-plugin-wkwebview-engine" source="npm" spec="~1.2.1" /> -->
     

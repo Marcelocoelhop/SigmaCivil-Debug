@@ -402,6 +402,14 @@
                 }
             }, 5000);
 
+            setTimeout(function () {
+                cordova.plugins.notification.local.schedule({
+                    title: 'My first notification',
+                    text: 'Thats pretty easy...',
+                    foreground: true
+                });
+            }, 5000);
+
             var statusRelacionamento;
             var statusDocumentacao;
             var mudaStatus = '<img src="images/danger.svg" width="25" height="25" />'

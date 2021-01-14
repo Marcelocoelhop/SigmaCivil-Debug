@@ -379,38 +379,6 @@
 				}
 			}, 5000);
 
-			var db;
-			var request = window.indexedDB.open("db_sigmacivil", "1");
-
-			request.onerror = function (event) {
-				alert("Erro ao criar o banco (cod 01)");
-			};
-
-			request.onsuccess = function (event) {
-				db = request.result;
-
-				consultaCliente(db);
-
-				db.onerror = function (event) {
-					alert("Database error: " + event.target.errorCode);
-				}
-			}
-
-			function consultaCliente(db) {
-				var tx = db.transaction(['mtab_cliente'], 'readwrite');
-				var store = tx.objectStore('mtab_cliente');
-				var objectStoreRequest = store.openCursor();
-				objectStoreRequest.onsuccess = function (event) {
-					var cursor = event.target.result;
-					if (cursor) {
-						var data = cursor.value;
-
-						qual_id_cliente = data.id_cliente;
-						q_e_construtora = data.e_construtora;
-					}
-				}
-			}
-
 			var data1_aux = q_mes + "/01/" + q_ano
 			var data_ini_p_busca = new Date(data1_aux)
 
@@ -490,6 +458,31 @@
 						}
 
 						cursor.continue();
+					}
+				}
+			}
+
+			request.onsuccess = function (event) {
+				db = request.result;
+
+				consultaCliente(db);
+
+				db.onerror = function (event) {
+					alert("Database error: " + event.target.errorCode);
+				}
+			}
+
+			function consultaCliente(db) {
+				var tx = db.transaction(['mtab_cliente'], 'readwrite');
+				var store = tx.objectStore('mtab_cliente');
+				var objectStoreRequest = store.openCursor();
+				objectStoreRequest.onsuccess = function (event) {
+					var cursor = event.target.result;
+					if (cursor) {
+						var data = cursor.value;
+
+						qual_id_cliente = data.id_cliente;
+						q_e_construtora = data.e_construtora;
 					}
 				}
 			}

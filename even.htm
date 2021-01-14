@@ -91,7 +91,7 @@
 				'<div align="center">',
 				'<a href="#" onClick="volta_uni()"><button style="background: #e9e9e9; border-color: #e9e9e9;" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-left ui-icon-carat-l">Voltar</button></a>', '<table width="30" border="0" cellpadding="0" cellspacing="0" >',
 				'<tr>',
-				'<td width="30" ><img src="images/logo4.png" width="142"> </td>',
+				'<td width="30" ><img src="images/logo6.png" width="142"> </td>',
 				'</tr>',
 				'</table>',
 				'</div>',
@@ -111,7 +111,7 @@
 				'<a href="#" onClick="volta_uni()"><button style="background: #e9e9e9; border-color: #e9e9e9;" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-left ui-icon-carat-l">Voltar</button></a>',
 				'<table width="30" border="0" cellpadding="0" cellspacing="0" >',
 				'<tr>',
-				'<td width="30" ><img src="images/logo4.png" width="142"> </td>',
+				'<td width="30" ><img src="images/logo6.png" width="142"> </td>',
 				'</tr>',
 				'</table>',
 				'</div>',
@@ -1046,13 +1046,15 @@
 		var i, len;
 		var m_path;
 
+		alert(mediaFiles);
+
 		if (Array.isArray(mediaFiles)) {
 			mediaFiles = [
 				{ fullPath: mediaFiles }
 			];
 		}
 
-		for (i = 0, len = mediaFiles.length; i < len; i += 1) {
+		for (var i = 0; i < mediaFiles.length; i++) {
 			m_path = mediaFiles[i].fullPath;
 
 			document.getElementById('video_invis_' + qual_id_prog_manut).style.display = "inline";

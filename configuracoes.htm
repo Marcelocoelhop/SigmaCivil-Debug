@@ -282,208 +282,210 @@
 			var data_final_p_busca = new Date(data2_aux)
 			/////////////////////////////////////////////
 
-			// Buscando o id_prog_manut, dia, mes e ano e criando um array de objetos para o for() do contaManutEvento()
-			var ajax = new XMLHttpRequest();
-			ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_emp_online.asp?l=" + login + "&s=" + senha + "&versao=2.2&t=" + Math.random(), true);
-			ajax.addEventListener("loadend", function (evt) {
-				var resposta_total = this.responseText;
-				var jsontext = resposta_total.split("*")
+			if (tem_conexao()) {
+				// Buscando o id_prog_manut, dia, mes e ano e criando um array de objetos para o for() do contaManutEvento()
+				var ajax = new XMLHttpRequest();
+				ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_emp_online.asp?l=" + login + "&s=" + senha + "&versao=2.2&t=" + Math.random(), true);
+				ajax.addEventListener("loadend", function (evt) {
+					var resposta_total = this.responseText;
+					var jsontext = resposta_total.split("*")
 
-				var getLogin = JSON.parse(jsontext[0]);
-				var logou = getLogin.logou;
-				qual_id_cliente = getLogin.id_cliente;
-				var num_empree = getLogin.id_empree;
-				var nome_empree = getLogin.nome_empree;
-				q_e_construtora = getLogin.e_construtora;
-				var data_implantacao_sc = new Date(getLogin.data_implantacao_sc)
+					var getLogin = JSON.parse(jsontext[0]);
+					var logou = getLogin.logou;
+					qual_id_cliente = getLogin.id_cliente;
+					var num_empree = getLogin.id_empree;
+					var nome_empree = getLogin.nome_empree;
+					q_e_construtora = getLogin.e_construtora;
+					var data_implantacao_sc = new Date(getLogin.data_implantacao_sc)
 
-				var resultado_consulta = getLogin.status_sync;
-				var parte_resultado = resultado_consulta.split('_')
-				var status_sync_serv = parte_resultado[0]
-				var bloqueio = parte_resultado[1]
-				var q_mensagem = parte_resultado[2]
+					var resultado_consulta = getLogin.status_sync;
+					var parte_resultado = resultado_consulta.split('_')
+					var status_sync_serv = parte_resultado[0]
+					var bloqueio = parte_resultado[1]
+					var q_mensagem = parte_resultado[2]
 
-				if (logou == "S") {
+					if (logou == "S") {
 
-					var getEmpree = jsontext[1];
-					var objEmpree = JSON.parse(getEmpree);
-					var dados_0 = ""
-					var dados_1 = ""
-					var str = ""
-					var str2 = ""
-					var qtde_eventos = 0;
-					var compl2 = ""
-					var temp1 = ""
-					var data_maxima_alteracao;
-					var data_minima_alteracao;
+						var getEmpree = jsontext[1];
+						var objEmpree = JSON.parse(getEmpree);
+						var dados_0 = ""
+						var dados_1 = ""
+						var str = ""
+						var str2 = ""
+						var qtde_eventos = 0;
+						var compl2 = ""
+						var temp1 = ""
+						var data_maxima_alteracao;
+						var data_minima_alteracao;
 
-					for (i = 0; i < objEmpree.dados_empreendimento.length; i++) {
-						//calculo da data do evento
-						qtde_eventos = parseInt(objEmpree.dados_empreendimento[i].dias_garant / (objEmpree.dados_empreendimento[i].qdp * objEmpree.dados_empreendimento[i].qtae))
-						str = objEmpree.dados_empreendimento[i].formato_periodicidade
+						for (i = 0; i < objEmpree.dados_empreendimento.length; i++) {
+							//calculo da data do evento
+							qtde_eventos = parseInt(objEmpree.dados_empreendimento[i].dias_garant / (objEmpree.dados_empreendimento[i].qdp * objEmpree.dados_empreendimento[i].qtae))
+							str = objEmpree.dados_empreendimento[i].formato_periodicidade
 
-						var data_inicial_garantia = new Date(objEmpree.dados_empreendimento[i].dig)
-						str2 = str.split("_")
+							var data_inicial_garantia = new Date(objEmpree.dados_empreendimento[i].dig)
+							str2 = str.split("_")
 
-						////////////////////////////////// calculo dos eventos \\\\\\\\\\
-						var meio_empree = "";
+							////////////////////////////////// calculo dos eventos \\\\\\\\\\
+							var meio_empree = "";
 
-						for (j = 1; j <= qtde_eventos; j++) {
-							compl2 = j * str2[0] * objEmpree.dados_empreendimento[i].qtae
+							for (j = 1; j <= qtde_eventos; j++) {
+								compl2 = j * str2[0] * objEmpree.dados_empreendimento[i].qtae
 
-							var new_data_evento = new Date(data_inicial_garantia)
+								var new_data_evento = new Date(data_inicial_garantia)
 
-							if (str2[1] == "d") {
-								new_data_evento.setDate(new_data_evento.getDate() + compl2);
-							}
-							if (str2[1] == "m") {
-
-								/////para soma em MESES
-								var inteiro_ano = compl2 / 12;
-								inteiro_ano = Math.floor(inteiro_ano);
-								var aux_mes = compl2 - (12 * inteiro_ano);
-								aux_mes = (new_data_evento.getMonth() + aux_mes)
-
-								var soma_ano
-								var aux_dia
-
-								if (aux_mes >= 12) {
-									aux_mes = aux_mes - 12;
-									soma_ano = 1;
+								if (str2[1] == "d") {
+									new_data_evento.setDate(new_data_evento.getDate() + compl2);
 								}
-								else {
-									aux_mes = aux_mes;
-									soma_ano = 0;
-								}
+								if (str2[1] == "m") {
 
-								var aux_ano = inteiro_ano + soma_ano
-								aux_ano = (new_data_evento.getFullYear() + aux_ano)
+									/////para soma em MESES
+									var inteiro_ano = compl2 / 12;
+									inteiro_ano = Math.floor(inteiro_ano);
+									var aux_mes = compl2 - (12 * inteiro_ano);
+									aux_mes = (new_data_evento.getMonth() + aux_mes)
 
-								if (new_data_evento.getDate() == 31) {
+									var soma_ano
+									var aux_dia
 
-									if (aux_mes == 03 || aux_mes == 05 || aux_mes == 08 || aux_mes == 10) {
-										aux_dia = 30;
-									} else if ((aux_mes == 01) && (aux_ano % 4 == 0)) {
-										aux_dia = 29;
-									} else if ((aux_mes == 01) && (aux_ano % 4 != 0)) {
-										aux_dia = 28;
-									} else {
-										aux_dia = 31;
+									if (aux_mes >= 12) {
+										aux_mes = aux_mes - 12;
+										soma_ano = 1;
+									}
+									else {
+										aux_mes = aux_mes;
+										soma_ano = 0;
 									}
 
-								} else if (new_data_evento.getDate() == 30) {
+									var aux_ano = inteiro_ano + soma_ano
+									aux_ano = (new_data_evento.getFullYear() + aux_ano)
 
-									if ((aux_mes == 01) && (aux_ano % 4 == 0)) {
-										aux_dia = 29;
-									} else if ((aux_mes == 01) && (aux_ano % 4 != 0)) {
-										aux_dia = 28;
+									if (new_data_evento.getDate() == 31) {
+
+										if (aux_mes == 03 || aux_mes == 05 || aux_mes == 08 || aux_mes == 10) {
+											aux_dia = 30;
+										} else if ((aux_mes == 01) && (aux_ano % 4 == 0)) {
+											aux_dia = 29;
+										} else if ((aux_mes == 01) && (aux_ano % 4 != 0)) {
+											aux_dia = 28;
+										} else {
+											aux_dia = 31;
+										}
+
+									} else if (new_data_evento.getDate() == 30) {
+
+										if ((aux_mes == 01) && (aux_ano % 4 == 0)) {
+											aux_dia = 29;
+										} else if ((aux_mes == 01) && (aux_ano % 4 != 0)) {
+											aux_dia = 28;
+										} else {
+											aux_dia = 30;
+										}
+
+									} else if (new_data_evento.getDate() == 29) {
+
+										if ((aux_mes == 01) && (aux_ano % 4 != 0)) {
+											aux_dia = 28;
+										} else {
+											aux_dia = 29;
+										}
+
 									} else {
-										aux_dia = 30;
+										aux_dia = new_data_evento.getDate();
 									}
 
-								} else if (new_data_evento.getDate() == 29) {
+									new_data_evento = new Date(aux_ano, aux_mes, aux_dia)
+								} // for para gerar eventos
 
-									if ((aux_mes == 01) && (aux_ano % 4 != 0)) {
-										aux_dia = 28;
-									} else {
-										aux_dia = 29;
+								if (str2[1] == "yyyy") {
+									new_data_evento.setFullYear(new_data_evento.getFullYear() + compl2);
+								}
+
+								if (new_data_evento >= data_implantacao_sc) {
+
+									if (new_data_evento >= data_ini_p_busca && new_data_evento <= data_final_p_busca) {
+
+										temp1 = new_data_evento.getDate() + "/" + (new_data_evento.getMonth() + 1) + "/" + new_data_evento.getFullYear() + "<br>"
+										var aux_mes_novo = new_data_evento.getMonth() + 1;
+										aux_mes_novo = '0' + aux_mes_novo
+										aux_mes_novo = aux_mes_novo.substring(aux_mes_novo.length - 2, aux_mes_novo.length);
+
+										var aux_dia_novo = new_data_evento.getDate();
+										aux_dia_novo = '0' + aux_dia_novo
+										aux_dia_novo = aux_dia_novo.substring(aux_dia_novo.length - 2, aux_dia_novo.length);
+
+										vetor_consulta_evento += objEmpree.dados_empreendimento[i].id_prog_manut + '*' + new_data_evento.getFullYear() + '*' + aux_mes_novo + '*' + aux_dia_novo + ';'
+										vetor_dados_manutencao += objEmpree.dados_empreendimento[i].id_prog_manut + '*' + objEmpree.dados_empreendimento[i].nome_sistema + '*' + objEmpree.dados_empreendimento[i].nome_atividade + '*' + objEmpree.dados_empreendimento[i].nome_periodicidade + '*' + objEmpree.dados_empreendimento[i].resp + '*' + temp1 + '*' + objEmpree.dados_empreendimento[i].qdp + '*' + objEmpree.dados_empreendimento[i].qtae + '*' + objEmpree.dados_empreendimento[i].gap + '*' + new_data_evento + ';'
 									}
-
-								} else {
-									aux_dia = new_data_evento.getDate();
 								}
 
-								new_data_evento = new Date(aux_ano, aux_mes, aux_dia)
-							} // for para gerar eventos
+								if (new_data_evento > data_final_p_busca) { break; }
+							} //for next 1
 
-							if (str2[1] == "yyyy") {
-								new_data_evento.setFullYear(new_data_evento.getFullYear() + compl2);
-							}
+						} //for next 2
 
-							if (new_data_evento >= data_implantacao_sc) {
+						string_auxiliar += "inico do innerhtml:" + Date(Date.now()) + "<br>"
 
-								if (new_data_evento >= data_ini_p_busca && new_data_evento <= data_final_p_busca) {
+						string_auxiliar += " <br><br><br>-------INI  vetor_consulta_evento------------------ " + vetor_consulta_evento + "---------FIM------------<br>"
 
-									temp1 = new_data_evento.getDate() + "/" + (new_data_evento.getMonth() + 1) + "/" + new_data_evento.getFullYear() + "<br>"
-									var aux_mes_novo = new_data_evento.getMonth() + 1;
-									aux_mes_novo = '0' + aux_mes_novo
-									aux_mes_novo = aux_mes_novo.substring(aux_mes_novo.length - 2, aux_mes_novo.length);
+						string_auxiliar += "inico do resposta_total:" + Date(Date.now()) + "<br>"
+						vetor_consulta_evento = vetor_consulta_evento.substring(0, vetor_consulta_evento.length - 1);
+						vetor_dados_manutencao = vetor_dados_manutencao.substring(0, vetor_dados_manutencao.length - 1);
 
-									var aux_dia_novo = new_data_evento.getDate();
-									aux_dia_novo = '0' + aux_dia_novo
-									aux_dia_novo = aux_dia_novo.substring(aux_dia_novo.length - 2, aux_dia_novo.length);
+						var data_post = "l=" + login + "&s=" + senha + "&d=" + vetor_consulta_evento;
+						var ajax2 = new XMLHttpRequest();
+						ajax2.open("POST", "https://www.sigmacivil.com.br/app_sc/consult_evento_onlineB.asp?versao=2.2&t=" + Math.random(), true);
+						ajax2.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+						ajax2.addEventListener("loadend", function (evt) {
+							var resposta_total = this.responseText;
+							var jsontext = resposta_total.split("#")
 
-									vetor_consulta_evento += objEmpree.dados_empreendimento[i].id_prog_manut + '*' + new_data_evento.getFullYear() + '*' + aux_mes_novo + '*' + aux_dia_novo + ';'
-									vetor_dados_manutencao += objEmpree.dados_empreendimento[i].id_prog_manut + '*' + objEmpree.dados_empreendimento[i].nome_sistema + '*' + objEmpree.dados_empreendimento[i].nome_atividade + '*' + objEmpree.dados_empreendimento[i].nome_periodicidade + '*' + objEmpree.dados_empreendimento[i].resp + '*' + temp1 + '*' + objEmpree.dados_empreendimento[i].qdp + '*' + objEmpree.dados_empreendimento[i].qtae + '*' + objEmpree.dados_empreendimento[i].gap + '*' + new_data_evento + ';'
+							var getLogin = JSON.parse(jsontext[0]);
+							logou = getLogin.logou;
+
+							if (logou == "S") {
+
+								var getEvento = jsontext[1];
+								var objEvento = JSON.parse(getEvento);
+
+								var cada_vet_manut = vetor_dados_manutencao.split(";")
+								var cada_vet_evento = vetor_consulta_evento.split(';')
+
+								for (i = 0; i < objEvento.dados_emp.length; i++) {
+									string_auxiliar += " <br>-------CADA evento-----%%%%%%%%%%%%%%-------------  ev=" + objEvento.dados_emp[i].ev + "- up=" + objEvento.dados_emp[i].up + "---------FIM evento------------<br>"
+
+									var ev = objEvento.dados_emp[i].ev
+									var up = objEvento.dados_emp[i].up
+
+									string_auxiliar += " <br>-------CADA manut-------%%%%%%%%%%%%%-----------  " + cada_vet_manut[i] + "---------FIM manut------------<br>"
+
+									var cada_parte_vet_manut = cada_vet_manut[i].split("*")
+									var cada_parte_vet_evento = cada_vet_evento[i].split("*")
+
+									var obj_config = {
+										id_prog_manut: cada_parte_vet_manut[0],
+										dia_ev: cada_parte_vet_evento[3],
+										mes_ev: cada_parte_vet_evento[2],
+										ano_ev: cada_parte_vet_evento[1]
+									};
+
+									attrs.push(obj_config);
+
 								}
-							}
-
-							if (new_data_evento > data_final_p_busca) { break; }
-						} //for next 1
-
-					} //for next 2
-
-					string_auxiliar += "inico do innerhtml:" + Date(Date.now()) + "<br>"
-
-					string_auxiliar += " <br><br><br>-------INI  vetor_consulta_evento------------------ " + vetor_consulta_evento + "---------FIM------------<br>"
-
-					string_auxiliar += "inico do resposta_total:" + Date(Date.now()) + "<br>"
-					vetor_consulta_evento = vetor_consulta_evento.substring(0, vetor_consulta_evento.length - 1);
-					vetor_dados_manutencao = vetor_dados_manutencao.substring(0, vetor_dados_manutencao.length - 1);
-
-					var data_post = "l=" + login + "&s=" + senha + "&d=" + vetor_consulta_evento;
-					var ajax2 = new XMLHttpRequest();
-					ajax2.open("POST", "https://www.sigmacivil.com.br/app_sc/consult_evento_onlineB.asp?versao=2.2&t=" + Math.random(), true);
-					ajax2.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-					ajax2.addEventListener("loadend", function (evt) {
-						var resposta_total = this.responseText;
-						var jsontext = resposta_total.split("#")
-
-						var getLogin = JSON.parse(jsontext[0]);
-						logou = getLogin.logou;
-
-						if (logou == "S") {
-
-							var getEvento = jsontext[1];
-							var objEvento = JSON.parse(getEvento);
-
-							var cada_vet_manut = vetor_dados_manutencao.split(";")
-							var cada_vet_evento = vetor_consulta_evento.split(';')
-
-							for (i = 0; i < objEvento.dados_emp.length; i++) {
-								string_auxiliar += " <br>-------CADA evento-----%%%%%%%%%%%%%%-------------  ev=" + objEvento.dados_emp[i].ev + "- up=" + objEvento.dados_emp[i].up + "---------FIM evento------------<br>"
-
-								var ev = objEvento.dados_emp[i].ev
-								var up = objEvento.dados_emp[i].up
-
-								string_auxiliar += " <br>-------CADA manut-------%%%%%%%%%%%%%-----------  " + cada_vet_manut[i] + "---------FIM manut------------<br>"
-
-								var cada_parte_vet_manut = cada_vet_manut[i].split("*")
-								var cada_parte_vet_evento = cada_vet_evento[i].split("*")
-
-								var obj_config = {
-									id_prog_manut: cada_parte_vet_manut[0],
-									dia_ev: cada_parte_vet_evento[3],
-									mes_ev: cada_parte_vet_evento[2],
-									ano_ev: cada_parte_vet_evento[1]
-								};
-
-								attrs.push(obj_config);
 
 							}
+						});
 
-						}
-					});
+						ajax2.send(data_post);
 
-					ajax2.send(data_post);
+					} else { //nao logou
+						window.location.assign("login.htm");
+					}
+				});
 
-				} else { //nao logou
-					window.location.assign("login.htm");
-				}
-			});
-
-			ajax.send();
-			// Fim
+				ajax.send();
+				// Fim
+			}
 		}
 
 	</script>
@@ -1809,21 +1811,21 @@
 
 	function showTour() {
 		var db;
-        var request = window.indexedDB.open("db_sigmacivil", "1");
+		var request = window.indexedDB.open("db_sigmacivil", "1");
 
-        request.onerror = function (event) {
-            alert("Erro ao criar o banco (cod 03)");
-        };
+		request.onerror = function (event) {
+			alert("Erro ao criar o banco (cod 03)");
+		};
 
-        request.onsuccess = function (event) {
-            db = request.result;
+		request.onsuccess = function (event) {
+			db = request.result;
 
 			var tx = db.transaction(['mtab_config'], 'readwrite');
-            var store = tx.objectStore('mtab_config');
-            var objectStoreRequest = store.openCursor();
-            objectStoreRequest.onsuccess = function (event) {
-                var cursor = event.target.result;
-                if (cursor) {
+			var store = tx.objectStore('mtab_config');
+			var objectStoreRequest = store.openCursor();
+			objectStoreRequest.onsuccess = function (event) {
+				var cursor = event.target.result;
+				if (cursor) {
 					var data = cursor.value;
 
 					data.tutorial = false;
@@ -1834,10 +1836,10 @@
 				}
 			}
 
-            db.onerror = function (event) {
-                alert("Database error: " + event.target.errorCode);
-            }
-        }
+			db.onerror = function (event) {
+				alert("Database error: " + event.target.errorCode);
+			}
+		}
 	}
 
 	function sleep(milliseconds) {

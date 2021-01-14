@@ -417,7 +417,6 @@
 				}
 			};
 
-
 			var data_implantacao_sc;
 			var nome_empree = "";
 
@@ -458,31 +457,6 @@
 						}
 
 						cursor.continue();
-					}
-				}
-			}
-
-			request.onsuccess = function (event) {
-				db = request.result;
-
-				consultaCliente(db);
-
-				db.onerror = function (event) {
-					alert("Database error: " + event.target.errorCode);
-				}
-			}
-
-			function consultaCliente(db) {
-				var tx = db.transaction(['mtab_cliente'], 'readwrite');
-				var store = tx.objectStore('mtab_cliente');
-				var objectStoreRequest = store.openCursor();
-				objectStoreRequest.onsuccess = function (event) {
-					var cursor = event.target.result;
-					if (cursor) {
-						var data = cursor.value;
-
-						qual_id_cliente = data.id_cliente;
-						q_e_construtora = data.e_construtora;
 					}
 				}
 			}
@@ -632,6 +606,38 @@
 
 			}
 
+			var db;
+			var request = window.indexedDB.open("db_sigmacivil", "1");
+
+			request.onerror = function (event) {
+				alert("Erro ao criar o banco (cod 02)");
+			};
+
+			request.onsuccess = function (event) {
+				db = request.result;
+
+				consultaCliente(db);
+
+				db.onerror = function (event) {
+					alert("Database error: " + event.target.errorCode);
+				}
+			}
+
+			function consultaCliente(db) {
+				var tx = db.transaction(['mtab_cliente'], 'readwrite');
+				var store = tx.objectStore('mtab_cliente');
+				var objectStoreRequest = store.openCursor();
+				objectStoreRequest.onsuccess = function (event) {
+					var cursor = event.target.result;
+					if (cursor) {
+						var data = cursor.value;
+
+						qual_id_cliente = data.id_cliente;
+						q_e_construtora = data.e_construtora;
+					}
+				}
+			}
+
 			function removerAcento(text) {
 				text = text.replace(/Á/g, 'AxcL1A');
 				text = text.replace(/À/g, 'AxcL2A');
@@ -723,7 +729,7 @@
 	<!-- Menu bottom -->
 	<nav class="main-menu-bottom">
 		<div id="step-0">
-			<button id="step-1" class="button-actived" type="button" onclick="enviar()">
+			<button id="step-1" class="button-actived" type="button" onclick="volta_uni()">
 				<img src="images/engenheiro_cogs.png" width="22" alt="Home" />
 				<p>manutenções</p>
 			</button>
@@ -1001,6 +1007,15 @@
 		text = text.replace(/ç/g, 'xcL0c')
 
 		return text;
+	}
+
+	function tem_conexao() {
+		if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
+			// alert('Sem conexão com internet. Favor se conectar.');
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	function go_to_page_config() {

@@ -480,22 +480,43 @@
 
 	<div style="top:4" data-role="collapsible" data-collapsed="true" class="ui-btn-left" data-mini="true">
 		<h4>Menu</h4>
-		<ul data-role="listview" data-mini="true">
-			<li>
-				<a class="ui-btn ui-icon-back ui-btn-icon-right ui-shadow ui-corner-all" href="#"
-					onClick="volta_uni()">Manutenções</a>
+		<ul class="menu-tablet-responsive" style="border: 1px solid #38c;" data-role="listview" data-mini="true">
+			<li id="step-4">
+				<a class="ui-btn ui-icon-gear ui-btn-icon-right ui-shadow ui-corner-all" href="#"
+					onClick="go_to_page_config()">Configurações</a>
 			</li>
-			<li>
-				<a class="ui-btn ui-icon-carat-r ui-btn-icon-right ui-shadow ui-corner-all" href="#"
-					onClick="scan()">Ler QRcode</a>
-			</li>
-			<li>
+			<li id="step-5">
 				<a class="ui-btn ui-icon-power ui-btn-icon-right ui-shadow ui-corner-all" href="#"
 					onClick="closeApp()">Fechar app</a>
 			</li>
-			<li><a href="#" onClick="enviar_sync()">Logout</a></li>
+			<li id="step-6">
+				<a class="click" href="#" onClick="enviar_sync()">Logout</a>
+			</li>
 		</ul>
 	</div>
+
+	<!-- Menu bottom -->
+	<nav class="main-menu-bottom">
+		<div id="step-0">
+			<button id="step-1" class="button-actived" type="button" onclick="volta_uni()">
+				<img src="images/engenheiro_cogs.png" width="22" alt="Home" />
+				<p>manutenções</p>
+			</button>
+			<button id="step-2" class="buttons-navigate" type="button" onclick="scan()">
+				<img src="images/qr_code.png" width="22" alt="Qr_code" />
+				<p>qrcode</p>
+			</button>
+			<button id="step-3" class="buttons-navigate" type="button" onclick="go_relat_check2()">
+				<img src="images/graph.png" width="22" alt="Relatório" />
+				<p>rel.checkpoint</p>
+			</button>
+			<!-- <button class="buttons-navigate" type="button" onclick="openBrowser()">
+						<img src="images/call.png" width="22" alt="Chamado" />
+						<p>abrir chamado</p>
+					</button> -->
+		</div>
+	</nav>
+	<!-- Fim Menu bottom -->
 
 	<div id="parte_load" align="center" style="display:none">
 		<table width="224" border="0" cellpadding="0" cellspacing="0">
@@ -997,13 +1018,39 @@
 	////////////////////////////////////////// INICIO VIDEO  //////////////
 	function captureVideo(qual) {
 		qual_id_prog_manut = qual;
-		navigator.device.capture.captureVideo(videocaptureSuccess, videocaptureError, { limit: 1, duration: 15 });
+
+		navigator.notification.confirm(
+			'Deseja gravar um vídeo ou escolher o vídeo da galeria?',
+			function (buttonIndex) {
+				if (buttonIndex === 1) {
+					source = pictureSource.PHOTOLIBRARY;
+
+					navigator.camera.getPicture(videocaptureSuccess, videocaptureError, {
+						quality: 100,
+						destinationType: Camera.DestinationType.FILE_URI,
+						sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+						mediaType: Camera.MediaType.VIDEO
+					});
+				} else {
+					navigator.device.capture.captureVideo(videocaptureSuccess, videocaptureError, { limit: 1, duration: 15 });
+				}
+
+			},
+			'SigmaCivil',
+			['Galeria', 'Gravar um vídeo']
+		);
 	}
 
 
 	function videocaptureSuccess(mediaFiles) {
 		var i, len;
 		var m_path;
+
+		if (Array.isArray(mediaFiles)) {
+			mediaFiles = [
+				{ fullPath: mediaFiles }
+			];
+		}
 
 		for (i = 0, len = mediaFiles.length; i < len; i += 1) {
 			m_path = mediaFiles[i].fullPath;
@@ -1883,6 +1930,18 @@
 		text = text.replace(/UxcL3U/g, 'Û');
 
 		return text;
+	}
+
+	function go_to_page_config() {
+		window.location.assign("configuracoes.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&idc=" + qual_id_cliente + "&econst=" + q_e_construtora);
+	}
+
+	function go_relat_check2() {
+		if (tem_conexao()) {
+			window.location.assign("new_checkpoint_hist.htm?e=" + num_empree + /*"&id_sist=" + id_sis +*/ "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&idc=" + qual_id_cliente + "&econst=" + q_e_construtora);
+		} else {
+			alert('Você está sem conexão com a internet. Para visualizar o relatório online é necessário estar conectado. Favor se conectar.');
+		}
 	}
 
 	function getMobileOperatingSystem() {

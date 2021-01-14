@@ -1070,14 +1070,6 @@
                 'SigmaCivil',
                 ['Galeria', 'Tirar uma foto']
             );
-
-            /*var r = confirm("Para tirar uma foto com a câmera selecione OK. Para acessar sua galeria de imagens clique em CANCELAR");
-            if (r == true) {
-                source = pictureSource.CAMERA;
-            } else {
-                source = pictureSource.PHOTOLIBRARY;
-            }*/
-
         }
 
         function onFail(message) {
@@ -1485,21 +1477,17 @@
                 'SigmaCivil',
                 ['Galeria', 'Gravar um vídeo']
             );
-
-
         }
 
         function videocaptureSuccess(mediaFiles) {
-            if (!Array.isArray(mediaFiles)) {
-                mediaFiles = [
-                    {
-                        fullPath: mediaFiles
-                    }
-                ];
-            }
-
             var i, len;
             var m_path;
+
+            if (!Array.isArray(mediaFiles)) {
+                mediaFiles = [
+                    { fullPath: mediaFiles }
+                ];
+            }
 
             for (i = 0, len = mediaFiles.length; i < len; i += 1) {
                 m_path = mediaFiles[i].fullPath;

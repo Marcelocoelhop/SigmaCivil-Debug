@@ -606,38 +606,6 @@
 
 			}
 
-			var db;
-			var request = window.indexedDB.open("db_sigmacivil", "1");
-
-			request.onerror = function (event) {
-				alert("Erro ao criar o banco (cod 02)");
-			};
-
-			request.onsuccess = function (event) {
-				db = request.result;
-
-				consultaCliente(db);
-
-				db.onerror = function (event) {
-					alert("Database error: " + event.target.errorCode);
-				}
-			}
-
-			function consultaCliente(db) {
-				var tx = db.transaction(['mtab_cliente'], 'readwrite');
-				var store = tx.objectStore('mtab_cliente');
-				var objectStoreRequest = store.openCursor();
-				objectStoreRequest.onsuccess = function (event) {
-					var cursor = event.target.result;
-					if (cursor) {
-						var data = cursor.value;
-
-						qual_id_cliente = data.id_cliente;
-						q_e_construtora = data.e_construtora;
-					}
-				}
-			}
-
 			function removerAcento(text) {
 				text = text.replace(/Á/g, 'AxcL1A');
 				text = text.replace(/À/g, 'AxcL2A');
@@ -712,17 +680,19 @@
 	<div style="top:4" data-role="collapsible" data-collapsed="true" class="ui-btn-left" data-mini="true">
 		<h4>Menu</h4>
 		<ul class="menu-tablet-responsive" style="border: 1px solid #38c;" data-role="listview" data-mini="true">
-			<li id="step-4">
-				<a class="ui-btn ui-icon-gear ui-btn-icon-right ui-shadow ui-corner-all" href="#"
-					onClick="go_to_page_config()">Configurações</a>
+			<li>
+				<a class="ui-btn ui-icon-back ui-btn-icon-right ui-shadow ui-corner-all actived" href="#"
+				onClick="volta_uni()">Manutenções</a>
 			</li>
-			<li id="step-5">
+			<li>
+				<a class="ui-btn ui-icon-carat-r ui-btn-icon-right ui-shadow ui-corner-all" href="#"
+				onClick="scan()">Ler QRcode</a>
+			</li>
+			<li>
 				<a class="ui-btn ui-icon-power ui-btn-icon-right ui-shadow ui-corner-all" href="#"
-					onClick="closeApp()">Fechar app</a>
+				onClick="closeApp()">Fechar app</a>
 			</li>
-			<li id="step-6">
-				<a class="click" href="#" onClick="enviar_sync()">Logout</a>
-			</li>
+			<li><a href="#" onClick="enviar_sync()">Logout</a></li>
 		</ul>
 	</div>
 

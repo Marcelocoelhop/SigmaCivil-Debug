@@ -270,6 +270,10 @@ hr.line-color {
     word-wrap: break-word;
 }
 
+.last_btn_off:last-child {
+    margin-bottom: 60px;
+}
+
 .shadow-box {
     z-index: 1;
     box-shadow: 0px 1px 10px 5px rgba(78, 78, 78, 0.1);

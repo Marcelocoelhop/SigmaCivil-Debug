@@ -1018,27 +1018,7 @@
 	////////////////////////////////////////// INICIO VIDEO  //////////////
 	function captureVideo(qual) {
 		qual_id_prog_manut = qual;
-
-		navigator.notification.confirm(
-			'Deseja gravar um vídeo ou escolher o vídeo da galeria?',
-			function (buttonIndex) {
-				if (buttonIndex === 1) {
-					source = pictureSource.PHOTOLIBRARY;
-
-					navigator.camera.getPicture(videocaptureSuccess, videocaptureError, {
-						quality: 100,
-						destinationType: Camera.DestinationType.FILE_URI,
-						sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
-						mediaType: Camera.MediaType.VIDEO
-					});
-				} else {
-					navigator.device.capture.captureVideo(videocaptureSuccess, videocaptureError, { limit: 1, duration: 15 });
-				}
-
-			},
-			'SigmaCivil',
-			['Galeria', 'Gravar um vídeo']
-		);
+		navigator.device.capture.captureVideo(videocaptureSuccess, videocaptureError, { limit: 1, duration: 15 });
 	}
 
 

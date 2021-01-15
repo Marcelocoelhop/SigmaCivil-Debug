@@ -124,6 +124,8 @@
 				if (progressValue == 100) {
 					document.getElementById("parte_load_content").style.display = "none";
 					document.getElementById("parte_load").style.display = "none";
+
+					cordova.plugins.notification.local.clear();
 				}
 
 				if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
@@ -135,7 +137,7 @@
 					return true;
 				}
 			}, 5000);
-
+			
 			var db;
 			var request = window.indexedDB.open("db_sigmacivil", "1");
 
@@ -654,6 +656,8 @@
 	var sl1 = '';
 	var sl2 = '';
 
+	var totalArqs = 0;
+
 	//////////////////////////////////////
 
 	function uploadArquivos() {
@@ -736,6 +740,8 @@
 
 					if (todas_status_imagens[k] == '0') {
 						aux_image_upload = 'upload.png';
+						totalArqs += 1;
+
 						upload_imagem(k, id_prog_manut, dia_ev, mes_ev, ano_ev);
 					}
 					else {
@@ -750,6 +756,8 @@
 
 				if (rrr_status_caminho_video == '0') {
 					aux_image_upload = 'upload.png';
+					totalArqs += 1;
+
 					upload_video(id_prog_manut, dia_ev, mes_ev, ano_ev);
 				}
 				else {
@@ -758,6 +766,8 @@
 
 				if (rrr_status_caminho_audio == '0') {
 					aux_image_upload = "upload.png";
+					totalArqs += 1;
+
 					upload_audio(id_prog_manut, dia_ev, mes_ev, ano_ev);
 				}
 				else {
@@ -766,6 +776,8 @@
 
 				if (rrr_status_caminho_texto == '0') {
 					aux_image_upload = 'upload.png';
+					totalArqs += 1;
+
 					upload_texto(id_prog_manut, dia_ev, mes_ev, ano_ev);
 				}
 				else {
@@ -897,6 +909,14 @@
 				progressValue++;
 			}
 
+			cordova.plugins.notification.local.schedule({
+				title: 'Sync in progress',
+				text: `Fazendo upload de ${totalArqs} arquivos`,
+				smallIcon: 'res://calendar',
+				icon: 'http://climberindonesia.com/assets/icon/ionicons-2.0.1/png/512/android-chat.png',
+				progressBar: { value: progressValue }
+			});
+
 			// Display percentage in the UI
 			document.getElementById("progress-value").innerHTML = `${progressValue.toFixed()}%`;
 		};
@@ -941,11 +961,6 @@
 					data.status_imagens_upl = localStorage.getItem(`status_${id_prog_manut}_${dia_ev}_${mes_ev}_${ano_ev}`);
 
 					var request = cursor.update(data);
-					// sleep(2000);
-					request.onsuccess = function (event) {
-						// document.getElementById("parte_load_content").style.display = "none";
-						// document.getElementById("parte_load").style.display = "none";
-					}
 				}
 			}
 		}
@@ -1030,11 +1045,9 @@
 	// UPLOAD VIDEO
 	function up_loadVideo(videoURL, id_prog_manut, dia_ev, mes_ev, ano_ev) {
 
-		//if (!uploadAutomatic) {
 		document.getElementById("parte_load_content").style.display = "block";
 		document.getElementById("parte_load").style.display = "flex";
 		window.location.href = "#ancora123"
-		//}
 
 		var options = new FileUploadOptions();
 		options.fileKey = "file";
@@ -1051,13 +1064,15 @@
 				progressValue++;
 			}
 
+			cordova.plugins.notification.local.schedule({
+				title: 'Sync in progress',
+				text: `Fazendo upload de ${totalArqs} arquivos`,
+				smallIcon: 'res://calendar',
+				progressBar: { value: progressValue }
+			});
+
 			// Display percentage in the UI
 			document.getElementById("progress-value").innerHTML = `${progressValue.toFixed()}%`;
-
-			// if (progressValue === 100) {
-			// 	document.getElementById("parte_load").style.display = "none";
-			// 	document.getElementById("parte_load_content").style.display = "none";
-			// }
 		};
 
 		ft.upload(videoURL, "http://www.sigmacivil.com.br/app_sc/rec_video_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente, win_up_v(id_prog_manut, dia_ev, mes_ev, ano_ev), fail_up_v, options);
@@ -1095,10 +1110,6 @@
 					data.status_video_upl = "1";
 
 					var request = cursor.update(data);
-					request.onsuccess = function (event) {
-						// document.getElementById("parte_load_content").style.display = "none";
-						// document.getElementById("parte_load").style.display = "none";
-					}
 				}
 			}
 		}
@@ -1182,11 +1193,9 @@
 
 	function up_loadAudio(audioURL, id_prog_manut, dia_ev, mes_ev, ano_ev) {
 
-		//if (!uploadAutomatic) {
-		// document.getElementById("parte_load_content").style.display = "block";
-		// document.getElementById("parte_load").style.display = "flex";
-		// window.location.href = "#ancora123"
-		//}
+		document.getElementById("parte_load_content").style.display = "block";
+		document.getElementById("parte_load").style.display = "flex";
+		window.location.href = "#ancora123"
 
 		var options = new FileUploadOptions();
 		options.fileKey = "file";
@@ -1202,6 +1211,13 @@
 			} else {
 				progressValue++;
 			}
+
+			cordova.plugins.notification.local.schedule({
+				title: 'Sync in progress',
+				text: `Fazendo upload de ${totalArqs} arquivos`,
+				smallIcon: 'res://calendar',
+				progressBar: { value: progressValue }
+			});
 
 			// Display percentage in the UI
 			document.getElementById("progress-value").innerHTML = `${progressValue.toFixed()}%`;
@@ -1242,10 +1258,6 @@
 					data.status_audio_upl = "1";
 
 					var request = cursor.update(data);
-					request.onsuccess = function (event) {
-						// document.getElementById("parte_load_content").style.display = "none";
-						// document.getElementById("parte_load").style.display = "none";
-					}
 				}
 			}
 		}
@@ -1329,11 +1341,9 @@
 
 		if (!textoURL) return;
 
-		//if (!uploadAutomatic) {
-		// document.getElementById("parte_load_content").style.display = "block";
-		// document.getElementById("parte_load").style.display = "flex";
-		// window.location.href = "#ancora123"
-		//}
+		document.getElementById("parte_load_content").style.display = "block";
+		document.getElementById("parte_load").style.display = "flex";
+		window.location.href = "#ancora123"
 
 		var data = 'tx=' + encodeURIComponent(textoURL) + '&ipm=' + id_prog_manut + '&d=' + dia_ev + '&m=' + mes_ev + '&a=' + ano_ev + "&econst=" + e_construtora + "&idc=" + id_cliente;
 		var ajax = new XMLHttpRequest();
@@ -1373,10 +1383,6 @@
 								data.status_texto_upl = "1";
 
 								var request = cursor.update(data);
-								request.onsuccess = function (event) {
-									// document.getElementById("parte_load_content").style.display = "none";
-									// document.getElementById("parte_load").style.display = "none";
-								}
 							}
 						}
 					}

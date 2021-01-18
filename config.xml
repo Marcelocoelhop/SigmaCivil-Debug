@@ -28,15 +28,6 @@
          <application android:requestLegacyExternalStorage="true" />
 	</gap:config-file>
 
-    <platform name="android">
-        <resource-file src="res/icon/android/ic_stat_logo.png" target="app/src/main/res/drawable-ldpi/ic_stat_logo.png" />
-        <resource-file src="res/icon/android/ic_stat_logo.png" target="app/src/main/res/drawable-mdpi/ic_stat_logo.png" />
-        <resource-file src="res/icon/android/ic_stat_logo.png" target="app/src/main/res/drawable-hdpi/ic_stat_logo.png" />
-        <resource-file src="res/icon/android/ic_stat_logo.png" target="app/src/main/res/drawable-xhdpi/ic_stat_logo.png" />
-        <resource-file src="res/icon/android/ic_stat_logo.png" target="app/src/main/res/drawable-xxhdpi/ic_stat_logo.png" />
-        <resource-file src="res/icon/android/ic_stat_logo.png" target="app/src/main/res/drawable-xxxhdpi/ic_stat_logo.png" />
-    </platform>
-
     <!--
         Enable individual API permissions by defining each here.
         The 'device' permission is required for the 'deviceready' event.
@@ -214,6 +205,13 @@
     <icon src="res/icon/ios/Icon-256.png"        gap:platform="ios"      width="256" height="256" />
     <icon src="res/icon/ios/Icon-512.png"        gap:platform="ios"      width="512" height="512" />
     <icon src="res/icon/ios/Icon-1024.png"       gap:platform="ios"      width="1024" height="1024" />
+
+    <icon density="ldpi" src="res/icon/android/drawable-xxxhdpi/ic_stat_logo.png" />
+    <icon density="mdpi" src="res/icon/android/drawable-mdpi/ic_stat_logo.png" />
+    <icon density="hdpi" src="res/icon/android/drawable-hdpi/ic_stat_logo.png" />
+    <icon density="xhdpi" src="res/icon/android/drawable-xhdpi/ic_stat_logo.png" />
+    <icon density="xxhdpi" src="res/icon/android/drawable-xxhdpi/ic_stat_logo.png" />
+    <icon density="xxxhdpi" src="res/icon/android/drawable-xxxhdpi/ic_stat_logo.png" />
 
     <!-- autorizacoes para apple -->
     <!-- <key>NSCameraUsageDescription</key>

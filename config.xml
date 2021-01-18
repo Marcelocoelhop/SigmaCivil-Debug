@@ -210,8 +210,9 @@
     <icon density="mdpi" src="res/icon/android/drawable-mdpi/ic_stat_logo.png" />
     <icon density="hdpi" src="res/icon/android/drawable-hdpi/ic_stat_logo.png" />
     <icon density="xhdpi" src="res/icon/android/drawable-xhdpi/ic_stat_logo.png" /> -->
-    <icon density="xxhdpi" src="res/icon/android/icon-96-xhdpi.png" />
-    <icon density="xxxhdpi" src="res/icon/android/drawable-xxxhdpi/ic_stat_logo.png" />
+    
+    <icon density="xxhdpi" src="res/icon/android/drawable-xxxhdpi/ic_stat_logo.png" />
+    <icon density="xxxhdpi" src="res/icon/android/icon-96-xhdpi.png" />
 
     <!-- autorizacoes para apple -->
     <!-- <key>NSCameraUsageDescription</key>

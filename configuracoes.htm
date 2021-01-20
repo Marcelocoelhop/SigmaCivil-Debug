@@ -909,15 +909,6 @@
 				progressValue++;
 			}
 
-			cordova.plugins.notification.local.schedule({
-				title: 'Sync in progress',
-				text: `Fazendo upload de ${totalArqs} arquivos`,
-				smallIcon: 'res://calendar',
-				vibrate: false,
-				icon: 'http://climberindonesia.com/assets/icon/ionicons-2.0.1/png/512/android-chat.png',
-				progressBar: { value: progressValue }
-			});
-
 			// Display percentage in the UI
 			document.getElementById("progress-value").innerHTML = `${progressValue.toFixed()}%`;
 		};
@@ -1065,14 +1056,6 @@
 				progressValue++;
 			}
 
-			cordova.plugins.notification.local.schedule({
-				title: 'Sync in progress',
-				text: `Fazendo upload de ${totalArqs} arquivos`,
-				smallIcon: 'res://calendar',
-				vibrate: false,
-				progressBar: { value: progressValue }
-			});
-
 			// Display percentage in the UI
 			document.getElementById("progress-value").innerHTML = `${progressValue.toFixed()}%`;
 		};
@@ -1214,14 +1197,6 @@
 				progressValue++;
 			}
 
-			cordova.plugins.notification.local.schedule({
-				title: 'Sync in progress',
-				text: `Fazendo upload de ${totalArqs} arquivos`,
-				smallIcon: 'res://calendar',
-				vibrate: false,
-				progressBar: { value: progressValue }
-			});
-
 			// Display percentage in the UI
 			document.getElementById("progress-value").innerHTML = `${progressValue.toFixed()}%`;
 		};
@@ -1347,14 +1322,6 @@
 		document.getElementById("parte_load_content").style.display = "block";
 		document.getElementById("parte_load").style.display = "flex";
 		window.location.href = "#ancora123"
-
-		cordova.plugins.notification.local.schedule({
-			title: 'Sync in progress',
-			text: `Fazendo upload de ${totalArqs} arquivos`,
-			smallIcon: 'res://calendar',
-			vibrate: false,
-			progressBar: { value: progressValue }
-		});
 
 		var data = 'tx=' + encodeURIComponent(textoURL) + '&ipm=' + id_prog_manut + '&d=' + dia_ev + '&m=' + mes_ev + '&a=' + ano_ev + "&econst=" + e_construtora + "&idc=" + id_cliente;
 		var ajax = new XMLHttpRequest();

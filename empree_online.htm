@@ -57,7 +57,7 @@
                 <img class="is-bars" src="images/bars.svg" width="14" alt="Menu" />
                 <img class="is-times is-disabled" src="images/times.svg" width="13" alt="Menu" />
             </h4>
-            <ul class="menu-tablet-responsive" style="border: 1px solid #38c;" data-role="listview" data-mini="true">
+            <ul class="menu-tablet-responsive" style="border: 2px solid #38c;" data-role="listview" data-mini="true">
                 <li id="step-4">
                     <a class="ui-btn ui-icon-gear ui-btn-icon-right ui-shadow ui-corner-all" href="#"
                         onClick="go_to_page_config()">Configurações</a>
@@ -409,14 +409,14 @@
             //     foreground: true
             // });
 
-            // cordova.plugins.notification.local.schedule(
-            //     { 
-            //         id: 1,
-            //         title: 'My first notification',
-            //         icon: 'file://images/notification_upload.png',
-            //         smallIcon: 'res://icon' 
-            //     }
-            // );
+            cordova.plugins.notification.local.schedule(
+                { 
+                    id: 1,
+                    title: 'My first notification',
+                    icon: 'file://images/logo6.png',
+                    smallIcon: 'res://ic_stat_engineering',
+                }
+            );
 
             var statusRelacionamento;
             var statusDocumentacao;

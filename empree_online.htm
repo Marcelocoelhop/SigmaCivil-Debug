@@ -409,14 +409,15 @@
             //     foreground: true
             // });
 
-            cordova.plugins.notification.local.schedule(
-                { 
+            // cordova.plugins.backgroundMode.enable();
+
+            // cordova.plugins.backgroundMode.on('EVENT', function () {
+                cordova.plugins.notification.local.schedule({
                     id: 1,
                     title: 'My first notification',
-                    icon: 'file://images/notification_upload.png',
-                    smallIcon: 'res://icon' 
-                }
-            );
+                    icon: 'file://images/icon_sigma.jpg',
+                });
+            // });
 
             var statusRelacionamento;
             var statusDocumentacao;

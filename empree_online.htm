@@ -404,12 +404,26 @@
                 }
             }, 5000);
 
-            cordova.plugins.notification.local.schedule({
-                id: 1,
-                title: 'Você possui manutenções pendentes',
-                text: qtdEv > 0 && `${qtdEv} manutenções ainda não foram realizadas`,
-                icon: 'file://images/civil-eng.png',
-            });
+            // cordova.plugins.backgroundMode.enable();
+
+            // setInterval(function () {
+            //     alert(cordova.plugins.backgroundMode.isActive());
+            // }, 5000);
+
+            // cordova.plugins.backgroundMode.moveToBackground();
+
+            // cordova.plugins.backgroundMode.overrideBackButton();
+
+            // cordova.plugins.backgroundMode.on('activate', function () {
+            // cordova.plugins.notification.local.schedule({
+            //     id: 1,
+            //     title: 'Você possui manutenções pendentes',
+            //     text: qtdEv > 0 && `${qtdEv} manutenções ainda não foram realizadas`,
+            //     icon: 'file://images/icon_sigma.jpg',
+            // });
+
+            // cordova.plugins.backgroundMode.disable();
+            // });
 
             var statusRelacionamento;
             var statusDocumentacao;
@@ -891,6 +905,15 @@
 
                                     }
                                 }
+
+                                // notification
+                                cordova.plugins.notification.local.schedule({
+                                    title: 'Você possui manutenções pendentes',
+                                    text: qtdEv > 0 && `${qtdEv} manutenções ainda não foram realizadas`,
+                                    icon: 'file://images/civil-eng.png',
+                                    // smallIcon: 'res://images/civil-eng.png',
+                                    foreground: true
+                                });
 
                                 if (filtro_sis !== '' && filtro_bool === false) {
                                     navigator.notification.alert(

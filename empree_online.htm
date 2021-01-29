@@ -411,26 +411,26 @@
             //     foreground: true
             // });
 
-            cordova.plugins.backgroundMode.enable();
+            // cordova.plugins.backgroundMode.enable();
 
             // setInterval(function () {
             //     alert(cordova.plugins.backgroundMode.isActive());
             // }, 5000);
 
-            cordova.plugins.backgroundMode.on('activate', function () {
+            // cordova.plugins.backgroundMode.moveToBackground();
+
+            // cordova.plugins.backgroundMode.overrideBackButton();
+
+            // cordova.plugins.backgroundMode.on('activate', function () {
                 cordova.plugins.notification.local.schedule({
                     id: 1,
                     title: 'Você possui manutenções pendentes',
                     text: qtdEv > 0 && `${qtdEv} manutenções ainda não foram realizadas`,
                     icon: 'file://images/icon_sigma.jpg',
-                    actions: [
-                        { id: 'yes', title: 'Fazer manutenções' },
-                        { id: 'no', title: 'Agora não' }
-                    ]
                 });
 
-                cordova.plugins.backgroundMode.disable();
-            });
+                // cordova.plugins.backgroundMode.disable();
+            // });
 
             var statusRelacionamento;
             var statusDocumentacao;

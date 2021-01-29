@@ -424,6 +424,8 @@
                     text: qtdEv > 0 && `${qtdEv} manutenções ainda não foram realizadas`,
                     icon: 'file://images/icon_sigma.jpg',
                 });
+
+                cordova.plugins.backgroundMode.disable();
             });
 
             var statusRelacionamento;

@@ -404,33 +404,11 @@
                 }
             }, 5000);
 
-            // cordova.plugins.notification.local.schedule({
-            //     title: 'My first notification',
-            //     text: 'Thats pretty easy...',
-            //     smallIcon: 'res://ic_stat_engineering',
-            //     foreground: true
-            // });
-
-            // cordova.plugins.backgroundMode.enable();
-
-            // setInterval(function () {
-            //     alert(cordova.plugins.backgroundMode.isActive());
-            // }, 5000);
-
-            // cordova.plugins.backgroundMode.moveToBackground();
-
-            // cordova.plugins.backgroundMode.overrideBackButton();
-
-            // cordova.plugins.backgroundMode.on('activate', function () {
-                cordova.plugins.notification.local.schedule({
-                    id: 1,
-                    title: 'Você possui manutenções pendentes',
-                    text: qtdEv > 0 && `${qtdEv} manutenções ainda não foram realizadas`,
-                    icon: 'file://images/icon_sigma.jpg',
-                });
-
-                // cordova.plugins.backgroundMode.disable();
-            // });
+            cordova.plugins.notification.local.schedule({
+                title: 'My first notification',
+                text: 'Thats pretty easy...',
+                foreground: true
+            });
 
             var statusRelacionamento;
             var statusDocumentacao;

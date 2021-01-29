@@ -423,6 +423,10 @@
                     title: 'Você possui manutenções pendentes',
                     text: qtdEv > 0 && `${qtdEv} manutenções ainda não foram realizadas`,
                     icon: 'file://images/icon_sigma.jpg',
+                    actions: [
+                        { id: 'yes', title: 'Fazer manutenções' },
+                        { id: 'no', title: 'Agora não' }
+                    ]
                 });
 
                 cordova.plugins.backgroundMode.disable();

@@ -884,10 +884,11 @@
 
                                     }
                                 }
-                                cordova.plugins.backgroundMode.enable();
+                                // cordova.plugins.backgroundMode.enable();
 
                                 // notification
-                                cordova.plugins.backgroundMode.on('activate', function () {
+                                // cordova.plugins.backgroundMode.on('activate', function () {
+                                setTimeout(function () {
                                     cordova.plugins.notification.local.schedule({
                                         title: 'Você possui manutenções pendentes',
                                         text: qtdEv > 0 && `${qtdEv} manutenções ainda não foram realizadas`,
@@ -895,9 +896,10 @@
                                         // smallIcon: 'res://images/civil-eng.png',
                                         foreground: true
                                     });
+                                }, 8000);
 
-                                    cordova.plugins.backgroundMode.disable();
-                                });
+                                //     cordova.plugins.backgroundMode.disable();
+                                // });
 
 
                                 if (filtro_sis !== '' && filtro_bool === false) {

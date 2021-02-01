@@ -118,10 +118,6 @@
 
 			document.getElementById('menu_opc2').innerHTML = menu_sup_online;
 
-			cordova.plugins.notification.local.setDefaults({
-				vibrate: false
-			});
-
 			setInterval(function () {
 				// window.StatusBar.hide();
 
@@ -913,14 +909,6 @@
 				progressValue++;
 			}
 
-			cordova.plugins.notification.local.schedule({
-				title: 'Upload de arquivos',
-				text: `Subindo um total de ${totalArqs} arquivos`,
-				progressBar: { value: `${progressValue}` },
-				icon: 'file://images/civil-eng.png',
-				vibrate: false
-			});
-
 			// Display percentage in the UI
 			document.getElementById("progress-value").innerHTML = `${progressValue.toFixed()}%`;
 		};
@@ -1068,14 +1056,6 @@
 				progressValue++;
 			}
 
-			cordova.plugins.notification.local.schedule({
-				title: 'Upload de arquivos',
-				text: `Subindo um total de ${totalArqs} arquivos`,
-				progressBar: { value: `${progressValue}` },
-				icon: 'file://images/civil-eng.png',
-				vibrate: false
-			});
-
 			// Display percentage in the UI
 			document.getElementById("progress-value").innerHTML = `${progressValue.toFixed()}%`;
 		};
@@ -1216,14 +1196,6 @@
 			} else {
 				progressValue++;
 			}
-
-			cordova.plugins.notification.local.schedule({
-				title: 'Upload de arquivos',
-				text: `Subindo um total de ${totalArqs} arquivos`,
-				progressBar: { value: `${progressValue}` },
-				icon: 'file://images/civil-eng.png',
-				vibrate: false
-			});
 
 			// Display percentage in the UI
 			document.getElementById("progress-value").innerHTML = `${progressValue.toFixed()}%`;

@@ -118,6 +118,10 @@
 
 			document.getElementById('menu_opc2').innerHTML = menu_sup_online;
 
+			cordova.plugins.notification.local.setDefaults({
+				vibrate: false
+			});
+
 			setInterval(function () {
 				// window.StatusBar.hide();
 

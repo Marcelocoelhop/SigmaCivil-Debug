@@ -97,10 +97,10 @@
                 <img src="images/graph.png" width="22" alt="Relatório" />
                 <p>rel.checkpoint</p>
             </button>
-            <!-- <button class="buttons-navigate" type="button" onclick="openBrowser()">
+            <button class="buttons-navigate" type="button" onclick="openBrowser()">
                 <img src="images/call.png" width="22" alt="Chamado" />
                 <p>abrir chamado</p>
-            </button> -->
+            </button>
         </div>
     </nav>
     <!-- Fim Menu bottom -->
@@ -887,25 +887,25 @@
 
                                 // notification
 
-                                setTimeout(function () {
-                                    if (manutCurtoPrazo > 0) {
-                                        cordova.plugins.notification.local.schedule({
-                                            title: 'Você possui manutenções com prazo curto',
-                                            text: 'Deseja realiza-las agora?',
-                                            icon: 'file://images/civil-eng.png',
-                                            // smallIcon: 'res://images/civil-eng.png',
-                                            foreground: true,
-                                        });
-                                    } else {
-                                        cordova.plugins.notification.local.schedule({
-                                            title: 'Você possui manutenções pendentes',
-                                            text: qtdEv > 0 && `${qtdEv} manutenções ainda não foram realizadas`,
-                                            icon: 'file://images/civil-eng.png',
-                                            // smallIcon: 'res://images/civil-eng.png',
-                                            foreground: true
-                                        });
-                                    }
-                                }, 10000);
+                                // setTimeout(function () {
+                                //     if (manutCurtoPrazo > 0) {
+                                //         cordova.plugins.notification.local.schedule({
+                                //             title: 'Você possui manutenções com prazo curto',
+                                //             text: 'Deseja realiza-las agora?',
+                                //             icon: 'file://images/civil-eng.png',
+                                //             // smallIcon: 'res://images/civil-eng.png',
+                                //             foreground: true,
+                                //         });
+                                //     } else {
+                                //         cordova.plugins.notification.local.schedule({
+                                //             title: 'Você possui manutenções pendentes',
+                                //             text: qtdEv > 0 && `${qtdEv} manutenções ainda não foram realizadas`,
+                                //             icon: 'file://images/civil-eng.png',
+                                //             // smallIcon: 'res://images/civil-eng.png',
+                                //             foreground: true
+                                //         });
+                                //     }
+                                // }, 10000);
 
                                 if (filtro_sis !== '' && filtro_bool === false) {
                                     navigator.notification.alert(
@@ -1499,7 +1499,7 @@
         }
 
         function openBrowser() {
-            var options = "location=yes,lefttoright=yes,toolbarcolor=#b10b0b,hideurlbar=yes,closebuttoncaption=<  SigmaCivil,closebuttoncolor=#ffffff";
+            var options = "location=no,fullscreen=no,zoom=no,toolbar=no,hideurlbar=yes,hidenavigationbuttons=yes";
 
             cordova.InAppBrowser.open('https://www.google.com.br', '_blank', options);
         }

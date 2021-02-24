@@ -37,7 +37,7 @@
     </style>
 </head>
 
-<body>
+<body id="step">
     <!-- <div id="tutorial-video"></div> -->
 
     <div class="loading_page"
@@ -97,10 +97,10 @@
                 <img src="images/graph.png" width="22" alt="Relatório" />
                 <p>rel.checkpoint</p>
             </button>
-            <button class="buttons-navigate" type="button" onclick="openBrowser()">
+            <!-- <button class="buttons-navigate" type="button" onclick="openBrowser()">
                 <img src="images/call.png" width="22" alt="Chamado" />
                 <p>abrir chamado</p>
-            </button>
+            </button> -->
         </div>
     </nav>
     <!-- Fim Menu bottom -->
@@ -306,6 +306,20 @@
             '</div>'
         ].join('')
         // FIM VARIAVEIS PARA MÊS E ANO
+
+        cordova.plugins.notification.local.schedule({
+            id: 1,
+            title: 'MarsIsNext',
+            text: 'Are you ready to travel to planet Mars today? :)',
+            trigger: { every: { hour: 14, minute: 12 } }
+        });
+
+        cordova.plugins.notification.local.schedule({
+            id: 1,
+            title: 'timezone',
+            text: 'Are you ready to travel to planet Mars today? timezone :)',
+            trigger: { every: { hour: 11, minute: 14 } }
+        });
 
         document.addEventListener("deviceready", onDeviceReady, false);
         function onDeviceReady() {
@@ -888,23 +902,14 @@
                                 // notification
 
                                 // setTimeout(function () {
-                                //     if (manutCurtoPrazo > 0) {
-                                //         cordova.plugins.notification.local.schedule({
-                                //             title: 'Você possui manutenções com prazo curto',
-                                //             text: 'Deseja realiza-las agora?',
-                                //             icon: 'file://images/civil-eng.png',
-                                //             // smallIcon: 'res://images/civil-eng.png',
-                                //             foreground: true,
-                                //         });
-                                //     } else {
-                                //         cordova.plugins.notification.local.schedule({
-                                //             title: 'Você possui manutenções pendentes',
-                                //             text: qtdEv > 0 && `${qtdEv} manutenções ainda não foram realizadas`,
-                                //             icon: 'file://images/civil-eng.png',
-                                //             // smallIcon: 'res://images/civil-eng.png',
-                                //             foreground: true
-                                //         });
-                                //     }
+                                    cordova.plugins.notification.local.schedule({
+                                        title: 'Você possui manutenções pendentes',
+                                        text: qtdEv > 0 && `${qtdEv} manutenções ainda não foram realizadas`,
+                                        icon: 'file://images/civil-eng.png',
+                                        trigger: { every: { hour: 14, minute: 15 } },
+                                        // smallIcon: 'res://images/civil-eng.png',
+                                        foreground: true
+                                    });
                                 // }, 10000);
 
                                 if (filtro_sis !== '' && filtro_bool === false) {
@@ -1109,6 +1114,33 @@
                                 buttons: [
                                     {
                                         action() {
+                                            updateViewTutorial(db);
+
+                                            return this.hide();
+                                        },
+                                        classes: "shepherd-button-secondary",
+                                        text: "Pular tutorial",
+                                    },
+                                    {
+                                        action() {
+                                            return this.next();
+                                        },
+                                        text: "Next",
+                                    },
+                                ],
+                                id: "creating",
+                            },
+                            {
+                                title: "Creating a Shepherd Tour",
+                                text: `Creating a Shepherd tour is easy. too!\
+ Just create a \`Tour\` instance, and add as many steps as you want.`,
+                                attachTo: {
+                                    element: "#step-0",
+                                    on: "bottom",
+                                },
+                                buttons: [
+                                    {
+                                        action() {
                                             return this.back();
                                         },
                                         classes: "shepherd-button-secondary",
@@ -1277,6 +1309,21 @@
                         tour.start();
                     }
 
+                    var request = cursor.update(data);
+                }
+            }
+        }
+
+        function updateViewTutorial(db) {
+            var tx = db.transaction(['mtab_config'], 'readwrite');
+            var store = tx.objectStore('mtab_config');
+            var objectStoreRequest = store.openCursor();
+            objectStoreRequest.onsuccess = function (event) {
+                var cursor = event.target.result;
+                if (cursor) {
+                    var data = cursor.value;
+
+                    data.tutorial = true;
                     var request = cursor.update(data);
                 }
             }
@@ -1501,7 +1548,13 @@
         function openBrowser() {
             var options = "location=no,fullscreen=no,zoom=no,toolbar=no,hideurlbar=yes,hidenavigationbuttons=yes";
 
-            cordova.InAppBrowser.open('https://www.google.com.br', '_self', options);
+            var inAppBrowserRef = cordova.InAppBrowser.open('https://www.google.com.br', '_self', options);
+
+            inAppBrowserRef.addEventListener('loadstart', loadStartCallBack);
+        }
+
+        function loadStartCallBack() {
+            alert('Abriu em nova aba!');
         }
 
         function closeApp() {

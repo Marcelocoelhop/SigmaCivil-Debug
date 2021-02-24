@@ -307,20 +307,6 @@
         ].join('')
         // FIM VARIAVEIS PARA MÊS E ANO
 
-        cordova.plugins.notification.local.schedule({
-            id: 1,
-            title: 'MarsIsNext',
-            text: 'Are you ready to travel to planet Mars today? :)',
-            trigger: { every: { hour: 14, minute: 12 } }
-        });
-
-        cordova.plugins.notification.local.schedule({
-            id: 1,
-            title: 'timezone',
-            text: 'Are you ready to travel to planet Mars today? timezone :)',
-            trigger: { every: { hour: 11, minute: 14 } }
-        });
-
         document.addEventListener("deviceready", onDeviceReady, false);
         function onDeviceReady() {
             if (tem_conexao()) {
@@ -906,7 +892,7 @@
                                         title: 'Você possui manutenções pendentes',
                                         text: qtdEv > 0 && `${qtdEv} manutenções ainda não foram realizadas`,
                                         icon: 'file://images/civil-eng.png',
-                                        trigger: { every: { hour: 14, minute: 15 } },
+                                        trigger: { every: 'day', count: 5 },
                                         // smallIcon: 'res://images/civil-eng.png',
                                         foreground: true
                                     });
